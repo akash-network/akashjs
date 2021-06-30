@@ -4,6 +4,10 @@ const path = require("path");
 module.exports = {
   entry: "./src/index.ts",
   resolve: {
+    alias: {
+      // add as many aliases as you like!
+      keytar: path.resolve(__dirname, "src/wallet/storage.ts"),
+    },
     extensions: [".wasm", ".mjs", ".js", ".json", ".jsx", ".ts"],
     fallback: {
       http: require.resolve("stream-http"),
@@ -23,7 +27,7 @@ module.exports = {
     path: path.resolve(__dirname, "umd"),
     library: {
       type: "umd",
-      name: "akashjs",
+      name: "akjs",
     },
     // prevent error: `Uncaught ReferenceError: self is not define`
     globalObject: "this",

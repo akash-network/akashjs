@@ -12,10 +12,10 @@
   <button id="getCerts">Get Certs</button>
 
   <script type="text/javascript">
-    console.log(akashjs);
+    console.log(akjs);
 
     const fn = async () => {
-      const certs = await akashjs.certificate.createCertifcate("akash12345");
+      const certs = await akjs.certificate.createCertifcate("akash12345");
       let chain;
       let signer;
       let client;
@@ -28,9 +28,9 @@
 
       window.addEventListener("DOMContentLoaded", async (event) => {
         console.log("DOM fully loaded and parsed");
-        chain = akashjs.keplr.getChains().testnet;
-        signer = await akashjs.keplr.getSigner(chain);
-        client = await akashjs.keplr.get(chain, signer);
+        chain = akjs.keplr.getChains().testnet;
+        signer = await akjs.keplr.getSigner(chain);
+        client = await akjs.keplr.get(chain, signer);
         accounts = await signer.getAccounts();
         myAddress = accounts[0].address;
       });
@@ -52,8 +52,8 @@
       document
         .querySelector("#getCerts")
         .addEventListener("click", async () => {
-          const certs = await akashjs.certificate.queryCertificates(
-            akashjs.certProto.CertificateFilter.fromJSON({
+          const certs = await akjs.certificate.queryCertificates(
+            akjs.certProto.CertificateFilter.fromJSON({
               owner: myAddress,
             })
           );
