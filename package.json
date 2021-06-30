@@ -1,0 +1,48 @@
+{
+  "name": "@akashnetwork/akashjs",
+  "version": "0.0.7",
+  "description": "Akash Network JS SDK",
+  "repository": {
+    "url": "https://github.com/ovrclk/akashjs"
+  },
+  "bin": {
+    "akt": "bin.js"
+  },
+  "main": "build/index.js",
+  "types": "build/",
+  "scripts": {
+    "build": "yarn build:tsc && yarn build:build",
+    "build:tsc": "yarn tsc",
+    "build:build": "yarn webpack",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublishOnly": "yarn build"
+  },
+  "author": "",
+  "license": "Apache 2.0",
+  "dependencies": {
+    "@cosmjs/proto-signing": "^0.25.5",
+    "@cosmjs/stargate": "^0.25.5",
+    "asn1js": "^2.1.1",
+    "console-browserify": "^1.2.0",
+    "pkijs": "^2.1.95",
+    "process": "^0.11.10",
+    "pvutils": "^1.0.17",
+    "simple-jsonrpc-js": "^1.2.0"
+  },
+  "devDependencies": {
+    "node-polyfill-webpack-plugin": "^1.1.4",
+    "ts-loader": "^9.2.3",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.4",
+    "webpack": "^5.41.1",
+    "webpack-cli": "^4.7.2"
+  },
+  "browser": {
+    "fs": false,
+    "os": false,
+    "path": false
+  },
+  "files": [
+    "umd/"
+  ]
+}

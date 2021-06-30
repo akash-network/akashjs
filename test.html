@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<head>
+  <script type="text/javascript" src="umd/akashjs.js"></script>
+</head>
+<body>
+  <textarea id="csr"></textarea><br />
+  <textarea id="publicKey"></textarea><br />
+  <textarea id="privateKey"></textarea>
+  <br /><br />
+
+  <button id="signBroadcast">Sign and Broadcast Certificate</button>
+  <button id="getCerts">Get Certs</button>
+
+  <script type="text/javascript">
+    console.log(akashjs);
+
+    const fn = async () => {
+      const certs = await akashjs.certificate.createCertifcate("akash12345");
+      let chain;
+      let signer;
+      let client;
+      let accounts;
+      let myAddress;
+
+      document.querySelector("#csr").value = certs.csr;
+      document.querySelector("#publicKey").value = certs.publicKey;
+      document.querySelector("#privateKey").value = certs.privateKey;
+
+      window.addEventListener("DOMContentLoaded", async (event) => {
+        console.log("DOM fully loaded and parsed");
+        chain = akashjs.keplr.getChains().testnet;
+        signer = await akashjs.keplr.getSigner(chain);
+        client = await akashjs.keplr.get(chain, signer);
+        accounts = await signer.getAccounts();
+        myAddress = accounts[0].address;
+      });
+
+      document
+        .querySelector("#signBroadcast")
+        .addEventListener("click", async () => {
+          try {
+            akashjs.certificate.broadcastCertificate(
+              { csr: certs.csr, publicKey: certs.publicKey },
+              myAddress,
+              client
+            );
+          } catch (error) {
+            console.log(`Akash Transport : ${error.message}`);
+          }
+        });
+
+      document
+        .querySelector("#getCerts")
+        .addEventListener("click", async () => {
+          const certs = await akashjs.certificate.queryCertificates(
+            akashjs.certProto.CertificateFilter.fromJSON({
+              owner: myAddress,
+            })
+          );
+
+          console.log(certs);
+        });
+    };
+
+    fn();
+  </script>
+</body>
