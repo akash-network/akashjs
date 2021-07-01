@@ -1,24 +1,32 @@
-name: Publish to NPM
+name: Release from Master on Push
 on:
   push:
     branches:
       - main
 jobs:
-  publish:
+  tag:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@master
+      - uses: tool3/bump@master
+        with:
+          branch: main
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          unrelated: true
+
+  publisher:
+    needs: tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          ref: main
       - uses: actions/setup-node@v1
         with:
           node-version: 16
-      - name: Update version in package.json
-        uses: maks-stupak/gh-action-bump-version@v7.1.5
-        with:
-          tag-prefix: ""
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: npm install
       - run: npm test
       - uses: JS-DevTools/npm-publish@v1
         with:
+          dry-run: true
           token: ${{ secrets.NPM_TOKEN }}
