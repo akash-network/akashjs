@@ -7,8 +7,8 @@ jobs:
   tag:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - uses: tool3/bump@master
+      - uses: actions/checkout@main
+      - uses: tool3/bump@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           unrelated: true
