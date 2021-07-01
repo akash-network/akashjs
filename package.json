@@ -6,7 +6,7 @@
     "url": "https://github.com/ovrclk/akashjs"
   },
   "bin": {
-    "akt": "bin.js"
+    "akjs": "./build/bin.js"
   },
   "main": "build/index.js",
   "types": "build/",
@@ -20,10 +20,12 @@
   "author": "",
   "license": "Apache 2.0",
   "dependencies": {
+    "@cosmjs/launchpad": "^0.25.5",
     "@cosmjs/proto-signing": "^0.25.5",
     "@cosmjs/stargate": "^0.25.5",
     "asn1js": "^2.1.1",
     "console-browserify": "^1.2.0",
+    "keytar": "^7.7.0",
     "pkijs": "^2.1.95",
     "process": "^0.11.10",
     "pvutils": "^1.0.17",
