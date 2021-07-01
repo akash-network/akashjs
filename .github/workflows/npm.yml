@@ -1,0 +1,21 @@
+name: Publish to NPM
+on: [workflow_dispatch]
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16
+      - name: Update version in package.json
+        uses: maks-stupak/gh-action-bump-version@v7.1.5
+        with:
+          tag-prefix: ""
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: npm install
+      - run: npm test
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
