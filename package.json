@@ -12,13 +12,14 @@
   "types": "build/",
   "scripts": {
     "build": "yarn build:tsc && yarn build:build",
+    "build:production": "NODE_ENV=production yarn build:tsc && yarn build:build",
     "build:tsc": "yarn tsc",
     "build:build": "yarn webpack",
     "test": "echo \"pass\" && exit 0",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build:production"
   },
   "author": "",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "dependencies": {
     "@cosmjs/launchpad": "^0.25.5",
     "@cosmjs/proto-signing": "^0.25.5",
