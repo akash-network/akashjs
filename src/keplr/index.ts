@@ -1,28 +1,21 @@
-import { registry } from "../stargate";
-import { defaultRegistryTypes, SigningStargateClient } from "@cosmjs/stargate";
-import { Registry } from "@cosmjs/proto-signing";
+import type { SigningStargateClient } from "@cosmjs/stargate";
 
-export function getChains() {
-  return {
-    mainnet: { id: "" },
-    testnet: { id: "akash-testnet-6" },
+export async function sendTokens(
+  to: string,
+  from: string,
+  amount: string,
+  memo: string,
+  denom: string,
+  client: SigningStargateClient
+) {
+  const sendAmount = {
+    denom: denom,
+    amount: `${amount}`,
   };
-}
 
-export function getSigner(chain: any) {
-  return (window as any).getOfflineSigner(chain.id);
-}
-
-export async function get(chain: any, signer: any) {
-  const myRegistry = new Registry([
-    ...defaultRegistryTypes,
-    ...(registry as any),
-  ]);
-  return await SigningStargateClient.connectWithSigner(
-    `https://bridge.testnet.akash.network/akashnetwork`,
-    signer,
-    {
-      registry: myRegistry,
-    } as any
-  );
+  try {
+    const result = await client.sendTokens(from, to, [sendAmount], memo);
+  } catch (error) {
+    throw new Error(`Akash Transport : ${error.message}`);
+  }
 }

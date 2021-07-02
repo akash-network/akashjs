@@ -32,6 +32,23 @@ install globally to use `akjs` cli
 version: 0.0.7
 ```
 
+## filling keytar
+
+This library makes use of `keytar` to work securly under node. We fill this on the browser when we roll up the `UMD` version of this library. If you are using this library as a module, you may need to fill `keytar` on your rollup as well.
+
+The easiest way to do this, is to simply use our storage fill for `keytar`.
+
+```javascript
+resolve: {
+  alias: {
+    keytar: path.resolve(
+      __dirname,
+      "node_modules/@akashnetwork/akashjs/src/wallet/storage.ts"
+    ),
+  },
+}
+```
+
 ## stargate
 
 While `akashjs` manages much under the hood, more control is availble through all of the exported types, clients and protos.
