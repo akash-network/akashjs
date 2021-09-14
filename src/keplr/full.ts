@@ -4,17 +4,6 @@ import { defaultRegistryTypes, SigningStargateClient } from "@cosmjs/stargate";
 
 export * from "./index";
 
-export function getChains() {
-  return {
-    mainnet: { id: "" },
-    testnet: { id: "akash-testnet-6" },
-  };
-}
-
-export function getSigner(chain: any) {
-  return (window as any).getOfflineSigner(chain.id);
-}
-
 export async function get(chain: any, signer: any) {
   const myRegistry = new Registry([
     ...defaultRegistryTypes,

@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { util, configure, Writer, Reader } from "protobufjs/minimal";
-import * as Long from "long";
+import Long from "long";
+import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.base.v1beta1";
 
@@ -47,15 +47,18 @@ export function endpoint_KindToJSON(object: Endpoint_Kind): string {
 const baseEndpoint: object = { kind: 0 };
 
 export const Endpoint = {
-  encode(message: Endpoint, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Endpoint,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.kind !== 0) {
       writer.uint32(8).int32(message.kind);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Endpoint {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): Endpoint {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseEndpoint } as Endpoint;
     while (reader.pos < end) {
@@ -107,7 +110,8 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined;
+  | undefined
+  | Long;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -117,3 +121,8 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}

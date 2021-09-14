@@ -1,27 +1,27 @@
 /* eslint-disable */
-import { util, configure, Writer, Reader } from "protobufjs/minimal";
-import * as Long from "long";
-import { ResourceValue } from "./resourcevalue";
-import { Attribute } from "./attribute";
-import { Endpoint } from "./endpoint";
+import Long from "long";
+import _m0 from "protobufjs/minimal";
+import { ResourceValue } from "../../../akash/base/v1beta1/resourcevalue";
+import { Attribute } from "../../../akash/base/v1beta1/attribute";
+import { Endpoint } from "../../../akash/base/v1beta1/endpoint";
 
 export const protobufPackage = "akash.base.v1beta1";
 
 /** CPU stores resource units and cpu config attributes */
 export interface CPU {
-  units: ResourceValue | undefined;
+  units?: ResourceValue;
   attributes: Attribute[];
 }
 
 /** Memory stores resource quantity and memory attributes */
 export interface Memory {
-  quantity: ResourceValue | undefined;
+  quantity?: ResourceValue;
   attributes: Attribute[];
 }
 
 /** Storage stores resource quantity and storage attributes */
 export interface Storage {
-  quantity: ResourceValue | undefined;
+  quantity?: ResourceValue;
   attributes: Attribute[];
 }
 
@@ -30,16 +30,16 @@ export interface Storage {
  * if field is nil resource is not present in the given data-structure
  */
 export interface ResourceUnits {
-  cpu: CPU | undefined;
-  memory: Memory | undefined;
-  storage: Storage | undefined;
+  cpu?: CPU;
+  memory?: Memory;
+  storage?: Storage;
   endpoints: Endpoint[];
 }
 
 const baseCPU: object = {};
 
 export const CPU = {
-  encode(message: CPU, writer: Writer = Writer.create()): Writer {
+  encode(message: CPU, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.units !== undefined) {
       ResourceValue.encode(message.units, writer.uint32(10).fork()).ldelim();
     }
@@ -49,8 +49,8 @@ export const CPU = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): CPU {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): CPU {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCPU } as CPU;
     message.attributes = [];
@@ -123,7 +123,10 @@ export const CPU = {
 const baseMemory: object = {};
 
 export const Memory = {
-  encode(message: Memory, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Memory,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.quantity !== undefined) {
       ResourceValue.encode(message.quantity, writer.uint32(10).fork()).ldelim();
     }
@@ -133,8 +136,8 @@ export const Memory = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Memory {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): Memory {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseMemory } as Memory;
     message.attributes = [];
@@ -207,7 +210,10 @@ export const Memory = {
 const baseStorage: object = {};
 
 export const Storage = {
-  encode(message: Storage, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Storage,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.quantity !== undefined) {
       ResourceValue.encode(message.quantity, writer.uint32(10).fork()).ldelim();
     }
@@ -217,8 +223,8 @@ export const Storage = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Storage {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): Storage {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseStorage } as Storage;
     message.attributes = [];
@@ -291,7 +297,10 @@ export const Storage = {
 const baseResourceUnits: object = {};
 
 export const ResourceUnits = {
-  encode(message: ResourceUnits, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: ResourceUnits,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.cpu !== undefined) {
       CPU.encode(message.cpu, writer.uint32(10).fork()).ldelim();
     }
@@ -307,8 +316,8 @@ export const ResourceUnits = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): ResourceUnits {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): ResourceUnits {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseResourceUnits } as ResourceUnits;
     message.endpoints = [];
@@ -415,7 +424,8 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined;
+  | undefined
+  | Long;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -425,3 +435,8 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
