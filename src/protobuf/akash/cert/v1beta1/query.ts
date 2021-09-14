@@ -1,28 +1,32 @@
 /* eslint-disable */
-import { util, configure, Reader, Writer } from "protobufjs/minimal";
-import { Certificate, CertificateFilter } from "./akash/cert/v1beta1/cert";
+import Long from "long";
+import _m0 from "protobufjs/minimal";
+import {
+  Certificate,
+  CertificateFilter,
+} from "../../../akash/cert/v1beta1/cert";
 import {
   PageRequest,
   PageResponse,
-} from "./cosmos/base/query/v1beta1/pagination";
+} from "../../../cosmos/base/query/v1beta1/pagination";
 
 export const protobufPackage = "akash.cert.v1beta1";
 
 export interface CertificateResponse {
-  certificate: Certificate | undefined;
+  certificate?: Certificate;
   serial: string;
 }
 
 /** QueryDeploymentsRequest is request type for the Query/Deployments RPC method */
 export interface QueryCertificatesRequest {
-  filter: CertificateFilter | undefined;
-  pagination: PageRequest | undefined;
+  filter?: CertificateFilter;
+  pagination?: PageRequest;
 }
 
 /** QueryCertificatesResponse is response type for the Query/Certificates RPC method */
 export interface QueryCertificatesResponse {
   certificates: CertificateResponse[];
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse;
 }
 
 const baseCertificateResponse: object = { serial: "" };
@@ -30,8 +34,8 @@ const baseCertificateResponse: object = { serial: "" };
 export const CertificateResponse = {
   encode(
     message: CertificateResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.certificate !== undefined) {
       Certificate.encode(
         message.certificate,
@@ -44,8 +48,8 @@ export const CertificateResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): CertificateResponse {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): CertificateResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCertificateResponse } as CertificateResponse;
     while (reader.pos < end) {
@@ -111,8 +115,8 @@ const baseQueryCertificatesRequest: object = {};
 export const QueryCertificatesRequest = {
   encode(
     message: QueryCertificatesRequest,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.filter !== undefined) {
       CertificateFilter.encode(
         message.filter,
@@ -126,10 +130,10 @@ export const QueryCertificatesRequest = {
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): QueryCertificatesRequest {
-    const reader = input instanceof Reader ? input : new Reader(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = {
       ...baseQueryCertificatesRequest,
@@ -206,8 +210,8 @@ const baseQueryCertificatesResponse: object = {};
 export const QueryCertificatesResponse = {
   encode(
     message: QueryCertificatesResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.certificates) {
       CertificateResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -221,10 +225,10 @@ export const QueryCertificatesResponse = {
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): QueryCertificatesResponse {
-    const reader = input instanceof Reader ? input : new Reader(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = {
       ...baseQueryCertificatesResponse,
@@ -328,7 +332,7 @@ export class QueryClientImpl implements Query {
       data
     );
     return promise.then((data) =>
-      QueryCertificatesResponse.decode(new Reader(data))
+      QueryCertificatesResponse.decode(new _m0.Reader(data))
     );
   }
 }
@@ -348,7 +352,8 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined;
+  | undefined
+  | Long;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -358,3 +363,8 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}

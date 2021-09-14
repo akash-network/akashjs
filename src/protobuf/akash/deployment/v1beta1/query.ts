@@ -1,52 +1,52 @@
 /* eslint-disable */
-import { util, configure, Reader, Writer } from "protobufjs/minimal";
-import * as Long from "long";
+import Long from "long";
+import _m0 from "protobufjs/minimal";
 import {
   DeploymentFilters,
   DeploymentID,
   Deployment,
-} from "./akash/deployment/v1beta1/deployment";
+} from "../../../akash/deployment/v1beta1/deployment";
 import {
   PageRequest,
   PageResponse,
-} from "./cosmos/base/query/v1beta1/pagination";
-import { Group, GroupID } from "./akash/deployment/v1beta1/group";
-import { Account } from "./akash/escrow/v1beta1/types";
+} from "../../../cosmos/base/query/v1beta1/pagination";
+import { Account } from "../../../akash/escrow/v1beta1/types";
+import { GroupID, Group } from "../../../akash/deployment/v1beta1/group";
 
 export const protobufPackage = "akash.deployment.v1beta1";
 
 /** QueryDeploymentsRequest is request type for the Query/Deployments RPC method */
 export interface QueryDeploymentsRequest {
-  filters: DeploymentFilters | undefined;
-  pagination: PageRequest | undefined;
+  filters?: DeploymentFilters;
+  pagination?: PageRequest;
 }
 
 /** QueryDeploymentsResponse is response type for the Query/Deployments RPC method */
 export interface QueryDeploymentsResponse {
   deployments: QueryDeploymentResponse[];
-  pagination: PageResponse | undefined;
+  pagination?: PageResponse;
 }
 
 /** QueryDeploymentRequest is request type for the Query/Deployment RPC method */
 export interface QueryDeploymentRequest {
-  id: DeploymentID | undefined;
+  id?: DeploymentID;
 }
 
 /** QueryDeploymentResponse is response type for the Query/Deployment RPC method */
 export interface QueryDeploymentResponse {
-  deployment: Deployment | undefined;
+  deployment?: Deployment;
   groups: Group[];
-  escrowAccount: Account | undefined;
+  escrowAccount?: Account;
 }
 
 /** QueryGroupRequest is request type for the Query/Group RPC method */
 export interface QueryGroupRequest {
-  id: GroupID | undefined;
+  id?: GroupID;
 }
 
 /** QueryGroupResponse is response type for the Query/Group RPC method */
 export interface QueryGroupResponse {
-  group: Group | undefined;
+  group?: Group;
 }
 
 const baseQueryDeploymentsRequest: object = {};
@@ -54,8 +54,8 @@ const baseQueryDeploymentsRequest: object = {};
 export const QueryDeploymentsRequest = {
   encode(
     message: QueryDeploymentsRequest,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.filters !== undefined) {
       DeploymentFilters.encode(
         message.filters,
@@ -68,8 +68,11 @@ export const QueryDeploymentsRequest = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryDeploymentsRequest {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): QueryDeploymentsRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = {
       ...baseQueryDeploymentsRequest,
@@ -146,8 +149,8 @@ const baseQueryDeploymentsResponse: object = {};
 export const QueryDeploymentsResponse = {
   encode(
     message: QueryDeploymentsResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.deployments) {
       QueryDeploymentResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -161,10 +164,10 @@ export const QueryDeploymentsResponse = {
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): QueryDeploymentsResponse {
-    const reader = input instanceof Reader ? input : new Reader(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = {
       ...baseQueryDeploymentsResponse,
@@ -249,16 +252,19 @@ const baseQueryDeploymentRequest: object = {};
 export const QueryDeploymentRequest = {
   encode(
     message: QueryDeploymentRequest,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       DeploymentID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryDeploymentRequest {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): QueryDeploymentRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseQueryDeploymentRequest } as QueryDeploymentRequest;
     while (reader.pos < end) {
@@ -310,8 +316,8 @@ const baseQueryDeploymentResponse: object = {};
 export const QueryDeploymentResponse = {
   encode(
     message: QueryDeploymentResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.deployment !== undefined) {
       Deployment.encode(message.deployment, writer.uint32(10).fork()).ldelim();
     }
@@ -324,8 +330,11 @@ export const QueryDeploymentResponse = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryDeploymentResponse {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): QueryDeploymentResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = {
       ...baseQueryDeploymentResponse,
@@ -421,15 +430,18 @@ export const QueryDeploymentResponse = {
 const baseQueryGroupRequest: object = {};
 
 export const QueryGroupRequest = {
-  encode(message: QueryGroupRequest, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: QueryGroupRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       GroupID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGroupRequest {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGroupRequest {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseQueryGroupRequest } as QueryGroupRequest;
     while (reader.pos < end) {
@@ -479,16 +491,16 @@ const baseQueryGroupResponse: object = {};
 export const QueryGroupResponse = {
   encode(
     message: QueryGroupResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.group !== undefined) {
       Group.encode(message.group, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGroupResponse {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGroupResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseQueryGroupResponse } as QueryGroupResponse;
     while (reader.pos < end) {
@@ -563,7 +575,7 @@ export class QueryClientImpl implements Query {
       data
     );
     return promise.then((data) =>
-      QueryDeploymentsResponse.decode(new Reader(data))
+      QueryDeploymentsResponse.decode(new _m0.Reader(data))
     );
   }
 
@@ -577,7 +589,7 @@ export class QueryClientImpl implements Query {
       data
     );
     return promise.then((data) =>
-      QueryDeploymentResponse.decode(new Reader(data))
+      QueryDeploymentResponse.decode(new _m0.Reader(data))
     );
   }
 
@@ -588,7 +600,9 @@ export class QueryClientImpl implements Query {
       "Group",
       data
     );
-    return promise.then((data) => QueryGroupResponse.decode(new Reader(data)));
+    return promise.then((data) =>
+      QueryGroupResponse.decode(new _m0.Reader(data))
+    );
   }
 }
 
@@ -607,7 +621,8 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined;
+  | undefined
+  | Long;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -617,3 +632,8 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}

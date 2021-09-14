@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { util, configure, Writer, Reader } from "protobufjs/minimal";
-import * as Long from "long";
+import Long from "long";
+import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.base.v1beta1";
 
@@ -26,7 +26,7 @@ export interface SignedBy {
 /** PlacementRequirements */
 export interface PlacementRequirements {
   /** SignedBy list of keys that tenants expect to have signatures from */
-  signedBy: SignedBy | undefined;
+  signedBy?: SignedBy;
   /** Attribute list of attributes tenant expects from the provider */
   attributes: Attribute[];
 }
@@ -34,7 +34,10 @@ export interface PlacementRequirements {
 const baseAttribute: object = { key: "", value: "" };
 
 export const Attribute = {
-  encode(message: Attribute, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Attribute,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -44,8 +47,8 @@ export const Attribute = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Attribute {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): Attribute {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseAttribute } as Attribute;
     while (reader.pos < end) {
@@ -106,7 +109,10 @@ export const Attribute = {
 const baseSignedBy: object = { allOf: "", anyOf: "" };
 
 export const SignedBy = {
-  encode(message: SignedBy, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: SignedBy,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.allOf) {
       writer.uint32(10).string(v!);
     }
@@ -116,8 +122,8 @@ export const SignedBy = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): SignedBy {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): SignedBy {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseSignedBy } as SignedBy;
     message.allOf = [];
@@ -194,8 +200,8 @@ const basePlacementRequirements: object = {};
 export const PlacementRequirements = {
   encode(
     message: PlacementRequirements,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.signedBy !== undefined) {
       SignedBy.encode(message.signedBy, writer.uint32(10).fork()).ldelim();
     }
@@ -205,8 +211,11 @@ export const PlacementRequirements = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): PlacementRequirements {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PlacementRequirements {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePlacementRequirements } as PlacementRequirements;
     message.attributes = [];
@@ -285,7 +294,8 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined;
+  | undefined
+  | Long;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -295,3 +305,8 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}

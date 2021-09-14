@@ -1,15 +1,15 @@
 /* eslint-disable */
-import { util, configure, Writer, Reader } from "protobufjs/minimal";
-import * as Long from "long";
-import { PlacementRequirements } from "../../base/v1beta1/attribute";
-import { ResourceUnits } from "../../base/v1beta1/resource";
+import Long from "long";
+import _m0 from "protobufjs/minimal";
+import { PlacementRequirements } from "../../../akash/base/v1beta1/attribute";
+import { ResourceUnits } from "../../../akash/base/v1beta1/resource";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
 
 export const protobufPackage = "akash.deployment.v1beta1";
 
 /** MsgCloseGroup defines SDK message to close a single Group within a Deployment. */
 export interface MsgCloseGroup {
-  id: GroupID | undefined;
+  id?: GroupID;
 }
 
 /** MsgCloseGroupResponse defines the Msg/CloseGroup response type. */
@@ -17,7 +17,7 @@ export interface MsgCloseGroupResponse {}
 
 /** MsgPauseGroup defines SDK message to close a single Group within a Deployment. */
 export interface MsgPauseGroup {
-  id: GroupID | undefined;
+  id?: GroupID;
 }
 
 /** MsgPauseGroupResponse defines the Msg/PauseGroup response type. */
@@ -25,7 +25,7 @@ export interface MsgPauseGroupResponse {}
 
 /** MsgStartGroup defines SDK message to close a single Group within a Deployment. */
 export interface MsgStartGroup {
-  id: GroupID | undefined;
+  id?: GroupID;
 }
 
 /** MsgStartGroupResponse defines the Msg/StartGroup response type. */
@@ -34,23 +34,23 @@ export interface MsgStartGroupResponse {}
 /** GroupID stores owner, deployment sequence number and group sequence number */
 export interface GroupID {
   owner: string;
-  dseq: number;
+  dseq: Long;
   gseq: number;
 }
 
 /** GroupSpec stores group specifications */
 export interface GroupSpec {
   name: string;
-  requirements: PlacementRequirements | undefined;
+  requirements?: PlacementRequirements;
   resources: Resource[];
 }
 
 /** Group stores group id, state and specifications of group */
 export interface Group {
-  groupId: GroupID | undefined;
+  groupId?: GroupID;
   state: Group_State;
-  groupSpec: GroupSpec | undefined;
-  createdAt: number;
+  groupSpec?: GroupSpec;
+  createdAt: Long;
 }
 
 /** State is an enum which refers to state of group */
@@ -111,23 +111,26 @@ export function group_StateToJSON(object: Group_State): string {
 
 /** Resource stores unit, total count and price of resource */
 export interface Resource {
-  resources: ResourceUnits | undefined;
+  resources?: ResourceUnits;
   count: number;
-  price: Coin | undefined;
+  price?: Coin;
 }
 
 const baseMsgCloseGroup: object = {};
 
 export const MsgCloseGroup = {
-  encode(message: MsgCloseGroup, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: MsgCloseGroup,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       GroupID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgCloseGroup {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCloseGroup {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseMsgCloseGroup } as MsgCloseGroup;
     while (reader.pos < end) {
@@ -175,12 +178,18 @@ export const MsgCloseGroup = {
 const baseMsgCloseGroupResponse: object = {};
 
 export const MsgCloseGroupResponse = {
-  encode(_: MsgCloseGroupResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    _: MsgCloseGroupResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgCloseGroupResponse {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgCloseGroupResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseMsgCloseGroupResponse } as MsgCloseGroupResponse;
     while (reader.pos < end) {
@@ -213,15 +222,18 @@ export const MsgCloseGroupResponse = {
 const baseMsgPauseGroup: object = {};
 
 export const MsgPauseGroup = {
-  encode(message: MsgPauseGroup, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: MsgPauseGroup,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       GroupID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgPauseGroup {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgPauseGroup {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseMsgPauseGroup } as MsgPauseGroup;
     while (reader.pos < end) {
@@ -269,12 +281,18 @@ export const MsgPauseGroup = {
 const baseMsgPauseGroupResponse: object = {};
 
 export const MsgPauseGroupResponse = {
-  encode(_: MsgPauseGroupResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    _: MsgPauseGroupResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgPauseGroupResponse {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgPauseGroupResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseMsgPauseGroupResponse } as MsgPauseGroupResponse;
     while (reader.pos < end) {
@@ -307,15 +325,18 @@ export const MsgPauseGroupResponse = {
 const baseMsgStartGroup: object = {};
 
 export const MsgStartGroup = {
-  encode(message: MsgStartGroup, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: MsgStartGroup,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       GroupID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgStartGroup {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgStartGroup {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseMsgStartGroup } as MsgStartGroup;
     while (reader.pos < end) {
@@ -363,12 +384,18 @@ export const MsgStartGroup = {
 const baseMsgStartGroupResponse: object = {};
 
 export const MsgStartGroupResponse = {
-  encode(_: MsgStartGroupResponse, writer: Writer = Writer.create()): Writer {
+  encode(
+    _: MsgStartGroupResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgStartGroupResponse {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgStartGroupResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseMsgStartGroupResponse } as MsgStartGroupResponse;
     while (reader.pos < end) {
@@ -398,14 +425,17 @@ export const MsgStartGroupResponse = {
   },
 };
 
-const baseGroupID: object = { owner: "", dseq: 0, gseq: 0 };
+const baseGroupID: object = { owner: "", dseq: Long.UZERO, gseq: 0 };
 
 export const GroupID = {
-  encode(message: GroupID, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: GroupID,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
-    if (message.dseq !== 0) {
+    if (!message.dseq.isZero()) {
       writer.uint32(16).uint64(message.dseq);
     }
     if (message.gseq !== 0) {
@@ -414,8 +444,8 @@ export const GroupID = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): GroupID {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): GroupID {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseGroupID } as GroupID;
     while (reader.pos < end) {
@@ -425,7 +455,7 @@ export const GroupID = {
           message.owner = reader.string();
           break;
         case 2:
-          message.dseq = longToNumber(reader.uint64() as Long);
+          message.dseq = reader.uint64() as Long;
           break;
         case 3:
           message.gseq = reader.uint32();
@@ -446,9 +476,9 @@ export const GroupID = {
       message.owner = "";
     }
     if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = Number(object.dseq);
+      message.dseq = Long.fromString(object.dseq);
     } else {
-      message.dseq = 0;
+      message.dseq = Long.UZERO;
     }
     if (object.gseq !== undefined && object.gseq !== null) {
       message.gseq = Number(object.gseq);
@@ -461,7 +491,8 @@ export const GroupID = {
   toJSON(message: GroupID): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined && (obj.dseq = message.dseq);
+    message.dseq !== undefined &&
+      (obj.dseq = (message.dseq || Long.UZERO).toString());
     message.gseq !== undefined && (obj.gseq = message.gseq);
     return obj;
   },
@@ -474,9 +505,9 @@ export const GroupID = {
       message.owner = "";
     }
     if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = object.dseq;
+      message.dseq = object.dseq as Long;
     } else {
-      message.dseq = 0;
+      message.dseq = Long.UZERO;
     }
     if (object.gseq !== undefined && object.gseq !== null) {
       message.gseq = object.gseq;
@@ -490,7 +521,10 @@ export const GroupID = {
 const baseGroupSpec: object = { name: "" };
 
 export const GroupSpec = {
-  encode(message: GroupSpec, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: GroupSpec,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -506,8 +540,8 @@ export const GroupSpec = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): GroupSpec {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): GroupSpec {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseGroupSpec } as GroupSpec;
     message.resources = [];
@@ -598,10 +632,10 @@ export const GroupSpec = {
   },
 };
 
-const baseGroup: object = { state: 0, createdAt: 0 };
+const baseGroup: object = { state: 0, createdAt: Long.ZERO };
 
 export const Group = {
-  encode(message: Group, writer: Writer = Writer.create()): Writer {
+  encode(message: Group, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.groupId !== undefined) {
       GroupID.encode(message.groupId, writer.uint32(10).fork()).ldelim();
     }
@@ -611,14 +645,14 @@ export const Group = {
     if (message.groupSpec !== undefined) {
       GroupSpec.encode(message.groupSpec, writer.uint32(26).fork()).ldelim();
     }
-    if (message.createdAt !== 0) {
+    if (!message.createdAt.isZero()) {
       writer.uint32(32).int64(message.createdAt);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Group {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): Group {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseGroup } as Group;
     while (reader.pos < end) {
@@ -634,7 +668,7 @@ export const Group = {
           message.groupSpec = GroupSpec.decode(reader, reader.uint32());
           break;
         case 4:
-          message.createdAt = longToNumber(reader.int64() as Long);
+          message.createdAt = reader.int64() as Long;
           break;
         default:
           reader.skipType(tag & 7);
@@ -662,9 +696,9 @@ export const Group = {
       message.groupSpec = undefined;
     }
     if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = Number(object.createdAt);
+      message.createdAt = Long.fromString(object.createdAt);
     } else {
-      message.createdAt = 0;
+      message.createdAt = Long.ZERO;
     }
     return message;
   },
@@ -681,7 +715,8 @@ export const Group = {
       (obj.groupSpec = message.groupSpec
         ? GroupSpec.toJSON(message.groupSpec)
         : undefined);
-    message.createdAt !== undefined && (obj.createdAt = message.createdAt);
+    message.createdAt !== undefined &&
+      (obj.createdAt = (message.createdAt || Long.ZERO).toString());
     return obj;
   },
 
@@ -703,9 +738,9 @@ export const Group = {
       message.groupSpec = undefined;
     }
     if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = object.createdAt;
+      message.createdAt = object.createdAt as Long;
     } else {
-      message.createdAt = 0;
+      message.createdAt = Long.ZERO;
     }
     return message;
   },
@@ -714,7 +749,10 @@ export const Group = {
 const baseResource: object = { count: 0 };
 
 export const Resource = {
-  encode(message: Resource, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Resource,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.resources !== undefined) {
       ResourceUnits.encode(
         message.resources,
@@ -730,8 +768,8 @@ export const Resource = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Resource {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): Resource {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseResource } as Resource;
     while (reader.pos < end) {
@@ -807,16 +845,6 @@ export const Resource = {
   },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
-
 type Builtin =
   | Date
   | Function
@@ -824,7 +852,8 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined;
+  | undefined
+  | Long;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -835,9 +864,7 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
-function longToNumber(long: Long): number {
-  if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
-  }
-  return long.toNumber();
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
 }

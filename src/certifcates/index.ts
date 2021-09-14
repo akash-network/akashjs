@@ -6,8 +6,8 @@ import { createStarGateMessage } from "../pbclient";
 import {
   QueryCertificatesRequest,
   QueryCertificatesResponse,
-} from "../protobuf/certQuery";
-import { CertificateFilter } from "../protobuf/cert";
+} from "../protobuf/akash/cert/v1beta1/query";
+import { CertificateFilter } from "../protobuf/akash/cert/v1beta1/cert";
 
 const JsonRPC = require("simple-jsonrpc-js");
 const { toBase64 } = require("pvutils");
