@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { util, configure, Writer, Reader } from "protobufjs/minimal";
-import * as Long from "long";
+import Long from "long";
+import _m0 from "protobufjs/minimal";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
 
 export const protobufPackage = "akash.escrow.v1beta1";
@@ -13,12 +13,12 @@ export interface AccountID {
 
 /** Account stores state for an escrow account */
 export interface Account {
-  id: AccountID | undefined;
+  id?: AccountID;
   owner: string;
   state: Account_State;
-  balance: Coin | undefined;
-  transferred: Coin | undefined;
-  settledAt: number;
+  balance?: Coin;
+  transferred?: Coin;
+  settledAt: Long;
 }
 
 /** State stores state for an escrow account */
@@ -72,13 +72,13 @@ export function account_StateToJSON(object: Account_State): string {
 
 /** Payment stores state for a payment */
 export interface Payment {
-  accountId: AccountID | undefined;
+  accountId?: AccountID;
   paymentId: string;
   owner: string;
   state: Payment_State;
-  rate: Coin | undefined;
-  balance: Coin | undefined;
-  withdrawn: Coin | undefined;
+  rate?: Coin;
+  balance?: Coin;
+  withdrawn?: Coin;
 }
 
 /** Payment State */
@@ -133,7 +133,10 @@ export function payment_StateToJSON(object: Payment_State): string {
 const baseAccountID: object = { scope: "", xid: "" };
 
 export const AccountID = {
-  encode(message: AccountID, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: AccountID,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.scope !== "") {
       writer.uint32(10).string(message.scope);
     }
@@ -143,8 +146,8 @@ export const AccountID = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): AccountID {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): AccountID {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseAccountID } as AccountID;
     while (reader.pos < end) {
@@ -202,10 +205,13 @@ export const AccountID = {
   },
 };
 
-const baseAccount: object = { owner: "", state: 0, settledAt: 0 };
+const baseAccount: object = { owner: "", state: 0, settledAt: Long.ZERO };
 
 export const Account = {
-  encode(message: Account, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Account,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       AccountID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -221,14 +227,14 @@ export const Account = {
     if (message.transferred !== undefined) {
       Coin.encode(message.transferred, writer.uint32(42).fork()).ldelim();
     }
-    if (message.settledAt !== 0) {
+    if (!message.settledAt.isZero()) {
       writer.uint32(48).int64(message.settledAt);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Account {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): Account {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseAccount } as Account;
     while (reader.pos < end) {
@@ -250,7 +256,7 @@ export const Account = {
           message.transferred = Coin.decode(reader, reader.uint32());
           break;
         case 6:
-          message.settledAt = longToNumber(reader.int64() as Long);
+          message.settledAt = reader.int64() as Long;
           break;
         default:
           reader.skipType(tag & 7);
@@ -288,9 +294,9 @@ export const Account = {
       message.transferred = undefined;
     }
     if (object.settledAt !== undefined && object.settledAt !== null) {
-      message.settledAt = Number(object.settledAt);
+      message.settledAt = Long.fromString(object.settledAt);
     } else {
-      message.settledAt = 0;
+      message.settledAt = Long.ZERO;
     }
     return message;
   },
@@ -310,7 +316,8 @@ export const Account = {
       (obj.transferred = message.transferred
         ? Coin.toJSON(message.transferred)
         : undefined);
-    message.settledAt !== undefined && (obj.settledAt = message.settledAt);
+    message.settledAt !== undefined &&
+      (obj.settledAt = (message.settledAt || Long.ZERO).toString());
     return obj;
   },
 
@@ -342,9 +349,9 @@ export const Account = {
       message.transferred = undefined;
     }
     if (object.settledAt !== undefined && object.settledAt !== null) {
-      message.settledAt = object.settledAt;
+      message.settledAt = object.settledAt as Long;
     } else {
-      message.settledAt = 0;
+      message.settledAt = Long.ZERO;
     }
     return message;
   },
@@ -353,7 +360,10 @@ export const Account = {
 const basePayment: object = { paymentId: "", owner: "", state: 0 };
 
 export const Payment = {
-  encode(message: Payment, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Payment,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.accountId !== undefined) {
       AccountID.encode(message.accountId, writer.uint32(10).fork()).ldelim();
     }
@@ -378,8 +388,8 @@ export const Payment = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Payment {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): Payment {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...basePayment } as Payment;
     while (reader.pos < end) {
@@ -518,16 +528,6 @@ export const Payment = {
   },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
-  throw "Unable to locate global object";
-})();
-
 type Builtin =
   | Date
   | Function
@@ -535,7 +535,8 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined;
+  | undefined
+  | Long;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -546,9 +547,7 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
-function longToNumber(long: Long): number {
-  if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
-  }
-  return long.toNumber();
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
 }

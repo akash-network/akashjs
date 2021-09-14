@@ -1,6 +1,6 @@
 /* eslint-disable */
-import { util, configure, Reader, Writer } from "protobufjs/minimal";
-import * as Long from "long";
+import Long from "long";
+import _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.cert.v1beta1";
 
@@ -78,7 +78,7 @@ export interface MsgCreateCertificateResponse {}
 
 /** MsgRevokeCertificate defines an SDK message for revoking certificate */
 export interface MsgRevokeCertificate {
-  id: CertificateID | undefined;
+  id?: CertificateID;
 }
 
 /** MsgRevokeCertificateResponse defines the Msg/RevokeCertificate response type. */
@@ -87,7 +87,10 @@ export interface MsgRevokeCertificateResponse {}
 const baseCertificateID: object = { owner: "", serial: "" };
 
 export const CertificateID = {
-  encode(message: CertificateID, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CertificateID,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -97,8 +100,8 @@ export const CertificateID = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): CertificateID {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): CertificateID {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCertificateID } as CertificateID;
     while (reader.pos < end) {
@@ -159,7 +162,10 @@ export const CertificateID = {
 const baseCertificate: object = { state: 0 };
 
 export const Certificate = {
-  encode(message: Certificate, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Certificate,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.state !== 0) {
       writer.uint32(16).int32(message.state);
     }
@@ -172,8 +178,8 @@ export const Certificate = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Certificate {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): Certificate {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCertificate } as Certificate;
     message.cert = new Uint8Array();
@@ -255,7 +261,10 @@ export const Certificate = {
 const baseCertificateFilter: object = { owner: "", serial: "", state: "" };
 
 export const CertificateFilter = {
-  encode(message: CertificateFilter, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: CertificateFilter,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -268,8 +277,8 @@ export const CertificateFilter = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): CertificateFilter {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): CertificateFilter {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseCertificateFilter } as CertificateFilter;
     while (reader.pos < end) {
@@ -346,8 +355,8 @@ const baseMsgCreateCertificate: object = { owner: "" };
 export const MsgCreateCertificate = {
   encode(
     message: MsgCreateCertificate,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -360,8 +369,11 @@ export const MsgCreateCertificate = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgCreateCertificate {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgCreateCertificate {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseMsgCreateCertificate } as MsgCreateCertificate;
     message.cert = new Uint8Array();
@@ -444,16 +456,16 @@ const baseMsgCreateCertificateResponse: object = {};
 export const MsgCreateCertificateResponse = {
   encode(
     _: MsgCreateCertificateResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): MsgCreateCertificateResponse {
-    const reader = input instanceof Reader ? input : new Reader(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = {
       ...baseMsgCreateCertificateResponse,
@@ -496,16 +508,19 @@ const baseMsgRevokeCertificate: object = {};
 export const MsgRevokeCertificate = {
   encode(
     message: MsgRevokeCertificate,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       CertificateID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgRevokeCertificate {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgRevokeCertificate {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseMsgRevokeCertificate } as MsgRevokeCertificate;
     while (reader.pos < end) {
@@ -555,16 +570,16 @@ const baseMsgRevokeCertificateResponse: object = {};
 export const MsgRevokeCertificateResponse = {
   encode(
     _: MsgRevokeCertificateResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): MsgRevokeCertificateResponse {
-    const reader = input instanceof Reader ? input : new Reader(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = {
       ...baseMsgRevokeCertificateResponse,
@@ -631,7 +646,7 @@ export class MsgClientImpl implements Msg {
       data
     );
     return promise.then((data) =>
-      MsgCreateCertificateResponse.decode(new Reader(data))
+      MsgCreateCertificateResponse.decode(new _m0.Reader(data))
     );
   }
 
@@ -645,7 +660,7 @@ export class MsgClientImpl implements Msg {
       data
     );
     return promise.then((data) =>
-      MsgRevokeCertificateResponse.decode(new Reader(data))
+      MsgRevokeCertificateResponse.decode(new _m0.Reader(data))
     );
   }
 }
@@ -685,8 +700,8 @@ const btoa: (bin: string) => string =
   ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
   const bin: string[] = [];
-  for (const byte of arr) {
-    bin.push(String.fromCharCode(byte));
+  for (let i = 0; i < arr.byteLength; ++i) {
+    bin.push(String.fromCharCode(arr[i]));
   }
   return btoa(bin.join(""));
 }
@@ -698,7 +713,8 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined;
+  | undefined
+  | Long;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -708,3 +724,8 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}

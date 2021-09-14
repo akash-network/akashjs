@@ -1,6 +1,7 @@
 /* eslint-disable */
-import { util, configure, Reader, Writer } from "protobufjs/minimal";
-import * as Long from "long";
+import Long from "long";
+import _m0 from "protobufjs/minimal";
+import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import {
   GroupSpec,
   MsgCloseGroupResponse,
@@ -9,17 +10,16 @@ import {
   MsgCloseGroup,
   MsgPauseGroup,
   MsgStartGroup,
-} from "./group";
-import { Coin } from "../../../cosmos/base/v1beta1/coin";
+} from "../../../akash/deployment/v1beta1/group";
 
 export const protobufPackage = "akash.deployment.v1beta1";
 
 /** MsgCreateDeployment defines an SDK message for creating deployment */
 export interface MsgCreateDeployment {
-  id: DeploymentID | undefined;
+  id?: DeploymentID;
   groups: GroupSpec[];
   version: Uint8Array;
-  deposit: Coin | undefined;
+  deposit?: Coin;
 }
 
 /** MsgCreateDeploymentResponse defines the Msg/CreateDeployment response type. */
@@ -27,8 +27,8 @@ export interface MsgCreateDeploymentResponse {}
 
 /** MsgDepositDeployment deposits more funds into the deposit account */
 export interface MsgDepositDeployment {
-  id: DeploymentID | undefined;
-  amount: Coin | undefined;
+  id?: DeploymentID;
+  amount?: Coin;
 }
 
 /** MsgCreateDeploymentResponse defines the Msg/CreateDeployment response type. */
@@ -36,7 +36,7 @@ export interface MsgDepositDeploymentResponse {}
 
 /** MsgUpdateDeployment defines an SDK message for updating deployment */
 export interface MsgUpdateDeployment {
-  id: DeploymentID | undefined;
+  id?: DeploymentID;
   groups: GroupSpec[];
   version: Uint8Array;
 }
@@ -46,7 +46,7 @@ export interface MsgUpdateDeploymentResponse {}
 
 /** MsgCloseDeployment defines an SDK message for closing deployment */
 export interface MsgCloseDeployment {
-  id: DeploymentID | undefined;
+  id?: DeploymentID;
 }
 
 /** MsgCloseDeploymentResponse defines the Msg/CloseDeployment response type. */
@@ -55,15 +55,15 @@ export interface MsgCloseDeploymentResponse {}
 /** DeploymentID stores owner and sequence number */
 export interface DeploymentID {
   owner: string;
-  dseq: number;
+  dseq: Long;
 }
 
 /** Deployment stores deploymentID, state and version details */
 export interface Deployment {
-  deploymentId: DeploymentID | undefined;
+  deploymentId?: DeploymentID;
   state: Deployment_State;
   version: Uint8Array;
-  createdAt: number;
+  createdAt: Long;
 }
 
 /** State is an enum which refers to state of deployment */
@@ -111,7 +111,7 @@ export function deployment_StateToJSON(object: Deployment_State): string {
 /** DeploymentFilters defines filters used to filter deployments */
 export interface DeploymentFilters {
   owner: string;
-  dseq: number;
+  dseq: Long;
   state: string;
 }
 
@@ -120,8 +120,8 @@ const baseMsgCreateDeployment: object = {};
 export const MsgCreateDeployment = {
   encode(
     message: MsgCreateDeployment,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       DeploymentID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -137,8 +137,8 @@ export const MsgCreateDeployment = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgCreateDeployment {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateDeployment {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseMsgCreateDeployment } as MsgCreateDeployment;
     message.groups = [];
@@ -245,16 +245,16 @@ const baseMsgCreateDeploymentResponse: object = {};
 export const MsgCreateDeploymentResponse = {
   encode(
     _: MsgCreateDeploymentResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): MsgCreateDeploymentResponse {
-    const reader = input instanceof Reader ? input : new Reader(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = {
       ...baseMsgCreateDeploymentResponse,
@@ -297,8 +297,8 @@ const baseMsgDepositDeployment: object = {};
 export const MsgDepositDeployment = {
   encode(
     message: MsgDepositDeployment,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       DeploymentID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -308,8 +308,11 @@ export const MsgDepositDeployment = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgDepositDeployment {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgDepositDeployment {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseMsgDepositDeployment } as MsgDepositDeployment;
     while (reader.pos < end) {
@@ -374,16 +377,16 @@ const baseMsgDepositDeploymentResponse: object = {};
 export const MsgDepositDeploymentResponse = {
   encode(
     _: MsgDepositDeploymentResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): MsgDepositDeploymentResponse {
-    const reader = input instanceof Reader ? input : new Reader(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = {
       ...baseMsgDepositDeploymentResponse,
@@ -426,8 +429,8 @@ const baseMsgUpdateDeployment: object = {};
 export const MsgUpdateDeployment = {
   encode(
     message: MsgUpdateDeployment,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       DeploymentID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -440,8 +443,8 @@ export const MsgUpdateDeployment = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgUpdateDeployment {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateDeployment {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseMsgUpdateDeployment } as MsgUpdateDeployment;
     message.groups = [];
@@ -531,16 +534,16 @@ const baseMsgUpdateDeploymentResponse: object = {};
 export const MsgUpdateDeploymentResponse = {
   encode(
     _: MsgUpdateDeploymentResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): MsgUpdateDeploymentResponse {
-    const reader = input instanceof Reader ? input : new Reader(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = {
       ...baseMsgUpdateDeploymentResponse,
@@ -583,16 +586,16 @@ const baseMsgCloseDeployment: object = {};
 export const MsgCloseDeployment = {
   encode(
     message: MsgCloseDeployment,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       DeploymentID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgCloseDeployment {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCloseDeployment {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseMsgCloseDeployment } as MsgCloseDeployment;
     while (reader.pos < end) {
@@ -642,16 +645,16 @@ const baseMsgCloseDeploymentResponse: object = {};
 export const MsgCloseDeploymentResponse = {
   encode(
     _: MsgCloseDeploymentResponse,
-    writer: Writer = Writer.create()
-  ): Writer {
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
   decode(
-    input: Reader | Uint8Array,
+    input: _m0.Reader | Uint8Array,
     length?: number
   ): MsgCloseDeploymentResponse {
-    const reader = input instanceof Reader ? input : new Reader(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = {
       ...baseMsgCloseDeploymentResponse,
@@ -689,21 +692,24 @@ export const MsgCloseDeploymentResponse = {
   },
 };
 
-const baseDeploymentID: object = { owner: "", dseq: 0 };
+const baseDeploymentID: object = { owner: "", dseq: Long.UZERO };
 
 export const DeploymentID = {
-  encode(message: DeploymentID, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: DeploymentID,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
-    if (message.dseq !== 0) {
+    if (!message.dseq.isZero()) {
       writer.uint32(16).uint64(message.dseq);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): DeploymentID {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): DeploymentID {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeploymentID } as DeploymentID;
     while (reader.pos < end) {
@@ -713,7 +719,7 @@ export const DeploymentID = {
           message.owner = reader.string();
           break;
         case 2:
-          message.dseq = longToNumber(reader.uint64() as Long);
+          message.dseq = reader.uint64() as Long;
           break;
         default:
           reader.skipType(tag & 7);
@@ -731,9 +737,9 @@ export const DeploymentID = {
       message.owner = "";
     }
     if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = Number(object.dseq);
+      message.dseq = Long.fromString(object.dseq);
     } else {
-      message.dseq = 0;
+      message.dseq = Long.UZERO;
     }
     return message;
   },
@@ -741,7 +747,8 @@ export const DeploymentID = {
   toJSON(message: DeploymentID): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined && (obj.dseq = message.dseq);
+    message.dseq !== undefined &&
+      (obj.dseq = (message.dseq || Long.UZERO).toString());
     return obj;
   },
 
@@ -753,18 +760,21 @@ export const DeploymentID = {
       message.owner = "";
     }
     if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = object.dseq;
+      message.dseq = object.dseq as Long;
     } else {
-      message.dseq = 0;
+      message.dseq = Long.UZERO;
     }
     return message;
   },
 };
 
-const baseDeployment: object = { state: 0, createdAt: 0 };
+const baseDeployment: object = { state: 0, createdAt: Long.ZERO };
 
 export const Deployment = {
-  encode(message: Deployment, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: Deployment,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.deploymentId !== undefined) {
       DeploymentID.encode(
         message.deploymentId,
@@ -777,14 +787,14 @@ export const Deployment = {
     if (message.version.length !== 0) {
       writer.uint32(26).bytes(message.version);
     }
-    if (message.createdAt !== 0) {
+    if (!message.createdAt.isZero()) {
       writer.uint32(32).int64(message.createdAt);
     }
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): Deployment {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): Deployment {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeployment } as Deployment;
     message.version = new Uint8Array();
@@ -801,7 +811,7 @@ export const Deployment = {
           message.version = reader.bytes();
           break;
         case 4:
-          message.createdAt = longToNumber(reader.int64() as Long);
+          message.createdAt = reader.int64() as Long;
           break;
         default:
           reader.skipType(tag & 7);
@@ -828,9 +838,9 @@ export const Deployment = {
       message.version = bytesFromBase64(object.version);
     }
     if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = Number(object.createdAt);
+      message.createdAt = Long.fromString(object.createdAt);
     } else {
-      message.createdAt = 0;
+      message.createdAt = Long.ZERO;
     }
     return message;
   },
@@ -847,7 +857,8 @@ export const Deployment = {
       (obj.version = base64FromBytes(
         message.version !== undefined ? message.version : new Uint8Array()
       ));
-    message.createdAt !== undefined && (obj.createdAt = message.createdAt);
+    message.createdAt !== undefined &&
+      (obj.createdAt = (message.createdAt || Long.ZERO).toString());
     return obj;
   },
 
@@ -869,22 +880,29 @@ export const Deployment = {
       message.version = new Uint8Array();
     }
     if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = object.createdAt;
+      message.createdAt = object.createdAt as Long;
     } else {
-      message.createdAt = 0;
+      message.createdAt = Long.ZERO;
     }
     return message;
   },
 };
 
-const baseDeploymentFilters: object = { owner: "", dseq: 0, state: "" };
+const baseDeploymentFilters: object = {
+  owner: "",
+  dseq: Long.UZERO,
+  state: "",
+};
 
 export const DeploymentFilters = {
-  encode(message: DeploymentFilters, writer: Writer = Writer.create()): Writer {
+  encode(
+    message: DeploymentFilters,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
-    if (message.dseq !== 0) {
+    if (!message.dseq.isZero()) {
       writer.uint32(16).uint64(message.dseq);
     }
     if (message.state !== "") {
@@ -893,8 +911,8 @@ export const DeploymentFilters = {
     return writer;
   },
 
-  decode(input: Reader | Uint8Array, length?: number): DeploymentFilters {
-    const reader = input instanceof Reader ? input : new Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): DeploymentFilters {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = { ...baseDeploymentFilters } as DeploymentFilters;
     while (reader.pos < end) {
@@ -904,7 +922,7 @@ export const DeploymentFilters = {
           message.owner = reader.string();
           break;
         case 2:
-          message.dseq = longToNumber(reader.uint64() as Long);
+          message.dseq = reader.uint64() as Long;
           break;
         case 3:
           message.state = reader.string();
@@ -925,9 +943,9 @@ export const DeploymentFilters = {
       message.owner = "";
     }
     if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = Number(object.dseq);
+      message.dseq = Long.fromString(object.dseq);
     } else {
-      message.dseq = 0;
+      message.dseq = Long.UZERO;
     }
     if (object.state !== undefined && object.state !== null) {
       message.state = String(object.state);
@@ -940,7 +958,8 @@ export const DeploymentFilters = {
   toJSON(message: DeploymentFilters): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined && (obj.dseq = message.dseq);
+    message.dseq !== undefined &&
+      (obj.dseq = (message.dseq || Long.UZERO).toString());
     message.state !== undefined && (obj.state = message.state);
     return obj;
   },
@@ -953,9 +972,9 @@ export const DeploymentFilters = {
       message.owner = "";
     }
     if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = object.dseq;
+      message.dseq = object.dseq as Long;
     } else {
-      message.dseq = 0;
+      message.dseq = Long.UZERO;
     }
     if (object.state !== undefined && object.state !== null) {
       message.state = object.state;
@@ -1014,7 +1033,7 @@ export class MsgClientImpl implements Msg {
       data
     );
     return promise.then((data) =>
-      MsgCreateDeploymentResponse.decode(new Reader(data))
+      MsgCreateDeploymentResponse.decode(new _m0.Reader(data))
     );
   }
 
@@ -1028,7 +1047,7 @@ export class MsgClientImpl implements Msg {
       data
     );
     return promise.then((data) =>
-      MsgDepositDeploymentResponse.decode(new Reader(data))
+      MsgDepositDeploymentResponse.decode(new _m0.Reader(data))
     );
   }
 
@@ -1042,7 +1061,7 @@ export class MsgClientImpl implements Msg {
       data
     );
     return promise.then((data) =>
-      MsgUpdateDeploymentResponse.decode(new Reader(data))
+      MsgUpdateDeploymentResponse.decode(new _m0.Reader(data))
     );
   }
 
@@ -1056,7 +1075,7 @@ export class MsgClientImpl implements Msg {
       data
     );
     return promise.then((data) =>
-      MsgCloseDeploymentResponse.decode(new Reader(data))
+      MsgCloseDeploymentResponse.decode(new _m0.Reader(data))
     );
   }
 
@@ -1068,7 +1087,7 @@ export class MsgClientImpl implements Msg {
       data
     );
     return promise.then((data) =>
-      MsgCloseGroupResponse.decode(new Reader(data))
+      MsgCloseGroupResponse.decode(new _m0.Reader(data))
     );
   }
 
@@ -1080,7 +1099,7 @@ export class MsgClientImpl implements Msg {
       data
     );
     return promise.then((data) =>
-      MsgPauseGroupResponse.decode(new Reader(data))
+      MsgPauseGroupResponse.decode(new _m0.Reader(data))
     );
   }
 
@@ -1092,7 +1111,7 @@ export class MsgClientImpl implements Msg {
       data
     );
     return promise.then((data) =>
-      MsgStartGroupResponse.decode(new Reader(data))
+      MsgStartGroupResponse.decode(new _m0.Reader(data))
     );
   }
 }
@@ -1132,8 +1151,8 @@ const btoa: (bin: string) => string =
   ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
   const bin: string[] = [];
-  for (const byte of arr) {
-    bin.push(String.fromCharCode(byte));
+  for (let i = 0; i < arr.byteLength; ++i) {
+    bin.push(String.fromCharCode(arr[i]));
   }
   return btoa(bin.join(""));
 }
@@ -1145,7 +1164,8 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined;
+  | undefined
+  | Long;
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Array<infer U>
@@ -1156,9 +1176,7 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
-function longToNumber(long: Long): number {
-  if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
-  }
-  return long.toNumber();
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
 }
