@@ -5,9 +5,6 @@
   "repository": {
     "url": "https://github.com/ovrclk/akashjs"
   },
-  "bin": {
-    "akjs": "./build/bin.js"
-  },
   "main": "build/index.js",
   "types": "build/",
   "scripts": {
