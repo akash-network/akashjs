@@ -34,7 +34,8 @@ version: 0.0.7
 
 ## stargate
 
-While `akashjs` manages much under the hood, more control is availble through all of the exported types, clients and protos.
+While `akashjs` manages much under the hood, more control is available through all of the exported types, clients and protocols.
+
 Import the registry for signing and broadcasting signed transactions, this is needed if you plan to use [Stargate](https://www.npmjs.com/package/@cosmjs/stargate)
 
 ```typescript
