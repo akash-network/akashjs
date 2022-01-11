@@ -15,7 +15,7 @@
     console.log(akjs);
 
     const fn = async () => {
-      const certs = await akjs.certificate.createCertifcate("akash12345");
+      const certs = await akjs.certificate.createCertificate("akash12345");
       let chain;
       let signer;
       let client;
@@ -39,7 +39,7 @@
         .querySelector("#signBroadcast")
         .addEventListener("click", async () => {
           try {
-            akashjs.certificate.broadcastCertificate(
+            akjs.certificate.broadcastCertificate(
               { csr: certs.csr, publicKey: certs.publicKey },
               myAddress,
               client

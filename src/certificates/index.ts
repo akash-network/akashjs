@@ -32,12 +32,12 @@ export async function broadcastCertificate(
   return await client.signAndBroadcast(owner, [message.message], message.fee);
 }
 
-export async function createCertifcate(bech32Address: string) {
-  const certifcate = create509(bech32Address);
-  return certifcate;
+export async function createCertificate(bech32Address: string) {
+  const certificate = create509(bech32Address);
+  return certificate;
 }
 
-export async function revokeCertifcate(
+export async function revokeCertificate(
   owner: string,
   serial: string,
   client: SigningStargateClient

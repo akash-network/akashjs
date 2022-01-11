@@ -11,7 +11,7 @@ const accounts = await signer.getAccounts();
 try {
   const myAddress = accounts[0].address;
 
-  const pems: akashCertificate.pems = await akashCertificate.createCertifcate(
+  const pems: akashCertificate.pems = await akashCertificate.createCertificate(
     myAddress
   );
 
