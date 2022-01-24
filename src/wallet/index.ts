@@ -13,10 +13,15 @@ export async function createAccount(password: string) {
   };
 }
 
+export async function importAccount(mnemonic: string) {
+  wallet = await Secp256k1HdWallet.fromMnemonic(mnemonic);
+  const accounts = await wallet.getAccounts();
+  return accounts;
+}
+
 export async function getAccount(address: string) {
   const mnemonic: any = await keytar.getPassword("AkashNetwork", address);
-  wallet = await Secp256k1HdWallet.fromMnemonic(mnemonic);
-  return wallet;
+  return importAccount(mnemonic);
 }
 
 export async function getLastLoaded() {

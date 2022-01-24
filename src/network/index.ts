@@ -1,15 +1,13 @@
 import fetch from 'node-fetch';
 
-enum NETWORK_TYPE {
-    "mainnet",
-    "testnet",
-    "edgenet",
-}
+type NETWORK_TYPE =
+    "mainnet" |
+    "testnet" |
+    "edgenet";
 
-enum ENDPOINT_TYPE {
-    "rpc",
-    "rest",
-}
+type ENDPOINT_TYPE =
+    "rpc" |
+    "rest";
 
 interface INetworkMetadata {
     "chain_name": string;
@@ -59,7 +57,5 @@ export async function getMetadata(network: NETWORK_TYPE): Promise<INetworkMetada
 }
 
 export async function getEndpoints(network: NETWORK_TYPE, type: ENDPOINT_TYPE) {
-    return getMetadata(network).then(meta => ({
-        apis: meta.apis[type]
-    }));
+    return getMetadata(network).then(meta => meta.apis[type]);
 }
