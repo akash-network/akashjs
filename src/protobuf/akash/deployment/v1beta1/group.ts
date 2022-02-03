@@ -116,7 +116,9 @@ export interface Resource {
   price?: Coin;
 }
 
-const baseMsgCloseGroup: object = {};
+function createBaseMsgCloseGroup(): MsgCloseGroup {
+  return { id: undefined };
+}
 
 export const MsgCloseGroup = {
   encode(
@@ -132,7 +134,7 @@ export const MsgCloseGroup = {
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgCloseGroup {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgCloseGroup } as MsgCloseGroup;
+    const message = createBaseMsgCloseGroup();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -148,13 +150,9 @@ export const MsgCloseGroup = {
   },
 
   fromJSON(object: any): MsgCloseGroup {
-    const message = { ...baseMsgCloseGroup } as MsgCloseGroup;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = GroupID.fromJSON(object.id);
-    } else {
-      message.id = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined,
+    };
   },
 
   toJSON(message: MsgCloseGroup): unknown {
@@ -164,18 +162,21 @@ export const MsgCloseGroup = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgCloseGroup>): MsgCloseGroup {
-    const message = { ...baseMsgCloseGroup } as MsgCloseGroup;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = GroupID.fromPartial(object.id);
-    } else {
-      message.id = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgCloseGroup>, I>>(
+    object: I
+  ): MsgCloseGroup {
+    const message = createBaseMsgCloseGroup();
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? GroupID.fromPartial(object.id)
+        : undefined;
     return message;
   },
 };
 
-const baseMsgCloseGroupResponse: object = {};
+function createBaseMsgCloseGroupResponse(): MsgCloseGroupResponse {
+  return {};
+}
 
 export const MsgCloseGroupResponse = {
   encode(
@@ -191,7 +192,7 @@ export const MsgCloseGroupResponse = {
   ): MsgCloseGroupResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgCloseGroupResponse } as MsgCloseGroupResponse;
+    const message = createBaseMsgCloseGroupResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -204,8 +205,7 @@ export const MsgCloseGroupResponse = {
   },
 
   fromJSON(_: any): MsgCloseGroupResponse {
-    const message = { ...baseMsgCloseGroupResponse } as MsgCloseGroupResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgCloseGroupResponse): unknown {
@@ -213,13 +213,17 @@ export const MsgCloseGroupResponse = {
     return obj;
   },
 
-  fromPartial(_: DeepPartial<MsgCloseGroupResponse>): MsgCloseGroupResponse {
-    const message = { ...baseMsgCloseGroupResponse } as MsgCloseGroupResponse;
+  fromPartial<I extends Exact<DeepPartial<MsgCloseGroupResponse>, I>>(
+    _: I
+  ): MsgCloseGroupResponse {
+    const message = createBaseMsgCloseGroupResponse();
     return message;
   },
 };
 
-const baseMsgPauseGroup: object = {};
+function createBaseMsgPauseGroup(): MsgPauseGroup {
+  return { id: undefined };
+}
 
 export const MsgPauseGroup = {
   encode(
@@ -235,7 +239,7 @@ export const MsgPauseGroup = {
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgPauseGroup {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgPauseGroup } as MsgPauseGroup;
+    const message = createBaseMsgPauseGroup();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -251,13 +255,9 @@ export const MsgPauseGroup = {
   },
 
   fromJSON(object: any): MsgPauseGroup {
-    const message = { ...baseMsgPauseGroup } as MsgPauseGroup;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = GroupID.fromJSON(object.id);
-    } else {
-      message.id = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined,
+    };
   },
 
   toJSON(message: MsgPauseGroup): unknown {
@@ -267,18 +267,21 @@ export const MsgPauseGroup = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgPauseGroup>): MsgPauseGroup {
-    const message = { ...baseMsgPauseGroup } as MsgPauseGroup;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = GroupID.fromPartial(object.id);
-    } else {
-      message.id = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgPauseGroup>, I>>(
+    object: I
+  ): MsgPauseGroup {
+    const message = createBaseMsgPauseGroup();
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? GroupID.fromPartial(object.id)
+        : undefined;
     return message;
   },
 };
 
-const baseMsgPauseGroupResponse: object = {};
+function createBaseMsgPauseGroupResponse(): MsgPauseGroupResponse {
+  return {};
+}
 
 export const MsgPauseGroupResponse = {
   encode(
@@ -294,7 +297,7 @@ export const MsgPauseGroupResponse = {
   ): MsgPauseGroupResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgPauseGroupResponse } as MsgPauseGroupResponse;
+    const message = createBaseMsgPauseGroupResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -307,8 +310,7 @@ export const MsgPauseGroupResponse = {
   },
 
   fromJSON(_: any): MsgPauseGroupResponse {
-    const message = { ...baseMsgPauseGroupResponse } as MsgPauseGroupResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgPauseGroupResponse): unknown {
@@ -316,13 +318,17 @@ export const MsgPauseGroupResponse = {
     return obj;
   },
 
-  fromPartial(_: DeepPartial<MsgPauseGroupResponse>): MsgPauseGroupResponse {
-    const message = { ...baseMsgPauseGroupResponse } as MsgPauseGroupResponse;
+  fromPartial<I extends Exact<DeepPartial<MsgPauseGroupResponse>, I>>(
+    _: I
+  ): MsgPauseGroupResponse {
+    const message = createBaseMsgPauseGroupResponse();
     return message;
   },
 };
 
-const baseMsgStartGroup: object = {};
+function createBaseMsgStartGroup(): MsgStartGroup {
+  return { id: undefined };
+}
 
 export const MsgStartGroup = {
   encode(
@@ -338,7 +344,7 @@ export const MsgStartGroup = {
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgStartGroup {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgStartGroup } as MsgStartGroup;
+    const message = createBaseMsgStartGroup();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -354,13 +360,9 @@ export const MsgStartGroup = {
   },
 
   fromJSON(object: any): MsgStartGroup {
-    const message = { ...baseMsgStartGroup } as MsgStartGroup;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = GroupID.fromJSON(object.id);
-    } else {
-      message.id = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined,
+    };
   },
 
   toJSON(message: MsgStartGroup): unknown {
@@ -370,18 +372,21 @@ export const MsgStartGroup = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgStartGroup>): MsgStartGroup {
-    const message = { ...baseMsgStartGroup } as MsgStartGroup;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = GroupID.fromPartial(object.id);
-    } else {
-      message.id = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgStartGroup>, I>>(
+    object: I
+  ): MsgStartGroup {
+    const message = createBaseMsgStartGroup();
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? GroupID.fromPartial(object.id)
+        : undefined;
     return message;
   },
 };
 
-const baseMsgStartGroupResponse: object = {};
+function createBaseMsgStartGroupResponse(): MsgStartGroupResponse {
+  return {};
+}
 
 export const MsgStartGroupResponse = {
   encode(
@@ -397,7 +402,7 @@ export const MsgStartGroupResponse = {
   ): MsgStartGroupResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgStartGroupResponse } as MsgStartGroupResponse;
+    const message = createBaseMsgStartGroupResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -410,8 +415,7 @@ export const MsgStartGroupResponse = {
   },
 
   fromJSON(_: any): MsgStartGroupResponse {
-    const message = { ...baseMsgStartGroupResponse } as MsgStartGroupResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgStartGroupResponse): unknown {
@@ -419,13 +423,17 @@ export const MsgStartGroupResponse = {
     return obj;
   },
 
-  fromPartial(_: DeepPartial<MsgStartGroupResponse>): MsgStartGroupResponse {
-    const message = { ...baseMsgStartGroupResponse } as MsgStartGroupResponse;
+  fromPartial<I extends Exact<DeepPartial<MsgStartGroupResponse>, I>>(
+    _: I
+  ): MsgStartGroupResponse {
+    const message = createBaseMsgStartGroupResponse();
     return message;
   },
 };
 
-const baseGroupID: object = { owner: "", dseq: Long.UZERO, gseq: 0 };
+function createBaseGroupID(): GroupID {
+  return { owner: "", dseq: Long.UZERO, gseq: 0 };
+}
 
 export const GroupID = {
   encode(
@@ -447,7 +455,7 @@ export const GroupID = {
   decode(input: _m0.Reader | Uint8Array, length?: number): GroupID {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseGroupID } as GroupID;
+    const message = createBaseGroupID();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -469,23 +477,11 @@ export const GroupID = {
   },
 
   fromJSON(object: any): GroupID {
-    const message = { ...baseGroupID } as GroupID;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = Long.fromString(object.dseq);
-    } else {
-      message.dseq = Long.UZERO;
-    }
-    if (object.gseq !== undefined && object.gseq !== null) {
-      message.gseq = Number(object.gseq);
-    } else {
-      message.gseq = 0;
-    }
-    return message;
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
+      gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
+    };
   },
 
   toJSON(message: GroupID): unknown {
@@ -493,32 +489,25 @@ export const GroupID = {
     message.owner !== undefined && (obj.owner = message.owner);
     message.dseq !== undefined &&
       (obj.dseq = (message.dseq || Long.UZERO).toString());
-    message.gseq !== undefined && (obj.gseq = message.gseq);
+    message.gseq !== undefined && (obj.gseq = Math.round(message.gseq));
     return obj;
   },
 
-  fromPartial(object: DeepPartial<GroupID>): GroupID {
-    const message = { ...baseGroupID } as GroupID;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
-    if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = object.dseq as Long;
-    } else {
-      message.dseq = Long.UZERO;
-    }
-    if (object.gseq !== undefined && object.gseq !== null) {
-      message.gseq = object.gseq;
-    } else {
-      message.gseq = 0;
-    }
+  fromPartial<I extends Exact<DeepPartial<GroupID>, I>>(object: I): GroupID {
+    const message = createBaseGroupID();
+    message.owner = object.owner ?? "";
+    message.dseq =
+      object.dseq !== undefined && object.dseq !== null
+        ? Long.fromValue(object.dseq)
+        : Long.UZERO;
+    message.gseq = object.gseq ?? 0;
     return message;
   },
 };
 
-const baseGroupSpec: object = { name: "" };
+function createBaseGroupSpec(): GroupSpec {
+  return { name: "", requirements: undefined, resources: [] };
+}
 
 export const GroupSpec = {
   encode(
@@ -543,8 +532,7 @@ export const GroupSpec = {
   decode(input: _m0.Reader | Uint8Array, length?: number): GroupSpec {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseGroupSpec } as GroupSpec;
-    message.resources = [];
+    const message = createBaseGroupSpec();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -569,26 +557,15 @@ export const GroupSpec = {
   },
 
   fromJSON(object: any): GroupSpec {
-    const message = { ...baseGroupSpec } as GroupSpec;
-    message.resources = [];
-    if (object.name !== undefined && object.name !== null) {
-      message.name = String(object.name);
-    } else {
-      message.name = "";
-    }
-    if (object.requirements !== undefined && object.requirements !== null) {
-      message.requirements = PlacementRequirements.fromJSON(
-        object.requirements
-      );
-    } else {
-      message.requirements = undefined;
-    }
-    if (object.resources !== undefined && object.resources !== null) {
-      for (const e of object.resources) {
-        message.resources.push(Resource.fromJSON(e));
-      }
-    }
-    return message;
+    return {
+      name: isSet(object.name) ? String(object.name) : "",
+      requirements: isSet(object.requirements)
+        ? PlacementRequirements.fromJSON(object.requirements)
+        : undefined,
+      resources: Array.isArray(object?.resources)
+        ? object.resources.map((e: any) => Resource.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: GroupSpec): unknown {
@@ -608,31 +585,29 @@ export const GroupSpec = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<GroupSpec>): GroupSpec {
-    const message = { ...baseGroupSpec } as GroupSpec;
-    message.resources = [];
-    if (object.name !== undefined && object.name !== null) {
-      message.name = object.name;
-    } else {
-      message.name = "";
-    }
-    if (object.requirements !== undefined && object.requirements !== null) {
-      message.requirements = PlacementRequirements.fromPartial(
-        object.requirements
-      );
-    } else {
-      message.requirements = undefined;
-    }
-    if (object.resources !== undefined && object.resources !== null) {
-      for (const e of object.resources) {
-        message.resources.push(Resource.fromPartial(e));
-      }
-    }
+  fromPartial<I extends Exact<DeepPartial<GroupSpec>, I>>(
+    object: I
+  ): GroupSpec {
+    const message = createBaseGroupSpec();
+    message.name = object.name ?? "";
+    message.requirements =
+      object.requirements !== undefined && object.requirements !== null
+        ? PlacementRequirements.fromPartial(object.requirements)
+        : undefined;
+    message.resources =
+      object.resources?.map((e) => Resource.fromPartial(e)) || [];
     return message;
   },
 };
 
-const baseGroup: object = { state: 0, createdAt: Long.ZERO };
+function createBaseGroup(): Group {
+  return {
+    groupId: undefined,
+    state: 0,
+    groupSpec: undefined,
+    createdAt: Long.ZERO,
+  };
+}
 
 export const Group = {
   encode(message: Group, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
@@ -654,7 +629,7 @@ export const Group = {
   decode(input: _m0.Reader | Uint8Array, length?: number): Group {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseGroup } as Group;
+    const message = createBaseGroup();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -679,28 +654,18 @@ export const Group = {
   },
 
   fromJSON(object: any): Group {
-    const message = { ...baseGroup } as Group;
-    if (object.groupId !== undefined && object.groupId !== null) {
-      message.groupId = GroupID.fromJSON(object.groupId);
-    } else {
-      message.groupId = undefined;
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = group_StateFromJSON(object.state);
-    } else {
-      message.state = 0;
-    }
-    if (object.groupSpec !== undefined && object.groupSpec !== null) {
-      message.groupSpec = GroupSpec.fromJSON(object.groupSpec);
-    } else {
-      message.groupSpec = undefined;
-    }
-    if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = Long.fromString(object.createdAt);
-    } else {
-      message.createdAt = Long.ZERO;
-    }
-    return message;
+    return {
+      groupId: isSet(object.groupId)
+        ? GroupID.fromJSON(object.groupId)
+        : undefined,
+      state: isSet(object.state) ? group_StateFromJSON(object.state) : 0,
+      groupSpec: isSet(object.groupSpec)
+        ? GroupSpec.fromJSON(object.groupSpec)
+        : undefined,
+      createdAt: isSet(object.createdAt)
+        ? Long.fromString(object.createdAt)
+        : Long.ZERO,
+    };
   },
 
   toJSON(message: Group): unknown {
@@ -720,33 +685,28 @@ export const Group = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Group>): Group {
-    const message = { ...baseGroup } as Group;
-    if (object.groupId !== undefined && object.groupId !== null) {
-      message.groupId = GroupID.fromPartial(object.groupId);
-    } else {
-      message.groupId = undefined;
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = object.state;
-    } else {
-      message.state = 0;
-    }
-    if (object.groupSpec !== undefined && object.groupSpec !== null) {
-      message.groupSpec = GroupSpec.fromPartial(object.groupSpec);
-    } else {
-      message.groupSpec = undefined;
-    }
-    if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = object.createdAt as Long;
-    } else {
-      message.createdAt = Long.ZERO;
-    }
+  fromPartial<I extends Exact<DeepPartial<Group>, I>>(object: I): Group {
+    const message = createBaseGroup();
+    message.groupId =
+      object.groupId !== undefined && object.groupId !== null
+        ? GroupID.fromPartial(object.groupId)
+        : undefined;
+    message.state = object.state ?? 0;
+    message.groupSpec =
+      object.groupSpec !== undefined && object.groupSpec !== null
+        ? GroupSpec.fromPartial(object.groupSpec)
+        : undefined;
+    message.createdAt =
+      object.createdAt !== undefined && object.createdAt !== null
+        ? Long.fromValue(object.createdAt)
+        : Long.ZERO;
     return message;
   },
 };
 
-const baseResource: object = { count: 0 };
+function createBaseResource(): Resource {
+  return { resources: undefined, count: 0, price: undefined };
+}
 
 export const Resource = {
   encode(
@@ -771,7 +731,7 @@ export const Resource = {
   decode(input: _m0.Reader | Uint8Array, length?: number): Resource {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseResource } as Resource;
+    const message = createBaseResource();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -793,23 +753,13 @@ export const Resource = {
   },
 
   fromJSON(object: any): Resource {
-    const message = { ...baseResource } as Resource;
-    if (object.resources !== undefined && object.resources !== null) {
-      message.resources = ResourceUnits.fromJSON(object.resources);
-    } else {
-      message.resources = undefined;
-    }
-    if (object.count !== undefined && object.count !== null) {
-      message.count = Number(object.count);
-    } else {
-      message.count = 0;
-    }
-    if (object.price !== undefined && object.price !== null) {
-      message.price = Coin.fromJSON(object.price);
-    } else {
-      message.price = undefined;
-    }
-    return message;
+    return {
+      resources: isSet(object.resources)
+        ? ResourceUnits.fromJSON(object.resources)
+        : undefined,
+      count: isSet(object.count) ? Number(object.count) : 0,
+      price: isSet(object.price) ? Coin.fromJSON(object.price) : undefined,
+    };
   },
 
   toJSON(message: Resource): unknown {
@@ -818,29 +768,23 @@ export const Resource = {
       (obj.resources = message.resources
         ? ResourceUnits.toJSON(message.resources)
         : undefined);
-    message.count !== undefined && (obj.count = message.count);
+    message.count !== undefined && (obj.count = Math.round(message.count));
     message.price !== undefined &&
       (obj.price = message.price ? Coin.toJSON(message.price) : undefined);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Resource>): Resource {
-    const message = { ...baseResource } as Resource;
-    if (object.resources !== undefined && object.resources !== null) {
-      message.resources = ResourceUnits.fromPartial(object.resources);
-    } else {
-      message.resources = undefined;
-    }
-    if (object.count !== undefined && object.count !== null) {
-      message.count = object.count;
-    } else {
-      message.count = 0;
-    }
-    if (object.price !== undefined && object.price !== null) {
-      message.price = Coin.fromPartial(object.price);
-    } else {
-      message.price = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<Resource>, I>>(object: I): Resource {
+    const message = createBaseResource();
+    message.resources =
+      object.resources !== undefined && object.resources !== null
+        ? ResourceUnits.fromPartial(object.resources)
+        : undefined;
+    message.count = object.count ?? 0;
+    message.price =
+      object.price !== undefined && object.price !== null
+        ? Coin.fromPartial(object.price)
+        : undefined;
     return message;
   },
 };
@@ -852,10 +796,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -864,7 +810,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

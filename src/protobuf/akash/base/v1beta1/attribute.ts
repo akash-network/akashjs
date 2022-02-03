@@ -31,7 +31,9 @@ export interface PlacementRequirements {
   attributes: Attribute[];
 }
 
-const baseAttribute: object = { key: "", value: "" };
+function createBaseAttribute(): Attribute {
+  return { key: "", value: "" };
+}
 
 export const Attribute = {
   encode(
@@ -50,7 +52,7 @@ export const Attribute = {
   decode(input: _m0.Reader | Uint8Array, length?: number): Attribute {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseAttribute } as Attribute;
+    const message = createBaseAttribute();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -69,18 +71,10 @@ export const Attribute = {
   },
 
   fromJSON(object: any): Attribute {
-    const message = { ...baseAttribute } as Attribute;
-    if (object.key !== undefined && object.key !== null) {
-      message.key = String(object.key);
-    } else {
-      message.key = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = String(object.value);
-    } else {
-      message.value = "";
-    }
-    return message;
+    return {
+      key: isSet(object.key) ? String(object.key) : "",
+      value: isSet(object.value) ? String(object.value) : "",
+    };
   },
 
   toJSON(message: Attribute): unknown {
@@ -90,23 +84,19 @@ export const Attribute = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Attribute>): Attribute {
-    const message = { ...baseAttribute } as Attribute;
-    if (object.key !== undefined && object.key !== null) {
-      message.key = object.key;
-    } else {
-      message.key = "";
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = object.value;
-    } else {
-      message.value = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<Attribute>, I>>(
+    object: I
+  ): Attribute {
+    const message = createBaseAttribute();
+    message.key = object.key ?? "";
+    message.value = object.value ?? "";
     return message;
   },
 };
 
-const baseSignedBy: object = { allOf: "", anyOf: "" };
+function createBaseSignedBy(): SignedBy {
+  return { allOf: [], anyOf: [] };
+}
 
 export const SignedBy = {
   encode(
@@ -125,9 +115,7 @@ export const SignedBy = {
   decode(input: _m0.Reader | Uint8Array, length?: number): SignedBy {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseSignedBy } as SignedBy;
-    message.allOf = [];
-    message.anyOf = [];
+    const message = createBaseSignedBy();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -146,20 +134,14 @@ export const SignedBy = {
   },
 
   fromJSON(object: any): SignedBy {
-    const message = { ...baseSignedBy } as SignedBy;
-    message.allOf = [];
-    message.anyOf = [];
-    if (object.allOf !== undefined && object.allOf !== null) {
-      for (const e of object.allOf) {
-        message.allOf.push(String(e));
-      }
-    }
-    if (object.anyOf !== undefined && object.anyOf !== null) {
-      for (const e of object.anyOf) {
-        message.anyOf.push(String(e));
-      }
-    }
-    return message;
+    return {
+      allOf: Array.isArray(object?.allOf)
+        ? object.allOf.map((e: any) => String(e))
+        : [],
+      anyOf: Array.isArray(object?.anyOf)
+        ? object.anyOf.map((e: any) => String(e))
+        : [],
+    };
   },
 
   toJSON(message: SignedBy): unknown {
@@ -177,25 +159,17 @@ export const SignedBy = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<SignedBy>): SignedBy {
-    const message = { ...baseSignedBy } as SignedBy;
-    message.allOf = [];
-    message.anyOf = [];
-    if (object.allOf !== undefined && object.allOf !== null) {
-      for (const e of object.allOf) {
-        message.allOf.push(e);
-      }
-    }
-    if (object.anyOf !== undefined && object.anyOf !== null) {
-      for (const e of object.anyOf) {
-        message.anyOf.push(e);
-      }
-    }
+  fromPartial<I extends Exact<DeepPartial<SignedBy>, I>>(object: I): SignedBy {
+    const message = createBaseSignedBy();
+    message.allOf = object.allOf?.map((e) => e) || [];
+    message.anyOf = object.anyOf?.map((e) => e) || [];
     return message;
   },
 };
 
-const basePlacementRequirements: object = {};
+function createBasePlacementRequirements(): PlacementRequirements {
+  return { signedBy: undefined, attributes: [] };
+}
 
 export const PlacementRequirements = {
   encode(
@@ -217,8 +191,7 @@ export const PlacementRequirements = {
   ): PlacementRequirements {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...basePlacementRequirements } as PlacementRequirements;
-    message.attributes = [];
+    const message = createBasePlacementRequirements();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -237,19 +210,14 @@ export const PlacementRequirements = {
   },
 
   fromJSON(object: any): PlacementRequirements {
-    const message = { ...basePlacementRequirements } as PlacementRequirements;
-    message.attributes = [];
-    if (object.signedBy !== undefined && object.signedBy !== null) {
-      message.signedBy = SignedBy.fromJSON(object.signedBy);
-    } else {
-      message.signedBy = undefined;
-    }
-    if (object.attributes !== undefined && object.attributes !== null) {
-      for (const e of object.attributes) {
-        message.attributes.push(Attribute.fromJSON(e));
-      }
-    }
-    return message;
+    return {
+      signedBy: isSet(object.signedBy)
+        ? SignedBy.fromJSON(object.signedBy)
+        : undefined,
+      attributes: Array.isArray(object?.attributes)
+        ? object.attributes.map((e: any) => Attribute.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: PlacementRequirements): unknown {
@@ -268,21 +236,16 @@ export const PlacementRequirements = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<PlacementRequirements>
+  fromPartial<I extends Exact<DeepPartial<PlacementRequirements>, I>>(
+    object: I
   ): PlacementRequirements {
-    const message = { ...basePlacementRequirements } as PlacementRequirements;
-    message.attributes = [];
-    if (object.signedBy !== undefined && object.signedBy !== null) {
-      message.signedBy = SignedBy.fromPartial(object.signedBy);
-    } else {
-      message.signedBy = undefined;
-    }
-    if (object.attributes !== undefined && object.attributes !== null) {
-      for (const e of object.attributes) {
-        message.attributes.push(Attribute.fromPartial(e));
-      }
-    }
+    const message = createBasePlacementRequirements();
+    message.signedBy =
+      object.signedBy !== undefined && object.signedBy !== null
+        ? SignedBy.fromPartial(object.signedBy)
+        : undefined;
+    message.attributes =
+      object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
     return message;
   },
 };
@@ -294,10 +257,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -306,7 +271,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

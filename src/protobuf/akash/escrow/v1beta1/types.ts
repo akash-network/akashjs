@@ -13,11 +13,17 @@ export interface AccountID {
 
 /** Account stores state for an escrow account */
 export interface Account {
+  /** unique identifier for this escrow account */
   id?: AccountID;
+  /** bech32 encoded account address of the owner of this escrow account */
   owner: string;
+  /** current state of this escrow account */
   state: Account_State;
+  /** unspent coins received from the owner's wallet */
   balance?: Coin;
+  /** total coins spent by this account */
   transferred?: Coin;
+  /** block height at which this account was last settled */
   settledAt: Long;
 }
 
@@ -130,7 +136,9 @@ export function payment_StateToJSON(object: Payment_State): string {
   }
 }
 
-const baseAccountID: object = { scope: "", xid: "" };
+function createBaseAccountID(): AccountID {
+  return { scope: "", xid: "" };
+}
 
 export const AccountID = {
   encode(
@@ -149,7 +157,7 @@ export const AccountID = {
   decode(input: _m0.Reader | Uint8Array, length?: number): AccountID {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseAccountID } as AccountID;
+    const message = createBaseAccountID();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -168,18 +176,10 @@ export const AccountID = {
   },
 
   fromJSON(object: any): AccountID {
-    const message = { ...baseAccountID } as AccountID;
-    if (object.scope !== undefined && object.scope !== null) {
-      message.scope = String(object.scope);
-    } else {
-      message.scope = "";
-    }
-    if (object.xid !== undefined && object.xid !== null) {
-      message.xid = String(object.xid);
-    } else {
-      message.xid = "";
-    }
-    return message;
+    return {
+      scope: isSet(object.scope) ? String(object.scope) : "",
+      xid: isSet(object.xid) ? String(object.xid) : "",
+    };
   },
 
   toJSON(message: AccountID): unknown {
@@ -189,23 +189,26 @@ export const AccountID = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<AccountID>): AccountID {
-    const message = { ...baseAccountID } as AccountID;
-    if (object.scope !== undefined && object.scope !== null) {
-      message.scope = object.scope;
-    } else {
-      message.scope = "";
-    }
-    if (object.xid !== undefined && object.xid !== null) {
-      message.xid = object.xid;
-    } else {
-      message.xid = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<AccountID>, I>>(
+    object: I
+  ): AccountID {
+    const message = createBaseAccountID();
+    message.scope = object.scope ?? "";
+    message.xid = object.xid ?? "";
     return message;
   },
 };
 
-const baseAccount: object = { owner: "", state: 0, settledAt: Long.ZERO };
+function createBaseAccount(): Account {
+  return {
+    id: undefined,
+    owner: "",
+    state: 0,
+    balance: undefined,
+    transferred: undefined,
+    settledAt: Long.ZERO,
+  };
+}
 
 export const Account = {
   encode(
@@ -236,7 +239,7 @@ export const Account = {
   decode(input: _m0.Reader | Uint8Array, length?: number): Account {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseAccount } as Account;
+    const message = createBaseAccount();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -267,38 +270,20 @@ export const Account = {
   },
 
   fromJSON(object: any): Account {
-    const message = { ...baseAccount } as Account;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = AccountID.fromJSON(object.id);
-    } else {
-      message.id = undefined;
-    }
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = account_StateFromJSON(object.state);
-    } else {
-      message.state = 0;
-    }
-    if (object.balance !== undefined && object.balance !== null) {
-      message.balance = Coin.fromJSON(object.balance);
-    } else {
-      message.balance = undefined;
-    }
-    if (object.transferred !== undefined && object.transferred !== null) {
-      message.transferred = Coin.fromJSON(object.transferred);
-    } else {
-      message.transferred = undefined;
-    }
-    if (object.settledAt !== undefined && object.settledAt !== null) {
-      message.settledAt = Long.fromString(object.settledAt);
-    } else {
-      message.settledAt = Long.ZERO;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? AccountID.fromJSON(object.id) : undefined,
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      state: isSet(object.state) ? account_StateFromJSON(object.state) : 0,
+      balance: isSet(object.balance)
+        ? Coin.fromJSON(object.balance)
+        : undefined,
+      transferred: isSet(object.transferred)
+        ? Coin.fromJSON(object.transferred)
+        : undefined,
+      settledAt: isSet(object.settledAt)
+        ? Long.fromString(object.settledAt)
+        : Long.ZERO,
+    };
   },
 
   toJSON(message: Account): unknown {
@@ -321,43 +306,41 @@ export const Account = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Account>): Account {
-    const message = { ...baseAccount } as Account;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = AccountID.fromPartial(object.id);
-    } else {
-      message.id = undefined;
-    }
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = object.state;
-    } else {
-      message.state = 0;
-    }
-    if (object.balance !== undefined && object.balance !== null) {
-      message.balance = Coin.fromPartial(object.balance);
-    } else {
-      message.balance = undefined;
-    }
-    if (object.transferred !== undefined && object.transferred !== null) {
-      message.transferred = Coin.fromPartial(object.transferred);
-    } else {
-      message.transferred = undefined;
-    }
-    if (object.settledAt !== undefined && object.settledAt !== null) {
-      message.settledAt = object.settledAt as Long;
-    } else {
-      message.settledAt = Long.ZERO;
-    }
+  fromPartial<I extends Exact<DeepPartial<Account>, I>>(object: I): Account {
+    const message = createBaseAccount();
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? AccountID.fromPartial(object.id)
+        : undefined;
+    message.owner = object.owner ?? "";
+    message.state = object.state ?? 0;
+    message.balance =
+      object.balance !== undefined && object.balance !== null
+        ? Coin.fromPartial(object.balance)
+        : undefined;
+    message.transferred =
+      object.transferred !== undefined && object.transferred !== null
+        ? Coin.fromPartial(object.transferred)
+        : undefined;
+    message.settledAt =
+      object.settledAt !== undefined && object.settledAt !== null
+        ? Long.fromValue(object.settledAt)
+        : Long.ZERO;
     return message;
   },
 };
 
-const basePayment: object = { paymentId: "", owner: "", state: 0 };
+function createBasePayment(): Payment {
+  return {
+    accountId: undefined,
+    paymentId: "",
+    owner: "",
+    state: 0,
+    rate: undefined,
+    balance: undefined,
+    withdrawn: undefined,
+  };
+}
 
 export const Payment = {
   encode(
@@ -391,7 +374,7 @@ export const Payment = {
   decode(input: _m0.Reader | Uint8Array, length?: number): Payment {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...basePayment } as Payment;
+    const message = createBasePayment();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -425,43 +408,21 @@ export const Payment = {
   },
 
   fromJSON(object: any): Payment {
-    const message = { ...basePayment } as Payment;
-    if (object.accountId !== undefined && object.accountId !== null) {
-      message.accountId = AccountID.fromJSON(object.accountId);
-    } else {
-      message.accountId = undefined;
-    }
-    if (object.paymentId !== undefined && object.paymentId !== null) {
-      message.paymentId = String(object.paymentId);
-    } else {
-      message.paymentId = "";
-    }
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = payment_StateFromJSON(object.state);
-    } else {
-      message.state = 0;
-    }
-    if (object.rate !== undefined && object.rate !== null) {
-      message.rate = Coin.fromJSON(object.rate);
-    } else {
-      message.rate = undefined;
-    }
-    if (object.balance !== undefined && object.balance !== null) {
-      message.balance = Coin.fromJSON(object.balance);
-    } else {
-      message.balance = undefined;
-    }
-    if (object.withdrawn !== undefined && object.withdrawn !== null) {
-      message.withdrawn = Coin.fromJSON(object.withdrawn);
-    } else {
-      message.withdrawn = undefined;
-    }
-    return message;
+    return {
+      accountId: isSet(object.accountId)
+        ? AccountID.fromJSON(object.accountId)
+        : undefined,
+      paymentId: isSet(object.paymentId) ? String(object.paymentId) : "",
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      state: isSet(object.state) ? payment_StateFromJSON(object.state) : 0,
+      rate: isSet(object.rate) ? Coin.fromJSON(object.rate) : undefined,
+      balance: isSet(object.balance)
+        ? Coin.fromJSON(object.balance)
+        : undefined,
+      withdrawn: isSet(object.withdrawn)
+        ? Coin.fromJSON(object.withdrawn)
+        : undefined,
+    };
   },
 
   toJSON(message: Payment): unknown {
@@ -487,43 +448,27 @@ export const Payment = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Payment>): Payment {
-    const message = { ...basePayment } as Payment;
-    if (object.accountId !== undefined && object.accountId !== null) {
-      message.accountId = AccountID.fromPartial(object.accountId);
-    } else {
-      message.accountId = undefined;
-    }
-    if (object.paymentId !== undefined && object.paymentId !== null) {
-      message.paymentId = object.paymentId;
-    } else {
-      message.paymentId = "";
-    }
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = object.state;
-    } else {
-      message.state = 0;
-    }
-    if (object.rate !== undefined && object.rate !== null) {
-      message.rate = Coin.fromPartial(object.rate);
-    } else {
-      message.rate = undefined;
-    }
-    if (object.balance !== undefined && object.balance !== null) {
-      message.balance = Coin.fromPartial(object.balance);
-    } else {
-      message.balance = undefined;
-    }
-    if (object.withdrawn !== undefined && object.withdrawn !== null) {
-      message.withdrawn = Coin.fromPartial(object.withdrawn);
-    } else {
-      message.withdrawn = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<Payment>, I>>(object: I): Payment {
+    const message = createBasePayment();
+    message.accountId =
+      object.accountId !== undefined && object.accountId !== null
+        ? AccountID.fromPartial(object.accountId)
+        : undefined;
+    message.paymentId = object.paymentId ?? "";
+    message.owner = object.owner ?? "";
+    message.state = object.state ?? 0;
+    message.rate =
+      object.rate !== undefined && object.rate !== null
+        ? Coin.fromPartial(object.rate)
+        : undefined;
+    message.balance =
+      object.balance !== undefined && object.balance !== null
+        ? Coin.fromPartial(object.balance)
+        : undefined;
+    message.withdrawn =
+      object.withdrawn !== undefined && object.withdrawn !== null
+        ? Coin.fromPartial(object.withdrawn)
+        : undefined;
     return message;
   },
 };
@@ -535,10 +480,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -547,7 +494,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

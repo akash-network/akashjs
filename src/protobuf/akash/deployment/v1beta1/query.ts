@@ -49,7 +49,9 @@ export interface QueryGroupResponse {
   group?: Group;
 }
 
-const baseQueryDeploymentsRequest: object = {};
+function createBaseQueryDeploymentsRequest(): QueryDeploymentsRequest {
+  return { filters: undefined, pagination: undefined };
+}
 
 export const QueryDeploymentsRequest = {
   encode(
@@ -74,9 +76,7 @@ export const QueryDeploymentsRequest = {
   ): QueryDeploymentsRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryDeploymentsRequest,
-    } as QueryDeploymentsRequest;
+    const message = createBaseQueryDeploymentsRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -95,20 +95,14 @@ export const QueryDeploymentsRequest = {
   },
 
   fromJSON(object: any): QueryDeploymentsRequest {
-    const message = {
-      ...baseQueryDeploymentsRequest,
-    } as QueryDeploymentsRequest;
-    if (object.filters !== undefined && object.filters !== null) {
-      message.filters = DeploymentFilters.fromJSON(object.filters);
-    } else {
-      message.filters = undefined;
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
+    return {
+      filters: isSet(object.filters)
+        ? DeploymentFilters.fromJSON(object.filters)
+        : undefined,
+      pagination: isSet(object.pagination)
+        ? PageRequest.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryDeploymentsRequest): unknown {
@@ -124,27 +118,25 @@ export const QueryDeploymentsRequest = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryDeploymentsRequest>
+  fromPartial<I extends Exact<DeepPartial<QueryDeploymentsRequest>, I>>(
+    object: I
   ): QueryDeploymentsRequest {
-    const message = {
-      ...baseQueryDeploymentsRequest,
-    } as QueryDeploymentsRequest;
-    if (object.filters !== undefined && object.filters !== null) {
-      message.filters = DeploymentFilters.fromPartial(object.filters);
-    } else {
-      message.filters = undefined;
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
+    const message = createBaseQueryDeploymentsRequest();
+    message.filters =
+      object.filters !== undefined && object.filters !== null
+        ? DeploymentFilters.fromPartial(object.filters)
+        : undefined;
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageRequest.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryDeploymentsResponse: object = {};
+function createBaseQueryDeploymentsResponse(): QueryDeploymentsResponse {
+  return { deployments: [], pagination: undefined };
+}
 
 export const QueryDeploymentsResponse = {
   encode(
@@ -169,10 +161,7 @@ export const QueryDeploymentsResponse = {
   ): QueryDeploymentsResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryDeploymentsResponse,
-    } as QueryDeploymentsResponse;
-    message.deployments = [];
+    const message = createBaseQueryDeploymentsResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -193,21 +182,16 @@ export const QueryDeploymentsResponse = {
   },
 
   fromJSON(object: any): QueryDeploymentsResponse {
-    const message = {
-      ...baseQueryDeploymentsResponse,
-    } as QueryDeploymentsResponse;
-    message.deployments = [];
-    if (object.deployments !== undefined && object.deployments !== null) {
-      for (const e of object.deployments) {
-        message.deployments.push(QueryDeploymentResponse.fromJSON(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
+    return {
+      deployments: Array.isArray(object?.deployments)
+        ? object.deployments.map((e: any) =>
+            QueryDeploymentResponse.fromJSON(e)
+          )
+        : [],
+      pagination: isSet(object.pagination)
+        ? PageResponse.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryDeploymentsResponse): unknown {
@@ -226,28 +210,24 @@ export const QueryDeploymentsResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryDeploymentsResponse>
+  fromPartial<I extends Exact<DeepPartial<QueryDeploymentsResponse>, I>>(
+    object: I
   ): QueryDeploymentsResponse {
-    const message = {
-      ...baseQueryDeploymentsResponse,
-    } as QueryDeploymentsResponse;
-    message.deployments = [];
-    if (object.deployments !== undefined && object.deployments !== null) {
-      for (const e of object.deployments) {
-        message.deployments.push(QueryDeploymentResponse.fromPartial(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
+    const message = createBaseQueryDeploymentsResponse();
+    message.deployments =
+      object.deployments?.map((e) => QueryDeploymentResponse.fromPartial(e)) ||
+      [];
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageResponse.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryDeploymentRequest: object = {};
+function createBaseQueryDeploymentRequest(): QueryDeploymentRequest {
+  return { id: undefined };
+}
 
 export const QueryDeploymentRequest = {
   encode(
@@ -266,7 +246,7 @@ export const QueryDeploymentRequest = {
   ): QueryDeploymentRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryDeploymentRequest } as QueryDeploymentRequest;
+    const message = createBaseQueryDeploymentRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -282,13 +262,9 @@ export const QueryDeploymentRequest = {
   },
 
   fromJSON(object: any): QueryDeploymentRequest {
-    const message = { ...baseQueryDeploymentRequest } as QueryDeploymentRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = DeploymentID.fromJSON(object.id);
-    } else {
-      message.id = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? DeploymentID.fromJSON(object.id) : undefined,
+    };
   },
 
   toJSON(message: QueryDeploymentRequest): unknown {
@@ -298,20 +274,21 @@ export const QueryDeploymentRequest = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryDeploymentRequest>
+  fromPartial<I extends Exact<DeepPartial<QueryDeploymentRequest>, I>>(
+    object: I
   ): QueryDeploymentRequest {
-    const message = { ...baseQueryDeploymentRequest } as QueryDeploymentRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = DeploymentID.fromPartial(object.id);
-    } else {
-      message.id = undefined;
-    }
+    const message = createBaseQueryDeploymentRequest();
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? DeploymentID.fromPartial(object.id)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryDeploymentResponse: object = {};
+function createBaseQueryDeploymentResponse(): QueryDeploymentResponse {
+  return { deployment: undefined, groups: [], escrowAccount: undefined };
+}
 
 export const QueryDeploymentResponse = {
   encode(
@@ -336,10 +313,7 @@ export const QueryDeploymentResponse = {
   ): QueryDeploymentResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryDeploymentResponse,
-    } as QueryDeploymentResponse;
-    message.groups = [];
+    const message = createBaseQueryDeploymentResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -361,26 +335,17 @@ export const QueryDeploymentResponse = {
   },
 
   fromJSON(object: any): QueryDeploymentResponse {
-    const message = {
-      ...baseQueryDeploymentResponse,
-    } as QueryDeploymentResponse;
-    message.groups = [];
-    if (object.deployment !== undefined && object.deployment !== null) {
-      message.deployment = Deployment.fromJSON(object.deployment);
-    } else {
-      message.deployment = undefined;
-    }
-    if (object.groups !== undefined && object.groups !== null) {
-      for (const e of object.groups) {
-        message.groups.push(Group.fromJSON(e));
-      }
-    }
-    if (object.escrowAccount !== undefined && object.escrowAccount !== null) {
-      message.escrowAccount = Account.fromJSON(object.escrowAccount);
-    } else {
-      message.escrowAccount = undefined;
-    }
-    return message;
+    return {
+      deployment: isSet(object.deployment)
+        ? Deployment.fromJSON(object.deployment)
+        : undefined,
+      groups: Array.isArray(object?.groups)
+        ? object.groups.map((e: any) => Group.fromJSON(e))
+        : [],
+      escrowAccount: isSet(object.escrowAccount)
+        ? Account.fromJSON(object.escrowAccount)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryDeploymentResponse): unknown {
@@ -401,33 +366,26 @@ export const QueryDeploymentResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryDeploymentResponse>
+  fromPartial<I extends Exact<DeepPartial<QueryDeploymentResponse>, I>>(
+    object: I
   ): QueryDeploymentResponse {
-    const message = {
-      ...baseQueryDeploymentResponse,
-    } as QueryDeploymentResponse;
-    message.groups = [];
-    if (object.deployment !== undefined && object.deployment !== null) {
-      message.deployment = Deployment.fromPartial(object.deployment);
-    } else {
-      message.deployment = undefined;
-    }
-    if (object.groups !== undefined && object.groups !== null) {
-      for (const e of object.groups) {
-        message.groups.push(Group.fromPartial(e));
-      }
-    }
-    if (object.escrowAccount !== undefined && object.escrowAccount !== null) {
-      message.escrowAccount = Account.fromPartial(object.escrowAccount);
-    } else {
-      message.escrowAccount = undefined;
-    }
+    const message = createBaseQueryDeploymentResponse();
+    message.deployment =
+      object.deployment !== undefined && object.deployment !== null
+        ? Deployment.fromPartial(object.deployment)
+        : undefined;
+    message.groups = object.groups?.map((e) => Group.fromPartial(e)) || [];
+    message.escrowAccount =
+      object.escrowAccount !== undefined && object.escrowAccount !== null
+        ? Account.fromPartial(object.escrowAccount)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryGroupRequest: object = {};
+function createBaseQueryGroupRequest(): QueryGroupRequest {
+  return { id: undefined };
+}
 
 export const QueryGroupRequest = {
   encode(
@@ -443,7 +401,7 @@ export const QueryGroupRequest = {
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryGroupRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryGroupRequest } as QueryGroupRequest;
+    const message = createBaseQueryGroupRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -459,13 +417,9 @@ export const QueryGroupRequest = {
   },
 
   fromJSON(object: any): QueryGroupRequest {
-    const message = { ...baseQueryGroupRequest } as QueryGroupRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = GroupID.fromJSON(object.id);
-    } else {
-      message.id = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined,
+    };
   },
 
   toJSON(message: QueryGroupRequest): unknown {
@@ -475,18 +429,21 @@ export const QueryGroupRequest = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGroupRequest>): QueryGroupRequest {
-    const message = { ...baseQueryGroupRequest } as QueryGroupRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = GroupID.fromPartial(object.id);
-    } else {
-      message.id = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<QueryGroupRequest>, I>>(
+    object: I
+  ): QueryGroupRequest {
+    const message = createBaseQueryGroupRequest();
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? GroupID.fromPartial(object.id)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryGroupResponse: object = {};
+function createBaseQueryGroupResponse(): QueryGroupResponse {
+  return { group: undefined };
+}
 
 export const QueryGroupResponse = {
   encode(
@@ -502,7 +459,7 @@ export const QueryGroupResponse = {
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryGroupResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryGroupResponse } as QueryGroupResponse;
+    const message = createBaseQueryGroupResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -518,13 +475,9 @@ export const QueryGroupResponse = {
   },
 
   fromJSON(object: any): QueryGroupResponse {
-    const message = { ...baseQueryGroupResponse } as QueryGroupResponse;
-    if (object.group !== undefined && object.group !== null) {
-      message.group = Group.fromJSON(object.group);
-    } else {
-      message.group = undefined;
-    }
-    return message;
+    return {
+      group: isSet(object.group) ? Group.fromJSON(object.group) : undefined,
+    };
   },
 
   toJSON(message: QueryGroupResponse): unknown {
@@ -534,13 +487,14 @@ export const QueryGroupResponse = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryGroupResponse>): QueryGroupResponse {
-    const message = { ...baseQueryGroupResponse } as QueryGroupResponse;
-    if (object.group !== undefined && object.group !== null) {
-      message.group = Group.fromPartial(object.group);
-    } else {
-      message.group = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<QueryGroupResponse>, I>>(
+    object: I
+  ): QueryGroupResponse {
+    const message = createBaseQueryGroupResponse();
+    message.group =
+      object.group !== undefined && object.group !== null
+        ? Group.fromPartial(object.group)
+        : undefined;
     return message;
   },
 };
@@ -621,10 +575,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -633,7 +589,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }
