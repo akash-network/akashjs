@@ -51,6 +51,7 @@
   },
   "files": [
     "umd/",
-    "build/**/*.d.ts"
+    "build/**/*.d.ts",
+    "build/**/*.js"
   ]
 }
