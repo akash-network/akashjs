@@ -2,7 +2,7 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "akash.cert.v1beta1";
+export const protobufPackage = "akash.cert.v1beta2";
 
 /** CertificateID stores owner and sequence number */
 export interface CertificateID {
@@ -84,7 +84,9 @@ export interface MsgRevokeCertificate {
 /** MsgRevokeCertificateResponse defines the Msg/RevokeCertificate response type. */
 export interface MsgRevokeCertificateResponse {}
 
-const baseCertificateID: object = { owner: "", serial: "" };
+function createBaseCertificateID(): CertificateID {
+  return { owner: "", serial: "" };
+}
 
 export const CertificateID = {
   encode(
@@ -103,7 +105,7 @@ export const CertificateID = {
   decode(input: _m0.Reader | Uint8Array, length?: number): CertificateID {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseCertificateID } as CertificateID;
+    const message = createBaseCertificateID();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -122,18 +124,10 @@ export const CertificateID = {
   },
 
   fromJSON(object: any): CertificateID {
-    const message = { ...baseCertificateID } as CertificateID;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    if (object.serial !== undefined && object.serial !== null) {
-      message.serial = String(object.serial);
-    } else {
-      message.serial = "";
-    }
-    return message;
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      serial: isSet(object.serial) ? String(object.serial) : "",
+    };
   },
 
   toJSON(message: CertificateID): unknown {
@@ -143,23 +137,19 @@ export const CertificateID = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<CertificateID>): CertificateID {
-    const message = { ...baseCertificateID } as CertificateID;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
-    if (object.serial !== undefined && object.serial !== null) {
-      message.serial = object.serial;
-    } else {
-      message.serial = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<CertificateID>, I>>(
+    object: I
+  ): CertificateID {
+    const message = createBaseCertificateID();
+    message.owner = object.owner ?? "";
+    message.serial = object.serial ?? "";
     return message;
   },
 };
 
-const baseCertificate: object = { state: 0 };
+function createBaseCertificate(): Certificate {
+  return { state: 0, cert: new Uint8Array(), pubkey: new Uint8Array() };
+}
 
 export const Certificate = {
   encode(
@@ -181,9 +171,7 @@ export const Certificate = {
   decode(input: _m0.Reader | Uint8Array, length?: number): Certificate {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseCertificate } as Certificate;
-    message.cert = new Uint8Array();
-    message.pubkey = new Uint8Array();
+    const message = createBaseCertificate();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -205,21 +193,15 @@ export const Certificate = {
   },
 
   fromJSON(object: any): Certificate {
-    const message = { ...baseCertificate } as Certificate;
-    message.cert = new Uint8Array();
-    message.pubkey = new Uint8Array();
-    if (object.state !== undefined && object.state !== null) {
-      message.state = certificate_StateFromJSON(object.state);
-    } else {
-      message.state = 0;
-    }
-    if (object.cert !== undefined && object.cert !== null) {
-      message.cert = bytesFromBase64(object.cert);
-    }
-    if (object.pubkey !== undefined && object.pubkey !== null) {
-      message.pubkey = bytesFromBase64(object.pubkey);
-    }
-    return message;
+    return {
+      state: isSet(object.state) ? certificate_StateFromJSON(object.state) : 0,
+      cert: isSet(object.cert)
+        ? bytesFromBase64(object.cert)
+        : new Uint8Array(),
+      pubkey: isSet(object.pubkey)
+        ? bytesFromBase64(object.pubkey)
+        : new Uint8Array(),
+    };
   },
 
   toJSON(message: Certificate): unknown {
@@ -237,28 +219,20 @@ export const Certificate = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Certificate>): Certificate {
-    const message = { ...baseCertificate } as Certificate;
-    if (object.state !== undefined && object.state !== null) {
-      message.state = object.state;
-    } else {
-      message.state = 0;
-    }
-    if (object.cert !== undefined && object.cert !== null) {
-      message.cert = object.cert;
-    } else {
-      message.cert = new Uint8Array();
-    }
-    if (object.pubkey !== undefined && object.pubkey !== null) {
-      message.pubkey = object.pubkey;
-    } else {
-      message.pubkey = new Uint8Array();
-    }
+  fromPartial<I extends Exact<DeepPartial<Certificate>, I>>(
+    object: I
+  ): Certificate {
+    const message = createBaseCertificate();
+    message.state = object.state ?? 0;
+    message.cert = object.cert ?? new Uint8Array();
+    message.pubkey = object.pubkey ?? new Uint8Array();
     return message;
   },
 };
 
-const baseCertificateFilter: object = { owner: "", serial: "", state: "" };
+function createBaseCertificateFilter(): CertificateFilter {
+  return { owner: "", serial: "", state: "" };
+}
 
 export const CertificateFilter = {
   encode(
@@ -280,7 +254,7 @@ export const CertificateFilter = {
   decode(input: _m0.Reader | Uint8Array, length?: number): CertificateFilter {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseCertificateFilter } as CertificateFilter;
+    const message = createBaseCertificateFilter();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -302,23 +276,11 @@ export const CertificateFilter = {
   },
 
   fromJSON(object: any): CertificateFilter {
-    const message = { ...baseCertificateFilter } as CertificateFilter;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    if (object.serial !== undefined && object.serial !== null) {
-      message.serial = String(object.serial);
-    } else {
-      message.serial = "";
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = String(object.state);
-    } else {
-      message.state = "";
-    }
-    return message;
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      serial: isSet(object.serial) ? String(object.serial) : "",
+      state: isSet(object.state) ? String(object.state) : "",
+    };
   },
 
   toJSON(message: CertificateFilter): unknown {
@@ -329,28 +291,20 @@ export const CertificateFilter = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<CertificateFilter>): CertificateFilter {
-    const message = { ...baseCertificateFilter } as CertificateFilter;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
-    if (object.serial !== undefined && object.serial !== null) {
-      message.serial = object.serial;
-    } else {
-      message.serial = "";
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = object.state;
-    } else {
-      message.state = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<CertificateFilter>, I>>(
+    object: I
+  ): CertificateFilter {
+    const message = createBaseCertificateFilter();
+    message.owner = object.owner ?? "";
+    message.serial = object.serial ?? "";
+    message.state = object.state ?? "";
     return message;
   },
 };
 
-const baseMsgCreateCertificate: object = { owner: "" };
+function createBaseMsgCreateCertificate(): MsgCreateCertificate {
+  return { owner: "", cert: new Uint8Array(), pubkey: new Uint8Array() };
+}
 
 export const MsgCreateCertificate = {
   encode(
@@ -375,9 +329,7 @@ export const MsgCreateCertificate = {
   ): MsgCreateCertificate {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgCreateCertificate } as MsgCreateCertificate;
-    message.cert = new Uint8Array();
-    message.pubkey = new Uint8Array();
+    const message = createBaseMsgCreateCertificate();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -399,21 +351,15 @@ export const MsgCreateCertificate = {
   },
 
   fromJSON(object: any): MsgCreateCertificate {
-    const message = { ...baseMsgCreateCertificate } as MsgCreateCertificate;
-    message.cert = new Uint8Array();
-    message.pubkey = new Uint8Array();
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    if (object.cert !== undefined && object.cert !== null) {
-      message.cert = bytesFromBase64(object.cert);
-    }
-    if (object.pubkey !== undefined && object.pubkey !== null) {
-      message.pubkey = bytesFromBase64(object.pubkey);
-    }
-    return message;
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      cert: isSet(object.cert)
+        ? bytesFromBase64(object.cert)
+        : new Uint8Array(),
+      pubkey: isSet(object.pubkey)
+        ? bytesFromBase64(object.pubkey)
+        : new Uint8Array(),
+    };
   },
 
   toJSON(message: MsgCreateCertificate): unknown {
@@ -430,28 +376,20 @@ export const MsgCreateCertificate = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgCreateCertificate>): MsgCreateCertificate {
-    const message = { ...baseMsgCreateCertificate } as MsgCreateCertificate;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
-    if (object.cert !== undefined && object.cert !== null) {
-      message.cert = object.cert;
-    } else {
-      message.cert = new Uint8Array();
-    }
-    if (object.pubkey !== undefined && object.pubkey !== null) {
-      message.pubkey = object.pubkey;
-    } else {
-      message.pubkey = new Uint8Array();
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgCreateCertificate>, I>>(
+    object: I
+  ): MsgCreateCertificate {
+    const message = createBaseMsgCreateCertificate();
+    message.owner = object.owner ?? "";
+    message.cert = object.cert ?? new Uint8Array();
+    message.pubkey = object.pubkey ?? new Uint8Array();
     return message;
   },
 };
 
-const baseMsgCreateCertificateResponse: object = {};
+function createBaseMsgCreateCertificateResponse(): MsgCreateCertificateResponse {
+  return {};
+}
 
 export const MsgCreateCertificateResponse = {
   encode(
@@ -467,9 +405,7 @@ export const MsgCreateCertificateResponse = {
   ): MsgCreateCertificateResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgCreateCertificateResponse,
-    } as MsgCreateCertificateResponse;
+    const message = createBaseMsgCreateCertificateResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -482,10 +418,7 @@ export const MsgCreateCertificateResponse = {
   },
 
   fromJSON(_: any): MsgCreateCertificateResponse {
-    const message = {
-      ...baseMsgCreateCertificateResponse,
-    } as MsgCreateCertificateResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgCreateCertificateResponse): unknown {
@@ -493,17 +426,17 @@ export const MsgCreateCertificateResponse = {
     return obj;
   },
 
-  fromPartial(
-    _: DeepPartial<MsgCreateCertificateResponse>
+  fromPartial<I extends Exact<DeepPartial<MsgCreateCertificateResponse>, I>>(
+    _: I
   ): MsgCreateCertificateResponse {
-    const message = {
-      ...baseMsgCreateCertificateResponse,
-    } as MsgCreateCertificateResponse;
+    const message = createBaseMsgCreateCertificateResponse();
     return message;
   },
 };
 
-const baseMsgRevokeCertificate: object = {};
+function createBaseMsgRevokeCertificate(): MsgRevokeCertificate {
+  return { id: undefined };
+}
 
 export const MsgRevokeCertificate = {
   encode(
@@ -522,7 +455,7 @@ export const MsgRevokeCertificate = {
   ): MsgRevokeCertificate {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgRevokeCertificate } as MsgRevokeCertificate;
+    const message = createBaseMsgRevokeCertificate();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -538,13 +471,9 @@ export const MsgRevokeCertificate = {
   },
 
   fromJSON(object: any): MsgRevokeCertificate {
-    const message = { ...baseMsgRevokeCertificate } as MsgRevokeCertificate;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = CertificateID.fromJSON(object.id);
-    } else {
-      message.id = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? CertificateID.fromJSON(object.id) : undefined,
+    };
   },
 
   toJSON(message: MsgRevokeCertificate): unknown {
@@ -554,18 +483,21 @@ export const MsgRevokeCertificate = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgRevokeCertificate>): MsgRevokeCertificate {
-    const message = { ...baseMsgRevokeCertificate } as MsgRevokeCertificate;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = CertificateID.fromPartial(object.id);
-    } else {
-      message.id = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgRevokeCertificate>, I>>(
+    object: I
+  ): MsgRevokeCertificate {
+    const message = createBaseMsgRevokeCertificate();
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? CertificateID.fromPartial(object.id)
+        : undefined;
     return message;
   },
 };
 
-const baseMsgRevokeCertificateResponse: object = {};
+function createBaseMsgRevokeCertificateResponse(): MsgRevokeCertificateResponse {
+  return {};
+}
 
 export const MsgRevokeCertificateResponse = {
   encode(
@@ -581,9 +513,7 @@ export const MsgRevokeCertificateResponse = {
   ): MsgRevokeCertificateResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgRevokeCertificateResponse,
-    } as MsgRevokeCertificateResponse;
+    const message = createBaseMsgRevokeCertificateResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -596,10 +526,7 @@ export const MsgRevokeCertificateResponse = {
   },
 
   fromJSON(_: any): MsgRevokeCertificateResponse {
-    const message = {
-      ...baseMsgRevokeCertificateResponse,
-    } as MsgRevokeCertificateResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgRevokeCertificateResponse): unknown {
@@ -607,12 +534,10 @@ export const MsgRevokeCertificateResponse = {
     return obj;
   },
 
-  fromPartial(
-    _: DeepPartial<MsgRevokeCertificateResponse>
+  fromPartial<I extends Exact<DeepPartial<MsgRevokeCertificateResponse>, I>>(
+    _: I
   ): MsgRevokeCertificateResponse {
-    const message = {
-      ...baseMsgRevokeCertificateResponse,
-    } as MsgRevokeCertificateResponse;
+    const message = createBaseMsgRevokeCertificateResponse();
     return message;
   },
 };
@@ -641,7 +566,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgCreateCertificateResponse> {
     const data = MsgCreateCertificate.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.cert.v1beta1.Msg",
+      "akash.cert.v1beta2.Msg",
       "CreateCertificate",
       data
     );
@@ -655,7 +580,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgRevokeCertificateResponse> {
     const data = MsgRevokeCertificate.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.cert.v1beta1.Msg",
+      "akash.cert.v1beta2.Msg",
       "RevokeCertificate",
       data
     );
@@ -675,6 +600,7 @@ interface Rpc {
 
 declare var self: any | undefined;
 declare var window: any | undefined;
+declare var global: any | undefined;
 var globalThis: any = (() => {
   if (typeof globalThis !== "undefined") return globalThis;
   if (typeof self !== "undefined") return self;
@@ -700,8 +626,8 @@ const btoa: (bin: string) => string =
   ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
   const bin: string[] = [];
-  for (let i = 0; i < arr.byteLength; ++i) {
-    bin.push(String.fromCharCode(arr[i]));
+  for (const byte of arr) {
+    bin.push(String.fromCharCode(byte));
   }
   return btoa(bin.join(""));
 }
@@ -713,10 +639,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -725,7 +653,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

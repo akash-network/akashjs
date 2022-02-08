@@ -1,9 +1,9 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { GroupSpec } from "../../../akash/deployment/v1beta1/group";
+import { GroupSpec } from "../../../akash/deployment/v1beta2/groupspec";
 
-export const protobufPackage = "akash.market.v1beta1";
+export const protobufPackage = "akash.market.v1beta2";
 
 /** OrderID stores owner and all other seq numbers */
 export interface OrderID {
@@ -79,7 +79,9 @@ export interface OrderFilters {
   state: string;
 }
 
-const baseOrderID: object = { owner: "", dseq: Long.UZERO, gseq: 0, oseq: 0 };
+function createBaseOrderID(): OrderID {
+  return { owner: "", dseq: Long.UZERO, gseq: 0, oseq: 0 };
+}
 
 export const OrderID = {
   encode(
@@ -104,7 +106,7 @@ export const OrderID = {
   decode(input: _m0.Reader | Uint8Array, length?: number): OrderID {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseOrderID } as OrderID;
+    const message = createBaseOrderID();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -129,28 +131,12 @@ export const OrderID = {
   },
 
   fromJSON(object: any): OrderID {
-    const message = { ...baseOrderID } as OrderID;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = Long.fromString(object.dseq);
-    } else {
-      message.dseq = Long.UZERO;
-    }
-    if (object.gseq !== undefined && object.gseq !== null) {
-      message.gseq = Number(object.gseq);
-    } else {
-      message.gseq = 0;
-    }
-    if (object.oseq !== undefined && object.oseq !== null) {
-      message.oseq = Number(object.oseq);
-    } else {
-      message.oseq = 0;
-    }
-    return message;
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
+      gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
+      oseq: isSet(object.oseq) ? Number(object.oseq) : 0,
+    };
   },
 
   toJSON(message: OrderID): unknown {
@@ -158,38 +144,32 @@ export const OrderID = {
     message.owner !== undefined && (obj.owner = message.owner);
     message.dseq !== undefined &&
       (obj.dseq = (message.dseq || Long.UZERO).toString());
-    message.gseq !== undefined && (obj.gseq = message.gseq);
-    message.oseq !== undefined && (obj.oseq = message.oseq);
+    message.gseq !== undefined && (obj.gseq = Math.round(message.gseq));
+    message.oseq !== undefined && (obj.oseq = Math.round(message.oseq));
     return obj;
   },
 
-  fromPartial(object: DeepPartial<OrderID>): OrderID {
-    const message = { ...baseOrderID } as OrderID;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
-    if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = object.dseq as Long;
-    } else {
-      message.dseq = Long.UZERO;
-    }
-    if (object.gseq !== undefined && object.gseq !== null) {
-      message.gseq = object.gseq;
-    } else {
-      message.gseq = 0;
-    }
-    if (object.oseq !== undefined && object.oseq !== null) {
-      message.oseq = object.oseq;
-    } else {
-      message.oseq = 0;
-    }
+  fromPartial<I extends Exact<DeepPartial<OrderID>, I>>(object: I): OrderID {
+    const message = createBaseOrderID();
+    message.owner = object.owner ?? "";
+    message.dseq =
+      object.dseq !== undefined && object.dseq !== null
+        ? Long.fromValue(object.dseq)
+        : Long.UZERO;
+    message.gseq = object.gseq ?? 0;
+    message.oseq = object.oseq ?? 0;
     return message;
   },
 };
 
-const baseOrder: object = { state: 0, createdAt: Long.ZERO };
+function createBaseOrder(): Order {
+  return {
+    orderId: undefined,
+    state: 0,
+    spec: undefined,
+    createdAt: Long.ZERO,
+  };
+}
 
 export const Order = {
   encode(message: Order, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
@@ -211,7 +191,7 @@ export const Order = {
   decode(input: _m0.Reader | Uint8Array, length?: number): Order {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseOrder } as Order;
+    const message = createBaseOrder();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -236,28 +216,16 @@ export const Order = {
   },
 
   fromJSON(object: any): Order {
-    const message = { ...baseOrder } as Order;
-    if (object.orderId !== undefined && object.orderId !== null) {
-      message.orderId = OrderID.fromJSON(object.orderId);
-    } else {
-      message.orderId = undefined;
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = order_StateFromJSON(object.state);
-    } else {
-      message.state = 0;
-    }
-    if (object.spec !== undefined && object.spec !== null) {
-      message.spec = GroupSpec.fromJSON(object.spec);
-    } else {
-      message.spec = undefined;
-    }
-    if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = Long.fromString(object.createdAt);
-    } else {
-      message.createdAt = Long.ZERO;
-    }
-    return message;
+    return {
+      orderId: isSet(object.orderId)
+        ? OrderID.fromJSON(object.orderId)
+        : undefined,
+      state: isSet(object.state) ? order_StateFromJSON(object.state) : 0,
+      spec: isSet(object.spec) ? GroupSpec.fromJSON(object.spec) : undefined,
+      createdAt: isSet(object.createdAt)
+        ? Long.fromString(object.createdAt)
+        : Long.ZERO,
+    };
   },
 
   toJSON(message: Order): unknown {
@@ -275,39 +243,28 @@ export const Order = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Order>): Order {
-    const message = { ...baseOrder } as Order;
-    if (object.orderId !== undefined && object.orderId !== null) {
-      message.orderId = OrderID.fromPartial(object.orderId);
-    } else {
-      message.orderId = undefined;
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = object.state;
-    } else {
-      message.state = 0;
-    }
-    if (object.spec !== undefined && object.spec !== null) {
-      message.spec = GroupSpec.fromPartial(object.spec);
-    } else {
-      message.spec = undefined;
-    }
-    if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = object.createdAt as Long;
-    } else {
-      message.createdAt = Long.ZERO;
-    }
+  fromPartial<I extends Exact<DeepPartial<Order>, I>>(object: I): Order {
+    const message = createBaseOrder();
+    message.orderId =
+      object.orderId !== undefined && object.orderId !== null
+        ? OrderID.fromPartial(object.orderId)
+        : undefined;
+    message.state = object.state ?? 0;
+    message.spec =
+      object.spec !== undefined && object.spec !== null
+        ? GroupSpec.fromPartial(object.spec)
+        : undefined;
+    message.createdAt =
+      object.createdAt !== undefined && object.createdAt !== null
+        ? Long.fromValue(object.createdAt)
+        : Long.ZERO;
     return message;
   },
 };
 
-const baseOrderFilters: object = {
-  owner: "",
-  dseq: Long.UZERO,
-  gseq: 0,
-  oseq: 0,
-  state: "",
-};
+function createBaseOrderFilters(): OrderFilters {
+  return { owner: "", dseq: Long.UZERO, gseq: 0, oseq: 0, state: "" };
+}
 
 export const OrderFilters = {
   encode(
@@ -335,7 +292,7 @@ export const OrderFilters = {
   decode(input: _m0.Reader | Uint8Array, length?: number): OrderFilters {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseOrderFilters } as OrderFilters;
+    const message = createBaseOrderFilters();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -363,33 +320,13 @@ export const OrderFilters = {
   },
 
   fromJSON(object: any): OrderFilters {
-    const message = { ...baseOrderFilters } as OrderFilters;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = Long.fromString(object.dseq);
-    } else {
-      message.dseq = Long.UZERO;
-    }
-    if (object.gseq !== undefined && object.gseq !== null) {
-      message.gseq = Number(object.gseq);
-    } else {
-      message.gseq = 0;
-    }
-    if (object.oseq !== undefined && object.oseq !== null) {
-      message.oseq = Number(object.oseq);
-    } else {
-      message.oseq = 0;
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = String(object.state);
-    } else {
-      message.state = "";
-    }
-    return message;
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
+      gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
+      oseq: isSet(object.oseq) ? Number(object.oseq) : 0,
+      state: isSet(object.state) ? String(object.state) : "",
+    };
   },
 
   toJSON(message: OrderFilters): unknown {
@@ -397,39 +334,24 @@ export const OrderFilters = {
     message.owner !== undefined && (obj.owner = message.owner);
     message.dseq !== undefined &&
       (obj.dseq = (message.dseq || Long.UZERO).toString());
-    message.gseq !== undefined && (obj.gseq = message.gseq);
-    message.oseq !== undefined && (obj.oseq = message.oseq);
+    message.gseq !== undefined && (obj.gseq = Math.round(message.gseq));
+    message.oseq !== undefined && (obj.oseq = Math.round(message.oseq));
     message.state !== undefined && (obj.state = message.state);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<OrderFilters>): OrderFilters {
-    const message = { ...baseOrderFilters } as OrderFilters;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
-    if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = object.dseq as Long;
-    } else {
-      message.dseq = Long.UZERO;
-    }
-    if (object.gseq !== undefined && object.gseq !== null) {
-      message.gseq = object.gseq;
-    } else {
-      message.gseq = 0;
-    }
-    if (object.oseq !== undefined && object.oseq !== null) {
-      message.oseq = object.oseq;
-    } else {
-      message.oseq = 0;
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = object.state;
-    } else {
-      message.state = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<OrderFilters>, I>>(
+    object: I
+  ): OrderFilters {
+    const message = createBaseOrderFilters();
+    message.owner = object.owner ?? "";
+    message.dseq =
+      object.dseq !== undefined && object.dseq !== null
+        ? Long.fromValue(object.dseq)
+        : Long.UZERO;
+    message.gseq = object.gseq ?? 0;
+    message.oseq = object.oseq ?? 0;
+    message.state = object.state ?? "";
     return message;
   },
 };
@@ -441,10 +363,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -453,7 +377,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

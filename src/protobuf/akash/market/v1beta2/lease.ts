@@ -1,10 +1,10 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { Coin } from "../../../cosmos/base/v1beta1/coin";
-import { BidID } from "../../../akash/market/v1beta1/bid";
+import { DecCoin } from "../../../cosmos/base/v1beta1/coin";
+import { BidID } from "../../../akash/market/v1beta2/bid";
 
-export const protobufPackage = "akash.market.v1beta1";
+export const protobufPackage = "akash.market.v1beta2";
 
 /** LeaseID stores bid details of lease */
 export interface LeaseID {
@@ -19,8 +19,9 @@ export interface LeaseID {
 export interface Lease {
   leaseId?: LeaseID;
   state: Lease_State;
-  price?: Coin;
+  price?: DecCoin;
   createdAt: Long;
+  closedOn: Long;
 }
 
 /** State is an enum which refers to state of lease */
@@ -106,13 +107,9 @@ export interface MsgCloseLease {
 /** MsgCloseLeaseResponse defines the Msg/CloseLease response type. */
 export interface MsgCloseLeaseResponse {}
 
-const baseLeaseID: object = {
-  owner: "",
-  dseq: Long.UZERO,
-  gseq: 0,
-  oseq: 0,
-  provider: "",
-};
+function createBaseLeaseID(): LeaseID {
+  return { owner: "", dseq: Long.UZERO, gseq: 0, oseq: 0, provider: "" };
+}
 
 export const LeaseID = {
   encode(
@@ -140,7 +137,7 @@ export const LeaseID = {
   decode(input: _m0.Reader | Uint8Array, length?: number): LeaseID {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseLeaseID } as LeaseID;
+    const message = createBaseLeaseID();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -168,33 +165,13 @@ export const LeaseID = {
   },
 
   fromJSON(object: any): LeaseID {
-    const message = { ...baseLeaseID } as LeaseID;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = Long.fromString(object.dseq);
-    } else {
-      message.dseq = Long.UZERO;
-    }
-    if (object.gseq !== undefined && object.gseq !== null) {
-      message.gseq = Number(object.gseq);
-    } else {
-      message.gseq = 0;
-    }
-    if (object.oseq !== undefined && object.oseq !== null) {
-      message.oseq = Number(object.oseq);
-    } else {
-      message.oseq = 0;
-    }
-    if (object.provider !== undefined && object.provider !== null) {
-      message.provider = String(object.provider);
-    } else {
-      message.provider = "";
-    }
-    return message;
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
+      gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
+      oseq: isSet(object.oseq) ? Number(object.oseq) : 0,
+      provider: isSet(object.provider) ? String(object.provider) : "",
+    };
   },
 
   toJSON(message: LeaseID): unknown {
@@ -202,44 +179,35 @@ export const LeaseID = {
     message.owner !== undefined && (obj.owner = message.owner);
     message.dseq !== undefined &&
       (obj.dseq = (message.dseq || Long.UZERO).toString());
-    message.gseq !== undefined && (obj.gseq = message.gseq);
-    message.oseq !== undefined && (obj.oseq = message.oseq);
+    message.gseq !== undefined && (obj.gseq = Math.round(message.gseq));
+    message.oseq !== undefined && (obj.oseq = Math.round(message.oseq));
     message.provider !== undefined && (obj.provider = message.provider);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<LeaseID>): LeaseID {
-    const message = { ...baseLeaseID } as LeaseID;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
-    if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = object.dseq as Long;
-    } else {
-      message.dseq = Long.UZERO;
-    }
-    if (object.gseq !== undefined && object.gseq !== null) {
-      message.gseq = object.gseq;
-    } else {
-      message.gseq = 0;
-    }
-    if (object.oseq !== undefined && object.oseq !== null) {
-      message.oseq = object.oseq;
-    } else {
-      message.oseq = 0;
-    }
-    if (object.provider !== undefined && object.provider !== null) {
-      message.provider = object.provider;
-    } else {
-      message.provider = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<LeaseID>, I>>(object: I): LeaseID {
+    const message = createBaseLeaseID();
+    message.owner = object.owner ?? "";
+    message.dseq =
+      object.dseq !== undefined && object.dseq !== null
+        ? Long.fromValue(object.dseq)
+        : Long.UZERO;
+    message.gseq = object.gseq ?? 0;
+    message.oseq = object.oseq ?? 0;
+    message.provider = object.provider ?? "";
     return message;
   },
 };
 
-const baseLease: object = { state: 0, createdAt: Long.ZERO };
+function createBaseLease(): Lease {
+  return {
+    leaseId: undefined,
+    state: 0,
+    price: undefined,
+    createdAt: Long.ZERO,
+    closedOn: Long.ZERO,
+  };
+}
 
 export const Lease = {
   encode(message: Lease, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
@@ -250,10 +218,13 @@ export const Lease = {
       writer.uint32(16).int32(message.state);
     }
     if (message.price !== undefined) {
-      Coin.encode(message.price, writer.uint32(26).fork()).ldelim();
+      DecCoin.encode(message.price, writer.uint32(26).fork()).ldelim();
     }
     if (!message.createdAt.isZero()) {
       writer.uint32(32).int64(message.createdAt);
+    }
+    if (!message.closedOn.isZero()) {
+      writer.uint32(40).int64(message.closedOn);
     }
     return writer;
   },
@@ -261,7 +232,7 @@ export const Lease = {
   decode(input: _m0.Reader | Uint8Array, length?: number): Lease {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseLease } as Lease;
+    const message = createBaseLease();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -272,10 +243,13 @@ export const Lease = {
           message.state = reader.int32() as any;
           break;
         case 3:
-          message.price = Coin.decode(reader, reader.uint32());
+          message.price = DecCoin.decode(reader, reader.uint32());
           break;
         case 4:
           message.createdAt = reader.int64() as Long;
+          break;
+        case 5:
+          message.closedOn = reader.int64() as Long;
           break;
         default:
           reader.skipType(tag & 7);
@@ -286,28 +260,19 @@ export const Lease = {
   },
 
   fromJSON(object: any): Lease {
-    const message = { ...baseLease } as Lease;
-    if (object.leaseId !== undefined && object.leaseId !== null) {
-      message.leaseId = LeaseID.fromJSON(object.leaseId);
-    } else {
-      message.leaseId = undefined;
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = lease_StateFromJSON(object.state);
-    } else {
-      message.state = 0;
-    }
-    if (object.price !== undefined && object.price !== null) {
-      message.price = Coin.fromJSON(object.price);
-    } else {
-      message.price = undefined;
-    }
-    if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = Long.fromString(object.createdAt);
-    } else {
-      message.createdAt = Long.ZERO;
-    }
-    return message;
+    return {
+      leaseId: isSet(object.leaseId)
+        ? LeaseID.fromJSON(object.leaseId)
+        : undefined,
+      state: isSet(object.state) ? lease_StateFromJSON(object.state) : 0,
+      price: isSet(object.price) ? DecCoin.fromJSON(object.price) : undefined,
+      createdAt: isSet(object.createdAt)
+        ? Long.fromString(object.createdAt)
+        : Long.ZERO,
+      closedOn: isSet(object.closedOn)
+        ? Long.fromString(object.closedOn)
+        : Long.ZERO,
+    };
   },
 
   toJSON(message: Lease): unknown {
@@ -319,46 +284,47 @@ export const Lease = {
     message.state !== undefined &&
       (obj.state = lease_StateToJSON(message.state));
     message.price !== undefined &&
-      (obj.price = message.price ? Coin.toJSON(message.price) : undefined);
+      (obj.price = message.price ? DecCoin.toJSON(message.price) : undefined);
     message.createdAt !== undefined &&
       (obj.createdAt = (message.createdAt || Long.ZERO).toString());
+    message.closedOn !== undefined &&
+      (obj.closedOn = (message.closedOn || Long.ZERO).toString());
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Lease>): Lease {
-    const message = { ...baseLease } as Lease;
-    if (object.leaseId !== undefined && object.leaseId !== null) {
-      message.leaseId = LeaseID.fromPartial(object.leaseId);
-    } else {
-      message.leaseId = undefined;
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = object.state;
-    } else {
-      message.state = 0;
-    }
-    if (object.price !== undefined && object.price !== null) {
-      message.price = Coin.fromPartial(object.price);
-    } else {
-      message.price = undefined;
-    }
-    if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = object.createdAt as Long;
-    } else {
-      message.createdAt = Long.ZERO;
-    }
+  fromPartial<I extends Exact<DeepPartial<Lease>, I>>(object: I): Lease {
+    const message = createBaseLease();
+    message.leaseId =
+      object.leaseId !== undefined && object.leaseId !== null
+        ? LeaseID.fromPartial(object.leaseId)
+        : undefined;
+    message.state = object.state ?? 0;
+    message.price =
+      object.price !== undefined && object.price !== null
+        ? DecCoin.fromPartial(object.price)
+        : undefined;
+    message.createdAt =
+      object.createdAt !== undefined && object.createdAt !== null
+        ? Long.fromValue(object.createdAt)
+        : Long.ZERO;
+    message.closedOn =
+      object.closedOn !== undefined && object.closedOn !== null
+        ? Long.fromValue(object.closedOn)
+        : Long.ZERO;
     return message;
   },
 };
 
-const baseLeaseFilters: object = {
-  owner: "",
-  dseq: Long.UZERO,
-  gseq: 0,
-  oseq: 0,
-  provider: "",
-  state: "",
-};
+function createBaseLeaseFilters(): LeaseFilters {
+  return {
+    owner: "",
+    dseq: Long.UZERO,
+    gseq: 0,
+    oseq: 0,
+    provider: "",
+    state: "",
+  };
+}
 
 export const LeaseFilters = {
   encode(
@@ -389,7 +355,7 @@ export const LeaseFilters = {
   decode(input: _m0.Reader | Uint8Array, length?: number): LeaseFilters {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseLeaseFilters } as LeaseFilters;
+    const message = createBaseLeaseFilters();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -420,38 +386,14 @@ export const LeaseFilters = {
   },
 
   fromJSON(object: any): LeaseFilters {
-    const message = { ...baseLeaseFilters } as LeaseFilters;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = Long.fromString(object.dseq);
-    } else {
-      message.dseq = Long.UZERO;
-    }
-    if (object.gseq !== undefined && object.gseq !== null) {
-      message.gseq = Number(object.gseq);
-    } else {
-      message.gseq = 0;
-    }
-    if (object.oseq !== undefined && object.oseq !== null) {
-      message.oseq = Number(object.oseq);
-    } else {
-      message.oseq = 0;
-    }
-    if (object.provider !== undefined && object.provider !== null) {
-      message.provider = String(object.provider);
-    } else {
-      message.provider = "";
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = String(object.state);
-    } else {
-      message.state = "";
-    }
-    return message;
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
+      gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
+      oseq: isSet(object.oseq) ? Number(object.oseq) : 0,
+      provider: isSet(object.provider) ? String(object.provider) : "",
+      state: isSet(object.state) ? String(object.state) : "",
+    };
   },
 
   toJSON(message: LeaseFilters): unknown {
@@ -459,50 +401,33 @@ export const LeaseFilters = {
     message.owner !== undefined && (obj.owner = message.owner);
     message.dseq !== undefined &&
       (obj.dseq = (message.dseq || Long.UZERO).toString());
-    message.gseq !== undefined && (obj.gseq = message.gseq);
-    message.oseq !== undefined && (obj.oseq = message.oseq);
+    message.gseq !== undefined && (obj.gseq = Math.round(message.gseq));
+    message.oseq !== undefined && (obj.oseq = Math.round(message.oseq));
     message.provider !== undefined && (obj.provider = message.provider);
     message.state !== undefined && (obj.state = message.state);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<LeaseFilters>): LeaseFilters {
-    const message = { ...baseLeaseFilters } as LeaseFilters;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
-    if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = object.dseq as Long;
-    } else {
-      message.dseq = Long.UZERO;
-    }
-    if (object.gseq !== undefined && object.gseq !== null) {
-      message.gseq = object.gseq;
-    } else {
-      message.gseq = 0;
-    }
-    if (object.oseq !== undefined && object.oseq !== null) {
-      message.oseq = object.oseq;
-    } else {
-      message.oseq = 0;
-    }
-    if (object.provider !== undefined && object.provider !== null) {
-      message.provider = object.provider;
-    } else {
-      message.provider = "";
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = object.state;
-    } else {
-      message.state = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<LeaseFilters>, I>>(
+    object: I
+  ): LeaseFilters {
+    const message = createBaseLeaseFilters();
+    message.owner = object.owner ?? "";
+    message.dseq =
+      object.dseq !== undefined && object.dseq !== null
+        ? Long.fromValue(object.dseq)
+        : Long.UZERO;
+    message.gseq = object.gseq ?? 0;
+    message.oseq = object.oseq ?? 0;
+    message.provider = object.provider ?? "";
+    message.state = object.state ?? "";
     return message;
   },
 };
 
-const baseMsgCreateLease: object = {};
+function createBaseMsgCreateLease(): MsgCreateLease {
+  return { bidId: undefined };
+}
 
 export const MsgCreateLease = {
   encode(
@@ -518,7 +443,7 @@ export const MsgCreateLease = {
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateLease {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgCreateLease } as MsgCreateLease;
+    const message = createBaseMsgCreateLease();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -534,13 +459,9 @@ export const MsgCreateLease = {
   },
 
   fromJSON(object: any): MsgCreateLease {
-    const message = { ...baseMsgCreateLease } as MsgCreateLease;
-    if (object.bidId !== undefined && object.bidId !== null) {
-      message.bidId = BidID.fromJSON(object.bidId);
-    } else {
-      message.bidId = undefined;
-    }
-    return message;
+    return {
+      bidId: isSet(object.bidId) ? BidID.fromJSON(object.bidId) : undefined,
+    };
   },
 
   toJSON(message: MsgCreateLease): unknown {
@@ -550,18 +471,21 @@ export const MsgCreateLease = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgCreateLease>): MsgCreateLease {
-    const message = { ...baseMsgCreateLease } as MsgCreateLease;
-    if (object.bidId !== undefined && object.bidId !== null) {
-      message.bidId = BidID.fromPartial(object.bidId);
-    } else {
-      message.bidId = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgCreateLease>, I>>(
+    object: I
+  ): MsgCreateLease {
+    const message = createBaseMsgCreateLease();
+    message.bidId =
+      object.bidId !== undefined && object.bidId !== null
+        ? BidID.fromPartial(object.bidId)
+        : undefined;
     return message;
   },
 };
 
-const baseMsgCreateLeaseResponse: object = {};
+function createBaseMsgCreateLeaseResponse(): MsgCreateLeaseResponse {
+  return {};
+}
 
 export const MsgCreateLeaseResponse = {
   encode(
@@ -577,7 +501,7 @@ export const MsgCreateLeaseResponse = {
   ): MsgCreateLeaseResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgCreateLeaseResponse } as MsgCreateLeaseResponse;
+    const message = createBaseMsgCreateLeaseResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -590,8 +514,7 @@ export const MsgCreateLeaseResponse = {
   },
 
   fromJSON(_: any): MsgCreateLeaseResponse {
-    const message = { ...baseMsgCreateLeaseResponse } as MsgCreateLeaseResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgCreateLeaseResponse): unknown {
@@ -599,13 +522,17 @@ export const MsgCreateLeaseResponse = {
     return obj;
   },
 
-  fromPartial(_: DeepPartial<MsgCreateLeaseResponse>): MsgCreateLeaseResponse {
-    const message = { ...baseMsgCreateLeaseResponse } as MsgCreateLeaseResponse;
+  fromPartial<I extends Exact<DeepPartial<MsgCreateLeaseResponse>, I>>(
+    _: I
+  ): MsgCreateLeaseResponse {
+    const message = createBaseMsgCreateLeaseResponse();
     return message;
   },
 };
 
-const baseMsgWithdrawLease: object = {};
+function createBaseMsgWithdrawLease(): MsgWithdrawLease {
+  return { bidId: undefined };
+}
 
 export const MsgWithdrawLease = {
   encode(
@@ -621,7 +548,7 @@ export const MsgWithdrawLease = {
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgWithdrawLease {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgWithdrawLease } as MsgWithdrawLease;
+    const message = createBaseMsgWithdrawLease();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -637,13 +564,9 @@ export const MsgWithdrawLease = {
   },
 
   fromJSON(object: any): MsgWithdrawLease {
-    const message = { ...baseMsgWithdrawLease } as MsgWithdrawLease;
-    if (object.bidId !== undefined && object.bidId !== null) {
-      message.bidId = LeaseID.fromJSON(object.bidId);
-    } else {
-      message.bidId = undefined;
-    }
-    return message;
+    return {
+      bidId: isSet(object.bidId) ? LeaseID.fromJSON(object.bidId) : undefined,
+    };
   },
 
   toJSON(message: MsgWithdrawLease): unknown {
@@ -653,18 +576,21 @@ export const MsgWithdrawLease = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgWithdrawLease>): MsgWithdrawLease {
-    const message = { ...baseMsgWithdrawLease } as MsgWithdrawLease;
-    if (object.bidId !== undefined && object.bidId !== null) {
-      message.bidId = LeaseID.fromPartial(object.bidId);
-    } else {
-      message.bidId = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawLease>, I>>(
+    object: I
+  ): MsgWithdrawLease {
+    const message = createBaseMsgWithdrawLease();
+    message.bidId =
+      object.bidId !== undefined && object.bidId !== null
+        ? LeaseID.fromPartial(object.bidId)
+        : undefined;
     return message;
   },
 };
 
-const baseMsgWithdrawLeaseResponse: object = {};
+function createBaseMsgWithdrawLeaseResponse(): MsgWithdrawLeaseResponse {
+  return {};
+}
 
 export const MsgWithdrawLeaseResponse = {
   encode(
@@ -680,9 +606,7 @@ export const MsgWithdrawLeaseResponse = {
   ): MsgWithdrawLeaseResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgWithdrawLeaseResponse,
-    } as MsgWithdrawLeaseResponse;
+    const message = createBaseMsgWithdrawLeaseResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -695,10 +619,7 @@ export const MsgWithdrawLeaseResponse = {
   },
 
   fromJSON(_: any): MsgWithdrawLeaseResponse {
-    const message = {
-      ...baseMsgWithdrawLeaseResponse,
-    } as MsgWithdrawLeaseResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgWithdrawLeaseResponse): unknown {
@@ -706,17 +627,17 @@ export const MsgWithdrawLeaseResponse = {
     return obj;
   },
 
-  fromPartial(
-    _: DeepPartial<MsgWithdrawLeaseResponse>
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawLeaseResponse>, I>>(
+    _: I
   ): MsgWithdrawLeaseResponse {
-    const message = {
-      ...baseMsgWithdrawLeaseResponse,
-    } as MsgWithdrawLeaseResponse;
+    const message = createBaseMsgWithdrawLeaseResponse();
     return message;
   },
 };
 
-const baseMsgCloseLease: object = {};
+function createBaseMsgCloseLease(): MsgCloseLease {
+  return { leaseId: undefined };
+}
 
 export const MsgCloseLease = {
   encode(
@@ -732,7 +653,7 @@ export const MsgCloseLease = {
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgCloseLease {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgCloseLease } as MsgCloseLease;
+    const message = createBaseMsgCloseLease();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -748,13 +669,11 @@ export const MsgCloseLease = {
   },
 
   fromJSON(object: any): MsgCloseLease {
-    const message = { ...baseMsgCloseLease } as MsgCloseLease;
-    if (object.leaseId !== undefined && object.leaseId !== null) {
-      message.leaseId = LeaseID.fromJSON(object.leaseId);
-    } else {
-      message.leaseId = undefined;
-    }
-    return message;
+    return {
+      leaseId: isSet(object.leaseId)
+        ? LeaseID.fromJSON(object.leaseId)
+        : undefined,
+    };
   },
 
   toJSON(message: MsgCloseLease): unknown {
@@ -766,18 +685,21 @@ export const MsgCloseLease = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgCloseLease>): MsgCloseLease {
-    const message = { ...baseMsgCloseLease } as MsgCloseLease;
-    if (object.leaseId !== undefined && object.leaseId !== null) {
-      message.leaseId = LeaseID.fromPartial(object.leaseId);
-    } else {
-      message.leaseId = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgCloseLease>, I>>(
+    object: I
+  ): MsgCloseLease {
+    const message = createBaseMsgCloseLease();
+    message.leaseId =
+      object.leaseId !== undefined && object.leaseId !== null
+        ? LeaseID.fromPartial(object.leaseId)
+        : undefined;
     return message;
   },
 };
 
-const baseMsgCloseLeaseResponse: object = {};
+function createBaseMsgCloseLeaseResponse(): MsgCloseLeaseResponse {
+  return {};
+}
 
 export const MsgCloseLeaseResponse = {
   encode(
@@ -793,7 +715,7 @@ export const MsgCloseLeaseResponse = {
   ): MsgCloseLeaseResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgCloseLeaseResponse } as MsgCloseLeaseResponse;
+    const message = createBaseMsgCloseLeaseResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -806,8 +728,7 @@ export const MsgCloseLeaseResponse = {
   },
 
   fromJSON(_: any): MsgCloseLeaseResponse {
-    const message = { ...baseMsgCloseLeaseResponse } as MsgCloseLeaseResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgCloseLeaseResponse): unknown {
@@ -815,8 +736,10 @@ export const MsgCloseLeaseResponse = {
     return obj;
   },
 
-  fromPartial(_: DeepPartial<MsgCloseLeaseResponse>): MsgCloseLeaseResponse {
-    const message = { ...baseMsgCloseLeaseResponse } as MsgCloseLeaseResponse;
+  fromPartial<I extends Exact<DeepPartial<MsgCloseLeaseResponse>, I>>(
+    _: I
+  ): MsgCloseLeaseResponse {
+    const message = createBaseMsgCloseLeaseResponse();
     return message;
   },
 };
@@ -828,10 +751,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -840,7 +765,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

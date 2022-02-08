@@ -115,7 +115,14 @@ export interface DeploymentFilters {
   state: string;
 }
 
-const baseMsgCreateDeployment: object = {};
+function createBaseMsgCreateDeployment(): MsgCreateDeployment {
+  return {
+    id: undefined,
+    groups: [],
+    version: new Uint8Array(),
+    deposit: undefined,
+  };
+}
 
 export const MsgCreateDeployment = {
   encode(
@@ -140,9 +147,7 @@ export const MsgCreateDeployment = {
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateDeployment {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgCreateDeployment } as MsgCreateDeployment;
-    message.groups = [];
-    message.version = new Uint8Array();
+    const message = createBaseMsgCreateDeployment();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -167,28 +172,18 @@ export const MsgCreateDeployment = {
   },
 
   fromJSON(object: any): MsgCreateDeployment {
-    const message = { ...baseMsgCreateDeployment } as MsgCreateDeployment;
-    message.groups = [];
-    message.version = new Uint8Array();
-    if (object.id !== undefined && object.id !== null) {
-      message.id = DeploymentID.fromJSON(object.id);
-    } else {
-      message.id = undefined;
-    }
-    if (object.groups !== undefined && object.groups !== null) {
-      for (const e of object.groups) {
-        message.groups.push(GroupSpec.fromJSON(e));
-      }
-    }
-    if (object.version !== undefined && object.version !== null) {
-      message.version = bytesFromBase64(object.version);
-    }
-    if (object.deposit !== undefined && object.deposit !== null) {
-      message.deposit = Coin.fromJSON(object.deposit);
-    } else {
-      message.deposit = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? DeploymentID.fromJSON(object.id) : undefined,
+      groups: Array.isArray(object?.groups)
+        ? object.groups.map((e: any) => GroupSpec.fromJSON(e))
+        : [],
+      version: isSet(object.version)
+        ? bytesFromBase64(object.version)
+        : new Uint8Array(),
+      deposit: isSet(object.deposit)
+        ? Coin.fromJSON(object.deposit)
+        : undefined,
+    };
   },
 
   toJSON(message: MsgCreateDeployment): unknown {
@@ -213,34 +208,27 @@ export const MsgCreateDeployment = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgCreateDeployment>): MsgCreateDeployment {
-    const message = { ...baseMsgCreateDeployment } as MsgCreateDeployment;
-    message.groups = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = DeploymentID.fromPartial(object.id);
-    } else {
-      message.id = undefined;
-    }
-    if (object.groups !== undefined && object.groups !== null) {
-      for (const e of object.groups) {
-        message.groups.push(GroupSpec.fromPartial(e));
-      }
-    }
-    if (object.version !== undefined && object.version !== null) {
-      message.version = object.version;
-    } else {
-      message.version = new Uint8Array();
-    }
-    if (object.deposit !== undefined && object.deposit !== null) {
-      message.deposit = Coin.fromPartial(object.deposit);
-    } else {
-      message.deposit = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgCreateDeployment>, I>>(
+    object: I
+  ): MsgCreateDeployment {
+    const message = createBaseMsgCreateDeployment();
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? DeploymentID.fromPartial(object.id)
+        : undefined;
+    message.groups = object.groups?.map((e) => GroupSpec.fromPartial(e)) || [];
+    message.version = object.version ?? new Uint8Array();
+    message.deposit =
+      object.deposit !== undefined && object.deposit !== null
+        ? Coin.fromPartial(object.deposit)
+        : undefined;
     return message;
   },
 };
 
-const baseMsgCreateDeploymentResponse: object = {};
+function createBaseMsgCreateDeploymentResponse(): MsgCreateDeploymentResponse {
+  return {};
+}
 
 export const MsgCreateDeploymentResponse = {
   encode(
@@ -256,9 +244,7 @@ export const MsgCreateDeploymentResponse = {
   ): MsgCreateDeploymentResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgCreateDeploymentResponse,
-    } as MsgCreateDeploymentResponse;
+    const message = createBaseMsgCreateDeploymentResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -271,10 +257,7 @@ export const MsgCreateDeploymentResponse = {
   },
 
   fromJSON(_: any): MsgCreateDeploymentResponse {
-    const message = {
-      ...baseMsgCreateDeploymentResponse,
-    } as MsgCreateDeploymentResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgCreateDeploymentResponse): unknown {
@@ -282,17 +265,17 @@ export const MsgCreateDeploymentResponse = {
     return obj;
   },
 
-  fromPartial(
-    _: DeepPartial<MsgCreateDeploymentResponse>
+  fromPartial<I extends Exact<DeepPartial<MsgCreateDeploymentResponse>, I>>(
+    _: I
   ): MsgCreateDeploymentResponse {
-    const message = {
-      ...baseMsgCreateDeploymentResponse,
-    } as MsgCreateDeploymentResponse;
+    const message = createBaseMsgCreateDeploymentResponse();
     return message;
   },
 };
 
-const baseMsgDepositDeployment: object = {};
+function createBaseMsgDepositDeployment(): MsgDepositDeployment {
+  return { id: undefined, amount: undefined };
+}
 
 export const MsgDepositDeployment = {
   encode(
@@ -314,7 +297,7 @@ export const MsgDepositDeployment = {
   ): MsgDepositDeployment {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgDepositDeployment } as MsgDepositDeployment;
+    const message = createBaseMsgDepositDeployment();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -333,18 +316,10 @@ export const MsgDepositDeployment = {
   },
 
   fromJSON(object: any): MsgDepositDeployment {
-    const message = { ...baseMsgDepositDeployment } as MsgDepositDeployment;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = DeploymentID.fromJSON(object.id);
-    } else {
-      message.id = undefined;
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = Coin.fromJSON(object.amount);
-    } else {
-      message.amount = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? DeploymentID.fromJSON(object.id) : undefined,
+      amount: isSet(object.amount) ? Coin.fromJSON(object.amount) : undefined,
+    };
   },
 
   toJSON(message: MsgDepositDeployment): unknown {
@@ -356,23 +331,25 @@ export const MsgDepositDeployment = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgDepositDeployment>): MsgDepositDeployment {
-    const message = { ...baseMsgDepositDeployment } as MsgDepositDeployment;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = DeploymentID.fromPartial(object.id);
-    } else {
-      message.id = undefined;
-    }
-    if (object.amount !== undefined && object.amount !== null) {
-      message.amount = Coin.fromPartial(object.amount);
-    } else {
-      message.amount = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgDepositDeployment>, I>>(
+    object: I
+  ): MsgDepositDeployment {
+    const message = createBaseMsgDepositDeployment();
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? DeploymentID.fromPartial(object.id)
+        : undefined;
+    message.amount =
+      object.amount !== undefined && object.amount !== null
+        ? Coin.fromPartial(object.amount)
+        : undefined;
     return message;
   },
 };
 
-const baseMsgDepositDeploymentResponse: object = {};
+function createBaseMsgDepositDeploymentResponse(): MsgDepositDeploymentResponse {
+  return {};
+}
 
 export const MsgDepositDeploymentResponse = {
   encode(
@@ -388,9 +365,7 @@ export const MsgDepositDeploymentResponse = {
   ): MsgDepositDeploymentResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgDepositDeploymentResponse,
-    } as MsgDepositDeploymentResponse;
+    const message = createBaseMsgDepositDeploymentResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -403,10 +378,7 @@ export const MsgDepositDeploymentResponse = {
   },
 
   fromJSON(_: any): MsgDepositDeploymentResponse {
-    const message = {
-      ...baseMsgDepositDeploymentResponse,
-    } as MsgDepositDeploymentResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgDepositDeploymentResponse): unknown {
@@ -414,17 +386,17 @@ export const MsgDepositDeploymentResponse = {
     return obj;
   },
 
-  fromPartial(
-    _: DeepPartial<MsgDepositDeploymentResponse>
+  fromPartial<I extends Exact<DeepPartial<MsgDepositDeploymentResponse>, I>>(
+    _: I
   ): MsgDepositDeploymentResponse {
-    const message = {
-      ...baseMsgDepositDeploymentResponse,
-    } as MsgDepositDeploymentResponse;
+    const message = createBaseMsgDepositDeploymentResponse();
     return message;
   },
 };
 
-const baseMsgUpdateDeployment: object = {};
+function createBaseMsgUpdateDeployment(): MsgUpdateDeployment {
+  return { id: undefined, groups: [], version: new Uint8Array() };
+}
 
 export const MsgUpdateDeployment = {
   encode(
@@ -446,9 +418,7 @@ export const MsgUpdateDeployment = {
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateDeployment {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgUpdateDeployment } as MsgUpdateDeployment;
-    message.groups = [];
-    message.version = new Uint8Array();
+    const message = createBaseMsgUpdateDeployment();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -470,23 +440,15 @@ export const MsgUpdateDeployment = {
   },
 
   fromJSON(object: any): MsgUpdateDeployment {
-    const message = { ...baseMsgUpdateDeployment } as MsgUpdateDeployment;
-    message.groups = [];
-    message.version = new Uint8Array();
-    if (object.id !== undefined && object.id !== null) {
-      message.id = DeploymentID.fromJSON(object.id);
-    } else {
-      message.id = undefined;
-    }
-    if (object.groups !== undefined && object.groups !== null) {
-      for (const e of object.groups) {
-        message.groups.push(GroupSpec.fromJSON(e));
-      }
-    }
-    if (object.version !== undefined && object.version !== null) {
-      message.version = bytesFromBase64(object.version);
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? DeploymentID.fromJSON(object.id) : undefined,
+      groups: Array.isArray(object?.groups)
+        ? object.groups.map((e: any) => GroupSpec.fromJSON(e))
+        : [],
+      version: isSet(object.version)
+        ? bytesFromBase64(object.version)
+        : new Uint8Array(),
+    };
   },
 
   toJSON(message: MsgUpdateDeployment): unknown {
@@ -507,29 +469,23 @@ export const MsgUpdateDeployment = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgUpdateDeployment>): MsgUpdateDeployment {
-    const message = { ...baseMsgUpdateDeployment } as MsgUpdateDeployment;
-    message.groups = [];
-    if (object.id !== undefined && object.id !== null) {
-      message.id = DeploymentID.fromPartial(object.id);
-    } else {
-      message.id = undefined;
-    }
-    if (object.groups !== undefined && object.groups !== null) {
-      for (const e of object.groups) {
-        message.groups.push(GroupSpec.fromPartial(e));
-      }
-    }
-    if (object.version !== undefined && object.version !== null) {
-      message.version = object.version;
-    } else {
-      message.version = new Uint8Array();
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateDeployment>, I>>(
+    object: I
+  ): MsgUpdateDeployment {
+    const message = createBaseMsgUpdateDeployment();
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? DeploymentID.fromPartial(object.id)
+        : undefined;
+    message.groups = object.groups?.map((e) => GroupSpec.fromPartial(e)) || [];
+    message.version = object.version ?? new Uint8Array();
     return message;
   },
 };
 
-const baseMsgUpdateDeploymentResponse: object = {};
+function createBaseMsgUpdateDeploymentResponse(): MsgUpdateDeploymentResponse {
+  return {};
+}
 
 export const MsgUpdateDeploymentResponse = {
   encode(
@@ -545,9 +501,7 @@ export const MsgUpdateDeploymentResponse = {
   ): MsgUpdateDeploymentResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgUpdateDeploymentResponse,
-    } as MsgUpdateDeploymentResponse;
+    const message = createBaseMsgUpdateDeploymentResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -560,10 +514,7 @@ export const MsgUpdateDeploymentResponse = {
   },
 
   fromJSON(_: any): MsgUpdateDeploymentResponse {
-    const message = {
-      ...baseMsgUpdateDeploymentResponse,
-    } as MsgUpdateDeploymentResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgUpdateDeploymentResponse): unknown {
@@ -571,17 +522,17 @@ export const MsgUpdateDeploymentResponse = {
     return obj;
   },
 
-  fromPartial(
-    _: DeepPartial<MsgUpdateDeploymentResponse>
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateDeploymentResponse>, I>>(
+    _: I
   ): MsgUpdateDeploymentResponse {
-    const message = {
-      ...baseMsgUpdateDeploymentResponse,
-    } as MsgUpdateDeploymentResponse;
+    const message = createBaseMsgUpdateDeploymentResponse();
     return message;
   },
 };
 
-const baseMsgCloseDeployment: object = {};
+function createBaseMsgCloseDeployment(): MsgCloseDeployment {
+  return { id: undefined };
+}
 
 export const MsgCloseDeployment = {
   encode(
@@ -597,7 +548,7 @@ export const MsgCloseDeployment = {
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgCloseDeployment {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgCloseDeployment } as MsgCloseDeployment;
+    const message = createBaseMsgCloseDeployment();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -613,13 +564,9 @@ export const MsgCloseDeployment = {
   },
 
   fromJSON(object: any): MsgCloseDeployment {
-    const message = { ...baseMsgCloseDeployment } as MsgCloseDeployment;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = DeploymentID.fromJSON(object.id);
-    } else {
-      message.id = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? DeploymentID.fromJSON(object.id) : undefined,
+    };
   },
 
   toJSON(message: MsgCloseDeployment): unknown {
@@ -629,18 +576,21 @@ export const MsgCloseDeployment = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgCloseDeployment>): MsgCloseDeployment {
-    const message = { ...baseMsgCloseDeployment } as MsgCloseDeployment;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = DeploymentID.fromPartial(object.id);
-    } else {
-      message.id = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgCloseDeployment>, I>>(
+    object: I
+  ): MsgCloseDeployment {
+    const message = createBaseMsgCloseDeployment();
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? DeploymentID.fromPartial(object.id)
+        : undefined;
     return message;
   },
 };
 
-const baseMsgCloseDeploymentResponse: object = {};
+function createBaseMsgCloseDeploymentResponse(): MsgCloseDeploymentResponse {
+  return {};
+}
 
 export const MsgCloseDeploymentResponse = {
   encode(
@@ -656,9 +606,7 @@ export const MsgCloseDeploymentResponse = {
   ): MsgCloseDeploymentResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgCloseDeploymentResponse,
-    } as MsgCloseDeploymentResponse;
+    const message = createBaseMsgCloseDeploymentResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -671,10 +619,7 @@ export const MsgCloseDeploymentResponse = {
   },
 
   fromJSON(_: any): MsgCloseDeploymentResponse {
-    const message = {
-      ...baseMsgCloseDeploymentResponse,
-    } as MsgCloseDeploymentResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgCloseDeploymentResponse): unknown {
@@ -682,17 +627,17 @@ export const MsgCloseDeploymentResponse = {
     return obj;
   },
 
-  fromPartial(
-    _: DeepPartial<MsgCloseDeploymentResponse>
+  fromPartial<I extends Exact<DeepPartial<MsgCloseDeploymentResponse>, I>>(
+    _: I
   ): MsgCloseDeploymentResponse {
-    const message = {
-      ...baseMsgCloseDeploymentResponse,
-    } as MsgCloseDeploymentResponse;
+    const message = createBaseMsgCloseDeploymentResponse();
     return message;
   },
 };
 
-const baseDeploymentID: object = { owner: "", dseq: Long.UZERO };
+function createBaseDeploymentID(): DeploymentID {
+  return { owner: "", dseq: Long.UZERO };
+}
 
 export const DeploymentID = {
   encode(
@@ -711,7 +656,7 @@ export const DeploymentID = {
   decode(input: _m0.Reader | Uint8Array, length?: number): DeploymentID {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseDeploymentID } as DeploymentID;
+    const message = createBaseDeploymentID();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -730,18 +675,10 @@ export const DeploymentID = {
   },
 
   fromJSON(object: any): DeploymentID {
-    const message = { ...baseDeploymentID } as DeploymentID;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = Long.fromString(object.dseq);
-    } else {
-      message.dseq = Long.UZERO;
-    }
-    return message;
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
+    };
   },
 
   toJSON(message: DeploymentID): unknown {
@@ -752,23 +689,27 @@ export const DeploymentID = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<DeploymentID>): DeploymentID {
-    const message = { ...baseDeploymentID } as DeploymentID;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
-    if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = object.dseq as Long;
-    } else {
-      message.dseq = Long.UZERO;
-    }
+  fromPartial<I extends Exact<DeepPartial<DeploymentID>, I>>(
+    object: I
+  ): DeploymentID {
+    const message = createBaseDeploymentID();
+    message.owner = object.owner ?? "";
+    message.dseq =
+      object.dseq !== undefined && object.dseq !== null
+        ? Long.fromValue(object.dseq)
+        : Long.UZERO;
     return message;
   },
 };
 
-const baseDeployment: object = { state: 0, createdAt: Long.ZERO };
+function createBaseDeployment(): Deployment {
+  return {
+    deploymentId: undefined,
+    state: 0,
+    version: new Uint8Array(),
+    createdAt: Long.ZERO,
+  };
+}
 
 export const Deployment = {
   encode(
@@ -796,8 +737,7 @@ export const Deployment = {
   decode(input: _m0.Reader | Uint8Array, length?: number): Deployment {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseDeployment } as Deployment;
-    message.version = new Uint8Array();
+    const message = createBaseDeployment();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -822,27 +762,18 @@ export const Deployment = {
   },
 
   fromJSON(object: any): Deployment {
-    const message = { ...baseDeployment } as Deployment;
-    message.version = new Uint8Array();
-    if (object.deploymentId !== undefined && object.deploymentId !== null) {
-      message.deploymentId = DeploymentID.fromJSON(object.deploymentId);
-    } else {
-      message.deploymentId = undefined;
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = deployment_StateFromJSON(object.state);
-    } else {
-      message.state = 0;
-    }
-    if (object.version !== undefined && object.version !== null) {
-      message.version = bytesFromBase64(object.version);
-    }
-    if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = Long.fromString(object.createdAt);
-    } else {
-      message.createdAt = Long.ZERO;
-    }
-    return message;
+    return {
+      deploymentId: isSet(object.deploymentId)
+        ? DeploymentID.fromJSON(object.deploymentId)
+        : undefined,
+      state: isSet(object.state) ? deployment_StateFromJSON(object.state) : 0,
+      version: isSet(object.version)
+        ? bytesFromBase64(object.version)
+        : new Uint8Array(),
+      createdAt: isSet(object.createdAt)
+        ? Long.fromString(object.createdAt)
+        : Long.ZERO,
+    };
   },
 
   toJSON(message: Deployment): unknown {
@@ -862,37 +793,27 @@ export const Deployment = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Deployment>): Deployment {
-    const message = { ...baseDeployment } as Deployment;
-    if (object.deploymentId !== undefined && object.deploymentId !== null) {
-      message.deploymentId = DeploymentID.fromPartial(object.deploymentId);
-    } else {
-      message.deploymentId = undefined;
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = object.state;
-    } else {
-      message.state = 0;
-    }
-    if (object.version !== undefined && object.version !== null) {
-      message.version = object.version;
-    } else {
-      message.version = new Uint8Array();
-    }
-    if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = object.createdAt as Long;
-    } else {
-      message.createdAt = Long.ZERO;
-    }
+  fromPartial<I extends Exact<DeepPartial<Deployment>, I>>(
+    object: I
+  ): Deployment {
+    const message = createBaseDeployment();
+    message.deploymentId =
+      object.deploymentId !== undefined && object.deploymentId !== null
+        ? DeploymentID.fromPartial(object.deploymentId)
+        : undefined;
+    message.state = object.state ?? 0;
+    message.version = object.version ?? new Uint8Array();
+    message.createdAt =
+      object.createdAt !== undefined && object.createdAt !== null
+        ? Long.fromValue(object.createdAt)
+        : Long.ZERO;
     return message;
   },
 };
 
-const baseDeploymentFilters: object = {
-  owner: "",
-  dseq: Long.UZERO,
-  state: "",
-};
+function createBaseDeploymentFilters(): DeploymentFilters {
+  return { owner: "", dseq: Long.UZERO, state: "" };
+}
 
 export const DeploymentFilters = {
   encode(
@@ -914,7 +835,7 @@ export const DeploymentFilters = {
   decode(input: _m0.Reader | Uint8Array, length?: number): DeploymentFilters {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseDeploymentFilters } as DeploymentFilters;
+    const message = createBaseDeploymentFilters();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -936,23 +857,11 @@ export const DeploymentFilters = {
   },
 
   fromJSON(object: any): DeploymentFilters {
-    const message = { ...baseDeploymentFilters } as DeploymentFilters;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = Long.fromString(object.dseq);
-    } else {
-      message.dseq = Long.UZERO;
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = String(object.state);
-    } else {
-      message.state = "";
-    }
-    return message;
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
+      state: isSet(object.state) ? String(object.state) : "",
+    };
   },
 
   toJSON(message: DeploymentFilters): unknown {
@@ -964,23 +873,16 @@ export const DeploymentFilters = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<DeploymentFilters>): DeploymentFilters {
-    const message = { ...baseDeploymentFilters } as DeploymentFilters;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
-    if (object.dseq !== undefined && object.dseq !== null) {
-      message.dseq = object.dseq as Long;
-    } else {
-      message.dseq = Long.UZERO;
-    }
-    if (object.state !== undefined && object.state !== null) {
-      message.state = object.state;
-    } else {
-      message.state = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<DeploymentFilters>, I>>(
+    object: I
+  ): DeploymentFilters {
+    const message = createBaseDeploymentFilters();
+    message.owner = object.owner ?? "";
+    message.dseq =
+      object.dseq !== undefined && object.dseq !== null
+        ? Long.fromValue(object.dseq)
+        : Long.UZERO;
+    message.state = object.state ?? "";
     return message;
   },
 };
@@ -1126,6 +1028,7 @@ interface Rpc {
 
 declare var self: any | undefined;
 declare var window: any | undefined;
+declare var global: any | undefined;
 var globalThis: any = (() => {
   if (typeof globalThis !== "undefined") return globalThis;
   if (typeof self !== "undefined") return self;
@@ -1151,8 +1054,8 @@ const btoa: (bin: string) => string =
   ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
   const bin: string[] = [];
-  for (let i = 0; i < arr.byteLength; ++i) {
-    bin.push(String.fromCharCode(arr[i]));
+  for (const byte of arr) {
+    bin.push(String.fromCharCode(byte));
   }
   return btoa(bin.join(""));
 }
@@ -1164,10 +1067,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -1176,7 +1081,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

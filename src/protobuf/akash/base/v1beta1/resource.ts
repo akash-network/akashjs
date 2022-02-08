@@ -36,7 +36,9 @@ export interface ResourceUnits {
   endpoints: Endpoint[];
 }
 
-const baseCPU: object = {};
+function createBaseCPU(): CPU {
+  return { units: undefined, attributes: [] };
+}
 
 export const CPU = {
   encode(message: CPU, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
@@ -52,8 +54,7 @@ export const CPU = {
   decode(input: _m0.Reader | Uint8Array, length?: number): CPU {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseCPU } as CPU;
-    message.attributes = [];
+    const message = createBaseCPU();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -72,19 +73,14 @@ export const CPU = {
   },
 
   fromJSON(object: any): CPU {
-    const message = { ...baseCPU } as CPU;
-    message.attributes = [];
-    if (object.units !== undefined && object.units !== null) {
-      message.units = ResourceValue.fromJSON(object.units);
-    } else {
-      message.units = undefined;
-    }
-    if (object.attributes !== undefined && object.attributes !== null) {
-      for (const e of object.attributes) {
-        message.attributes.push(Attribute.fromJSON(e));
-      }
-    }
-    return message;
+    return {
+      units: isSet(object.units)
+        ? ResourceValue.fromJSON(object.units)
+        : undefined,
+      attributes: Array.isArray(object?.attributes)
+        ? object.attributes.map((e: any) => Attribute.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: CPU): unknown {
@@ -103,24 +99,21 @@ export const CPU = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<CPU>): CPU {
-    const message = { ...baseCPU } as CPU;
-    message.attributes = [];
-    if (object.units !== undefined && object.units !== null) {
-      message.units = ResourceValue.fromPartial(object.units);
-    } else {
-      message.units = undefined;
-    }
-    if (object.attributes !== undefined && object.attributes !== null) {
-      for (const e of object.attributes) {
-        message.attributes.push(Attribute.fromPartial(e));
-      }
-    }
+  fromPartial<I extends Exact<DeepPartial<CPU>, I>>(object: I): CPU {
+    const message = createBaseCPU();
+    message.units =
+      object.units !== undefined && object.units !== null
+        ? ResourceValue.fromPartial(object.units)
+        : undefined;
+    message.attributes =
+      object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
     return message;
   },
 };
 
-const baseMemory: object = {};
+function createBaseMemory(): Memory {
+  return { quantity: undefined, attributes: [] };
+}
 
 export const Memory = {
   encode(
@@ -139,8 +132,7 @@ export const Memory = {
   decode(input: _m0.Reader | Uint8Array, length?: number): Memory {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMemory } as Memory;
-    message.attributes = [];
+    const message = createBaseMemory();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -159,19 +151,14 @@ export const Memory = {
   },
 
   fromJSON(object: any): Memory {
-    const message = { ...baseMemory } as Memory;
-    message.attributes = [];
-    if (object.quantity !== undefined && object.quantity !== null) {
-      message.quantity = ResourceValue.fromJSON(object.quantity);
-    } else {
-      message.quantity = undefined;
-    }
-    if (object.attributes !== undefined && object.attributes !== null) {
-      for (const e of object.attributes) {
-        message.attributes.push(Attribute.fromJSON(e));
-      }
-    }
-    return message;
+    return {
+      quantity: isSet(object.quantity)
+        ? ResourceValue.fromJSON(object.quantity)
+        : undefined,
+      attributes: Array.isArray(object?.attributes)
+        ? object.attributes.map((e: any) => Attribute.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: Memory): unknown {
@@ -190,24 +177,21 @@ export const Memory = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Memory>): Memory {
-    const message = { ...baseMemory } as Memory;
-    message.attributes = [];
-    if (object.quantity !== undefined && object.quantity !== null) {
-      message.quantity = ResourceValue.fromPartial(object.quantity);
-    } else {
-      message.quantity = undefined;
-    }
-    if (object.attributes !== undefined && object.attributes !== null) {
-      for (const e of object.attributes) {
-        message.attributes.push(Attribute.fromPartial(e));
-      }
-    }
+  fromPartial<I extends Exact<DeepPartial<Memory>, I>>(object: I): Memory {
+    const message = createBaseMemory();
+    message.quantity =
+      object.quantity !== undefined && object.quantity !== null
+        ? ResourceValue.fromPartial(object.quantity)
+        : undefined;
+    message.attributes =
+      object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
     return message;
   },
 };
 
-const baseStorage: object = {};
+function createBaseStorage(): Storage {
+  return { quantity: undefined, attributes: [] };
+}
 
 export const Storage = {
   encode(
@@ -226,8 +210,7 @@ export const Storage = {
   decode(input: _m0.Reader | Uint8Array, length?: number): Storage {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseStorage } as Storage;
-    message.attributes = [];
+    const message = createBaseStorage();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -246,19 +229,14 @@ export const Storage = {
   },
 
   fromJSON(object: any): Storage {
-    const message = { ...baseStorage } as Storage;
-    message.attributes = [];
-    if (object.quantity !== undefined && object.quantity !== null) {
-      message.quantity = ResourceValue.fromJSON(object.quantity);
-    } else {
-      message.quantity = undefined;
-    }
-    if (object.attributes !== undefined && object.attributes !== null) {
-      for (const e of object.attributes) {
-        message.attributes.push(Attribute.fromJSON(e));
-      }
-    }
-    return message;
+    return {
+      quantity: isSet(object.quantity)
+        ? ResourceValue.fromJSON(object.quantity)
+        : undefined,
+      attributes: Array.isArray(object?.attributes)
+        ? object.attributes.map((e: any) => Attribute.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: Storage): unknown {
@@ -277,24 +255,26 @@ export const Storage = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Storage>): Storage {
-    const message = { ...baseStorage } as Storage;
-    message.attributes = [];
-    if (object.quantity !== undefined && object.quantity !== null) {
-      message.quantity = ResourceValue.fromPartial(object.quantity);
-    } else {
-      message.quantity = undefined;
-    }
-    if (object.attributes !== undefined && object.attributes !== null) {
-      for (const e of object.attributes) {
-        message.attributes.push(Attribute.fromPartial(e));
-      }
-    }
+  fromPartial<I extends Exact<DeepPartial<Storage>, I>>(object: I): Storage {
+    const message = createBaseStorage();
+    message.quantity =
+      object.quantity !== undefined && object.quantity !== null
+        ? ResourceValue.fromPartial(object.quantity)
+        : undefined;
+    message.attributes =
+      object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
     return message;
   },
 };
 
-const baseResourceUnits: object = {};
+function createBaseResourceUnits(): ResourceUnits {
+  return {
+    cpu: undefined,
+    memory: undefined,
+    storage: undefined,
+    endpoints: [],
+  };
+}
 
 export const ResourceUnits = {
   encode(
@@ -319,8 +299,7 @@ export const ResourceUnits = {
   decode(input: _m0.Reader | Uint8Array, length?: number): ResourceUnits {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseResourceUnits } as ResourceUnits;
-    message.endpoints = [];
+    const message = createBaseResourceUnits();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -345,29 +324,16 @@ export const ResourceUnits = {
   },
 
   fromJSON(object: any): ResourceUnits {
-    const message = { ...baseResourceUnits } as ResourceUnits;
-    message.endpoints = [];
-    if (object.cpu !== undefined && object.cpu !== null) {
-      message.cpu = CPU.fromJSON(object.cpu);
-    } else {
-      message.cpu = undefined;
-    }
-    if (object.memory !== undefined && object.memory !== null) {
-      message.memory = Memory.fromJSON(object.memory);
-    } else {
-      message.memory = undefined;
-    }
-    if (object.storage !== undefined && object.storage !== null) {
-      message.storage = Storage.fromJSON(object.storage);
-    } else {
-      message.storage = undefined;
-    }
-    if (object.endpoints !== undefined && object.endpoints !== null) {
-      for (const e of object.endpoints) {
-        message.endpoints.push(Endpoint.fromJSON(e));
-      }
-    }
-    return message;
+    return {
+      cpu: isSet(object.cpu) ? CPU.fromJSON(object.cpu) : undefined,
+      memory: isSet(object.memory) ? Memory.fromJSON(object.memory) : undefined,
+      storage: isSet(object.storage)
+        ? Storage.fromJSON(object.storage)
+        : undefined,
+      endpoints: Array.isArray(object?.endpoints)
+        ? object.endpoints.map((e: any) => Endpoint.fromJSON(e))
+        : [],
+    };
   },
 
   toJSON(message: ResourceUnits): unknown {
@@ -390,29 +356,24 @@ export const ResourceUnits = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<ResourceUnits>): ResourceUnits {
-    const message = { ...baseResourceUnits } as ResourceUnits;
-    message.endpoints = [];
-    if (object.cpu !== undefined && object.cpu !== null) {
-      message.cpu = CPU.fromPartial(object.cpu);
-    } else {
-      message.cpu = undefined;
-    }
-    if (object.memory !== undefined && object.memory !== null) {
-      message.memory = Memory.fromPartial(object.memory);
-    } else {
-      message.memory = undefined;
-    }
-    if (object.storage !== undefined && object.storage !== null) {
-      message.storage = Storage.fromPartial(object.storage);
-    } else {
-      message.storage = undefined;
-    }
-    if (object.endpoints !== undefined && object.endpoints !== null) {
-      for (const e of object.endpoints) {
-        message.endpoints.push(Endpoint.fromPartial(e));
-      }
-    }
+  fromPartial<I extends Exact<DeepPartial<ResourceUnits>, I>>(
+    object: I
+  ): ResourceUnits {
+    const message = createBaseResourceUnits();
+    message.cpu =
+      object.cpu !== undefined && object.cpu !== null
+        ? CPU.fromPartial(object.cpu)
+        : undefined;
+    message.memory =
+      object.memory !== undefined && object.memory !== null
+        ? Memory.fromPartial(object.memory)
+        : undefined;
+    message.storage =
+      object.storage !== undefined && object.storage !== null
+        ? Storage.fromPartial(object.storage)
+        : undefined;
+    message.endpoints =
+      object.endpoints?.map((e) => Endpoint.fromPartial(e)) || [];
     return message;
   },
 };
@@ -424,10 +385,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -436,7 +399,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

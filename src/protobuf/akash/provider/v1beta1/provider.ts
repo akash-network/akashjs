@@ -49,7 +49,9 @@ export interface Provider {
   info?: ProviderInfo;
 }
 
-const baseProviderInfo: object = { email: "", website: "" };
+function createBaseProviderInfo(): ProviderInfo {
+  return { email: "", website: "" };
+}
 
 export const ProviderInfo = {
   encode(
@@ -68,7 +70,7 @@ export const ProviderInfo = {
   decode(input: _m0.Reader | Uint8Array, length?: number): ProviderInfo {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseProviderInfo } as ProviderInfo;
+    const message = createBaseProviderInfo();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -87,18 +89,10 @@ export const ProviderInfo = {
   },
 
   fromJSON(object: any): ProviderInfo {
-    const message = { ...baseProviderInfo } as ProviderInfo;
-    if (object.email !== undefined && object.email !== null) {
-      message.email = String(object.email);
-    } else {
-      message.email = "";
-    }
-    if (object.website !== undefined && object.website !== null) {
-      message.website = String(object.website);
-    } else {
-      message.website = "";
-    }
-    return message;
+    return {
+      email: isSet(object.email) ? String(object.email) : "",
+      website: isSet(object.website) ? String(object.website) : "",
+    };
   },
 
   toJSON(message: ProviderInfo): unknown {
@@ -108,23 +102,19 @@ export const ProviderInfo = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<ProviderInfo>): ProviderInfo {
-    const message = { ...baseProviderInfo } as ProviderInfo;
-    if (object.email !== undefined && object.email !== null) {
-      message.email = object.email;
-    } else {
-      message.email = "";
-    }
-    if (object.website !== undefined && object.website !== null) {
-      message.website = object.website;
-    } else {
-      message.website = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<ProviderInfo>, I>>(
+    object: I
+  ): ProviderInfo {
+    const message = createBaseProviderInfo();
+    message.email = object.email ?? "";
+    message.website = object.website ?? "";
     return message;
   },
 };
 
-const baseMsgCreateProvider: object = { owner: "", hostUri: "" };
+function createBaseMsgCreateProvider(): MsgCreateProvider {
+  return { owner: "", hostUri: "", attributes: [], info: undefined };
+}
 
 export const MsgCreateProvider = {
   encode(
@@ -149,8 +139,7 @@ export const MsgCreateProvider = {
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateProvider {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgCreateProvider } as MsgCreateProvider;
-    message.attributes = [];
+    const message = createBaseMsgCreateProvider();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -175,29 +164,14 @@ export const MsgCreateProvider = {
   },
 
   fromJSON(object: any): MsgCreateProvider {
-    const message = { ...baseMsgCreateProvider } as MsgCreateProvider;
-    message.attributes = [];
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    if (object.hostUri !== undefined && object.hostUri !== null) {
-      message.hostUri = String(object.hostUri);
-    } else {
-      message.hostUri = "";
-    }
-    if (object.attributes !== undefined && object.attributes !== null) {
-      for (const e of object.attributes) {
-        message.attributes.push(Attribute.fromJSON(e));
-      }
-    }
-    if (object.info !== undefined && object.info !== null) {
-      message.info = ProviderInfo.fromJSON(object.info);
-    } else {
-      message.info = undefined;
-    }
-    return message;
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      hostUri: isSet(object.hostUri) ? String(object.hostUri) : "",
+      attributes: Array.isArray(object?.attributes)
+        ? object.attributes.map((e: any) => Attribute.fromJSON(e))
+        : [],
+      info: isSet(object.info) ? ProviderInfo.fromJSON(object.info) : undefined,
+    };
   },
 
   toJSON(message: MsgCreateProvider): unknown {
@@ -216,34 +190,25 @@ export const MsgCreateProvider = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgCreateProvider>): MsgCreateProvider {
-    const message = { ...baseMsgCreateProvider } as MsgCreateProvider;
-    message.attributes = [];
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
-    if (object.hostUri !== undefined && object.hostUri !== null) {
-      message.hostUri = object.hostUri;
-    } else {
-      message.hostUri = "";
-    }
-    if (object.attributes !== undefined && object.attributes !== null) {
-      for (const e of object.attributes) {
-        message.attributes.push(Attribute.fromPartial(e));
-      }
-    }
-    if (object.info !== undefined && object.info !== null) {
-      message.info = ProviderInfo.fromPartial(object.info);
-    } else {
-      message.info = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgCreateProvider>, I>>(
+    object: I
+  ): MsgCreateProvider {
+    const message = createBaseMsgCreateProvider();
+    message.owner = object.owner ?? "";
+    message.hostUri = object.hostUri ?? "";
+    message.attributes =
+      object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
+    message.info =
+      object.info !== undefined && object.info !== null
+        ? ProviderInfo.fromPartial(object.info)
+        : undefined;
     return message;
   },
 };
 
-const baseMsgCreateProviderResponse: object = {};
+function createBaseMsgCreateProviderResponse(): MsgCreateProviderResponse {
+  return {};
+}
 
 export const MsgCreateProviderResponse = {
   encode(
@@ -259,9 +224,7 @@ export const MsgCreateProviderResponse = {
   ): MsgCreateProviderResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgCreateProviderResponse,
-    } as MsgCreateProviderResponse;
+    const message = createBaseMsgCreateProviderResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -274,10 +237,7 @@ export const MsgCreateProviderResponse = {
   },
 
   fromJSON(_: any): MsgCreateProviderResponse {
-    const message = {
-      ...baseMsgCreateProviderResponse,
-    } as MsgCreateProviderResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgCreateProviderResponse): unknown {
@@ -285,17 +245,17 @@ export const MsgCreateProviderResponse = {
     return obj;
   },
 
-  fromPartial(
-    _: DeepPartial<MsgCreateProviderResponse>
+  fromPartial<I extends Exact<DeepPartial<MsgCreateProviderResponse>, I>>(
+    _: I
   ): MsgCreateProviderResponse {
-    const message = {
-      ...baseMsgCreateProviderResponse,
-    } as MsgCreateProviderResponse;
+    const message = createBaseMsgCreateProviderResponse();
     return message;
   },
 };
 
-const baseMsgUpdateProvider: object = { owner: "", hostUri: "" };
+function createBaseMsgUpdateProvider(): MsgUpdateProvider {
+  return { owner: "", hostUri: "", attributes: [], info: undefined };
+}
 
 export const MsgUpdateProvider = {
   encode(
@@ -320,8 +280,7 @@ export const MsgUpdateProvider = {
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateProvider {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgUpdateProvider } as MsgUpdateProvider;
-    message.attributes = [];
+    const message = createBaseMsgUpdateProvider();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -346,29 +305,14 @@ export const MsgUpdateProvider = {
   },
 
   fromJSON(object: any): MsgUpdateProvider {
-    const message = { ...baseMsgUpdateProvider } as MsgUpdateProvider;
-    message.attributes = [];
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    if (object.hostUri !== undefined && object.hostUri !== null) {
-      message.hostUri = String(object.hostUri);
-    } else {
-      message.hostUri = "";
-    }
-    if (object.attributes !== undefined && object.attributes !== null) {
-      for (const e of object.attributes) {
-        message.attributes.push(Attribute.fromJSON(e));
-      }
-    }
-    if (object.info !== undefined && object.info !== null) {
-      message.info = ProviderInfo.fromJSON(object.info);
-    } else {
-      message.info = undefined;
-    }
-    return message;
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      hostUri: isSet(object.hostUri) ? String(object.hostUri) : "",
+      attributes: Array.isArray(object?.attributes)
+        ? object.attributes.map((e: any) => Attribute.fromJSON(e))
+        : [],
+      info: isSet(object.info) ? ProviderInfo.fromJSON(object.info) : undefined,
+    };
   },
 
   toJSON(message: MsgUpdateProvider): unknown {
@@ -387,34 +331,25 @@ export const MsgUpdateProvider = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgUpdateProvider>): MsgUpdateProvider {
-    const message = { ...baseMsgUpdateProvider } as MsgUpdateProvider;
-    message.attributes = [];
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
-    if (object.hostUri !== undefined && object.hostUri !== null) {
-      message.hostUri = object.hostUri;
-    } else {
-      message.hostUri = "";
-    }
-    if (object.attributes !== undefined && object.attributes !== null) {
-      for (const e of object.attributes) {
-        message.attributes.push(Attribute.fromPartial(e));
-      }
-    }
-    if (object.info !== undefined && object.info !== null) {
-      message.info = ProviderInfo.fromPartial(object.info);
-    } else {
-      message.info = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateProvider>, I>>(
+    object: I
+  ): MsgUpdateProvider {
+    const message = createBaseMsgUpdateProvider();
+    message.owner = object.owner ?? "";
+    message.hostUri = object.hostUri ?? "";
+    message.attributes =
+      object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
+    message.info =
+      object.info !== undefined && object.info !== null
+        ? ProviderInfo.fromPartial(object.info)
+        : undefined;
     return message;
   },
 };
 
-const baseMsgUpdateProviderResponse: object = {};
+function createBaseMsgUpdateProviderResponse(): MsgUpdateProviderResponse {
+  return {};
+}
 
 export const MsgUpdateProviderResponse = {
   encode(
@@ -430,9 +365,7 @@ export const MsgUpdateProviderResponse = {
   ): MsgUpdateProviderResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgUpdateProviderResponse,
-    } as MsgUpdateProviderResponse;
+    const message = createBaseMsgUpdateProviderResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -445,10 +378,7 @@ export const MsgUpdateProviderResponse = {
   },
 
   fromJSON(_: any): MsgUpdateProviderResponse {
-    const message = {
-      ...baseMsgUpdateProviderResponse,
-    } as MsgUpdateProviderResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgUpdateProviderResponse): unknown {
@@ -456,17 +386,17 @@ export const MsgUpdateProviderResponse = {
     return obj;
   },
 
-  fromPartial(
-    _: DeepPartial<MsgUpdateProviderResponse>
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateProviderResponse>, I>>(
+    _: I
   ): MsgUpdateProviderResponse {
-    const message = {
-      ...baseMsgUpdateProviderResponse,
-    } as MsgUpdateProviderResponse;
+    const message = createBaseMsgUpdateProviderResponse();
     return message;
   },
 };
 
-const baseMsgDeleteProvider: object = { owner: "" };
+function createBaseMsgDeleteProvider(): MsgDeleteProvider {
+  return { owner: "" };
+}
 
 export const MsgDeleteProvider = {
   encode(
@@ -482,7 +412,7 @@ export const MsgDeleteProvider = {
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgDeleteProvider {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseMsgDeleteProvider } as MsgDeleteProvider;
+    const message = createBaseMsgDeleteProvider();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -498,13 +428,9 @@ export const MsgDeleteProvider = {
   },
 
   fromJSON(object: any): MsgDeleteProvider {
-    const message = { ...baseMsgDeleteProvider } as MsgDeleteProvider;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    return message;
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+    };
   },
 
   toJSON(message: MsgDeleteProvider): unknown {
@@ -513,18 +439,18 @@ export const MsgDeleteProvider = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<MsgDeleteProvider>): MsgDeleteProvider {
-    const message = { ...baseMsgDeleteProvider } as MsgDeleteProvider;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<MsgDeleteProvider>, I>>(
+    object: I
+  ): MsgDeleteProvider {
+    const message = createBaseMsgDeleteProvider();
+    message.owner = object.owner ?? "";
     return message;
   },
 };
 
-const baseMsgDeleteProviderResponse: object = {};
+function createBaseMsgDeleteProviderResponse(): MsgDeleteProviderResponse {
+  return {};
+}
 
 export const MsgDeleteProviderResponse = {
   encode(
@@ -540,9 +466,7 @@ export const MsgDeleteProviderResponse = {
   ): MsgDeleteProviderResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseMsgDeleteProviderResponse,
-    } as MsgDeleteProviderResponse;
+    const message = createBaseMsgDeleteProviderResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -555,10 +479,7 @@ export const MsgDeleteProviderResponse = {
   },
 
   fromJSON(_: any): MsgDeleteProviderResponse {
-    const message = {
-      ...baseMsgDeleteProviderResponse,
-    } as MsgDeleteProviderResponse;
-    return message;
+    return {};
   },
 
   toJSON(_: MsgDeleteProviderResponse): unknown {
@@ -566,17 +487,17 @@ export const MsgDeleteProviderResponse = {
     return obj;
   },
 
-  fromPartial(
-    _: DeepPartial<MsgDeleteProviderResponse>
+  fromPartial<I extends Exact<DeepPartial<MsgDeleteProviderResponse>, I>>(
+    _: I
   ): MsgDeleteProviderResponse {
-    const message = {
-      ...baseMsgDeleteProviderResponse,
-    } as MsgDeleteProviderResponse;
+    const message = createBaseMsgDeleteProviderResponse();
     return message;
   },
 };
 
-const baseProvider: object = { owner: "", hostUri: "" };
+function createBaseProvider(): Provider {
+  return { owner: "", hostUri: "", attributes: [], info: undefined };
+}
 
 export const Provider = {
   encode(
@@ -601,8 +522,7 @@ export const Provider = {
   decode(input: _m0.Reader | Uint8Array, length?: number): Provider {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseProvider } as Provider;
-    message.attributes = [];
+    const message = createBaseProvider();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -627,29 +547,14 @@ export const Provider = {
   },
 
   fromJSON(object: any): Provider {
-    const message = { ...baseProvider } as Provider;
-    message.attributes = [];
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    if (object.hostUri !== undefined && object.hostUri !== null) {
-      message.hostUri = String(object.hostUri);
-    } else {
-      message.hostUri = "";
-    }
-    if (object.attributes !== undefined && object.attributes !== null) {
-      for (const e of object.attributes) {
-        message.attributes.push(Attribute.fromJSON(e));
-      }
-    }
-    if (object.info !== undefined && object.info !== null) {
-      message.info = ProviderInfo.fromJSON(object.info);
-    } else {
-      message.info = undefined;
-    }
-    return message;
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      hostUri: isSet(object.hostUri) ? String(object.hostUri) : "",
+      attributes: Array.isArray(object?.attributes)
+        ? object.attributes.map((e: any) => Attribute.fromJSON(e))
+        : [],
+      info: isSet(object.info) ? ProviderInfo.fromJSON(object.info) : undefined,
+    };
   },
 
   toJSON(message: Provider): unknown {
@@ -668,29 +573,16 @@ export const Provider = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Provider>): Provider {
-    const message = { ...baseProvider } as Provider;
-    message.attributes = [];
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
-    if (object.hostUri !== undefined && object.hostUri !== null) {
-      message.hostUri = object.hostUri;
-    } else {
-      message.hostUri = "";
-    }
-    if (object.attributes !== undefined && object.attributes !== null) {
-      for (const e of object.attributes) {
-        message.attributes.push(Attribute.fromPartial(e));
-      }
-    }
-    if (object.info !== undefined && object.info !== null) {
-      message.info = ProviderInfo.fromPartial(object.info);
-    } else {
-      message.info = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<Provider>, I>>(object: I): Provider {
+    const message = createBaseProvider();
+    message.owner = object.owner ?? "";
+    message.hostUri = object.hostUri ?? "";
+    message.attributes =
+      object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
+    message.info =
+      object.info !== undefined && object.info !== null
+        ? ProviderInfo.fromPartial(object.info)
+        : undefined;
     return message;
   },
 };
@@ -777,10 +669,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -789,7 +683,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

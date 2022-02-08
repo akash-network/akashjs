@@ -5,9 +5,9 @@ import {
   PageRequest,
   PageResponse,
 } from "../../../cosmos/base/query/v1beta1/pagination";
-import { Provider } from "../../../akash/provider/v1beta1/provider";
+import { Provider } from "../../../akash/provider/v1beta2/provider";
 
-export const protobufPackage = "akash.provider.v1beta1";
+export const protobufPackage = "akash.provider.v1beta2";
 
 /** QueryProvidersRequest is request type for the Query/Providers RPC method */
 export interface QueryProvidersRequest {
@@ -30,7 +30,9 @@ export interface QueryProviderResponse {
   provider?: Provider;
 }
 
-const baseQueryProvidersRequest: object = {};
+function createBaseQueryProvidersRequest(): QueryProvidersRequest {
+  return { pagination: undefined };
+}
 
 export const QueryProvidersRequest = {
   encode(
@@ -49,7 +51,7 @@ export const QueryProvidersRequest = {
   ): QueryProvidersRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryProvidersRequest } as QueryProvidersRequest;
+    const message = createBaseQueryProvidersRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -65,13 +67,11 @@ export const QueryProvidersRequest = {
   },
 
   fromJSON(object: any): QueryProvidersRequest {
-    const message = { ...baseQueryProvidersRequest } as QueryProvidersRequest;
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
+    return {
+      pagination: isSet(object.pagination)
+        ? PageRequest.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryProvidersRequest): unknown {
@@ -83,20 +83,21 @@ export const QueryProvidersRequest = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryProvidersRequest>
+  fromPartial<I extends Exact<DeepPartial<QueryProvidersRequest>, I>>(
+    object: I
   ): QueryProvidersRequest {
-    const message = { ...baseQueryProvidersRequest } as QueryProvidersRequest;
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
+    const message = createBaseQueryProvidersRequest();
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageRequest.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryProvidersResponse: object = {};
+function createBaseQueryProvidersResponse(): QueryProvidersResponse {
+  return { providers: [], pagination: undefined };
+}
 
 export const QueryProvidersResponse = {
   encode(
@@ -121,8 +122,7 @@ export const QueryProvidersResponse = {
   ): QueryProvidersResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryProvidersResponse } as QueryProvidersResponse;
-    message.providers = [];
+    const message = createBaseQueryProvidersResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -141,19 +141,14 @@ export const QueryProvidersResponse = {
   },
 
   fromJSON(object: any): QueryProvidersResponse {
-    const message = { ...baseQueryProvidersResponse } as QueryProvidersResponse;
-    message.providers = [];
-    if (object.providers !== undefined && object.providers !== null) {
-      for (const e of object.providers) {
-        message.providers.push(Provider.fromJSON(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
+    return {
+      providers: Array.isArray(object?.providers)
+        ? object.providers.map((e: any) => Provider.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination)
+        ? PageResponse.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryProvidersResponse): unknown {
@@ -172,26 +167,23 @@ export const QueryProvidersResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryProvidersResponse>
+  fromPartial<I extends Exact<DeepPartial<QueryProvidersResponse>, I>>(
+    object: I
   ): QueryProvidersResponse {
-    const message = { ...baseQueryProvidersResponse } as QueryProvidersResponse;
-    message.providers = [];
-    if (object.providers !== undefined && object.providers !== null) {
-      for (const e of object.providers) {
-        message.providers.push(Provider.fromPartial(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
+    const message = createBaseQueryProvidersResponse();
+    message.providers =
+      object.providers?.map((e) => Provider.fromPartial(e)) || [];
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageResponse.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryProviderRequest: object = { owner: "" };
+function createBaseQueryProviderRequest(): QueryProviderRequest {
+  return { owner: "" };
+}
 
 export const QueryProviderRequest = {
   encode(
@@ -210,7 +202,7 @@ export const QueryProviderRequest = {
   ): QueryProviderRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryProviderRequest } as QueryProviderRequest;
+    const message = createBaseQueryProviderRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -226,13 +218,9 @@ export const QueryProviderRequest = {
   },
 
   fromJSON(object: any): QueryProviderRequest {
-    const message = { ...baseQueryProviderRequest } as QueryProviderRequest;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    return message;
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+    };
   },
 
   toJSON(message: QueryProviderRequest): unknown {
@@ -241,18 +229,18 @@ export const QueryProviderRequest = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryProviderRequest>): QueryProviderRequest {
-    const message = { ...baseQueryProviderRequest } as QueryProviderRequest;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<QueryProviderRequest>, I>>(
+    object: I
+  ): QueryProviderRequest {
+    const message = createBaseQueryProviderRequest();
+    message.owner = object.owner ?? "";
     return message;
   },
 };
 
-const baseQueryProviderResponse: object = {};
+function createBaseQueryProviderResponse(): QueryProviderResponse {
+  return { provider: undefined };
+}
 
 export const QueryProviderResponse = {
   encode(
@@ -271,7 +259,7 @@ export const QueryProviderResponse = {
   ): QueryProviderResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryProviderResponse } as QueryProviderResponse;
+    const message = createBaseQueryProviderResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -287,13 +275,11 @@ export const QueryProviderResponse = {
   },
 
   fromJSON(object: any): QueryProviderResponse {
-    const message = { ...baseQueryProviderResponse } as QueryProviderResponse;
-    if (object.provider !== undefined && object.provider !== null) {
-      message.provider = Provider.fromJSON(object.provider);
-    } else {
-      message.provider = undefined;
-    }
-    return message;
+    return {
+      provider: isSet(object.provider)
+        ? Provider.fromJSON(object.provider)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryProviderResponse): unknown {
@@ -305,15 +291,14 @@ export const QueryProviderResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryProviderResponse>
+  fromPartial<I extends Exact<DeepPartial<QueryProviderResponse>, I>>(
+    object: I
   ): QueryProviderResponse {
-    const message = { ...baseQueryProviderResponse } as QueryProviderResponse;
-    if (object.provider !== undefined && object.provider !== null) {
-      message.provider = Provider.fromPartial(object.provider);
-    } else {
-      message.provider = undefined;
-    }
+    const message = createBaseQueryProviderResponse();
+    message.provider =
+      object.provider !== undefined && object.provider !== null
+        ? Provider.fromPartial(object.provider)
+        : undefined;
     return message;
   },
 };
@@ -336,7 +321,7 @@ export class QueryClientImpl implements Query {
   Providers(request: QueryProvidersRequest): Promise<QueryProvidersResponse> {
     const data = QueryProvidersRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.provider.v1beta1.Query",
+      "akash.provider.v1beta2.Query",
       "Providers",
       data
     );
@@ -348,7 +333,7 @@ export class QueryClientImpl implements Query {
   Provider(request: QueryProviderRequest): Promise<QueryProviderResponse> {
     const data = QueryProviderRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.provider.v1beta1.Query",
+      "akash.provider.v1beta2.Query",
       "Provider",
       data
     );
@@ -373,10 +358,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -385,7 +372,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

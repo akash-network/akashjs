@@ -1,4 +1,6 @@
 node_modules/
 build/
 umd/
+yarn-error.log
 test.js
+generate.log

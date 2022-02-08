@@ -4,14 +4,15 @@ import _m0 from "protobufjs/minimal";
 import {
   Certificate,
   CertificateFilter,
-} from "../../../akash/cert/v1beta1/cert";
+} from "../../../akash/cert/v1beta2/cert";
 import {
   PageRequest,
   PageResponse,
 } from "../../../cosmos/base/query/v1beta1/pagination";
 
-export const protobufPackage = "akash.cert.v1beta1";
+export const protobufPackage = "akash.cert.v1beta2";
 
+/** CertificateResponse contains a single X509 certificate and its serial number */
 export interface CertificateResponse {
   certificate?: Certificate;
   serial: string;
@@ -29,7 +30,9 @@ export interface QueryCertificatesResponse {
   pagination?: PageResponse;
 }
 
-const baseCertificateResponse: object = { serial: "" };
+function createBaseCertificateResponse(): CertificateResponse {
+  return { certificate: undefined, serial: "" };
+}
 
 export const CertificateResponse = {
   encode(
@@ -51,7 +54,7 @@ export const CertificateResponse = {
   decode(input: _m0.Reader | Uint8Array, length?: number): CertificateResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseCertificateResponse } as CertificateResponse;
+    const message = createBaseCertificateResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -70,18 +73,12 @@ export const CertificateResponse = {
   },
 
   fromJSON(object: any): CertificateResponse {
-    const message = { ...baseCertificateResponse } as CertificateResponse;
-    if (object.certificate !== undefined && object.certificate !== null) {
-      message.certificate = Certificate.fromJSON(object.certificate);
-    } else {
-      message.certificate = undefined;
-    }
-    if (object.serial !== undefined && object.serial !== null) {
-      message.serial = String(object.serial);
-    } else {
-      message.serial = "";
-    }
-    return message;
+    return {
+      certificate: isSet(object.certificate)
+        ? Certificate.fromJSON(object.certificate)
+        : undefined,
+      serial: isSet(object.serial) ? String(object.serial) : "",
+    };
   },
 
   toJSON(message: CertificateResponse): unknown {
@@ -94,23 +91,22 @@ export const CertificateResponse = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<CertificateResponse>): CertificateResponse {
-    const message = { ...baseCertificateResponse } as CertificateResponse;
-    if (object.certificate !== undefined && object.certificate !== null) {
-      message.certificate = Certificate.fromPartial(object.certificate);
-    } else {
-      message.certificate = undefined;
-    }
-    if (object.serial !== undefined && object.serial !== null) {
-      message.serial = object.serial;
-    } else {
-      message.serial = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<CertificateResponse>, I>>(
+    object: I
+  ): CertificateResponse {
+    const message = createBaseCertificateResponse();
+    message.certificate =
+      object.certificate !== undefined && object.certificate !== null
+        ? Certificate.fromPartial(object.certificate)
+        : undefined;
+    message.serial = object.serial ?? "";
     return message;
   },
 };
 
-const baseQueryCertificatesRequest: object = {};
+function createBaseQueryCertificatesRequest(): QueryCertificatesRequest {
+  return { filter: undefined, pagination: undefined };
+}
 
 export const QueryCertificatesRequest = {
   encode(
@@ -135,9 +131,7 @@ export const QueryCertificatesRequest = {
   ): QueryCertificatesRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryCertificatesRequest,
-    } as QueryCertificatesRequest;
+    const message = createBaseQueryCertificatesRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -156,20 +150,14 @@ export const QueryCertificatesRequest = {
   },
 
   fromJSON(object: any): QueryCertificatesRequest {
-    const message = {
-      ...baseQueryCertificatesRequest,
-    } as QueryCertificatesRequest;
-    if (object.filter !== undefined && object.filter !== null) {
-      message.filter = CertificateFilter.fromJSON(object.filter);
-    } else {
-      message.filter = undefined;
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
+    return {
+      filter: isSet(object.filter)
+        ? CertificateFilter.fromJSON(object.filter)
+        : undefined,
+      pagination: isSet(object.pagination)
+        ? PageRequest.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryCertificatesRequest): unknown {
@@ -185,27 +173,25 @@ export const QueryCertificatesRequest = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryCertificatesRequest>
+  fromPartial<I extends Exact<DeepPartial<QueryCertificatesRequest>, I>>(
+    object: I
   ): QueryCertificatesRequest {
-    const message = {
-      ...baseQueryCertificatesRequest,
-    } as QueryCertificatesRequest;
-    if (object.filter !== undefined && object.filter !== null) {
-      message.filter = CertificateFilter.fromPartial(object.filter);
-    } else {
-      message.filter = undefined;
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
+    const message = createBaseQueryCertificatesRequest();
+    message.filter =
+      object.filter !== undefined && object.filter !== null
+        ? CertificateFilter.fromPartial(object.filter)
+        : undefined;
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageRequest.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryCertificatesResponse: object = {};
+function createBaseQueryCertificatesResponse(): QueryCertificatesResponse {
+  return { certificates: [], pagination: undefined };
+}
 
 export const QueryCertificatesResponse = {
   encode(
@@ -230,10 +216,7 @@ export const QueryCertificatesResponse = {
   ): QueryCertificatesResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryCertificatesResponse,
-    } as QueryCertificatesResponse;
-    message.certificates = [];
+    const message = createBaseQueryCertificatesResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -254,21 +237,14 @@ export const QueryCertificatesResponse = {
   },
 
   fromJSON(object: any): QueryCertificatesResponse {
-    const message = {
-      ...baseQueryCertificatesResponse,
-    } as QueryCertificatesResponse;
-    message.certificates = [];
-    if (object.certificates !== undefined && object.certificates !== null) {
-      for (const e of object.certificates) {
-        message.certificates.push(CertificateResponse.fromJSON(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
+    return {
+      certificates: Array.isArray(object?.certificates)
+        ? object.certificates.map((e: any) => CertificateResponse.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination)
+        ? PageResponse.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryCertificatesResponse): unknown {
@@ -287,23 +263,16 @@ export const QueryCertificatesResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryCertificatesResponse>
+  fromPartial<I extends Exact<DeepPartial<QueryCertificatesResponse>, I>>(
+    object: I
   ): QueryCertificatesResponse {
-    const message = {
-      ...baseQueryCertificatesResponse,
-    } as QueryCertificatesResponse;
-    message.certificates = [];
-    if (object.certificates !== undefined && object.certificates !== null) {
-      for (const e of object.certificates) {
-        message.certificates.push(CertificateResponse.fromPartial(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
+    const message = createBaseQueryCertificatesResponse();
+    message.certificates =
+      object.certificates?.map((e) => CertificateResponse.fromPartial(e)) || [];
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageResponse.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
@@ -327,7 +296,7 @@ export class QueryClientImpl implements Query {
   ): Promise<QueryCertificatesResponse> {
     const data = QueryCertificatesRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.cert.v1beta1.Query",
+      "akash.cert.v1beta2.Query",
       "Certificates",
       data
     );
@@ -352,10 +321,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -364,7 +335,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

@@ -3,7 +3,7 @@ import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
 
-export const protobufPackage = "akash.market.v1beta1";
+export const protobufPackage = "akash.market.v1beta2";
 
 /** Params is the params for the x/market module */
 export interface Params {
@@ -11,7 +11,9 @@ export interface Params {
   orderMaxBids: number;
 }
 
-const baseParams: object = { orderMaxBids: 0 };
+function createBaseParams(): Params {
+  return { bidMinDeposit: undefined, orderMaxBids: 0 };
+}
 
 export const Params = {
   encode(
@@ -30,7 +32,7 @@ export const Params = {
   decode(input: _m0.Reader | Uint8Array, length?: number): Params {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseParams } as Params;
+    const message = createBaseParams();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -49,18 +51,14 @@ export const Params = {
   },
 
   fromJSON(object: any): Params {
-    const message = { ...baseParams } as Params;
-    if (object.bidMinDeposit !== undefined && object.bidMinDeposit !== null) {
-      message.bidMinDeposit = Coin.fromJSON(object.bidMinDeposit);
-    } else {
-      message.bidMinDeposit = undefined;
-    }
-    if (object.orderMaxBids !== undefined && object.orderMaxBids !== null) {
-      message.orderMaxBids = Number(object.orderMaxBids);
-    } else {
-      message.orderMaxBids = 0;
-    }
-    return message;
+    return {
+      bidMinDeposit: isSet(object.bidMinDeposit)
+        ? Coin.fromJSON(object.bidMinDeposit)
+        : undefined,
+      orderMaxBids: isSet(object.orderMaxBids)
+        ? Number(object.orderMaxBids)
+        : 0,
+    };
   },
 
   toJSON(message: Params): unknown {
@@ -70,22 +68,17 @@ export const Params = {
         ? Coin.toJSON(message.bidMinDeposit)
         : undefined);
     message.orderMaxBids !== undefined &&
-      (obj.orderMaxBids = message.orderMaxBids);
+      (obj.orderMaxBids = Math.round(message.orderMaxBids));
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Params>): Params {
-    const message = { ...baseParams } as Params;
-    if (object.bidMinDeposit !== undefined && object.bidMinDeposit !== null) {
-      message.bidMinDeposit = Coin.fromPartial(object.bidMinDeposit);
-    } else {
-      message.bidMinDeposit = undefined;
-    }
-    if (object.orderMaxBids !== undefined && object.orderMaxBids !== null) {
-      message.orderMaxBids = object.orderMaxBids;
-    } else {
-      message.orderMaxBids = 0;
-    }
+  fromPartial<I extends Exact<DeepPartial<Params>, I>>(object: I): Params {
+    const message = createBaseParams();
+    message.bidMinDeposit =
+      object.bidMinDeposit !== undefined && object.bidMinDeposit !== null
+        ? Coin.fromPartial(object.bidMinDeposit)
+        : undefined;
+    message.orderMaxBids = object.orderMaxBids ?? 0;
     return message;
   },
 };
@@ -97,10 +90,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -109,7 +104,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

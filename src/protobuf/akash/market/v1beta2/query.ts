@@ -5,20 +5,23 @@ import {
   OrderFilters,
   OrderID,
   Order,
-} from "../../../akash/market/v1beta1/order";
+} from "../../../akash/market/v1beta2/order";
 import {
   PageRequest,
   PageResponse,
 } from "../../../cosmos/base/query/v1beta1/pagination";
-import { BidFilters, BidID, Bid } from "../../../akash/market/v1beta1/bid";
-import { Account, Payment } from "../../../akash/escrow/v1beta1/types";
+import { BidFilters, BidID, Bid } from "../../../akash/market/v1beta2/bid";
+import {
+  Account,
+  FractionalPayment,
+} from "../../../akash/escrow/v1beta2/types";
 import {
   LeaseFilters,
   LeaseID,
   Lease,
-} from "../../../akash/market/v1beta1/lease";
+} from "../../../akash/market/v1beta2/lease";
 
-export const protobufPackage = "akash.market.v1beta1";
+export const protobufPackage = "akash.market.v1beta2";
 
 /** QueryOrdersRequest is request type for the Query/Orders RPC method */
 export interface QueryOrdersRequest {
@@ -85,10 +88,12 @@ export interface QueryLeaseRequest {
 /** QueryLeaseResponse is response type for the Query/Lease RPC method */
 export interface QueryLeaseResponse {
   lease?: Lease;
-  escrowPayment?: Payment;
+  escrowPayment?: FractionalPayment;
 }
 
-const baseQueryOrdersRequest: object = {};
+function createBaseQueryOrdersRequest(): QueryOrdersRequest {
+  return { filters: undefined, pagination: undefined };
+}
 
 export const QueryOrdersRequest = {
   encode(
@@ -107,7 +112,7 @@ export const QueryOrdersRequest = {
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryOrdersRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryOrdersRequest } as QueryOrdersRequest;
+    const message = createBaseQueryOrdersRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -126,18 +131,14 @@ export const QueryOrdersRequest = {
   },
 
   fromJSON(object: any): QueryOrdersRequest {
-    const message = { ...baseQueryOrdersRequest } as QueryOrdersRequest;
-    if (object.filters !== undefined && object.filters !== null) {
-      message.filters = OrderFilters.fromJSON(object.filters);
-    } else {
-      message.filters = undefined;
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
+    return {
+      filters: isSet(object.filters)
+        ? OrderFilters.fromJSON(object.filters)
+        : undefined,
+      pagination: isSet(object.pagination)
+        ? PageRequest.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryOrdersRequest): unknown {
@@ -153,23 +154,25 @@ export const QueryOrdersRequest = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryOrdersRequest>): QueryOrdersRequest {
-    const message = { ...baseQueryOrdersRequest } as QueryOrdersRequest;
-    if (object.filters !== undefined && object.filters !== null) {
-      message.filters = OrderFilters.fromPartial(object.filters);
-    } else {
-      message.filters = undefined;
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<QueryOrdersRequest>, I>>(
+    object: I
+  ): QueryOrdersRequest {
+    const message = createBaseQueryOrdersRequest();
+    message.filters =
+      object.filters !== undefined && object.filters !== null
+        ? OrderFilters.fromPartial(object.filters)
+        : undefined;
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageRequest.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryOrdersResponse: object = {};
+function createBaseQueryOrdersResponse(): QueryOrdersResponse {
+  return { orders: [], pagination: undefined };
+}
 
 export const QueryOrdersResponse = {
   encode(
@@ -191,8 +194,7 @@ export const QueryOrdersResponse = {
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryOrdersResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryOrdersResponse } as QueryOrdersResponse;
-    message.orders = [];
+    const message = createBaseQueryOrdersResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -211,19 +213,14 @@ export const QueryOrdersResponse = {
   },
 
   fromJSON(object: any): QueryOrdersResponse {
-    const message = { ...baseQueryOrdersResponse } as QueryOrdersResponse;
-    message.orders = [];
-    if (object.orders !== undefined && object.orders !== null) {
-      for (const e of object.orders) {
-        message.orders.push(Order.fromJSON(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
+    return {
+      orders: Array.isArray(object?.orders)
+        ? object.orders.map((e: any) => Order.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination)
+        ? PageResponse.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryOrdersResponse): unknown {
@@ -240,24 +237,22 @@ export const QueryOrdersResponse = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryOrdersResponse>): QueryOrdersResponse {
-    const message = { ...baseQueryOrdersResponse } as QueryOrdersResponse;
-    message.orders = [];
-    if (object.orders !== undefined && object.orders !== null) {
-      for (const e of object.orders) {
-        message.orders.push(Order.fromPartial(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<QueryOrdersResponse>, I>>(
+    object: I
+  ): QueryOrdersResponse {
+    const message = createBaseQueryOrdersResponse();
+    message.orders = object.orders?.map((e) => Order.fromPartial(e)) || [];
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageResponse.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryOrderRequest: object = {};
+function createBaseQueryOrderRequest(): QueryOrderRequest {
+  return { id: undefined };
+}
 
 export const QueryOrderRequest = {
   encode(
@@ -273,7 +268,7 @@ export const QueryOrderRequest = {
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryOrderRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryOrderRequest } as QueryOrderRequest;
+    const message = createBaseQueryOrderRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -289,13 +284,9 @@ export const QueryOrderRequest = {
   },
 
   fromJSON(object: any): QueryOrderRequest {
-    const message = { ...baseQueryOrderRequest } as QueryOrderRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = OrderID.fromJSON(object.id);
-    } else {
-      message.id = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? OrderID.fromJSON(object.id) : undefined,
+    };
   },
 
   toJSON(message: QueryOrderRequest): unknown {
@@ -305,18 +296,21 @@ export const QueryOrderRequest = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryOrderRequest>): QueryOrderRequest {
-    const message = { ...baseQueryOrderRequest } as QueryOrderRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = OrderID.fromPartial(object.id);
-    } else {
-      message.id = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<QueryOrderRequest>, I>>(
+    object: I
+  ): QueryOrderRequest {
+    const message = createBaseQueryOrderRequest();
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? OrderID.fromPartial(object.id)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryOrderResponse: object = {};
+function createBaseQueryOrderResponse(): QueryOrderResponse {
+  return { order: undefined };
+}
 
 export const QueryOrderResponse = {
   encode(
@@ -332,7 +326,7 @@ export const QueryOrderResponse = {
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryOrderResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryOrderResponse } as QueryOrderResponse;
+    const message = createBaseQueryOrderResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -348,13 +342,9 @@ export const QueryOrderResponse = {
   },
 
   fromJSON(object: any): QueryOrderResponse {
-    const message = { ...baseQueryOrderResponse } as QueryOrderResponse;
-    if (object.order !== undefined && object.order !== null) {
-      message.order = Order.fromJSON(object.order);
-    } else {
-      message.order = undefined;
-    }
-    return message;
+    return {
+      order: isSet(object.order) ? Order.fromJSON(object.order) : undefined,
+    };
   },
 
   toJSON(message: QueryOrderResponse): unknown {
@@ -364,18 +354,21 @@ export const QueryOrderResponse = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryOrderResponse>): QueryOrderResponse {
-    const message = { ...baseQueryOrderResponse } as QueryOrderResponse;
-    if (object.order !== undefined && object.order !== null) {
-      message.order = Order.fromPartial(object.order);
-    } else {
-      message.order = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<QueryOrderResponse>, I>>(
+    object: I
+  ): QueryOrderResponse {
+    const message = createBaseQueryOrderResponse();
+    message.order =
+      object.order !== undefined && object.order !== null
+        ? Order.fromPartial(object.order)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryBidsRequest: object = {};
+function createBaseQueryBidsRequest(): QueryBidsRequest {
+  return { filters: undefined, pagination: undefined };
+}
 
 export const QueryBidsRequest = {
   encode(
@@ -394,7 +387,7 @@ export const QueryBidsRequest = {
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryBidsRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryBidsRequest } as QueryBidsRequest;
+    const message = createBaseQueryBidsRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -413,18 +406,14 @@ export const QueryBidsRequest = {
   },
 
   fromJSON(object: any): QueryBidsRequest {
-    const message = { ...baseQueryBidsRequest } as QueryBidsRequest;
-    if (object.filters !== undefined && object.filters !== null) {
-      message.filters = BidFilters.fromJSON(object.filters);
-    } else {
-      message.filters = undefined;
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
+    return {
+      filters: isSet(object.filters)
+        ? BidFilters.fromJSON(object.filters)
+        : undefined,
+      pagination: isSet(object.pagination)
+        ? PageRequest.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryBidsRequest): unknown {
@@ -440,23 +429,25 @@ export const QueryBidsRequest = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryBidsRequest>): QueryBidsRequest {
-    const message = { ...baseQueryBidsRequest } as QueryBidsRequest;
-    if (object.filters !== undefined && object.filters !== null) {
-      message.filters = BidFilters.fromPartial(object.filters);
-    } else {
-      message.filters = undefined;
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<QueryBidsRequest>, I>>(
+    object: I
+  ): QueryBidsRequest {
+    const message = createBaseQueryBidsRequest();
+    message.filters =
+      object.filters !== undefined && object.filters !== null
+        ? BidFilters.fromPartial(object.filters)
+        : undefined;
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageRequest.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryBidsResponse: object = {};
+function createBaseQueryBidsResponse(): QueryBidsResponse {
+  return { bids: [], pagination: undefined };
+}
 
 export const QueryBidsResponse = {
   encode(
@@ -478,8 +469,7 @@ export const QueryBidsResponse = {
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryBidsResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryBidsResponse } as QueryBidsResponse;
-    message.bids = [];
+    const message = createBaseQueryBidsResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -498,19 +488,14 @@ export const QueryBidsResponse = {
   },
 
   fromJSON(object: any): QueryBidsResponse {
-    const message = { ...baseQueryBidsResponse } as QueryBidsResponse;
-    message.bids = [];
-    if (object.bids !== undefined && object.bids !== null) {
-      for (const e of object.bids) {
-        message.bids.push(QueryBidResponse.fromJSON(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
+    return {
+      bids: Array.isArray(object?.bids)
+        ? object.bids.map((e: any) => QueryBidResponse.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination)
+        ? PageResponse.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryBidsResponse): unknown {
@@ -529,24 +514,23 @@ export const QueryBidsResponse = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryBidsResponse>): QueryBidsResponse {
-    const message = { ...baseQueryBidsResponse } as QueryBidsResponse;
-    message.bids = [];
-    if (object.bids !== undefined && object.bids !== null) {
-      for (const e of object.bids) {
-        message.bids.push(QueryBidResponse.fromPartial(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<QueryBidsResponse>, I>>(
+    object: I
+  ): QueryBidsResponse {
+    const message = createBaseQueryBidsResponse();
+    message.bids =
+      object.bids?.map((e) => QueryBidResponse.fromPartial(e)) || [];
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageResponse.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryBidRequest: object = {};
+function createBaseQueryBidRequest(): QueryBidRequest {
+  return { id: undefined };
+}
 
 export const QueryBidRequest = {
   encode(
@@ -562,7 +546,7 @@ export const QueryBidRequest = {
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryBidRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryBidRequest } as QueryBidRequest;
+    const message = createBaseQueryBidRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -578,13 +562,9 @@ export const QueryBidRequest = {
   },
 
   fromJSON(object: any): QueryBidRequest {
-    const message = { ...baseQueryBidRequest } as QueryBidRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = BidID.fromJSON(object.id);
-    } else {
-      message.id = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? BidID.fromJSON(object.id) : undefined,
+    };
   },
 
   toJSON(message: QueryBidRequest): unknown {
@@ -594,18 +574,21 @@ export const QueryBidRequest = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryBidRequest>): QueryBidRequest {
-    const message = { ...baseQueryBidRequest } as QueryBidRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = BidID.fromPartial(object.id);
-    } else {
-      message.id = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<QueryBidRequest>, I>>(
+    object: I
+  ): QueryBidRequest {
+    const message = createBaseQueryBidRequest();
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? BidID.fromPartial(object.id)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryBidResponse: object = {};
+function createBaseQueryBidResponse(): QueryBidResponse {
+  return { bid: undefined, escrowAccount: undefined };
+}
 
 export const QueryBidResponse = {
   encode(
@@ -624,7 +607,7 @@ export const QueryBidResponse = {
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryBidResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryBidResponse } as QueryBidResponse;
+    const message = createBaseQueryBidResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -643,18 +626,12 @@ export const QueryBidResponse = {
   },
 
   fromJSON(object: any): QueryBidResponse {
-    const message = { ...baseQueryBidResponse } as QueryBidResponse;
-    if (object.bid !== undefined && object.bid !== null) {
-      message.bid = Bid.fromJSON(object.bid);
-    } else {
-      message.bid = undefined;
-    }
-    if (object.escrowAccount !== undefined && object.escrowAccount !== null) {
-      message.escrowAccount = Account.fromJSON(object.escrowAccount);
-    } else {
-      message.escrowAccount = undefined;
-    }
-    return message;
+    return {
+      bid: isSet(object.bid) ? Bid.fromJSON(object.bid) : undefined,
+      escrowAccount: isSet(object.escrowAccount)
+        ? Account.fromJSON(object.escrowAccount)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryBidResponse): unknown {
@@ -668,23 +645,25 @@ export const QueryBidResponse = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryBidResponse>): QueryBidResponse {
-    const message = { ...baseQueryBidResponse } as QueryBidResponse;
-    if (object.bid !== undefined && object.bid !== null) {
-      message.bid = Bid.fromPartial(object.bid);
-    } else {
-      message.bid = undefined;
-    }
-    if (object.escrowAccount !== undefined && object.escrowAccount !== null) {
-      message.escrowAccount = Account.fromPartial(object.escrowAccount);
-    } else {
-      message.escrowAccount = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<QueryBidResponse>, I>>(
+    object: I
+  ): QueryBidResponse {
+    const message = createBaseQueryBidResponse();
+    message.bid =
+      object.bid !== undefined && object.bid !== null
+        ? Bid.fromPartial(object.bid)
+        : undefined;
+    message.escrowAccount =
+      object.escrowAccount !== undefined && object.escrowAccount !== null
+        ? Account.fromPartial(object.escrowAccount)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryLeasesRequest: object = {};
+function createBaseQueryLeasesRequest(): QueryLeasesRequest {
+  return { filters: undefined, pagination: undefined };
+}
 
 export const QueryLeasesRequest = {
   encode(
@@ -703,7 +682,7 @@ export const QueryLeasesRequest = {
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryLeasesRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryLeasesRequest } as QueryLeasesRequest;
+    const message = createBaseQueryLeasesRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -722,18 +701,14 @@ export const QueryLeasesRequest = {
   },
 
   fromJSON(object: any): QueryLeasesRequest {
-    const message = { ...baseQueryLeasesRequest } as QueryLeasesRequest;
-    if (object.filters !== undefined && object.filters !== null) {
-      message.filters = LeaseFilters.fromJSON(object.filters);
-    } else {
-      message.filters = undefined;
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
+    return {
+      filters: isSet(object.filters)
+        ? LeaseFilters.fromJSON(object.filters)
+        : undefined,
+      pagination: isSet(object.pagination)
+        ? PageRequest.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryLeasesRequest): unknown {
@@ -749,23 +724,25 @@ export const QueryLeasesRequest = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryLeasesRequest>): QueryLeasesRequest {
-    const message = { ...baseQueryLeasesRequest } as QueryLeasesRequest;
-    if (object.filters !== undefined && object.filters !== null) {
-      message.filters = LeaseFilters.fromPartial(object.filters);
-    } else {
-      message.filters = undefined;
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<QueryLeasesRequest>, I>>(
+    object: I
+  ): QueryLeasesRequest {
+    const message = createBaseQueryLeasesRequest();
+    message.filters =
+      object.filters !== undefined && object.filters !== null
+        ? LeaseFilters.fromPartial(object.filters)
+        : undefined;
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageRequest.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryLeasesResponse: object = {};
+function createBaseQueryLeasesResponse(): QueryLeasesResponse {
+  return { leases: [], pagination: undefined };
+}
 
 export const QueryLeasesResponse = {
   encode(
@@ -787,8 +764,7 @@ export const QueryLeasesResponse = {
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryLeasesResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryLeasesResponse } as QueryLeasesResponse;
-    message.leases = [];
+    const message = createBaseQueryLeasesResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -809,19 +785,14 @@ export const QueryLeasesResponse = {
   },
 
   fromJSON(object: any): QueryLeasesResponse {
-    const message = { ...baseQueryLeasesResponse } as QueryLeasesResponse;
-    message.leases = [];
-    if (object.leases !== undefined && object.leases !== null) {
-      for (const e of object.leases) {
-        message.leases.push(QueryLeaseResponse.fromJSON(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
+    return {
+      leases: Array.isArray(object?.leases)
+        ? object.leases.map((e: any) => QueryLeaseResponse.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination)
+        ? PageResponse.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryLeasesResponse): unknown {
@@ -840,24 +811,23 @@ export const QueryLeasesResponse = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryLeasesResponse>): QueryLeasesResponse {
-    const message = { ...baseQueryLeasesResponse } as QueryLeasesResponse;
-    message.leases = [];
-    if (object.leases !== undefined && object.leases !== null) {
-      for (const e of object.leases) {
-        message.leases.push(QueryLeaseResponse.fromPartial(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<QueryLeasesResponse>, I>>(
+    object: I
+  ): QueryLeasesResponse {
+    const message = createBaseQueryLeasesResponse();
+    message.leases =
+      object.leases?.map((e) => QueryLeaseResponse.fromPartial(e)) || [];
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageResponse.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryLeaseRequest: object = {};
+function createBaseQueryLeaseRequest(): QueryLeaseRequest {
+  return { id: undefined };
+}
 
 export const QueryLeaseRequest = {
   encode(
@@ -873,7 +843,7 @@ export const QueryLeaseRequest = {
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryLeaseRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryLeaseRequest } as QueryLeaseRequest;
+    const message = createBaseQueryLeaseRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -889,13 +859,9 @@ export const QueryLeaseRequest = {
   },
 
   fromJSON(object: any): QueryLeaseRequest {
-    const message = { ...baseQueryLeaseRequest } as QueryLeaseRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = LeaseID.fromJSON(object.id);
-    } else {
-      message.id = undefined;
-    }
-    return message;
+    return {
+      id: isSet(object.id) ? LeaseID.fromJSON(object.id) : undefined,
+    };
   },
 
   toJSON(message: QueryLeaseRequest): unknown {
@@ -905,18 +871,21 @@ export const QueryLeaseRequest = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryLeaseRequest>): QueryLeaseRequest {
-    const message = { ...baseQueryLeaseRequest } as QueryLeaseRequest;
-    if (object.id !== undefined && object.id !== null) {
-      message.id = LeaseID.fromPartial(object.id);
-    } else {
-      message.id = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<QueryLeaseRequest>, I>>(
+    object: I
+  ): QueryLeaseRequest {
+    const message = createBaseQueryLeaseRequest();
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? LeaseID.fromPartial(object.id)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryLeaseResponse: object = {};
+function createBaseQueryLeaseResponse(): QueryLeaseResponse {
+  return { lease: undefined, escrowPayment: undefined };
+}
 
 export const QueryLeaseResponse = {
   encode(
@@ -927,7 +896,10 @@ export const QueryLeaseResponse = {
       Lease.encode(message.lease, writer.uint32(10).fork()).ldelim();
     }
     if (message.escrowPayment !== undefined) {
-      Payment.encode(message.escrowPayment, writer.uint32(18).fork()).ldelim();
+      FractionalPayment.encode(
+        message.escrowPayment,
+        writer.uint32(18).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -935,7 +907,7 @@ export const QueryLeaseResponse = {
   decode(input: _m0.Reader | Uint8Array, length?: number): QueryLeaseResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryLeaseResponse } as QueryLeaseResponse;
+    const message = createBaseQueryLeaseResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -943,7 +915,10 @@ export const QueryLeaseResponse = {
           message.lease = Lease.decode(reader, reader.uint32());
           break;
         case 2:
-          message.escrowPayment = Payment.decode(reader, reader.uint32());
+          message.escrowPayment = FractionalPayment.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -954,18 +929,12 @@ export const QueryLeaseResponse = {
   },
 
   fromJSON(object: any): QueryLeaseResponse {
-    const message = { ...baseQueryLeaseResponse } as QueryLeaseResponse;
-    if (object.lease !== undefined && object.lease !== null) {
-      message.lease = Lease.fromJSON(object.lease);
-    } else {
-      message.lease = undefined;
-    }
-    if (object.escrowPayment !== undefined && object.escrowPayment !== null) {
-      message.escrowPayment = Payment.fromJSON(object.escrowPayment);
-    } else {
-      message.escrowPayment = undefined;
-    }
-    return message;
+    return {
+      lease: isSet(object.lease) ? Lease.fromJSON(object.lease) : undefined,
+      escrowPayment: isSet(object.escrowPayment)
+        ? FractionalPayment.fromJSON(object.escrowPayment)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryLeaseResponse): unknown {
@@ -974,23 +943,23 @@ export const QueryLeaseResponse = {
       (obj.lease = message.lease ? Lease.toJSON(message.lease) : undefined);
     message.escrowPayment !== undefined &&
       (obj.escrowPayment = message.escrowPayment
-        ? Payment.toJSON(message.escrowPayment)
+        ? FractionalPayment.toJSON(message.escrowPayment)
         : undefined);
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryLeaseResponse>): QueryLeaseResponse {
-    const message = { ...baseQueryLeaseResponse } as QueryLeaseResponse;
-    if (object.lease !== undefined && object.lease !== null) {
-      message.lease = Lease.fromPartial(object.lease);
-    } else {
-      message.lease = undefined;
-    }
-    if (object.escrowPayment !== undefined && object.escrowPayment !== null) {
-      message.escrowPayment = Payment.fromPartial(object.escrowPayment);
-    } else {
-      message.escrowPayment = undefined;
-    }
+  fromPartial<I extends Exact<DeepPartial<QueryLeaseResponse>, I>>(
+    object: I
+  ): QueryLeaseResponse {
+    const message = createBaseQueryLeaseResponse();
+    message.lease =
+      object.lease !== undefined && object.lease !== null
+        ? Lease.fromPartial(object.lease)
+        : undefined;
+    message.escrowPayment =
+      object.escrowPayment !== undefined && object.escrowPayment !== null
+        ? FractionalPayment.fromPartial(object.escrowPayment)
+        : undefined;
     return message;
   },
 };
@@ -1025,7 +994,7 @@ export class QueryClientImpl implements Query {
   Orders(request: QueryOrdersRequest): Promise<QueryOrdersResponse> {
     const data = QueryOrdersRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.market.v1beta1.Query",
+      "akash.market.v1beta2.Query",
       "Orders",
       data
     );
@@ -1037,7 +1006,7 @@ export class QueryClientImpl implements Query {
   Order(request: QueryOrderRequest): Promise<QueryOrderResponse> {
     const data = QueryOrderRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.market.v1beta1.Query",
+      "akash.market.v1beta2.Query",
       "Order",
       data
     );
@@ -1049,7 +1018,7 @@ export class QueryClientImpl implements Query {
   Bids(request: QueryBidsRequest): Promise<QueryBidsResponse> {
     const data = QueryBidsRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.market.v1beta1.Query",
+      "akash.market.v1beta2.Query",
       "Bids",
       data
     );
@@ -1060,7 +1029,7 @@ export class QueryClientImpl implements Query {
 
   Bid(request: QueryBidRequest): Promise<QueryBidResponse> {
     const data = QueryBidRequest.encode(request).finish();
-    const promise = this.rpc.request("akash.market.v1beta1.Query", "Bid", data);
+    const promise = this.rpc.request("akash.market.v1beta2.Query", "Bid", data);
     return promise.then((data) =>
       QueryBidResponse.decode(new _m0.Reader(data))
     );
@@ -1069,7 +1038,7 @@ export class QueryClientImpl implements Query {
   Leases(request: QueryLeasesRequest): Promise<QueryLeasesResponse> {
     const data = QueryLeasesRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.market.v1beta1.Query",
+      "akash.market.v1beta2.Query",
       "Leases",
       data
     );
@@ -1081,7 +1050,7 @@ export class QueryClientImpl implements Query {
   Lease(request: QueryLeaseRequest): Promise<QueryLeaseResponse> {
     const data = QueryLeaseRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.market.v1beta1.Query",
+      "akash.market.v1beta2.Query",
       "Lease",
       data
     );
@@ -1106,10 +1075,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -1118,7 +1089,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

@@ -5,9 +5,9 @@ import {
   PageResponse,
   PageRequest,
 } from "../../../cosmos/base/query/v1beta1/pagination";
-import { Provider } from "../../../akash/audit/v1beta1/audit";
+import { Provider } from "../../../akash/audit/v1beta2/audit";
 
-export const protobufPackage = "akash.audit.v1beta1";
+export const protobufPackage = "akash.audit.v1beta2";
 
 /** QueryProvidersResponse is response type for the Query/Providers RPC method */
 export interface QueryProvidersResponse {
@@ -44,7 +44,9 @@ export interface QueryAuditorAttributesRequest {
   pagination?: PageRequest;
 }
 
-const baseQueryProvidersResponse: object = {};
+function createBaseQueryProvidersResponse(): QueryProvidersResponse {
+  return { providers: [], pagination: undefined };
+}
 
 export const QueryProvidersResponse = {
   encode(
@@ -69,8 +71,7 @@ export const QueryProvidersResponse = {
   ): QueryProvidersResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryProvidersResponse } as QueryProvidersResponse;
-    message.providers = [];
+    const message = createBaseQueryProvidersResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -89,19 +90,14 @@ export const QueryProvidersResponse = {
   },
 
   fromJSON(object: any): QueryProvidersResponse {
-    const message = { ...baseQueryProvidersResponse } as QueryProvidersResponse;
-    message.providers = [];
-    if (object.providers !== undefined && object.providers !== null) {
-      for (const e of object.providers) {
-        message.providers.push(Provider.fromJSON(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
+    return {
+      providers: Array.isArray(object?.providers)
+        ? object.providers.map((e: any) => Provider.fromJSON(e))
+        : [],
+      pagination: isSet(object.pagination)
+        ? PageResponse.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryProvidersResponse): unknown {
@@ -120,26 +116,23 @@ export const QueryProvidersResponse = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryProvidersResponse>
+  fromPartial<I extends Exact<DeepPartial<QueryProvidersResponse>, I>>(
+    object: I
   ): QueryProvidersResponse {
-    const message = { ...baseQueryProvidersResponse } as QueryProvidersResponse;
-    message.providers = [];
-    if (object.providers !== undefined && object.providers !== null) {
-      for (const e of object.providers) {
-        message.providers.push(Provider.fromPartial(e));
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
+    const message = createBaseQueryProvidersResponse();
+    message.providers =
+      object.providers?.map((e) => Provider.fromPartial(e)) || [];
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageResponse.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryProviderRequest: object = { auditor: "", owner: "" };
+function createBaseQueryProviderRequest(): QueryProviderRequest {
+  return { auditor: "", owner: "" };
+}
 
 export const QueryProviderRequest = {
   encode(
@@ -161,7 +154,7 @@ export const QueryProviderRequest = {
   ): QueryProviderRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseQueryProviderRequest } as QueryProviderRequest;
+    const message = createBaseQueryProviderRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -180,18 +173,10 @@ export const QueryProviderRequest = {
   },
 
   fromJSON(object: any): QueryProviderRequest {
-    const message = { ...baseQueryProviderRequest } as QueryProviderRequest;
-    if (object.auditor !== undefined && object.auditor !== null) {
-      message.auditor = String(object.auditor);
-    } else {
-      message.auditor = "";
-    }
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    return message;
+    return {
+      auditor: isSet(object.auditor) ? String(object.auditor) : "",
+      owner: isSet(object.owner) ? String(object.owner) : "",
+    };
   },
 
   toJSON(message: QueryProviderRequest): unknown {
@@ -201,23 +186,19 @@ export const QueryProviderRequest = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<QueryProviderRequest>): QueryProviderRequest {
-    const message = { ...baseQueryProviderRequest } as QueryProviderRequest;
-    if (object.auditor !== undefined && object.auditor !== null) {
-      message.auditor = object.auditor;
-    } else {
-      message.auditor = "";
-    }
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
+  fromPartial<I extends Exact<DeepPartial<QueryProviderRequest>, I>>(
+    object: I
+  ): QueryProviderRequest {
+    const message = createBaseQueryProviderRequest();
+    message.auditor = object.auditor ?? "";
+    message.owner = object.owner ?? "";
     return message;
   },
 };
 
-const baseQueryAllProvidersAttributesRequest: object = {};
+function createBaseQueryAllProvidersAttributesRequest(): QueryAllProvidersAttributesRequest {
+  return { pagination: undefined };
+}
 
 export const QueryAllProvidersAttributesRequest = {
   encode(
@@ -236,9 +217,7 @@ export const QueryAllProvidersAttributesRequest = {
   ): QueryAllProvidersAttributesRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryAllProvidersAttributesRequest,
-    } as QueryAllProvidersAttributesRequest;
+    const message = createBaseQueryAllProvidersAttributesRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -254,15 +233,11 @@ export const QueryAllProvidersAttributesRequest = {
   },
 
   fromJSON(object: any): QueryAllProvidersAttributesRequest {
-    const message = {
-      ...baseQueryAllProvidersAttributesRequest,
-    } as QueryAllProvidersAttributesRequest;
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
+    return {
+      pagination: isSet(object.pagination)
+        ? PageRequest.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryAllProvidersAttributesRequest): unknown {
@@ -274,22 +249,21 @@ export const QueryAllProvidersAttributesRequest = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryAllProvidersAttributesRequest>
-  ): QueryAllProvidersAttributesRequest {
-    const message = {
-      ...baseQueryAllProvidersAttributesRequest,
-    } as QueryAllProvidersAttributesRequest;
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
+  fromPartial<
+    I extends Exact<DeepPartial<QueryAllProvidersAttributesRequest>, I>
+  >(object: I): QueryAllProvidersAttributesRequest {
+    const message = createBaseQueryAllProvidersAttributesRequest();
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageRequest.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryProviderAttributesRequest: object = { owner: "" };
+function createBaseQueryProviderAttributesRequest(): QueryProviderAttributesRequest {
+  return { owner: "", pagination: undefined };
+}
 
 export const QueryProviderAttributesRequest = {
   encode(
@@ -311,9 +285,7 @@ export const QueryProviderAttributesRequest = {
   ): QueryProviderAttributesRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryProviderAttributesRequest,
-    } as QueryProviderAttributesRequest;
+    const message = createBaseQueryProviderAttributesRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -332,20 +304,12 @@ export const QueryProviderAttributesRequest = {
   },
 
   fromJSON(object: any): QueryProviderAttributesRequest {
-    const message = {
-      ...baseQueryProviderAttributesRequest,
-    } as QueryProviderAttributesRequest;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
+    return {
+      owner: isSet(object.owner) ? String(object.owner) : "",
+      pagination: isSet(object.pagination)
+        ? PageRequest.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryProviderAttributesRequest): unknown {
@@ -358,27 +322,22 @@ export const QueryProviderAttributesRequest = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryProviderAttributesRequest>
+  fromPartial<I extends Exact<DeepPartial<QueryProviderAttributesRequest>, I>>(
+    object: I
   ): QueryProviderAttributesRequest {
-    const message = {
-      ...baseQueryProviderAttributesRequest,
-    } as QueryProviderAttributesRequest;
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
+    const message = createBaseQueryProviderAttributesRequest();
+    message.owner = object.owner ?? "";
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageRequest.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
 
-const baseQueryProviderAuditorRequest: object = { auditor: "", owner: "" };
+function createBaseQueryProviderAuditorRequest(): QueryProviderAuditorRequest {
+  return { auditor: "", owner: "" };
+}
 
 export const QueryProviderAuditorRequest = {
   encode(
@@ -400,9 +359,7 @@ export const QueryProviderAuditorRequest = {
   ): QueryProviderAuditorRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryProviderAuditorRequest,
-    } as QueryProviderAuditorRequest;
+    const message = createBaseQueryProviderAuditorRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -421,20 +378,10 @@ export const QueryProviderAuditorRequest = {
   },
 
   fromJSON(object: any): QueryProviderAuditorRequest {
-    const message = {
-      ...baseQueryProviderAuditorRequest,
-    } as QueryProviderAuditorRequest;
-    if (object.auditor !== undefined && object.auditor !== null) {
-      message.auditor = String(object.auditor);
-    } else {
-      message.auditor = "";
-    }
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = String(object.owner);
-    } else {
-      message.owner = "";
-    }
-    return message;
+    return {
+      auditor: isSet(object.auditor) ? String(object.auditor) : "",
+      owner: isSet(object.owner) ? String(object.owner) : "",
+    };
   },
 
   toJSON(message: QueryProviderAuditorRequest): unknown {
@@ -444,27 +391,19 @@ export const QueryProviderAuditorRequest = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryProviderAuditorRequest>
+  fromPartial<I extends Exact<DeepPartial<QueryProviderAuditorRequest>, I>>(
+    object: I
   ): QueryProviderAuditorRequest {
-    const message = {
-      ...baseQueryProviderAuditorRequest,
-    } as QueryProviderAuditorRequest;
-    if (object.auditor !== undefined && object.auditor !== null) {
-      message.auditor = object.auditor;
-    } else {
-      message.auditor = "";
-    }
-    if (object.owner !== undefined && object.owner !== null) {
-      message.owner = object.owner;
-    } else {
-      message.owner = "";
-    }
+    const message = createBaseQueryProviderAuditorRequest();
+    message.auditor = object.auditor ?? "";
+    message.owner = object.owner ?? "";
     return message;
   },
 };
 
-const baseQueryAuditorAttributesRequest: object = { auditor: "" };
+function createBaseQueryAuditorAttributesRequest(): QueryAuditorAttributesRequest {
+  return { auditor: "", pagination: undefined };
+}
 
 export const QueryAuditorAttributesRequest = {
   encode(
@@ -486,9 +425,7 @@ export const QueryAuditorAttributesRequest = {
   ): QueryAuditorAttributesRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = {
-      ...baseQueryAuditorAttributesRequest,
-    } as QueryAuditorAttributesRequest;
+    const message = createBaseQueryAuditorAttributesRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -507,20 +444,12 @@ export const QueryAuditorAttributesRequest = {
   },
 
   fromJSON(object: any): QueryAuditorAttributesRequest {
-    const message = {
-      ...baseQueryAuditorAttributesRequest,
-    } as QueryAuditorAttributesRequest;
-    if (object.auditor !== undefined && object.auditor !== null) {
-      message.auditor = String(object.auditor);
-    } else {
-      message.auditor = "";
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
-    return message;
+    return {
+      auditor: isSet(object.auditor) ? String(object.auditor) : "",
+      pagination: isSet(object.pagination)
+        ? PageRequest.fromJSON(object.pagination)
+        : undefined,
+    };
   },
 
   toJSON(message: QueryAuditorAttributesRequest): unknown {
@@ -533,22 +462,15 @@ export const QueryAuditorAttributesRequest = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<QueryAuditorAttributesRequest>
+  fromPartial<I extends Exact<DeepPartial<QueryAuditorAttributesRequest>, I>>(
+    object: I
   ): QueryAuditorAttributesRequest {
-    const message = {
-      ...baseQueryAuditorAttributesRequest,
-    } as QueryAuditorAttributesRequest;
-    if (object.auditor !== undefined && object.auditor !== null) {
-      message.auditor = object.auditor;
-    } else {
-      message.auditor = "";
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination);
-    } else {
-      message.pagination = undefined;
-    }
+    const message = createBaseQueryAuditorAttributesRequest();
+    message.auditor = object.auditor ?? "";
+    message.pagination =
+      object.pagination !== undefined && object.pagination !== null
+        ? PageRequest.fromPartial(object.pagination)
+        : undefined;
     return message;
   },
 };
@@ -603,7 +525,7 @@ export class QueryClientImpl implements Query {
   ): Promise<QueryProvidersResponse> {
     const data = QueryAllProvidersAttributesRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.audit.v1beta1.Query",
+      "akash.audit.v1beta2.Query",
       "AllProvidersAttributes",
       data
     );
@@ -617,7 +539,7 @@ export class QueryClientImpl implements Query {
   ): Promise<QueryProvidersResponse> {
     const data = QueryProviderAttributesRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.audit.v1beta1.Query",
+      "akash.audit.v1beta2.Query",
       "ProviderAttributes",
       data
     );
@@ -631,7 +553,7 @@ export class QueryClientImpl implements Query {
   ): Promise<QueryProvidersResponse> {
     const data = QueryProviderAuditorRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.audit.v1beta1.Query",
+      "akash.audit.v1beta2.Query",
       "ProviderAuditorAttributes",
       data
     );
@@ -645,7 +567,7 @@ export class QueryClientImpl implements Query {
   ): Promise<QueryProvidersResponse> {
     const data = QueryAuditorAttributesRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.audit.v1beta1.Query",
+      "akash.audit.v1beta2.Query",
       "AuditorAttributes",
       data
     );
@@ -670,10 +592,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -682,7 +606,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

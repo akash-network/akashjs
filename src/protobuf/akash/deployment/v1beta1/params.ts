@@ -10,7 +10,9 @@ export interface Params {
   deploymentMinDeposit?: Coin;
 }
 
-const baseParams: object = {};
+function createBaseParams(): Params {
+  return { deploymentMinDeposit: undefined };
+}
 
 export const Params = {
   encode(
@@ -29,7 +31,7 @@ export const Params = {
   decode(input: _m0.Reader | Uint8Array, length?: number): Params {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseParams } as Params;
+    const message = createBaseParams();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -45,16 +47,11 @@ export const Params = {
   },
 
   fromJSON(object: any): Params {
-    const message = { ...baseParams } as Params;
-    if (
-      object.deploymentMinDeposit !== undefined &&
-      object.deploymentMinDeposit !== null
-    ) {
-      message.deploymentMinDeposit = Coin.fromJSON(object.deploymentMinDeposit);
-    } else {
-      message.deploymentMinDeposit = undefined;
-    }
-    return message;
+    return {
+      deploymentMinDeposit: isSet(object.deploymentMinDeposit)
+        ? Coin.fromJSON(object.deploymentMinDeposit)
+        : undefined,
+    };
   },
 
   toJSON(message: Params): unknown {
@@ -66,18 +63,13 @@ export const Params = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<Params>): Params {
-    const message = { ...baseParams } as Params;
-    if (
+  fromPartial<I extends Exact<DeepPartial<Params>, I>>(object: I): Params {
+    const message = createBaseParams();
+    message.deploymentMinDeposit =
       object.deploymentMinDeposit !== undefined &&
       object.deploymentMinDeposit !== null
-    ) {
-      message.deploymentMinDeposit = Coin.fromPartial(
-        object.deploymentMinDeposit
-      );
-    } else {
-      message.deploymentMinDeposit = undefined;
-    }
+        ? Coin.fromPartial(object.deploymentMinDeposit)
+        : undefined;
     return message;
   },
 };
@@ -89,10 +81,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -101,7 +95,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }

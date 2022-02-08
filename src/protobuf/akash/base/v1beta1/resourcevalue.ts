@@ -9,7 +9,9 @@ export interface ResourceValue {
   val: Uint8Array;
 }
 
-const baseResourceValue: object = {};
+function createBaseResourceValue(): ResourceValue {
+  return { val: new Uint8Array() };
+}
 
 export const ResourceValue = {
   encode(
@@ -25,8 +27,7 @@ export const ResourceValue = {
   decode(input: _m0.Reader | Uint8Array, length?: number): ResourceValue {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = { ...baseResourceValue } as ResourceValue;
-    message.val = new Uint8Array();
+    const message = createBaseResourceValue();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -42,12 +43,9 @@ export const ResourceValue = {
   },
 
   fromJSON(object: any): ResourceValue {
-    const message = { ...baseResourceValue } as ResourceValue;
-    message.val = new Uint8Array();
-    if (object.val !== undefined && object.val !== null) {
-      message.val = bytesFromBase64(object.val);
-    }
-    return message;
+    return {
+      val: isSet(object.val) ? bytesFromBase64(object.val) : new Uint8Array(),
+    };
   },
 
   toJSON(message: ResourceValue): unknown {
@@ -59,19 +57,18 @@ export const ResourceValue = {
     return obj;
   },
 
-  fromPartial(object: DeepPartial<ResourceValue>): ResourceValue {
-    const message = { ...baseResourceValue } as ResourceValue;
-    if (object.val !== undefined && object.val !== null) {
-      message.val = object.val;
-    } else {
-      message.val = new Uint8Array();
-    }
+  fromPartial<I extends Exact<DeepPartial<ResourceValue>, I>>(
+    object: I
+  ): ResourceValue {
+    const message = createBaseResourceValue();
+    message.val = object.val ?? new Uint8Array();
     return message;
   },
 };
 
 declare var self: any | undefined;
 declare var window: any | undefined;
+declare var global: any | undefined;
 var globalThis: any = (() => {
   if (typeof globalThis !== "undefined") return globalThis;
   if (typeof self !== "undefined") return self;
@@ -97,8 +94,8 @@ const btoa: (bin: string) => string =
   ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
   const bin: string[] = [];
-  for (let i = 0; i < arr.byteLength; ++i) {
-    bin.push(String.fromCharCode(arr[i]));
+  for (const byte of arr) {
+    bin.push(String.fromCharCode(byte));
   }
   return btoa(bin.join(""));
 }
@@ -110,10 +107,12 @@ type Builtin =
   | string
   | number
   | boolean
-  | undefined
-  | Long;
+  | undefined;
+
 export type DeepPartial<T> = T extends Builtin
   ? T
+  : T extends Long
+  ? string | number | Long
   : T extends Array<infer U>
   ? Array<DeepPartial<U>>
   : T extends ReadonlyArray<infer U>
@@ -122,7 +121,19 @@ export type DeepPartial<T> = T extends Builtin
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P>>,
+        never
+      >;
+
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
   _m0.configure();
+}
+
+function isSet(value: any): boolean {
+  return value !== null && value !== undefined;
 }
