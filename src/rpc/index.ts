@@ -8,17 +8,17 @@ export function getRpc(endpoint: string) {
       fetch(endpoint, {
         method: "POST",
         headers: {
-          contentType: "application/json"
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           jsonrpc: "2.0",
           id: 0,
           method: "abci_query",
           params: {
+            data: bufferToHex(data),
             height: "0",
             path: `/${service}/${method}`,
             prove: false,
-            data: bufferToHex(data),
           }
         })
       }).then(decodeResponse)
@@ -32,28 +32,18 @@ function decodeResponse(response: { json: () => Promise<RPCResponse> }) {
   return response.json();
 }
 
-function getResponseValue(response: RPCResponse) {
-  const value = response?.result?.response?.value;
-
-  if (value !== undefined) {
-    return Promise.resolve(value);
+function getResponseValue({ result: { response } }: RPCResponse) {
+  if (response.value != null) {
+    return Promise.resolve(response.value);
   }
 
-  return Promise.reject("Invalid rpc value")
+  return Promise.reject(`RPC Failure: ${response.log}`)
 }
 
 function base64ToUInt(base64: string) {
-  var binary_string = atob(base64);
-  var len = binary_string.length;
-  var bytes = new Uint8Array(len);
-  for (var i = 0; i < len; i++) {
-    bytes[i] = binary_string.charCodeAt(i);
-  }
-  return bytes;
+  return Buffer.from(base64, "base64");
 }
 
-function bufferToHex(buffer: any) {
-  return [...new Uint8Array(buffer)]
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
+function bufferToHex(buffer: Buffer) {
+  return buffer.toString('hex');
 }
