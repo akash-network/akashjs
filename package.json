@@ -11,6 +11,7 @@
     "build": "yarn build:tsc && yarn build:build",
     "build:production": "NODE_ENV=production yarn build:tsc && yarn build:build",
     "build:tsc": "yarn tsc",
+    "dev:watch": "yarn tsc -- --watch",
     "build:build": "yarn webpack",
     "test": "echo \"pass\" && exit 0",
     "prepublishOnly": "yarn build:production"
