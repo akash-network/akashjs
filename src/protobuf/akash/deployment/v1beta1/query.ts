@@ -185,8 +185,8 @@ export const QueryDeploymentsResponse = {
     return {
       deployments: Array.isArray(object?.deployments)
         ? object.deployments.map((e: any) =>
-            QueryDeploymentResponse.fromJSON(e)
-          )
+          QueryDeploymentResponse.fromJSON(e)
+        )
         : [],
       pagination: isSet(object.pagination)
         ? PageResponse.fromJSON(object.pagination)
@@ -593,9 +593,9 @@ type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
-        never
-      >;
+    Exclude<keyof I, KeysOfUnion<P>>,
+    never
+  >;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
