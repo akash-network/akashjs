@@ -6,7 +6,7 @@ import {
   MsgCloseBidResponse,
   MsgCreateBid,
   MsgCloseBid,
-} from "../../../akash/market/v1beta2/bid";
+} from "../../../akash/market/v1beta1/bid";
 import {
   MsgWithdrawLeaseResponse,
   MsgCreateLeaseResponse,
@@ -14,9 +14,9 @@ import {
   MsgWithdrawLease,
   MsgCreateLease,
   MsgCloseLease,
-} from "../../../akash/market/v1beta2/lease";
+} from "../../../akash/market/v1beta1/lease";
 
-export const protobufPackage = "akash.market.v1beta2";
+export const protobufPackage = "akash.market.v1beta1";
 
 /** Msg defines the market Msg service */
 export interface Msg {
@@ -45,7 +45,7 @@ export class MsgClientImpl implements Msg {
   CreateBid(request: MsgCreateBid): Promise<MsgCreateBidResponse> {
     const data = MsgCreateBid.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.market.v1beta2.Msg",
+      "akash.market.v1beta1.Msg",
       "CreateBid",
       data
     );
@@ -57,7 +57,7 @@ export class MsgClientImpl implements Msg {
   CloseBid(request: MsgCloseBid): Promise<MsgCloseBidResponse> {
     const data = MsgCloseBid.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.market.v1beta2.Msg",
+      "akash.market.v1beta1.Msg",
       "CloseBid",
       data
     );
@@ -69,7 +69,7 @@ export class MsgClientImpl implements Msg {
   WithdrawLease(request: MsgWithdrawLease): Promise<MsgWithdrawLeaseResponse> {
     const data = MsgWithdrawLease.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.market.v1beta2.Msg",
+      "akash.market.v1beta1.Msg",
       "WithdrawLease",
       data
     );
@@ -81,7 +81,7 @@ export class MsgClientImpl implements Msg {
   CreateLease(request: MsgCreateLease): Promise<MsgCreateLeaseResponse> {
     const data = MsgCreateLease.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.market.v1beta2.Msg",
+      "akash.market.v1beta1.Msg",
       "CreateLease",
       data
     );
@@ -93,7 +93,7 @@ export class MsgClientImpl implements Msg {
   CloseLease(request: MsgCloseLease): Promise<MsgCloseLeaseResponse> {
     const data = MsgCloseLease.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.market.v1beta2.Msg",
+      "akash.market.v1beta1.Msg",
       "CloseLease",
       data
     );

@@ -5,23 +5,20 @@ import {
   OrderFilters,
   OrderID,
   Order,
-} from "../../../akash/market/v1beta2/order";
+} from "../../../akash/market/v1beta1/order";
 import {
   PageRequest,
   PageResponse,
 } from "../../../cosmos/base/query/v1beta1/pagination";
-import { BidFilters, BidID, Bid } from "../../../akash/market/v1beta2/bid";
-import {
-  Account,
-  FractionalPayment,
-} from "../../../akash/escrow/v1beta2/types";
+import { BidFilters, BidID, Bid } from "../../../akash/market/v1beta1/bid";
+import { Account, Payment } from "../../../akash/escrow/v1beta1/types";
 import {
   LeaseFilters,
   LeaseID,
   Lease,
-} from "../../../akash/market/v1beta2/lease";
+} from "../../../akash/market/v1beta1/lease";
 
-export const protobufPackage = "akash.market.v1beta2";
+export const protobufPackage = "akash.market.v1beta1";
 
 /** QueryOrdersRequest is request type for the Query/Orders RPC method */
 export interface QueryOrdersRequest {
@@ -88,7 +85,7 @@ export interface QueryLeaseRequest {
 /** QueryLeaseResponse is response type for the Query/Lease RPC method */
 export interface QueryLeaseResponse {
   lease?: Lease;
-  escrowPayment?: FractionalPayment;
+  escrowPayment?: Payment;
 }
 
 function createBaseQueryOrdersRequest(): QueryOrdersRequest {
@@ -896,10 +893,7 @@ export const QueryLeaseResponse = {
       Lease.encode(message.lease, writer.uint32(10).fork()).ldelim();
     }
     if (message.escrowPayment !== undefined) {
-      FractionalPayment.encode(
-        message.escrowPayment,
-        writer.uint32(18).fork()
-      ).ldelim();
+      Payment.encode(message.escrowPayment, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -915,10 +909,7 @@ export const QueryLeaseResponse = {
           message.lease = Lease.decode(reader, reader.uint32());
           break;
         case 2:
-          message.escrowPayment = FractionalPayment.decode(
-            reader,
-            reader.uint32()
-          );
+          message.escrowPayment = Payment.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -932,7 +923,7 @@ export const QueryLeaseResponse = {
     return {
       lease: isSet(object.lease) ? Lease.fromJSON(object.lease) : undefined,
       escrowPayment: isSet(object.escrowPayment)
-        ? FractionalPayment.fromJSON(object.escrowPayment)
+        ? Payment.fromJSON(object.escrowPayment)
         : undefined,
     };
   },
@@ -943,7 +934,7 @@ export const QueryLeaseResponse = {
       (obj.lease = message.lease ? Lease.toJSON(message.lease) : undefined);
     message.escrowPayment !== undefined &&
       (obj.escrowPayment = message.escrowPayment
-        ? FractionalPayment.toJSON(message.escrowPayment)
+        ? Payment.toJSON(message.escrowPayment)
         : undefined);
     return obj;
   },
@@ -958,7 +949,7 @@ export const QueryLeaseResponse = {
         : undefined;
     message.escrowPayment =
       object.escrowPayment !== undefined && object.escrowPayment !== null
-        ? FractionalPayment.fromPartial(object.escrowPayment)
+        ? Payment.fromPartial(object.escrowPayment)
         : undefined;
     return message;
   },
@@ -994,7 +985,7 @@ export class QueryClientImpl implements Query {
   Orders(request: QueryOrdersRequest): Promise<QueryOrdersResponse> {
     const data = QueryOrdersRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.market.v1beta2.Query",
+      "akash.market.v1beta1.Query",
       "Orders",
       data
     );
@@ -1006,7 +997,7 @@ export class QueryClientImpl implements Query {
   Order(request: QueryOrderRequest): Promise<QueryOrderResponse> {
     const data = QueryOrderRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.market.v1beta2.Query",
+      "akash.market.v1beta1.Query",
       "Order",
       data
     );
@@ -1018,7 +1009,7 @@ export class QueryClientImpl implements Query {
   Bids(request: QueryBidsRequest): Promise<QueryBidsResponse> {
     const data = QueryBidsRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.market.v1beta2.Query",
+      "akash.market.v1beta1.Query",
       "Bids",
       data
     );
@@ -1029,7 +1020,7 @@ export class QueryClientImpl implements Query {
 
   Bid(request: QueryBidRequest): Promise<QueryBidResponse> {
     const data = QueryBidRequest.encode(request).finish();
-    const promise = this.rpc.request("akash.market.v1beta2.Query", "Bid", data);
+    const promise = this.rpc.request("akash.market.v1beta1.Query", "Bid", data);
     return promise.then((data) =>
       QueryBidResponse.decode(new _m0.Reader(data))
     );
@@ -1038,7 +1029,7 @@ export class QueryClientImpl implements Query {
   Leases(request: QueryLeasesRequest): Promise<QueryLeasesResponse> {
     const data = QueryLeasesRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.market.v1beta2.Query",
+      "akash.market.v1beta1.Query",
       "Leases",
       data
     );
@@ -1050,7 +1041,7 @@ export class QueryClientImpl implements Query {
   Lease(request: QueryLeaseRequest): Promise<QueryLeaseResponse> {
     const data = QueryLeaseRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.market.v1beta2.Query",
+      "akash.market.v1beta1.Query",
       "Lease",
       data
     );

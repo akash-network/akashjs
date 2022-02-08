@@ -4,15 +4,14 @@ import _m0 from "protobufjs/minimal";
 import {
   Certificate,
   CertificateFilter,
-} from "../../../akash/cert/v1beta2/cert";
+} from "../../../akash/cert/v1beta1/cert";
 import {
   PageRequest,
   PageResponse,
 } from "../../../cosmos/base/query/v1beta1/pagination";
 
-export const protobufPackage = "akash.cert.v1beta2";
+export const protobufPackage = "akash.cert.v1beta1";
 
-/** CertificateResponse contains a single X509 certificate and its serial number */
 export interface CertificateResponse {
   certificate?: Certificate;
   serial: string;
@@ -296,7 +295,7 @@ export class QueryClientImpl implements Query {
   ): Promise<QueryCertificatesResponse> {
     const data = QueryCertificatesRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.cert.v1beta2.Query",
+      "akash.cert.v1beta1.Query",
       "Certificates",
       data
     );

@@ -1,11 +1,11 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { Params } from "../../../akash/market/v1beta2/params";
-import { Order } from "../../../akash/market/v1beta2/order";
-import { Lease } from "../../../akash/market/v1beta2/lease";
+import { Params } from "../../../akash/market/v1beta1/params";
+import { Order } from "../../../akash/market/v1beta1/order";
+import { Lease } from "../../../akash/market/v1beta1/lease";
 
-export const protobufPackage = "akash.market.v1beta2";
+export const protobufPackage = "akash.market.v1beta1";
 
 /** GenesisState defines the basic genesis state used by market module */
 export interface GenesisState {

@@ -1,10 +1,10 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { DecCoin } from "../../../cosmos/base/v1beta1/coin";
-import { BidID } from "../../../akash/market/v1beta2/bid";
+import { Coin } from "../../../cosmos/base/v1beta1/coin";
+import { BidID } from "../../../akash/market/v1beta1/bid";
 
-export const protobufPackage = "akash.market.v1beta2";
+export const protobufPackage = "akash.market.v1beta1";
 
 /** LeaseID stores bid details of lease */
 export interface LeaseID {
@@ -19,9 +19,8 @@ export interface LeaseID {
 export interface Lease {
   leaseId?: LeaseID;
   state: Lease_State;
-  price?: DecCoin;
+  price?: Coin;
   createdAt: Long;
-  closedOn: Long;
 }
 
 /** State is an enum which refers to state of lease */
@@ -205,7 +204,6 @@ function createBaseLease(): Lease {
     state: 0,
     price: undefined,
     createdAt: Long.ZERO,
-    closedOn: Long.ZERO,
   };
 }
 
@@ -218,13 +216,10 @@ export const Lease = {
       writer.uint32(16).int32(message.state);
     }
     if (message.price !== undefined) {
-      DecCoin.encode(message.price, writer.uint32(26).fork()).ldelim();
+      Coin.encode(message.price, writer.uint32(26).fork()).ldelim();
     }
     if (!message.createdAt.isZero()) {
       writer.uint32(32).int64(message.createdAt);
-    }
-    if (!message.closedOn.isZero()) {
-      writer.uint32(40).int64(message.closedOn);
     }
     return writer;
   },
@@ -243,13 +238,10 @@ export const Lease = {
           message.state = reader.int32() as any;
           break;
         case 3:
-          message.price = DecCoin.decode(reader, reader.uint32());
+          message.price = Coin.decode(reader, reader.uint32());
           break;
         case 4:
           message.createdAt = reader.int64() as Long;
-          break;
-        case 5:
-          message.closedOn = reader.int64() as Long;
           break;
         default:
           reader.skipType(tag & 7);
@@ -265,12 +257,9 @@ export const Lease = {
         ? LeaseID.fromJSON(object.leaseId)
         : undefined,
       state: isSet(object.state) ? lease_StateFromJSON(object.state) : 0,
-      price: isSet(object.price) ? DecCoin.fromJSON(object.price) : undefined,
+      price: isSet(object.price) ? Coin.fromJSON(object.price) : undefined,
       createdAt: isSet(object.createdAt)
         ? Long.fromString(object.createdAt)
-        : Long.ZERO,
-      closedOn: isSet(object.closedOn)
-        ? Long.fromString(object.closedOn)
         : Long.ZERO,
     };
   },
@@ -284,11 +273,9 @@ export const Lease = {
     message.state !== undefined &&
       (obj.state = lease_StateToJSON(message.state));
     message.price !== undefined &&
-      (obj.price = message.price ? DecCoin.toJSON(message.price) : undefined);
+      (obj.price = message.price ? Coin.toJSON(message.price) : undefined);
     message.createdAt !== undefined &&
       (obj.createdAt = (message.createdAt || Long.ZERO).toString());
-    message.closedOn !== undefined &&
-      (obj.closedOn = (message.closedOn || Long.ZERO).toString());
     return obj;
   },
 
@@ -301,15 +288,11 @@ export const Lease = {
     message.state = object.state ?? 0;
     message.price =
       object.price !== undefined && object.price !== null
-        ? DecCoin.fromPartial(object.price)
+        ? Coin.fromPartial(object.price)
         : undefined;
     message.createdAt =
       object.createdAt !== undefined && object.createdAt !== null
         ? Long.fromValue(object.createdAt)
-        : Long.ZERO;
-    message.closedOn =
-      object.closedOn !== undefined && object.closedOn !== null
-        ? Long.fromValue(object.closedOn)
         : Long.ZERO;
     return message;
   },

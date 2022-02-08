@@ -5,9 +5,9 @@ import {
   PageRequest,
   PageResponse,
 } from "../../../cosmos/base/query/v1beta1/pagination";
-import { Provider } from "../../../akash/provider/v1beta2/provider";
+import { Provider } from "../../../akash/provider/v1beta1/provider";
 
-export const protobufPackage = "akash.provider.v1beta2";
+export const protobufPackage = "akash.provider.v1beta1";
 
 /** QueryProvidersRequest is request type for the Query/Providers RPC method */
 export interface QueryProvidersRequest {
@@ -321,7 +321,7 @@ export class QueryClientImpl implements Query {
   Providers(request: QueryProvidersRequest): Promise<QueryProvidersResponse> {
     const data = QueryProvidersRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.provider.v1beta2.Query",
+      "akash.provider.v1beta1.Query",
       "Providers",
       data
     );
@@ -333,7 +333,7 @@ export class QueryClientImpl implements Query {
   Provider(request: QueryProviderRequest): Promise<QueryProviderResponse> {
     const data = QueryProviderRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.provider.v1beta2.Query",
+      "akash.provider.v1beta1.Query",
       "Provider",
       data
     );

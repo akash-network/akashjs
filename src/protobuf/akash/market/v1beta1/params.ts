@@ -3,15 +3,16 @@ import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
 
-export const protobufPackage = "akash.deployment.v1beta2";
+export const protobufPackage = "akash.market.v1beta1";
 
-/** Params defines the parameters for the x/deployment package */
+/** Params is the params for the x/market module */
 export interface Params {
-  deploymentMinDeposit?: Coin;
+  bidMinDeposit?: Coin;
+  orderMaxBids: number;
 }
 
 function createBaseParams(): Params {
-  return { deploymentMinDeposit: undefined };
+  return { bidMinDeposit: undefined, orderMaxBids: 0 };
 }
 
 export const Params = {
@@ -19,11 +20,11 @@ export const Params = {
     message: Params,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    if (message.deploymentMinDeposit !== undefined) {
-      Coin.encode(
-        message.deploymentMinDeposit,
-        writer.uint32(10).fork()
-      ).ldelim();
+    if (message.bidMinDeposit !== undefined) {
+      Coin.encode(message.bidMinDeposit, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.orderMaxBids !== 0) {
+      writer.uint32(16).uint32(message.orderMaxBids);
     }
     return writer;
   },
@@ -36,7 +37,10 @@ export const Params = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.deploymentMinDeposit = Coin.decode(reader, reader.uint32());
+          message.bidMinDeposit = Coin.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.orderMaxBids = reader.uint32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -48,28 +52,33 @@ export const Params = {
 
   fromJSON(object: any): Params {
     return {
-      deploymentMinDeposit: isSet(object.deploymentMinDeposit)
-        ? Coin.fromJSON(object.deploymentMinDeposit)
+      bidMinDeposit: isSet(object.bidMinDeposit)
+        ? Coin.fromJSON(object.bidMinDeposit)
         : undefined,
+      orderMaxBids: isSet(object.orderMaxBids)
+        ? Number(object.orderMaxBids)
+        : 0,
     };
   },
 
   toJSON(message: Params): unknown {
     const obj: any = {};
-    message.deploymentMinDeposit !== undefined &&
-      (obj.deploymentMinDeposit = message.deploymentMinDeposit
-        ? Coin.toJSON(message.deploymentMinDeposit)
+    message.bidMinDeposit !== undefined &&
+      (obj.bidMinDeposit = message.bidMinDeposit
+        ? Coin.toJSON(message.bidMinDeposit)
         : undefined);
+    message.orderMaxBids !== undefined &&
+      (obj.orderMaxBids = Math.round(message.orderMaxBids));
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<Params>, I>>(object: I): Params {
     const message = createBaseParams();
-    message.deploymentMinDeposit =
-      object.deploymentMinDeposit !== undefined &&
-      object.deploymentMinDeposit !== null
-        ? Coin.fromPartial(object.deploymentMinDeposit)
+    message.bidMinDeposit =
+      object.bidMinDeposit !== undefined && object.bidMinDeposit !== null
+        ? Coin.fromPartial(object.bidMinDeposit)
         : undefined;
+    message.orderMaxBids = object.orderMaxBids ?? 0;
     return message;
   },
 };

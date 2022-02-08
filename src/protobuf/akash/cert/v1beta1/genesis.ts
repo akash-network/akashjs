@@ -1,9 +1,9 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { Certificate } from "../../../akash/cert/v1beta2/cert";
+import { Certificate } from "../../../akash/cert/v1beta1/cert";
 
-export const protobufPackage = "akash.cert.v1beta2";
+export const protobufPackage = "akash.cert.v1beta1";
 
 /** GenesisCertificate defines certificate entry at genesis */
 export interface GenesisCertificate {

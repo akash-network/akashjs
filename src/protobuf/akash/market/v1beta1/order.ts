@@ -1,9 +1,9 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { GroupSpec } from "../../../akash/deployment/v1beta2/groupspec";
+import { GroupSpec } from "../../../akash/deployment/v1beta1/group";
 
-export const protobufPackage = "akash.market.v1beta2";
+export const protobufPackage = "akash.market.v1beta1";
 
 /** OrderID stores owner and all other seq numbers */
 export interface OrderID {

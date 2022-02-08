@@ -1,17 +1,17 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { AuditedAttributes } from "../../../akash/audit/v1beta2/audit";
+import { Provider } from "../../../akash/provider/v1beta1/provider";
 
-export const protobufPackage = "akash.audit.v1beta2";
+export const protobufPackage = "akash.provider.v1beta1";
 
-/** GenesisState defines the basic genesis state used by audit module */
+/** GenesisState defines the basic genesis state used by provider module */
 export interface GenesisState {
-  attributes: AuditedAttributes[];
+  providers: Provider[];
 }
 
 function createBaseGenesisState(): GenesisState {
-  return { attributes: [] };
+  return { providers: [] };
 }
 
 export const GenesisState = {
@@ -19,8 +19,8 @@ export const GenesisState = {
     message: GenesisState,
     writer: _m0.Writer = _m0.Writer.create()
   ): _m0.Writer {
-    for (const v of message.attributes) {
-      AuditedAttributes.encode(v!, writer.uint32(10).fork()).ldelim();
+    for (const v of message.providers) {
+      Provider.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
@@ -33,9 +33,7 @@ export const GenesisState = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.attributes.push(
-            AuditedAttributes.decode(reader, reader.uint32())
-          );
+          message.providers.push(Provider.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -47,20 +45,20 @@ export const GenesisState = {
 
   fromJSON(object: any): GenesisState {
     return {
-      attributes: Array.isArray(object?.attributes)
-        ? object.attributes.map((e: any) => AuditedAttributes.fromJSON(e))
+      providers: Array.isArray(object?.providers)
+        ? object.providers.map((e: any) => Provider.fromJSON(e))
         : [],
     };
   },
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
-    if (message.attributes) {
-      obj.attributes = message.attributes.map((e) =>
-        e ? AuditedAttributes.toJSON(e) : undefined
+    if (message.providers) {
+      obj.providers = message.providers.map((e) =>
+        e ? Provider.toJSON(e) : undefined
       );
     } else {
-      obj.attributes = [];
+      obj.providers = [];
     }
     return obj;
   },
@@ -69,8 +67,8 @@ export const GenesisState = {
     object: I
   ): GenesisState {
     const message = createBaseGenesisState();
-    message.attributes =
-      object.attributes?.map((e) => AuditedAttributes.fromPartial(e)) || [];
+    message.providers =
+      object.providers?.map((e) => Provider.fromPartial(e)) || [];
     return message;
   },
 };

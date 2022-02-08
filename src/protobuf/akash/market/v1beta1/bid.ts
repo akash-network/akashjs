@@ -1,16 +1,16 @@
 /* eslint-disable */
 import Long from "long";
 import _m0 from "protobufjs/minimal";
-import { OrderID } from "../../../akash/market/v1beta2/order";
-import { DecCoin, Coin } from "../../../cosmos/base/v1beta1/coin";
+import { OrderID } from "../../../akash/market/v1beta1/order";
+import { Coin } from "../../../cosmos/base/v1beta1/coin";
 
-export const protobufPackage = "akash.market.v1beta2";
+export const protobufPackage = "akash.market.v1beta1";
 
 /** MsgCreateBid defines an SDK message for creating Bid */
 export interface MsgCreateBid {
   order?: OrderID;
   provider: string;
-  price?: DecCoin;
+  price?: Coin;
   deposit?: Coin;
 }
 
@@ -41,7 +41,7 @@ export interface BidID {
 export interface Bid {
   bidId?: BidID;
   state: Bid_State;
-  price?: DecCoin;
+  price?: Coin;
   createdAt: Long;
 }
 
@@ -132,7 +132,7 @@ export const MsgCreateBid = {
       writer.uint32(18).string(message.provider);
     }
     if (message.price !== undefined) {
-      DecCoin.encode(message.price, writer.uint32(26).fork()).ldelim();
+      Coin.encode(message.price, writer.uint32(26).fork()).ldelim();
     }
     if (message.deposit !== undefined) {
       Coin.encode(message.deposit, writer.uint32(34).fork()).ldelim();
@@ -154,7 +154,7 @@ export const MsgCreateBid = {
           message.provider = reader.string();
           break;
         case 3:
-          message.price = DecCoin.decode(reader, reader.uint32());
+          message.price = Coin.decode(reader, reader.uint32());
           break;
         case 4:
           message.deposit = Coin.decode(reader, reader.uint32());
@@ -171,7 +171,7 @@ export const MsgCreateBid = {
     return {
       order: isSet(object.order) ? OrderID.fromJSON(object.order) : undefined,
       provider: isSet(object.provider) ? String(object.provider) : "",
-      price: isSet(object.price) ? DecCoin.fromJSON(object.price) : undefined,
+      price: isSet(object.price) ? Coin.fromJSON(object.price) : undefined,
       deposit: isSet(object.deposit)
         ? Coin.fromJSON(object.deposit)
         : undefined,
@@ -184,7 +184,7 @@ export const MsgCreateBid = {
       (obj.order = message.order ? OrderID.toJSON(message.order) : undefined);
     message.provider !== undefined && (obj.provider = message.provider);
     message.price !== undefined &&
-      (obj.price = message.price ? DecCoin.toJSON(message.price) : undefined);
+      (obj.price = message.price ? Coin.toJSON(message.price) : undefined);
     message.deposit !== undefined &&
       (obj.deposit = message.deposit
         ? Coin.toJSON(message.deposit)
@@ -203,7 +203,7 @@ export const MsgCreateBid = {
     message.provider = object.provider ?? "";
     message.price =
       object.price !== undefined && object.price !== null
-        ? DecCoin.fromPartial(object.price)
+        ? Coin.fromPartial(object.price)
         : undefined;
     message.deposit =
       object.deposit !== undefined && object.deposit !== null
@@ -464,7 +464,7 @@ export const Bid = {
       writer.uint32(16).int32(message.state);
     }
     if (message.price !== undefined) {
-      DecCoin.encode(message.price, writer.uint32(26).fork()).ldelim();
+      Coin.encode(message.price, writer.uint32(26).fork()).ldelim();
     }
     if (!message.createdAt.isZero()) {
       writer.uint32(32).int64(message.createdAt);
@@ -486,7 +486,7 @@ export const Bid = {
           message.state = reader.int32() as any;
           break;
         case 3:
-          message.price = DecCoin.decode(reader, reader.uint32());
+          message.price = Coin.decode(reader, reader.uint32());
           break;
         case 4:
           message.createdAt = reader.int64() as Long;
@@ -503,7 +503,7 @@ export const Bid = {
     return {
       bidId: isSet(object.bidId) ? BidID.fromJSON(object.bidId) : undefined,
       state: isSet(object.state) ? bid_StateFromJSON(object.state) : 0,
-      price: isSet(object.price) ? DecCoin.fromJSON(object.price) : undefined,
+      price: isSet(object.price) ? Coin.fromJSON(object.price) : undefined,
       createdAt: isSet(object.createdAt)
         ? Long.fromString(object.createdAt)
         : Long.ZERO,
@@ -516,7 +516,7 @@ export const Bid = {
       (obj.bidId = message.bidId ? BidID.toJSON(message.bidId) : undefined);
     message.state !== undefined && (obj.state = bid_StateToJSON(message.state));
     message.price !== undefined &&
-      (obj.price = message.price ? DecCoin.toJSON(message.price) : undefined);
+      (obj.price = message.price ? Coin.toJSON(message.price) : undefined);
     message.createdAt !== undefined &&
       (obj.createdAt = (message.createdAt || Long.ZERO).toString());
     return obj;
@@ -531,7 +531,7 @@ export const Bid = {
     message.state = object.state ?? 0;
     message.price =
       object.price !== undefined && object.price !== null
-        ? DecCoin.fromPartial(object.price)
+        ? Coin.fromPartial(object.price)
         : undefined;
     message.createdAt =
       object.createdAt !== undefined && object.createdAt !== null

@@ -2,7 +2,7 @@
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
-export const protobufPackage = "akash.cert.v1beta2";
+export const protobufPackage = "akash.cert.v1beta1";
 
 /** CertificateID stores owner and sequence number */
 export interface CertificateID {
@@ -566,7 +566,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgCreateCertificateResponse> {
     const data = MsgCreateCertificate.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.cert.v1beta2.Msg",
+      "akash.cert.v1beta1.Msg",
       "CreateCertificate",
       data
     );
@@ -580,7 +580,7 @@ export class MsgClientImpl implements Msg {
   ): Promise<MsgRevokeCertificateResponse> {
     const data = MsgRevokeCertificate.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.cert.v1beta2.Msg",
+      "akash.cert.v1beta1.Msg",
       "RevokeCertificate",
       data
     );

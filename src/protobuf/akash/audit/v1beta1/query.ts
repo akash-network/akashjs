@@ -5,9 +5,9 @@ import {
   PageResponse,
   PageRequest,
 } from "../../../cosmos/base/query/v1beta1/pagination";
-import { Provider } from "../../../akash/audit/v1beta2/audit";
+import { Provider } from "../../../akash/audit/v1beta1/audit";
 
-export const protobufPackage = "akash.audit.v1beta2";
+export const protobufPackage = "akash.audit.v1beta1";
 
 /** QueryProvidersResponse is response type for the Query/Providers RPC method */
 export interface QueryProvidersResponse {
@@ -525,7 +525,7 @@ export class QueryClientImpl implements Query {
   ): Promise<QueryProvidersResponse> {
     const data = QueryAllProvidersAttributesRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.audit.v1beta2.Query",
+      "akash.audit.v1beta1.Query",
       "AllProvidersAttributes",
       data
     );
@@ -539,7 +539,7 @@ export class QueryClientImpl implements Query {
   ): Promise<QueryProvidersResponse> {
     const data = QueryProviderAttributesRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.audit.v1beta2.Query",
+      "akash.audit.v1beta1.Query",
       "ProviderAttributes",
       data
     );
@@ -553,7 +553,7 @@ export class QueryClientImpl implements Query {
   ): Promise<QueryProvidersResponse> {
     const data = QueryProviderAuditorRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.audit.v1beta2.Query",
+      "akash.audit.v1beta1.Query",
       "ProviderAuditorAttributes",
       data
     );
@@ -567,7 +567,7 @@ export class QueryClientImpl implements Query {
   ): Promise<QueryProvidersResponse> {
     const data = QueryAuditorAttributesRequest.encode(request).finish();
     const promise = this.rpc.request(
-      "akash.audit.v1beta2.Query",
+      "akash.audit.v1beta1.Query",
       "AuditorAttributes",
       data
     );
