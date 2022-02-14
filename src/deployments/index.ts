@@ -14,7 +14,6 @@ import {
 import { GroupID } from "../protobuf/akash/deployment/v1beta1/group";
 import { getRpc } from "../rpc";
 
-
 function query(endpoint: string) {
   const client = new QueryClientImpl(getRpc(endpoint));
 
