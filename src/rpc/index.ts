@@ -1,59 +1,54 @@
-import fetch from "node-fetch";
+import fetch, { RequestInit, Response } from "node-fetch";
+import { ABCIQueryRequest, FetchFunction, RPCFetch, RPCResponse } from "./models";
 
-import { RPCResponse } from "./models";
+export function getRpc(endpoint: string, fetchFn: FetchFunction = fetch) {
+  const rpcFetch: RPCFetch =
+    (params) => fetchFn(endpoint, params);
 
-export function getRpc(endpoint: string) {
   return {
-    request: (service: string, method: string, data: Buffer) => (
-      fetch(endpoint, {
-        method: "POST",
-        headers: {
-          contentType: "application/json"
-        },
-        body: JSON.stringify({
-          jsonrpc: "2.0",
-          id: 0,
-          method: "abci_query",
-          params: {
-            height: "0",
-            path: `/${service}/${method}`,
-            prove: false,
-            data: bufferToHex(data),
-          }
-        })
-      }).then(decodeResponse)
+    request: (service: string, method: string, data: Buffer) =>
+      createRequestBody(service, method, data)
+        .then(wrapHttpPost)
+        .then(rpcFetch)
+        .then(asJSON)
         .then(getResponseValue)
-        .then(base64ToUInt)
-    )
   }
 }
 
-function decodeResponse(response: { json: () => Promise<RPCResponse> }) {
+export function wrapHttpPost(body: object): RequestInit {
+  return {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(body),
+  }
+}
+
+export function createRequestBody(service: string, method: string, data: Buffer): Promise<ABCIQueryRequest> {
+  return Promise.resolve({
+    jsonrpc: "2.0",
+    id: 0,
+    method: "abci_query",
+    params: {
+      data: data.toString('hex'),
+      height: "0",
+      path: `/${service}/${method}`,
+      prove: false,
+    }
+  });
+}
+
+export function asJSON(response: Response): Promise<RPCResponse> {
   return response.json();
 }
 
-function getResponseValue(response: RPCResponse) {
+export function getResponseValue(response: RPCResponse) {
   const value = response?.result?.response?.value;
 
-  if (value !== undefined) {
-    return Promise.resolve(value);
+  if (value != null) {
+    return Promise.resolve(Buffer.from(value, "base64"));
   }
 
-  return Promise.reject("Invalid rpc value")
-}
-
-function base64ToUInt(base64: string) {
-  var binary_string = atob(base64);
-  var len = binary_string.length;
-  var bytes = new Uint8Array(len);
-  for (var i = 0; i < len; i++) {
-    bytes[i] = binary_string.charCodeAt(i);
-  }
-  return bytes;
-}
-
-function bufferToHex(buffer: any) {
-  return [...new Uint8Array(buffer)]
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
+  return Promise.reject(`No 'value' field in response object`)
 }

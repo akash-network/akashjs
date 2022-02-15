@@ -1,4 +1,4 @@
-import { MsgCreateCertificate, MsgRevokeCertificate } from "../protobuf/akash/cert/v1beta2/cert";
+import { MsgCreateCertificate, MsgRevokeCertificate } from "../protobuf/akash/cert/v1beta1/cert";
 
 // duplication here for now, could make this cleaner through run time enumeration
 // one for stargate, one to make life easier for devs

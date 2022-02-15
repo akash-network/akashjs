@@ -11,8 +11,10 @@
     "build": "yarn build:tsc && yarn build:build",
     "build:production": "NODE_ENV=production yarn build:tsc && yarn build:build",
     "build:tsc": "yarn tsc",
+    "dev:watch": "yarn tsc -- --watch",
     "build:build": "yarn webpack",
     "test": "echo \"pass\" && exit 0",
+    "test:unit": "tap --ts tests/test_*.ts",
     "prepublishOnly": "yarn build:production"
   },
   "author": "",
@@ -35,8 +37,12 @@
   "devDependencies": {
     "@types/atob": "^2.1.2",
     "@types/node-fetch": "2",
+    "@types/sinon": "^10.0.11",
+    "@types/tap": "^15.0.5",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "protoc-gen-grpc-web": "^1.3.0",
+    "sinon": "^13.0.1",
+    "tap": "^15.1.6",
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "ts-proto": "^1.104.0",

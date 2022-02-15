@@ -1,6 +1,4 @@
-import { Response } from "node-fetch";
-
-export type RPCRequestClient<T> = (a: T) => { call: () => Promise<Response> }
+import { RequestInit, Response } from "node-fetch";
 
 export type ABCIQueryRequest = RPCRequest<{
   height: string;
@@ -33,3 +31,7 @@ export interface RPCResponse {
     }
   }
 }
+
+export type FetchFunction = (endpoint: string, init: RequestInit) => Promise<Response>
+
+export type RPCFetch = (init: RequestInit) => Promise<Response>

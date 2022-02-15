@@ -13,17 +13,11 @@ export interface AccountID {
 
 /** Account stores state for an escrow account */
 export interface Account {
-  /** unique identifier for this escrow account */
   id?: AccountID;
-  /** bech32 encoded account address of the owner of this escrow account */
   owner: string;
-  /** current state of this escrow account */
   state: Account_State;
-  /** unspent coins received from the owner's wallet */
   balance?: Coin;
-  /** total coins spent by this account */
   transferred?: Coin;
-  /** block height at which this account was last settled */
   settledAt: Long;
 }
 

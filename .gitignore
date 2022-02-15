@@ -1,6 +1,5 @@
-node_modules/
-build/
-umd/
+node_modules
 yarn-error.log
-test.js
-generate.log
+build
+.nyc_output
+umd
