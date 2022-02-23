@@ -1,6 +1,4 @@
 export * as certificate from "./certificates";
-export { default as deployments } from "./deployments";
-export { default as market } from "./market";
 export * as stargate from "./stargate";
 export * as keplr from "./keplr";
 export * as wallet from "./wallet";
