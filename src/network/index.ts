@@ -1,4 +1,6 @@
 import fetch from 'node-fetch';
+import { performance } from 'perf_hooks';
+import { awaitAll, filter, map, prop, sortBy } from '../util';
 
 type NETWORK_TYPE =
     "mainnet" |
@@ -56,6 +58,37 @@ export async function getMetadata(network: NETWORK_TYPE): Promise<INetworkMetada
     return res.json();
 }
 
-export async function getEndpoints(network: NETWORK_TYPE, type: ENDPOINT_TYPE) {
+export function getEndpoints(network: NETWORK_TYPE, type: ENDPOINT_TYPE) {
     return getMetadata(network).then(meta => meta.apis[type]);
+}
+
+export function getEndpointsSorted(network: NETWORK_TYPE, type: ENDPOINT_TYPE) {
+    return getEndpoints(network, type)
+        .then(map(getEndpointHealthStatus(800)))
+        .then(awaitAll)
+        .then(filter(isNodeResponsive))
+        .then(sortBy(prop("responseTime")));
+}
+
+function isNodeResponsive(endpoint: { responseTime: number | null }) {
+    return endpoint.responseTime !== null;
+}
+
+function getEndpointHealthStatus(timeout: number) {
+    return ({ address }: { "address": string }) => {
+        const startTime = performance.now();
+
+        return fetch(`${address}/node_info`, { timeout })
+            .then(
+                () => ({
+                    address,
+                    responseTime: Math.floor(performance.now() - startTime)
+                }))
+            .catch(
+                () => ({
+                    address,
+                    responseTime: null
+                })
+            );
+    }
 }
