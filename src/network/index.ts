@@ -52,14 +52,13 @@ interface INetworkMetadata {
 
 // TODO: this should probably be cached to avoid pulling for every request
 export async function getMetadata(network: NETWORK_TYPE): Promise<INetworkMetadata> {
-    const url = `https://raw.githubusercontent.com/ovrclk/net/master/${network}/meta.json`;
-    const res = await fetch(url);
-
-    return res.json();
+    return fetch(`https://raw.githubusercontent.com/ovrclk/net/master/${network}/meta.json`)
+        .then(res => res.json());
 }
 
 export function getEndpoints(network: NETWORK_TYPE, type: ENDPOINT_TYPE) {
-    return getMetadata(network).then(meta => meta.apis[type]);
+    return getMetadata(network)
+        .then(meta => meta.apis[type]);
 }
 
 export function getEndpointsSorted(network: NETWORK_TYPE, type: ENDPOINT_TYPE) {
