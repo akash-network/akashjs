@@ -1,11 +1,10 @@
-import { MsgCreateCertificate, MsgRevokeCertificate } from "../protobuf/akash/cert/v1beta1/cert";
+import { MessageType, messageTypeRegistry, UnknownMessage } from "../protobuf/typeRegistry";
 
-// duplication here for now, could make this cleaner through run time enumeration
-// one for stargate, one to make life easier for devs
-export const registry = [
-  ["/akash.cert.v1beta1.MsgCreateCertificate", MsgCreateCertificate],
-  ["/akash.cert.v1beta1.MsgRevokeCertificate", MsgRevokeCertificate],
-];
+export const getAkashTypeRegistry: () => ([string, MessageType<UnknownMessage>][])
+  = () => Array.from(messageTypeRegistry).map(([path, type]) => [`/${path}`, type])
+
+export const getTypeUrl: (type: MessageType) => string
+  = (type) => `/${type.$type}`
 
 export enum messages {
   MsgCreateCertificate = "/akash.cert.v1beta1.MsgCreateCertificate",

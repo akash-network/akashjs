@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
@@ -8,6 +9,7 @@ export const protobufPackage = "akash.market.v1beta1";
 
 /** LeaseID stores bid details of lease */
 export interface LeaseID {
+  $type: "akash.market.v1beta1.LeaseID";
   owner: string;
   dseq: Long;
   gseq: number;
@@ -17,6 +19,7 @@ export interface LeaseID {
 
 /** Lease stores LeaseID, state of lease and price */
 export interface Lease {
+  $type: "akash.market.v1beta1.Lease";
   leaseId?: LeaseID;
   state: Lease_State;
   price?: Coin;
@@ -74,6 +77,7 @@ export function lease_StateToJSON(object: Lease_State): string {
 
 /** LeaseFilters defines flags for lease list filter */
 export interface LeaseFilters {
+  $type: "akash.market.v1beta1.LeaseFilters";
   owner: string;
   dseq: Long;
   gseq: number;
@@ -84,33 +88,51 @@ export interface LeaseFilters {
 
 /** MsgCreateLease is sent to create a lease */
 export interface MsgCreateLease {
+  $type: "akash.market.v1beta1.MsgCreateLease";
   bidId?: BidID;
 }
 
 /** MsgCreateLeaseResponse is the response from creating a lease */
-export interface MsgCreateLeaseResponse {}
+export interface MsgCreateLeaseResponse {
+  $type: "akash.market.v1beta1.MsgCreateLeaseResponse";
+}
 
 /** MsgWithdrawLease defines an SDK message for closing bid */
 export interface MsgWithdrawLease {
+  $type: "akash.market.v1beta1.MsgWithdrawLease";
   bidId?: LeaseID;
 }
 
 /** MsgWithdrawLeaseResponse defines the Msg/WithdrawLease response type. */
-export interface MsgWithdrawLeaseResponse {}
+export interface MsgWithdrawLeaseResponse {
+  $type: "akash.market.v1beta1.MsgWithdrawLeaseResponse";
+}
 
 /** MsgCloseLease defines an SDK message for closing order */
 export interface MsgCloseLease {
+  $type: "akash.market.v1beta1.MsgCloseLease";
   leaseId?: LeaseID;
 }
 
 /** MsgCloseLeaseResponse defines the Msg/CloseLease response type. */
-export interface MsgCloseLeaseResponse {}
+export interface MsgCloseLeaseResponse {
+  $type: "akash.market.v1beta1.MsgCloseLeaseResponse";
+}
 
 function createBaseLeaseID(): LeaseID {
-  return { owner: "", dseq: Long.UZERO, gseq: 0, oseq: 0, provider: "" };
+  return {
+    $type: "akash.market.v1beta1.LeaseID",
+    owner: "",
+    dseq: Long.UZERO,
+    gseq: 0,
+    oseq: 0,
+    provider: "",
+  };
 }
 
 export const LeaseID = {
+  $type: "akash.market.v1beta1.LeaseID" as const,
+
   encode(
     message: LeaseID,
     writer: _m0.Writer = _m0.Writer.create()
@@ -165,6 +187,7 @@ export const LeaseID = {
 
   fromJSON(object: any): LeaseID {
     return {
+      $type: LeaseID.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
       gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
@@ -198,8 +221,11 @@ export const LeaseID = {
   },
 };
 
+messageTypeRegistry.set(LeaseID.$type, LeaseID);
+
 function createBaseLease(): Lease {
   return {
+    $type: "akash.market.v1beta1.Lease",
     leaseId: undefined,
     state: 0,
     price: undefined,
@@ -208,6 +234,8 @@ function createBaseLease(): Lease {
 }
 
 export const Lease = {
+  $type: "akash.market.v1beta1.Lease" as const,
+
   encode(message: Lease, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.leaseId !== undefined) {
       LeaseID.encode(message.leaseId, writer.uint32(10).fork()).ldelim();
@@ -253,6 +281,7 @@ export const Lease = {
 
   fromJSON(object: any): Lease {
     return {
+      $type: Lease.$type,
       leaseId: isSet(object.leaseId)
         ? LeaseID.fromJSON(object.leaseId)
         : undefined,
@@ -298,8 +327,11 @@ export const Lease = {
   },
 };
 
+messageTypeRegistry.set(Lease.$type, Lease);
+
 function createBaseLeaseFilters(): LeaseFilters {
   return {
+    $type: "akash.market.v1beta1.LeaseFilters",
     owner: "",
     dseq: Long.UZERO,
     gseq: 0,
@@ -310,6 +342,8 @@ function createBaseLeaseFilters(): LeaseFilters {
 }
 
 export const LeaseFilters = {
+  $type: "akash.market.v1beta1.LeaseFilters" as const,
+
   encode(
     message: LeaseFilters,
     writer: _m0.Writer = _m0.Writer.create()
@@ -370,6 +404,7 @@ export const LeaseFilters = {
 
   fromJSON(object: any): LeaseFilters {
     return {
+      $type: LeaseFilters.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
       gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
@@ -408,11 +443,15 @@ export const LeaseFilters = {
   },
 };
 
+messageTypeRegistry.set(LeaseFilters.$type, LeaseFilters);
+
 function createBaseMsgCreateLease(): MsgCreateLease {
-  return { bidId: undefined };
+  return { $type: "akash.market.v1beta1.MsgCreateLease", bidId: undefined };
 }
 
 export const MsgCreateLease = {
+  $type: "akash.market.v1beta1.MsgCreateLease" as const,
+
   encode(
     message: MsgCreateLease,
     writer: _m0.Writer = _m0.Writer.create()
@@ -443,6 +482,7 @@ export const MsgCreateLease = {
 
   fromJSON(object: any): MsgCreateLease {
     return {
+      $type: MsgCreateLease.$type,
       bidId: isSet(object.bidId) ? BidID.fromJSON(object.bidId) : undefined,
     };
   },
@@ -466,11 +506,15 @@ export const MsgCreateLease = {
   },
 };
 
+messageTypeRegistry.set(MsgCreateLease.$type, MsgCreateLease);
+
 function createBaseMsgCreateLeaseResponse(): MsgCreateLeaseResponse {
-  return {};
+  return { $type: "akash.market.v1beta1.MsgCreateLeaseResponse" };
 }
 
 export const MsgCreateLeaseResponse = {
+  $type: "akash.market.v1beta1.MsgCreateLeaseResponse" as const,
+
   encode(
     _: MsgCreateLeaseResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -497,7 +541,9 @@ export const MsgCreateLeaseResponse = {
   },
 
   fromJSON(_: any): MsgCreateLeaseResponse {
-    return {};
+    return {
+      $type: MsgCreateLeaseResponse.$type,
+    };
   },
 
   toJSON(_: MsgCreateLeaseResponse): unknown {
@@ -513,11 +559,15 @@ export const MsgCreateLeaseResponse = {
   },
 };
 
+messageTypeRegistry.set(MsgCreateLeaseResponse.$type, MsgCreateLeaseResponse);
+
 function createBaseMsgWithdrawLease(): MsgWithdrawLease {
-  return { bidId: undefined };
+  return { $type: "akash.market.v1beta1.MsgWithdrawLease", bidId: undefined };
 }
 
 export const MsgWithdrawLease = {
+  $type: "akash.market.v1beta1.MsgWithdrawLease" as const,
+
   encode(
     message: MsgWithdrawLease,
     writer: _m0.Writer = _m0.Writer.create()
@@ -548,6 +598,7 @@ export const MsgWithdrawLease = {
 
   fromJSON(object: any): MsgWithdrawLease {
     return {
+      $type: MsgWithdrawLease.$type,
       bidId: isSet(object.bidId) ? LeaseID.fromJSON(object.bidId) : undefined,
     };
   },
@@ -571,11 +622,15 @@ export const MsgWithdrawLease = {
   },
 };
 
+messageTypeRegistry.set(MsgWithdrawLease.$type, MsgWithdrawLease);
+
 function createBaseMsgWithdrawLeaseResponse(): MsgWithdrawLeaseResponse {
-  return {};
+  return { $type: "akash.market.v1beta1.MsgWithdrawLeaseResponse" };
 }
 
 export const MsgWithdrawLeaseResponse = {
+  $type: "akash.market.v1beta1.MsgWithdrawLeaseResponse" as const,
+
   encode(
     _: MsgWithdrawLeaseResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -602,7 +657,9 @@ export const MsgWithdrawLeaseResponse = {
   },
 
   fromJSON(_: any): MsgWithdrawLeaseResponse {
-    return {};
+    return {
+      $type: MsgWithdrawLeaseResponse.$type,
+    };
   },
 
   toJSON(_: MsgWithdrawLeaseResponse): unknown {
@@ -618,11 +675,18 @@ export const MsgWithdrawLeaseResponse = {
   },
 };
 
+messageTypeRegistry.set(
+  MsgWithdrawLeaseResponse.$type,
+  MsgWithdrawLeaseResponse
+);
+
 function createBaseMsgCloseLease(): MsgCloseLease {
-  return { leaseId: undefined };
+  return { $type: "akash.market.v1beta1.MsgCloseLease", leaseId: undefined };
 }
 
 export const MsgCloseLease = {
+  $type: "akash.market.v1beta1.MsgCloseLease" as const,
+
   encode(
     message: MsgCloseLease,
     writer: _m0.Writer = _m0.Writer.create()
@@ -653,6 +717,7 @@ export const MsgCloseLease = {
 
   fromJSON(object: any): MsgCloseLease {
     return {
+      $type: MsgCloseLease.$type,
       leaseId: isSet(object.leaseId)
         ? LeaseID.fromJSON(object.leaseId)
         : undefined,
@@ -680,11 +745,15 @@ export const MsgCloseLease = {
   },
 };
 
+messageTypeRegistry.set(MsgCloseLease.$type, MsgCloseLease);
+
 function createBaseMsgCloseLeaseResponse(): MsgCloseLeaseResponse {
-  return {};
+  return { $type: "akash.market.v1beta1.MsgCloseLeaseResponse" };
 }
 
 export const MsgCloseLeaseResponse = {
+  $type: "akash.market.v1beta1.MsgCloseLeaseResponse" as const,
+
   encode(
     _: MsgCloseLeaseResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -711,7 +780,9 @@ export const MsgCloseLeaseResponse = {
   },
 
   fromJSON(_: any): MsgCloseLeaseResponse {
-    return {};
+    return {
+      $type: MsgCloseLeaseResponse.$type,
+    };
   },
 
   toJSON(_: MsgCloseLeaseResponse): unknown {
@@ -726,6 +797,8 @@ export const MsgCloseLeaseResponse = {
     return message;
   },
 };
+
+messageTypeRegistry.set(MsgCloseLeaseResponse.$type, MsgCloseLeaseResponse);
 
 type Builtin =
   | Date
@@ -745,14 +818,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

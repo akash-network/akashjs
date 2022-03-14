@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { PlacementRequirements } from "../../../akash/base/v1beta1/attribute";
@@ -9,30 +10,40 @@ export const protobufPackage = "akash.deployment.v1beta1";
 
 /** MsgCloseGroup defines SDK message to close a single Group within a Deployment. */
 export interface MsgCloseGroup {
+  $type: "akash.deployment.v1beta1.MsgCloseGroup";
   id?: GroupID;
 }
 
 /** MsgCloseGroupResponse defines the Msg/CloseGroup response type. */
-export interface MsgCloseGroupResponse {}
+export interface MsgCloseGroupResponse {
+  $type: "akash.deployment.v1beta1.MsgCloseGroupResponse";
+}
 
 /** MsgPauseGroup defines SDK message to close a single Group within a Deployment. */
 export interface MsgPauseGroup {
+  $type: "akash.deployment.v1beta1.MsgPauseGroup";
   id?: GroupID;
 }
 
 /** MsgPauseGroupResponse defines the Msg/PauseGroup response type. */
-export interface MsgPauseGroupResponse {}
+export interface MsgPauseGroupResponse {
+  $type: "akash.deployment.v1beta1.MsgPauseGroupResponse";
+}
 
 /** MsgStartGroup defines SDK message to close a single Group within a Deployment. */
 export interface MsgStartGroup {
+  $type: "akash.deployment.v1beta1.MsgStartGroup";
   id?: GroupID;
 }
 
 /** MsgStartGroupResponse defines the Msg/StartGroup response type. */
-export interface MsgStartGroupResponse {}
+export interface MsgStartGroupResponse {
+  $type: "akash.deployment.v1beta1.MsgStartGroupResponse";
+}
 
 /** GroupID stores owner, deployment sequence number and group sequence number */
 export interface GroupID {
+  $type: "akash.deployment.v1beta1.GroupID";
   owner: string;
   dseq: Long;
   gseq: number;
@@ -40,6 +51,7 @@ export interface GroupID {
 
 /** GroupSpec stores group specifications */
 export interface GroupSpec {
+  $type: "akash.deployment.v1beta1.GroupSpec";
   name: string;
   requirements?: PlacementRequirements;
   resources: Resource[];
@@ -47,6 +59,7 @@ export interface GroupSpec {
 
 /** Group stores group id, state and specifications of group */
 export interface Group {
+  $type: "akash.deployment.v1beta1.Group";
   groupId?: GroupID;
   state: Group_State;
   groupSpec?: GroupSpec;
@@ -111,16 +124,19 @@ export function group_StateToJSON(object: Group_State): string {
 
 /** Resource stores unit, total count and price of resource */
 export interface Resource {
+  $type: "akash.deployment.v1beta1.Resource";
   resources?: ResourceUnits;
   count: number;
   price?: Coin;
 }
 
 function createBaseMsgCloseGroup(): MsgCloseGroup {
-  return { id: undefined };
+  return { $type: "akash.deployment.v1beta1.MsgCloseGroup", id: undefined };
 }
 
 export const MsgCloseGroup = {
+  $type: "akash.deployment.v1beta1.MsgCloseGroup" as const,
+
   encode(
     message: MsgCloseGroup,
     writer: _m0.Writer = _m0.Writer.create()
@@ -151,6 +167,7 @@ export const MsgCloseGroup = {
 
   fromJSON(object: any): MsgCloseGroup {
     return {
+      $type: MsgCloseGroup.$type,
       id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined,
     };
   },
@@ -174,11 +191,15 @@ export const MsgCloseGroup = {
   },
 };
 
+messageTypeRegistry.set(MsgCloseGroup.$type, MsgCloseGroup);
+
 function createBaseMsgCloseGroupResponse(): MsgCloseGroupResponse {
-  return {};
+  return { $type: "akash.deployment.v1beta1.MsgCloseGroupResponse" };
 }
 
 export const MsgCloseGroupResponse = {
+  $type: "akash.deployment.v1beta1.MsgCloseGroupResponse" as const,
+
   encode(
     _: MsgCloseGroupResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -205,7 +226,9 @@ export const MsgCloseGroupResponse = {
   },
 
   fromJSON(_: any): MsgCloseGroupResponse {
-    return {};
+    return {
+      $type: MsgCloseGroupResponse.$type,
+    };
   },
 
   toJSON(_: MsgCloseGroupResponse): unknown {
@@ -221,11 +244,15 @@ export const MsgCloseGroupResponse = {
   },
 };
 
+messageTypeRegistry.set(MsgCloseGroupResponse.$type, MsgCloseGroupResponse);
+
 function createBaseMsgPauseGroup(): MsgPauseGroup {
-  return { id: undefined };
+  return { $type: "akash.deployment.v1beta1.MsgPauseGroup", id: undefined };
 }
 
 export const MsgPauseGroup = {
+  $type: "akash.deployment.v1beta1.MsgPauseGroup" as const,
+
   encode(
     message: MsgPauseGroup,
     writer: _m0.Writer = _m0.Writer.create()
@@ -256,6 +283,7 @@ export const MsgPauseGroup = {
 
   fromJSON(object: any): MsgPauseGroup {
     return {
+      $type: MsgPauseGroup.$type,
       id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined,
     };
   },
@@ -279,11 +307,15 @@ export const MsgPauseGroup = {
   },
 };
 
+messageTypeRegistry.set(MsgPauseGroup.$type, MsgPauseGroup);
+
 function createBaseMsgPauseGroupResponse(): MsgPauseGroupResponse {
-  return {};
+  return { $type: "akash.deployment.v1beta1.MsgPauseGroupResponse" };
 }
 
 export const MsgPauseGroupResponse = {
+  $type: "akash.deployment.v1beta1.MsgPauseGroupResponse" as const,
+
   encode(
     _: MsgPauseGroupResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -310,7 +342,9 @@ export const MsgPauseGroupResponse = {
   },
 
   fromJSON(_: any): MsgPauseGroupResponse {
-    return {};
+    return {
+      $type: MsgPauseGroupResponse.$type,
+    };
   },
 
   toJSON(_: MsgPauseGroupResponse): unknown {
@@ -326,11 +360,15 @@ export const MsgPauseGroupResponse = {
   },
 };
 
+messageTypeRegistry.set(MsgPauseGroupResponse.$type, MsgPauseGroupResponse);
+
 function createBaseMsgStartGroup(): MsgStartGroup {
-  return { id: undefined };
+  return { $type: "akash.deployment.v1beta1.MsgStartGroup", id: undefined };
 }
 
 export const MsgStartGroup = {
+  $type: "akash.deployment.v1beta1.MsgStartGroup" as const,
+
   encode(
     message: MsgStartGroup,
     writer: _m0.Writer = _m0.Writer.create()
@@ -361,6 +399,7 @@ export const MsgStartGroup = {
 
   fromJSON(object: any): MsgStartGroup {
     return {
+      $type: MsgStartGroup.$type,
       id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined,
     };
   },
@@ -384,11 +423,15 @@ export const MsgStartGroup = {
   },
 };
 
+messageTypeRegistry.set(MsgStartGroup.$type, MsgStartGroup);
+
 function createBaseMsgStartGroupResponse(): MsgStartGroupResponse {
-  return {};
+  return { $type: "akash.deployment.v1beta1.MsgStartGroupResponse" };
 }
 
 export const MsgStartGroupResponse = {
+  $type: "akash.deployment.v1beta1.MsgStartGroupResponse" as const,
+
   encode(
     _: MsgStartGroupResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -415,7 +458,9 @@ export const MsgStartGroupResponse = {
   },
 
   fromJSON(_: any): MsgStartGroupResponse {
-    return {};
+    return {
+      $type: MsgStartGroupResponse.$type,
+    };
   },
 
   toJSON(_: MsgStartGroupResponse): unknown {
@@ -431,11 +476,20 @@ export const MsgStartGroupResponse = {
   },
 };
 
+messageTypeRegistry.set(MsgStartGroupResponse.$type, MsgStartGroupResponse);
+
 function createBaseGroupID(): GroupID {
-  return { owner: "", dseq: Long.UZERO, gseq: 0 };
+  return {
+    $type: "akash.deployment.v1beta1.GroupID",
+    owner: "",
+    dseq: Long.UZERO,
+    gseq: 0,
+  };
 }
 
 export const GroupID = {
+  $type: "akash.deployment.v1beta1.GroupID" as const,
+
   encode(
     message: GroupID,
     writer: _m0.Writer = _m0.Writer.create()
@@ -478,6 +532,7 @@ export const GroupID = {
 
   fromJSON(object: any): GroupID {
     return {
+      $type: GroupID.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
       gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
@@ -505,11 +560,20 @@ export const GroupID = {
   },
 };
 
+messageTypeRegistry.set(GroupID.$type, GroupID);
+
 function createBaseGroupSpec(): GroupSpec {
-  return { name: "", requirements: undefined, resources: [] };
+  return {
+    $type: "akash.deployment.v1beta1.GroupSpec",
+    name: "",
+    requirements: undefined,
+    resources: [],
+  };
 }
 
 export const GroupSpec = {
+  $type: "akash.deployment.v1beta1.GroupSpec" as const,
+
   encode(
     message: GroupSpec,
     writer: _m0.Writer = _m0.Writer.create()
@@ -558,6 +622,7 @@ export const GroupSpec = {
 
   fromJSON(object: any): GroupSpec {
     return {
+      $type: GroupSpec.$type,
       name: isSet(object.name) ? String(object.name) : "",
       requirements: isSet(object.requirements)
         ? PlacementRequirements.fromJSON(object.requirements)
@@ -600,8 +665,11 @@ export const GroupSpec = {
   },
 };
 
+messageTypeRegistry.set(GroupSpec.$type, GroupSpec);
+
 function createBaseGroup(): Group {
   return {
+    $type: "akash.deployment.v1beta1.Group",
     groupId: undefined,
     state: 0,
     groupSpec: undefined,
@@ -610,6 +678,8 @@ function createBaseGroup(): Group {
 }
 
 export const Group = {
+  $type: "akash.deployment.v1beta1.Group" as const,
+
   encode(message: Group, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.groupId !== undefined) {
       GroupID.encode(message.groupId, writer.uint32(10).fork()).ldelim();
@@ -655,6 +725,7 @@ export const Group = {
 
   fromJSON(object: any): Group {
     return {
+      $type: Group.$type,
       groupId: isSet(object.groupId)
         ? GroupID.fromJSON(object.groupId)
         : undefined,
@@ -704,11 +775,20 @@ export const Group = {
   },
 };
 
+messageTypeRegistry.set(Group.$type, Group);
+
 function createBaseResource(): Resource {
-  return { resources: undefined, count: 0, price: undefined };
+  return {
+    $type: "akash.deployment.v1beta1.Resource",
+    resources: undefined,
+    count: 0,
+    price: undefined,
+  };
 }
 
 export const Resource = {
+  $type: "akash.deployment.v1beta1.Resource" as const,
+
   encode(
     message: Resource,
     writer: _m0.Writer = _m0.Writer.create()
@@ -754,6 +834,7 @@ export const Resource = {
 
   fromJSON(object: any): Resource {
     return {
+      $type: Resource.$type,
       resources: isSet(object.resources)
         ? ResourceUnits.fromJSON(object.resources)
         : undefined,
@@ -789,6 +870,8 @@ export const Resource = {
   },
 };
 
+messageTypeRegistry.set(Resource.$type, Resource);
+
 type Builtin =
   | Date
   | Function
@@ -807,14 +890,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

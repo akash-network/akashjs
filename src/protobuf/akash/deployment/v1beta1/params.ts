@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
@@ -7,14 +8,20 @@ export const protobufPackage = "akash.deployment.v1beta1";
 
 /** Params defines the parameters for the x/deployment package */
 export interface Params {
+  $type: "akash.deployment.v1beta1.Params";
   deploymentMinDeposit?: Coin;
 }
 
 function createBaseParams(): Params {
-  return { deploymentMinDeposit: undefined };
+  return {
+    $type: "akash.deployment.v1beta1.Params",
+    deploymentMinDeposit: undefined,
+  };
 }
 
 export const Params = {
+  $type: "akash.deployment.v1beta1.Params" as const,
+
   encode(
     message: Params,
     writer: _m0.Writer = _m0.Writer.create()
@@ -48,6 +55,7 @@ export const Params = {
 
   fromJSON(object: any): Params {
     return {
+      $type: Params.$type,
       deploymentMinDeposit: isSet(object.deploymentMinDeposit)
         ? Coin.fromJSON(object.deploymentMinDeposit)
         : undefined,
@@ -74,6 +82,8 @@ export const Params = {
   },
 };
 
+messageTypeRegistry.set(Params.$type, Params);
+
 type Builtin =
   | Date
   | Function
@@ -92,14 +102,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

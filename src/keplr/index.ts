@@ -1,4 +1,4 @@
-import { registry } from "../stargate";
+import { getAkashTypeRegistry } from "../stargate";
 import { defaultRegistryTypes, SigningStargateClient } from "@cosmjs/stargate";
 import { Registry } from "@cosmjs/proto-signing";
 
@@ -16,7 +16,7 @@ export function getSigner(chain: any) {
 export async function get(chain: any, signer: any) {
   const myRegistry = new Registry([
     ...defaultRegistryTypes,
-    ...(registry as any),
+    ...getAkashTypeRegistry(),
   ]);
   return await SigningStargateClient.connectWithSigner(
     `https://bridge.testnet.akash.network/akashnetwork`,

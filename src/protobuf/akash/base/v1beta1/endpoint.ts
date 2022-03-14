@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
@@ -6,6 +7,7 @@ export const protobufPackage = "akash.base.v1beta1";
 
 /** Endpoint describes a publicly accessible IP service */
 export interface Endpoint {
+  $type: "akash.base.v1beta1.Endpoint";
   kind: Endpoint_Kind;
 }
 
@@ -45,10 +47,12 @@ export function endpoint_KindToJSON(object: Endpoint_Kind): string {
 }
 
 function createBaseEndpoint(): Endpoint {
-  return { kind: 0 };
+  return { $type: "akash.base.v1beta1.Endpoint", kind: 0 };
 }
 
 export const Endpoint = {
+  $type: "akash.base.v1beta1.Endpoint" as const,
+
   encode(
     message: Endpoint,
     writer: _m0.Writer = _m0.Writer.create()
@@ -79,6 +83,7 @@ export const Endpoint = {
 
   fromJSON(object: any): Endpoint {
     return {
+      $type: Endpoint.$type,
       kind: isSet(object.kind) ? endpoint_KindFromJSON(object.kind) : 0,
     };
   },
@@ -96,6 +101,8 @@ export const Endpoint = {
     return message;
   },
 };
+
+messageTypeRegistry.set(Endpoint.$type, Endpoint);
 
 type Builtin =
   | Date
@@ -115,14 +122,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

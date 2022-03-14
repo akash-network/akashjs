@@ -29,6 +29,7 @@ export async function broadcastCertificate(
     cert: encodedCsr,
     pubkey: encdodedPublicKey,
   });
+
   return await client.signAndBroadcast(owner, [message.message], message.fee);
 }
 

@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import {
@@ -13,27 +14,36 @@ import {
 export const protobufPackage = "akash.cert.v1beta1";
 
 export interface CertificateResponse {
+  $type: "akash.cert.v1beta1.CertificateResponse";
   certificate?: Certificate;
   serial: string;
 }
 
 /** QueryDeploymentsRequest is request type for the Query/Deployments RPC method */
 export interface QueryCertificatesRequest {
+  $type: "akash.cert.v1beta1.QueryCertificatesRequest";
   filter?: CertificateFilter;
   pagination?: PageRequest;
 }
 
 /** QueryCertificatesResponse is response type for the Query/Certificates RPC method */
 export interface QueryCertificatesResponse {
+  $type: "akash.cert.v1beta1.QueryCertificatesResponse";
   certificates: CertificateResponse[];
   pagination?: PageResponse;
 }
 
 function createBaseCertificateResponse(): CertificateResponse {
-  return { certificate: undefined, serial: "" };
+  return {
+    $type: "akash.cert.v1beta1.CertificateResponse",
+    certificate: undefined,
+    serial: "",
+  };
 }
 
 export const CertificateResponse = {
+  $type: "akash.cert.v1beta1.CertificateResponse" as const,
+
   encode(
     message: CertificateResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -73,6 +83,7 @@ export const CertificateResponse = {
 
   fromJSON(object: any): CertificateResponse {
     return {
+      $type: CertificateResponse.$type,
       certificate: isSet(object.certificate)
         ? Certificate.fromJSON(object.certificate)
         : undefined,
@@ -103,11 +114,19 @@ export const CertificateResponse = {
   },
 };
 
+messageTypeRegistry.set(CertificateResponse.$type, CertificateResponse);
+
 function createBaseQueryCertificatesRequest(): QueryCertificatesRequest {
-  return { filter: undefined, pagination: undefined };
+  return {
+    $type: "akash.cert.v1beta1.QueryCertificatesRequest",
+    filter: undefined,
+    pagination: undefined,
+  };
 }
 
 export const QueryCertificatesRequest = {
+  $type: "akash.cert.v1beta1.QueryCertificatesRequest" as const,
+
   encode(
     message: QueryCertificatesRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -150,6 +169,7 @@ export const QueryCertificatesRequest = {
 
   fromJSON(object: any): QueryCertificatesRequest {
     return {
+      $type: QueryCertificatesRequest.$type,
       filter: isSet(object.filter)
         ? CertificateFilter.fromJSON(object.filter)
         : undefined,
@@ -188,11 +208,22 @@ export const QueryCertificatesRequest = {
   },
 };
 
+messageTypeRegistry.set(
+  QueryCertificatesRequest.$type,
+  QueryCertificatesRequest
+);
+
 function createBaseQueryCertificatesResponse(): QueryCertificatesResponse {
-  return { certificates: [], pagination: undefined };
+  return {
+    $type: "akash.cert.v1beta1.QueryCertificatesResponse",
+    certificates: [],
+    pagination: undefined,
+  };
 }
 
 export const QueryCertificatesResponse = {
+  $type: "akash.cert.v1beta1.QueryCertificatesResponse" as const,
+
   encode(
     message: QueryCertificatesResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -237,6 +268,7 @@ export const QueryCertificatesResponse = {
 
   fromJSON(object: any): QueryCertificatesResponse {
     return {
+      $type: QueryCertificatesResponse.$type,
       certificates: Array.isArray(object?.certificates)
         ? object.certificates.map((e: any) => CertificateResponse.fromJSON(e))
         : [],
@@ -275,6 +307,11 @@ export const QueryCertificatesResponse = {
     return message;
   },
 };
+
+messageTypeRegistry.set(
+  QueryCertificatesResponse.$type,
+  QueryCertificatesResponse
+);
 
 /** Query defines the gRPC querier service */
 export interface Query {
@@ -331,14 +368,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

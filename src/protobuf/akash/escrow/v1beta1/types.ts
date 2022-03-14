@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
@@ -7,12 +8,14 @@ export const protobufPackage = "akash.escrow.v1beta1";
 
 /** AccountID is the account identifier */
 export interface AccountID {
+  $type: "akash.escrow.v1beta1.AccountID";
   scope: string;
   xid: string;
 }
 
 /** Account stores state for an escrow account */
 export interface Account {
+  $type: "akash.escrow.v1beta1.Account";
   id?: AccountID;
   owner: string;
   state: Account_State;
@@ -72,6 +75,7 @@ export function account_StateToJSON(object: Account_State): string {
 
 /** Payment stores state for a payment */
 export interface Payment {
+  $type: "akash.escrow.v1beta1.Payment";
   accountId?: AccountID;
   paymentId: string;
   owner: string;
@@ -131,10 +135,12 @@ export function payment_StateToJSON(object: Payment_State): string {
 }
 
 function createBaseAccountID(): AccountID {
-  return { scope: "", xid: "" };
+  return { $type: "akash.escrow.v1beta1.AccountID", scope: "", xid: "" };
 }
 
 export const AccountID = {
+  $type: "akash.escrow.v1beta1.AccountID" as const,
+
   encode(
     message: AccountID,
     writer: _m0.Writer = _m0.Writer.create()
@@ -171,6 +177,7 @@ export const AccountID = {
 
   fromJSON(object: any): AccountID {
     return {
+      $type: AccountID.$type,
       scope: isSet(object.scope) ? String(object.scope) : "",
       xid: isSet(object.xid) ? String(object.xid) : "",
     };
@@ -193,8 +200,11 @@ export const AccountID = {
   },
 };
 
+messageTypeRegistry.set(AccountID.$type, AccountID);
+
 function createBaseAccount(): Account {
   return {
+    $type: "akash.escrow.v1beta1.Account",
     id: undefined,
     owner: "",
     state: 0,
@@ -205,6 +215,8 @@ function createBaseAccount(): Account {
 }
 
 export const Account = {
+  $type: "akash.escrow.v1beta1.Account" as const,
+
   encode(
     message: Account,
     writer: _m0.Writer = _m0.Writer.create()
@@ -265,6 +277,7 @@ export const Account = {
 
   fromJSON(object: any): Account {
     return {
+      $type: Account.$type,
       id: isSet(object.id) ? AccountID.fromJSON(object.id) : undefined,
       owner: isSet(object.owner) ? String(object.owner) : "",
       state: isSet(object.state) ? account_StateFromJSON(object.state) : 0,
@@ -324,8 +337,11 @@ export const Account = {
   },
 };
 
+messageTypeRegistry.set(Account.$type, Account);
+
 function createBasePayment(): Payment {
   return {
+    $type: "akash.escrow.v1beta1.Payment",
     accountId: undefined,
     paymentId: "",
     owner: "",
@@ -337,6 +353,8 @@ function createBasePayment(): Payment {
 }
 
 export const Payment = {
+  $type: "akash.escrow.v1beta1.Payment" as const,
+
   encode(
     message: Payment,
     writer: _m0.Writer = _m0.Writer.create()
@@ -403,6 +421,7 @@ export const Payment = {
 
   fromJSON(object: any): Payment {
     return {
+      $type: Payment.$type,
       accountId: isSet(object.accountId)
         ? AccountID.fromJSON(object.accountId)
         : undefined,
@@ -467,6 +486,8 @@ export const Payment = {
   },
 };
 
+messageTypeRegistry.set(Payment.$type, Payment);
+
 type Builtin =
   | Date
   | Function
@@ -485,14 +506,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
@@ -6,14 +7,17 @@ export const protobufPackage = "akash.base.v1beta1";
 
 /** Unit stores cpu, memory and storage metrics */
 export interface ResourceValue {
+  $type: "akash.base.v1beta1.ResourceValue";
   val: Uint8Array;
 }
 
 function createBaseResourceValue(): ResourceValue {
-  return { val: new Uint8Array() };
+  return { $type: "akash.base.v1beta1.ResourceValue", val: new Uint8Array() };
 }
 
 export const ResourceValue = {
+  $type: "akash.base.v1beta1.ResourceValue" as const,
+
   encode(
     message: ResourceValue,
     writer: _m0.Writer = _m0.Writer.create()
@@ -44,6 +48,7 @@ export const ResourceValue = {
 
   fromJSON(object: any): ResourceValue {
     return {
+      $type: ResourceValue.$type,
       val: isSet(object.val) ? bytesFromBase64(object.val) : new Uint8Array(),
     };
   },
@@ -65,6 +70,8 @@ export const ResourceValue = {
     return message;
   },
 };
+
+messageTypeRegistry.set(ResourceValue.$type, ResourceValue);
 
 declare var self: any | undefined;
 declare var window: any | undefined;
@@ -118,14 +125,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

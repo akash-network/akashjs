@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import {
@@ -17,23 +18,27 @@ export const protobufPackage = "akash.deployment.v1beta1";
 
 /** QueryDeploymentsRequest is request type for the Query/Deployments RPC method */
 export interface QueryDeploymentsRequest {
+  $type: "akash.deployment.v1beta1.QueryDeploymentsRequest";
   filters?: DeploymentFilters;
   pagination?: PageRequest;
 }
 
 /** QueryDeploymentsResponse is response type for the Query/Deployments RPC method */
 export interface QueryDeploymentsResponse {
+  $type: "akash.deployment.v1beta1.QueryDeploymentsResponse";
   deployments: QueryDeploymentResponse[];
   pagination?: PageResponse;
 }
 
 /** QueryDeploymentRequest is request type for the Query/Deployment RPC method */
 export interface QueryDeploymentRequest {
+  $type: "akash.deployment.v1beta1.QueryDeploymentRequest";
   id?: DeploymentID;
 }
 
 /** QueryDeploymentResponse is response type for the Query/Deployment RPC method */
 export interface QueryDeploymentResponse {
+  $type: "akash.deployment.v1beta1.QueryDeploymentResponse";
   deployment?: Deployment;
   groups: Group[];
   escrowAccount?: Account;
@@ -41,19 +46,27 @@ export interface QueryDeploymentResponse {
 
 /** QueryGroupRequest is request type for the Query/Group RPC method */
 export interface QueryGroupRequest {
+  $type: "akash.deployment.v1beta1.QueryGroupRequest";
   id?: GroupID;
 }
 
 /** QueryGroupResponse is response type for the Query/Group RPC method */
 export interface QueryGroupResponse {
+  $type: "akash.deployment.v1beta1.QueryGroupResponse";
   group?: Group;
 }
 
 function createBaseQueryDeploymentsRequest(): QueryDeploymentsRequest {
-  return { filters: undefined, pagination: undefined };
+  return {
+    $type: "akash.deployment.v1beta1.QueryDeploymentsRequest",
+    filters: undefined,
+    pagination: undefined,
+  };
 }
 
 export const QueryDeploymentsRequest = {
+  $type: "akash.deployment.v1beta1.QueryDeploymentsRequest" as const,
+
   encode(
     message: QueryDeploymentsRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -96,6 +109,7 @@ export const QueryDeploymentsRequest = {
 
   fromJSON(object: any): QueryDeploymentsRequest {
     return {
+      $type: QueryDeploymentsRequest.$type,
       filters: isSet(object.filters)
         ? DeploymentFilters.fromJSON(object.filters)
         : undefined,
@@ -134,11 +148,19 @@ export const QueryDeploymentsRequest = {
   },
 };
 
+messageTypeRegistry.set(QueryDeploymentsRequest.$type, QueryDeploymentsRequest);
+
 function createBaseQueryDeploymentsResponse(): QueryDeploymentsResponse {
-  return { deployments: [], pagination: undefined };
+  return {
+    $type: "akash.deployment.v1beta1.QueryDeploymentsResponse",
+    deployments: [],
+    pagination: undefined,
+  };
 }
 
 export const QueryDeploymentsResponse = {
+  $type: "akash.deployment.v1beta1.QueryDeploymentsResponse" as const,
+
   encode(
     message: QueryDeploymentsResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -183,6 +205,7 @@ export const QueryDeploymentsResponse = {
 
   fromJSON(object: any): QueryDeploymentsResponse {
     return {
+      $type: QueryDeploymentsResponse.$type,
       deployments: Array.isArray(object?.deployments)
         ? object.deployments.map((e: any) =>
             QueryDeploymentResponse.fromJSON(e)
@@ -225,11 +248,21 @@ export const QueryDeploymentsResponse = {
   },
 };
 
+messageTypeRegistry.set(
+  QueryDeploymentsResponse.$type,
+  QueryDeploymentsResponse
+);
+
 function createBaseQueryDeploymentRequest(): QueryDeploymentRequest {
-  return { id: undefined };
+  return {
+    $type: "akash.deployment.v1beta1.QueryDeploymentRequest",
+    id: undefined,
+  };
 }
 
 export const QueryDeploymentRequest = {
+  $type: "akash.deployment.v1beta1.QueryDeploymentRequest" as const,
+
   encode(
     message: QueryDeploymentRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -263,6 +296,7 @@ export const QueryDeploymentRequest = {
 
   fromJSON(object: any): QueryDeploymentRequest {
     return {
+      $type: QueryDeploymentRequest.$type,
       id: isSet(object.id) ? DeploymentID.fromJSON(object.id) : undefined,
     };
   },
@@ -286,11 +320,20 @@ export const QueryDeploymentRequest = {
   },
 };
 
+messageTypeRegistry.set(QueryDeploymentRequest.$type, QueryDeploymentRequest);
+
 function createBaseQueryDeploymentResponse(): QueryDeploymentResponse {
-  return { deployment: undefined, groups: [], escrowAccount: undefined };
+  return {
+    $type: "akash.deployment.v1beta1.QueryDeploymentResponse",
+    deployment: undefined,
+    groups: [],
+    escrowAccount: undefined,
+  };
 }
 
 export const QueryDeploymentResponse = {
+  $type: "akash.deployment.v1beta1.QueryDeploymentResponse" as const,
+
   encode(
     message: QueryDeploymentResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -336,6 +379,7 @@ export const QueryDeploymentResponse = {
 
   fromJSON(object: any): QueryDeploymentResponse {
     return {
+      $type: QueryDeploymentResponse.$type,
       deployment: isSet(object.deployment)
         ? Deployment.fromJSON(object.deployment)
         : undefined,
@@ -383,11 +427,15 @@ export const QueryDeploymentResponse = {
   },
 };
 
+messageTypeRegistry.set(QueryDeploymentResponse.$type, QueryDeploymentResponse);
+
 function createBaseQueryGroupRequest(): QueryGroupRequest {
-  return { id: undefined };
+  return { $type: "akash.deployment.v1beta1.QueryGroupRequest", id: undefined };
 }
 
 export const QueryGroupRequest = {
+  $type: "akash.deployment.v1beta1.QueryGroupRequest" as const,
+
   encode(
     message: QueryGroupRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -418,6 +466,7 @@ export const QueryGroupRequest = {
 
   fromJSON(object: any): QueryGroupRequest {
     return {
+      $type: QueryGroupRequest.$type,
       id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined,
     };
   },
@@ -441,11 +490,18 @@ export const QueryGroupRequest = {
   },
 };
 
+messageTypeRegistry.set(QueryGroupRequest.$type, QueryGroupRequest);
+
 function createBaseQueryGroupResponse(): QueryGroupResponse {
-  return { group: undefined };
+  return {
+    $type: "akash.deployment.v1beta1.QueryGroupResponse",
+    group: undefined,
+  };
 }
 
 export const QueryGroupResponse = {
+  $type: "akash.deployment.v1beta1.QueryGroupResponse" as const,
+
   encode(
     message: QueryGroupResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -476,6 +532,7 @@ export const QueryGroupResponse = {
 
   fromJSON(object: any): QueryGroupResponse {
     return {
+      $type: QueryGroupResponse.$type,
       group: isSet(object.group) ? Group.fromJSON(object.group) : undefined,
     };
   },
@@ -498,6 +555,8 @@ export const QueryGroupResponse = {
     return message;
   },
 };
+
+messageTypeRegistry.set(QueryGroupResponse.$type, QueryGroupResponse);
 
 /** Query defines the gRPC querier service */
 export interface Query {
@@ -586,14 +645,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

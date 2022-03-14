@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import {
@@ -11,44 +12,56 @@ export const protobufPackage = "akash.audit.v1beta1";
 
 /** QueryProvidersResponse is response type for the Query/Providers RPC method */
 export interface QueryProvidersResponse {
+  $type: "akash.audit.v1beta1.QueryProvidersResponse";
   providers: Provider[];
   pagination?: PageResponse;
 }
 
 /** QueryProviderRequest is request type for the Query/Provider RPC method */
 export interface QueryProviderRequest {
+  $type: "akash.audit.v1beta1.QueryProviderRequest";
   auditor: string;
   owner: string;
 }
 
 /** QueryAllProvidersAttributesRequest is request type for the Query/All Providers RPC method */
 export interface QueryAllProvidersAttributesRequest {
+  $type: "akash.audit.v1beta1.QueryAllProvidersAttributesRequest";
   pagination?: PageRequest;
 }
 
 /** QueryProviderAttributesRequest is request type for the Query/Provider RPC method */
 export interface QueryProviderAttributesRequest {
+  $type: "akash.audit.v1beta1.QueryProviderAttributesRequest";
   owner: string;
   pagination?: PageRequest;
 }
 
 /** QueryProviderAuditorRequest is request type for the Query/Providers RPC method */
 export interface QueryProviderAuditorRequest {
+  $type: "akash.audit.v1beta1.QueryProviderAuditorRequest";
   auditor: string;
   owner: string;
 }
 
 /** QueryAuditorAttributesRequest is request type for the Query/Providers RPC method */
 export interface QueryAuditorAttributesRequest {
+  $type: "akash.audit.v1beta1.QueryAuditorAttributesRequest";
   auditor: string;
   pagination?: PageRequest;
 }
 
 function createBaseQueryProvidersResponse(): QueryProvidersResponse {
-  return { providers: [], pagination: undefined };
+  return {
+    $type: "akash.audit.v1beta1.QueryProvidersResponse",
+    providers: [],
+    pagination: undefined,
+  };
 }
 
 export const QueryProvidersResponse = {
+  $type: "akash.audit.v1beta1.QueryProvidersResponse" as const,
+
   encode(
     message: QueryProvidersResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -91,6 +104,7 @@ export const QueryProvidersResponse = {
 
   fromJSON(object: any): QueryProvidersResponse {
     return {
+      $type: QueryProvidersResponse.$type,
       providers: Array.isArray(object?.providers)
         ? object.providers.map((e: any) => Provider.fromJSON(e))
         : [],
@@ -130,11 +144,19 @@ export const QueryProvidersResponse = {
   },
 };
 
+messageTypeRegistry.set(QueryProvidersResponse.$type, QueryProvidersResponse);
+
 function createBaseQueryProviderRequest(): QueryProviderRequest {
-  return { auditor: "", owner: "" };
+  return {
+    $type: "akash.audit.v1beta1.QueryProviderRequest",
+    auditor: "",
+    owner: "",
+  };
 }
 
 export const QueryProviderRequest = {
+  $type: "akash.audit.v1beta1.QueryProviderRequest" as const,
+
   encode(
     message: QueryProviderRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -174,6 +196,7 @@ export const QueryProviderRequest = {
 
   fromJSON(object: any): QueryProviderRequest {
     return {
+      $type: QueryProviderRequest.$type,
       auditor: isSet(object.auditor) ? String(object.auditor) : "",
       owner: isSet(object.owner) ? String(object.owner) : "",
     };
@@ -196,11 +219,18 @@ export const QueryProviderRequest = {
   },
 };
 
+messageTypeRegistry.set(QueryProviderRequest.$type, QueryProviderRequest);
+
 function createBaseQueryAllProvidersAttributesRequest(): QueryAllProvidersAttributesRequest {
-  return { pagination: undefined };
+  return {
+    $type: "akash.audit.v1beta1.QueryAllProvidersAttributesRequest",
+    pagination: undefined,
+  };
 }
 
 export const QueryAllProvidersAttributesRequest = {
+  $type: "akash.audit.v1beta1.QueryAllProvidersAttributesRequest" as const,
+
   encode(
     message: QueryAllProvidersAttributesRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -234,6 +264,7 @@ export const QueryAllProvidersAttributesRequest = {
 
   fromJSON(object: any): QueryAllProvidersAttributesRequest {
     return {
+      $type: QueryAllProvidersAttributesRequest.$type,
       pagination: isSet(object.pagination)
         ? PageRequest.fromJSON(object.pagination)
         : undefined,
@@ -261,11 +292,22 @@ export const QueryAllProvidersAttributesRequest = {
   },
 };
 
+messageTypeRegistry.set(
+  QueryAllProvidersAttributesRequest.$type,
+  QueryAllProvidersAttributesRequest
+);
+
 function createBaseQueryProviderAttributesRequest(): QueryProviderAttributesRequest {
-  return { owner: "", pagination: undefined };
+  return {
+    $type: "akash.audit.v1beta1.QueryProviderAttributesRequest",
+    owner: "",
+    pagination: undefined,
+  };
 }
 
 export const QueryProviderAttributesRequest = {
+  $type: "akash.audit.v1beta1.QueryProviderAttributesRequest" as const,
+
   encode(
     message: QueryProviderAttributesRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -305,6 +347,7 @@ export const QueryProviderAttributesRequest = {
 
   fromJSON(object: any): QueryProviderAttributesRequest {
     return {
+      $type: QueryProviderAttributesRequest.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       pagination: isSet(object.pagination)
         ? PageRequest.fromJSON(object.pagination)
@@ -335,11 +378,22 @@ export const QueryProviderAttributesRequest = {
   },
 };
 
+messageTypeRegistry.set(
+  QueryProviderAttributesRequest.$type,
+  QueryProviderAttributesRequest
+);
+
 function createBaseQueryProviderAuditorRequest(): QueryProviderAuditorRequest {
-  return { auditor: "", owner: "" };
+  return {
+    $type: "akash.audit.v1beta1.QueryProviderAuditorRequest",
+    auditor: "",
+    owner: "",
+  };
 }
 
 export const QueryProviderAuditorRequest = {
+  $type: "akash.audit.v1beta1.QueryProviderAuditorRequest" as const,
+
   encode(
     message: QueryProviderAuditorRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -379,6 +433,7 @@ export const QueryProviderAuditorRequest = {
 
   fromJSON(object: any): QueryProviderAuditorRequest {
     return {
+      $type: QueryProviderAuditorRequest.$type,
       auditor: isSet(object.auditor) ? String(object.auditor) : "",
       owner: isSet(object.owner) ? String(object.owner) : "",
     };
@@ -401,11 +456,22 @@ export const QueryProviderAuditorRequest = {
   },
 };
 
+messageTypeRegistry.set(
+  QueryProviderAuditorRequest.$type,
+  QueryProviderAuditorRequest
+);
+
 function createBaseQueryAuditorAttributesRequest(): QueryAuditorAttributesRequest {
-  return { auditor: "", pagination: undefined };
+  return {
+    $type: "akash.audit.v1beta1.QueryAuditorAttributesRequest",
+    auditor: "",
+    pagination: undefined,
+  };
 }
 
 export const QueryAuditorAttributesRequest = {
+  $type: "akash.audit.v1beta1.QueryAuditorAttributesRequest" as const,
+
   encode(
     message: QueryAuditorAttributesRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -445,6 +511,7 @@ export const QueryAuditorAttributesRequest = {
 
   fromJSON(object: any): QueryAuditorAttributesRequest {
     return {
+      $type: QueryAuditorAttributesRequest.$type,
       auditor: isSet(object.auditor) ? String(object.auditor) : "",
       pagination: isSet(object.pagination)
         ? PageRequest.fromJSON(object.pagination)
@@ -474,6 +541,11 @@ export const QueryAuditorAttributesRequest = {
     return message;
   },
 };
+
+messageTypeRegistry.set(
+  QueryAuditorAttributesRequest.$type,
+  QueryAuditorAttributesRequest
+);
 
 /** Query defines the gRPC querier service */
 export interface Query {
@@ -603,14 +675,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
@@ -10,6 +11,7 @@ export const protobufPackage = "google.api";
  * to one or more HTTP REST API methods.
  */
 export interface Http {
+  $type: "google.api.Http";
   /**
    * A list of HTTP configuration rules that apply to individual API methods.
    *
@@ -247,6 +249,7 @@ export interface Http {
  * repeated fields or map fields.
  */
 export interface HttpRule {
+  $type: "google.api.HttpRule";
   /**
    * Selects methods to which this rule applies.
    *
@@ -293,6 +296,7 @@ export interface HttpRule {
 
 /** A custom pattern is used for defining custom HTTP verb. */
 export interface CustomHttpPattern {
+  $type: "google.api.CustomHttpPattern";
   /** The name of this custom HTTP verb. */
   kind: string;
   /** The path matched by this custom verb. */
@@ -300,10 +304,16 @@ export interface CustomHttpPattern {
 }
 
 function createBaseHttp(): Http {
-  return { rules: [], fullyDecodeReservedExpansion: false };
+  return {
+    $type: "google.api.Http",
+    rules: [],
+    fullyDecodeReservedExpansion: false,
+  };
 }
 
 export const Http = {
+  $type: "google.api.Http" as const,
+
   encode(message: Http, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.rules) {
       HttpRule.encode(v!, writer.uint32(10).fork()).ldelim();
@@ -337,6 +347,7 @@ export const Http = {
 
   fromJSON(object: any): Http {
     return {
+      $type: Http.$type,
       rules: Array.isArray(object?.rules)
         ? object.rules.map((e: any) => HttpRule.fromJSON(e))
         : [],
@@ -369,8 +380,11 @@ export const Http = {
   },
 };
 
+messageTypeRegistry.set(Http.$type, Http);
+
 function createBaseHttpRule(): HttpRule {
   return {
+    $type: "google.api.HttpRule",
     selector: "",
     get: undefined,
     put: undefined,
@@ -385,6 +399,8 @@ function createBaseHttpRule(): HttpRule {
 }
 
 export const HttpRule = {
+  $type: "google.api.HttpRule" as const,
+
   encode(
     message: HttpRule,
     writer: _m0.Writer = _m0.Writer.create()
@@ -474,6 +490,7 @@ export const HttpRule = {
 
   fromJSON(object: any): HttpRule {
     return {
+      $type: HttpRule.$type,
       selector: isSet(object.selector) ? String(object.selector) : "",
       get: isSet(object.get) ? String(object.get) : undefined,
       put: isSet(object.put) ? String(object.put) : undefined,
@@ -538,11 +555,15 @@ export const HttpRule = {
   },
 };
 
+messageTypeRegistry.set(HttpRule.$type, HttpRule);
+
 function createBaseCustomHttpPattern(): CustomHttpPattern {
-  return { kind: "", path: "" };
+  return { $type: "google.api.CustomHttpPattern", kind: "", path: "" };
 }
 
 export const CustomHttpPattern = {
+  $type: "google.api.CustomHttpPattern" as const,
+
   encode(
     message: CustomHttpPattern,
     writer: _m0.Writer = _m0.Writer.create()
@@ -579,6 +600,7 @@ export const CustomHttpPattern = {
 
   fromJSON(object: any): CustomHttpPattern {
     return {
+      $type: CustomHttpPattern.$type,
       kind: isSet(object.kind) ? String(object.kind) : "",
       path: isSet(object.path) ? String(object.path) : "",
     };
@@ -601,6 +623,8 @@ export const CustomHttpPattern = {
   },
 };
 
+messageTypeRegistry.set(CustomHttpPattern.$type, CustomHttpPattern);
+
 type Builtin =
   | Date
   | Function
@@ -619,14 +643,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

@@ -17,7 +17,7 @@ if protoc \
     --plugin="./node_modules/.bin/protoc-gen-ts_proto" \
     --proto_path=${PROTO_PATH} \
     --ts_proto_out=${OUTPUT_DIR} \
-    --ts_proto_opt=esModuleInterop=true,forceLong=long,useOptionals=messages \
+    --ts_proto_opt=esModuleInterop=true,forceLong=long,useOptionals=messages,outputTypeRegistry=true \
     ${SRC_PATHS}; then
     echo "ok";
 else
