@@ -7,6 +7,7 @@ module.exports = {
     alias: {
       // add as many aliases as you like!
       keytar: path.resolve(__dirname, "src/wallet/storage.ts"),
+      perf_hooks: path.resolve(__dirname, "src/webpack/perf_hooks.ts"),
     },
     extensions: [".wasm", ".mjs", ".js", ".json", ".jsx", ".ts"],
     fallback: {
