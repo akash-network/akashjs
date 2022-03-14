@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import {
@@ -11,6 +12,7 @@ export const protobufPackage = "akash.escrow.v1beta1";
 
 /** QueryAccountRequest is request type for the Query/Account RPC method */
 export interface QueryAccountsRequest {
+  $type: "akash.escrow.v1beta1.QueryAccountsRequest";
   scope: string;
   xid: string;
   owner: string;
@@ -20,12 +22,14 @@ export interface QueryAccountsRequest {
 
 /** QueryProvidersResponse is response type for the Query/Providers RPC method */
 export interface QueryAccountsResponse {
+  $type: "akash.escrow.v1beta1.QueryAccountsResponse";
   accounts: Account[];
   pagination?: PageResponse;
 }
 
 /** QueryPaymentRequest is request type for the Query/Payment RPC method */
 export interface QueryPaymentsRequest {
+  $type: "akash.escrow.v1beta1.QueryPaymentsRequest";
   scope: string;
   xid: string;
   id: string;
@@ -36,15 +40,25 @@ export interface QueryPaymentsRequest {
 
 /** QueryProvidersResponse is response type for the Query/Providers RPC method */
 export interface QueryPaymentsResponse {
+  $type: "akash.escrow.v1beta1.QueryPaymentsResponse";
   payments: Payment[];
   pagination?: PageResponse;
 }
 
 function createBaseQueryAccountsRequest(): QueryAccountsRequest {
-  return { scope: "", xid: "", owner: "", state: "", pagination: undefined };
+  return {
+    $type: "akash.escrow.v1beta1.QueryAccountsRequest",
+    scope: "",
+    xid: "",
+    owner: "",
+    state: "",
+    pagination: undefined,
+  };
 }
 
 export const QueryAccountsRequest = {
+  $type: "akash.escrow.v1beta1.QueryAccountsRequest" as const,
+
   encode(
     message: QueryAccountsRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -102,6 +116,7 @@ export const QueryAccountsRequest = {
 
   fromJSON(object: any): QueryAccountsRequest {
     return {
+      $type: QueryAccountsRequest.$type,
       scope: isSet(object.scope) ? String(object.scope) : "",
       xid: isSet(object.xid) ? String(object.xid) : "",
       owner: isSet(object.owner) ? String(object.owner) : "",
@@ -141,11 +156,19 @@ export const QueryAccountsRequest = {
   },
 };
 
+messageTypeRegistry.set(QueryAccountsRequest.$type, QueryAccountsRequest);
+
 function createBaseQueryAccountsResponse(): QueryAccountsResponse {
-  return { accounts: [], pagination: undefined };
+  return {
+    $type: "akash.escrow.v1beta1.QueryAccountsResponse",
+    accounts: [],
+    pagination: undefined,
+  };
 }
 
 export const QueryAccountsResponse = {
+  $type: "akash.escrow.v1beta1.QueryAccountsResponse" as const,
+
   encode(
     message: QueryAccountsResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -188,6 +211,7 @@ export const QueryAccountsResponse = {
 
   fromJSON(object: any): QueryAccountsResponse {
     return {
+      $type: QueryAccountsResponse.$type,
       accounts: Array.isArray(object?.accounts)
         ? object.accounts.map((e: any) => Account.fromJSON(e))
         : [],
@@ -227,8 +251,11 @@ export const QueryAccountsResponse = {
   },
 };
 
+messageTypeRegistry.set(QueryAccountsResponse.$type, QueryAccountsResponse);
+
 function createBaseQueryPaymentsRequest(): QueryPaymentsRequest {
   return {
+    $type: "akash.escrow.v1beta1.QueryPaymentsRequest",
     scope: "",
     xid: "",
     id: "",
@@ -239,6 +266,8 @@ function createBaseQueryPaymentsRequest(): QueryPaymentsRequest {
 }
 
 export const QueryPaymentsRequest = {
+  $type: "akash.escrow.v1beta1.QueryPaymentsRequest" as const,
+
   encode(
     message: QueryPaymentsRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -302,6 +331,7 @@ export const QueryPaymentsRequest = {
 
   fromJSON(object: any): QueryPaymentsRequest {
     return {
+      $type: QueryPaymentsRequest.$type,
       scope: isSet(object.scope) ? String(object.scope) : "",
       xid: isSet(object.xid) ? String(object.xid) : "",
       id: isSet(object.id) ? String(object.id) : "",
@@ -344,11 +374,19 @@ export const QueryPaymentsRequest = {
   },
 };
 
+messageTypeRegistry.set(QueryPaymentsRequest.$type, QueryPaymentsRequest);
+
 function createBaseQueryPaymentsResponse(): QueryPaymentsResponse {
-  return { payments: [], pagination: undefined };
+  return {
+    $type: "akash.escrow.v1beta1.QueryPaymentsResponse",
+    payments: [],
+    pagination: undefined,
+  };
 }
 
 export const QueryPaymentsResponse = {
+  $type: "akash.escrow.v1beta1.QueryPaymentsResponse" as const,
+
   encode(
     message: QueryPaymentsResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -391,6 +429,7 @@ export const QueryPaymentsResponse = {
 
   fromJSON(object: any): QueryPaymentsResponse {
     return {
+      $type: QueryPaymentsResponse.$type,
       payments: Array.isArray(object?.payments)
         ? object.payments.map((e: any) => Payment.fromJSON(e))
         : [],
@@ -429,6 +468,8 @@ export const QueryPaymentsResponse = {
     return message;
   },
 };
+
+messageTypeRegistry.set(QueryPaymentsResponse.$type, QueryPaymentsResponse);
 
 /** Query defines the gRPC querier service */
 export interface Query {
@@ -504,14 +545,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

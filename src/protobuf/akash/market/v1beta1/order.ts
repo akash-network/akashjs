@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { GroupSpec } from "../../../akash/deployment/v1beta1/group";
@@ -7,6 +8,7 @@ export const protobufPackage = "akash.market.v1beta1";
 
 /** OrderID stores owner and all other seq numbers */
 export interface OrderID {
+  $type: "akash.market.v1beta1.OrderID";
   owner: string;
   dseq: Long;
   gseq: number;
@@ -15,6 +17,7 @@ export interface OrderID {
 
 /** Order stores orderID, state of order and other details */
 export interface Order {
+  $type: "akash.market.v1beta1.Order";
   orderId?: OrderID;
   state: Order_State;
   spec?: GroupSpec;
@@ -72,6 +75,7 @@ export function order_StateToJSON(object: Order_State): string {
 
 /** OrderFilters defines flags for order list filter */
 export interface OrderFilters {
+  $type: "akash.market.v1beta1.OrderFilters";
   owner: string;
   dseq: Long;
   gseq: number;
@@ -80,10 +84,18 @@ export interface OrderFilters {
 }
 
 function createBaseOrderID(): OrderID {
-  return { owner: "", dseq: Long.UZERO, gseq: 0, oseq: 0 };
+  return {
+    $type: "akash.market.v1beta1.OrderID",
+    owner: "",
+    dseq: Long.UZERO,
+    gseq: 0,
+    oseq: 0,
+  };
 }
 
 export const OrderID = {
+  $type: "akash.market.v1beta1.OrderID" as const,
+
   encode(
     message: OrderID,
     writer: _m0.Writer = _m0.Writer.create()
@@ -132,6 +144,7 @@ export const OrderID = {
 
   fromJSON(object: any): OrderID {
     return {
+      $type: OrderID.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
       gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
@@ -162,8 +175,11 @@ export const OrderID = {
   },
 };
 
+messageTypeRegistry.set(OrderID.$type, OrderID);
+
 function createBaseOrder(): Order {
   return {
+    $type: "akash.market.v1beta1.Order",
     orderId: undefined,
     state: 0,
     spec: undefined,
@@ -172,6 +188,8 @@ function createBaseOrder(): Order {
 }
 
 export const Order = {
+  $type: "akash.market.v1beta1.Order" as const,
+
   encode(message: Order, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.orderId !== undefined) {
       OrderID.encode(message.orderId, writer.uint32(10).fork()).ldelim();
@@ -217,6 +235,7 @@ export const Order = {
 
   fromJSON(object: any): Order {
     return {
+      $type: Order.$type,
       orderId: isSet(object.orderId)
         ? OrderID.fromJSON(object.orderId)
         : undefined,
@@ -262,11 +281,22 @@ export const Order = {
   },
 };
 
+messageTypeRegistry.set(Order.$type, Order);
+
 function createBaseOrderFilters(): OrderFilters {
-  return { owner: "", dseq: Long.UZERO, gseq: 0, oseq: 0, state: "" };
+  return {
+    $type: "akash.market.v1beta1.OrderFilters",
+    owner: "",
+    dseq: Long.UZERO,
+    gseq: 0,
+    oseq: 0,
+    state: "",
+  };
 }
 
 export const OrderFilters = {
+  $type: "akash.market.v1beta1.OrderFilters" as const,
+
   encode(
     message: OrderFilters,
     writer: _m0.Writer = _m0.Writer.create()
@@ -321,6 +351,7 @@ export const OrderFilters = {
 
   fromJSON(object: any): OrderFilters {
     return {
+      $type: OrderFilters.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
       gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
@@ -356,6 +387,8 @@ export const OrderFilters = {
   },
 };
 
+messageTypeRegistry.set(OrderFilters.$type, OrderFilters);
+
 type Builtin =
   | Date
   | Function
@@ -374,14 +407,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

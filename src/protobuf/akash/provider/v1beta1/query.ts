@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import {
@@ -11,30 +12,39 @@ export const protobufPackage = "akash.provider.v1beta1";
 
 /** QueryProvidersRequest is request type for the Query/Providers RPC method */
 export interface QueryProvidersRequest {
+  $type: "akash.provider.v1beta1.QueryProvidersRequest";
   pagination?: PageRequest;
 }
 
 /** QueryProvidersResponse is response type for the Query/Providers RPC method */
 export interface QueryProvidersResponse {
+  $type: "akash.provider.v1beta1.QueryProvidersResponse";
   providers: Provider[];
   pagination?: PageResponse;
 }
 
 /** QueryProviderRequest is request type for the Query/Provider RPC method */
 export interface QueryProviderRequest {
+  $type: "akash.provider.v1beta1.QueryProviderRequest";
   owner: string;
 }
 
 /** QueryProviderResponse is response type for the Query/Provider RPC method */
 export interface QueryProviderResponse {
+  $type: "akash.provider.v1beta1.QueryProviderResponse";
   provider?: Provider;
 }
 
 function createBaseQueryProvidersRequest(): QueryProvidersRequest {
-  return { pagination: undefined };
+  return {
+    $type: "akash.provider.v1beta1.QueryProvidersRequest",
+    pagination: undefined,
+  };
 }
 
 export const QueryProvidersRequest = {
+  $type: "akash.provider.v1beta1.QueryProvidersRequest" as const,
+
   encode(
     message: QueryProvidersRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -68,6 +78,7 @@ export const QueryProvidersRequest = {
 
   fromJSON(object: any): QueryProvidersRequest {
     return {
+      $type: QueryProvidersRequest.$type,
       pagination: isSet(object.pagination)
         ? PageRequest.fromJSON(object.pagination)
         : undefined,
@@ -95,11 +106,19 @@ export const QueryProvidersRequest = {
   },
 };
 
+messageTypeRegistry.set(QueryProvidersRequest.$type, QueryProvidersRequest);
+
 function createBaseQueryProvidersResponse(): QueryProvidersResponse {
-  return { providers: [], pagination: undefined };
+  return {
+    $type: "akash.provider.v1beta1.QueryProvidersResponse",
+    providers: [],
+    pagination: undefined,
+  };
 }
 
 export const QueryProvidersResponse = {
+  $type: "akash.provider.v1beta1.QueryProvidersResponse" as const,
+
   encode(
     message: QueryProvidersResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -142,6 +161,7 @@ export const QueryProvidersResponse = {
 
   fromJSON(object: any): QueryProvidersResponse {
     return {
+      $type: QueryProvidersResponse.$type,
       providers: Array.isArray(object?.providers)
         ? object.providers.map((e: any) => Provider.fromJSON(e))
         : [],
@@ -181,11 +201,15 @@ export const QueryProvidersResponse = {
   },
 };
 
+messageTypeRegistry.set(QueryProvidersResponse.$type, QueryProvidersResponse);
+
 function createBaseQueryProviderRequest(): QueryProviderRequest {
-  return { owner: "" };
+  return { $type: "akash.provider.v1beta1.QueryProviderRequest", owner: "" };
 }
 
 export const QueryProviderRequest = {
+  $type: "akash.provider.v1beta1.QueryProviderRequest" as const,
+
   encode(
     message: QueryProviderRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -219,6 +243,7 @@ export const QueryProviderRequest = {
 
   fromJSON(object: any): QueryProviderRequest {
     return {
+      $type: QueryProviderRequest.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
     };
   },
@@ -238,11 +263,18 @@ export const QueryProviderRequest = {
   },
 };
 
+messageTypeRegistry.set(QueryProviderRequest.$type, QueryProviderRequest);
+
 function createBaseQueryProviderResponse(): QueryProviderResponse {
-  return { provider: undefined };
+  return {
+    $type: "akash.provider.v1beta1.QueryProviderResponse",
+    provider: undefined,
+  };
 }
 
 export const QueryProviderResponse = {
+  $type: "akash.provider.v1beta1.QueryProviderResponse" as const,
+
   encode(
     message: QueryProviderResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -276,6 +308,7 @@ export const QueryProviderResponse = {
 
   fromJSON(object: any): QueryProviderResponse {
     return {
+      $type: QueryProviderResponse.$type,
       provider: isSet(object.provider)
         ? Provider.fromJSON(object.provider)
         : undefined,
@@ -302,6 +335,8 @@ export const QueryProviderResponse = {
     return message;
   },
 };
+
+messageTypeRegistry.set(QueryProviderResponse.$type, QueryProviderResponse);
 
 /** Query defines the gRPC querier service */
 export interface Query {
@@ -369,14 +404,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Attribute } from "../../../akash/base/v1beta1/attribute";
@@ -7,12 +8,14 @@ export const protobufPackage = "akash.provider.v1beta1";
 
 /** ProviderInfo */
 export interface ProviderInfo {
+  $type: "akash.provider.v1beta1.ProviderInfo";
   email: string;
   website: string;
 }
 
 /** MsgCreateProvider defines an SDK message for creating a provider */
 export interface MsgCreateProvider {
+  $type: "akash.provider.v1beta1.MsgCreateProvider";
   owner: string;
   hostUri: string;
   attributes: Attribute[];
@@ -20,10 +23,13 @@ export interface MsgCreateProvider {
 }
 
 /** MsgCreateProviderResponse defines the Msg/CreateProvider response type. */
-export interface MsgCreateProviderResponse {}
+export interface MsgCreateProviderResponse {
+  $type: "akash.provider.v1beta1.MsgCreateProviderResponse";
+}
 
 /** MsgUpdateProvider defines an SDK message for updating a provider */
 export interface MsgUpdateProvider {
+  $type: "akash.provider.v1beta1.MsgUpdateProvider";
   owner: string;
   hostUri: string;
   attributes: Attribute[];
@@ -31,18 +37,24 @@ export interface MsgUpdateProvider {
 }
 
 /** MsgUpdateProviderResponse defines the Msg/UpdateProvider response type. */
-export interface MsgUpdateProviderResponse {}
+export interface MsgUpdateProviderResponse {
+  $type: "akash.provider.v1beta1.MsgUpdateProviderResponse";
+}
 
 /** MsgDeleteProvider defines an SDK message for deleting a provider */
 export interface MsgDeleteProvider {
+  $type: "akash.provider.v1beta1.MsgDeleteProvider";
   owner: string;
 }
 
 /** MsgDeleteProviderResponse defines the Msg/DeleteProvider response type. */
-export interface MsgDeleteProviderResponse {}
+export interface MsgDeleteProviderResponse {
+  $type: "akash.provider.v1beta1.MsgDeleteProviderResponse";
+}
 
 /** Provider stores owner and host details */
 export interface Provider {
+  $type: "akash.provider.v1beta1.Provider";
   owner: string;
   hostUri: string;
   attributes: Attribute[];
@@ -50,10 +62,16 @@ export interface Provider {
 }
 
 function createBaseProviderInfo(): ProviderInfo {
-  return { email: "", website: "" };
+  return {
+    $type: "akash.provider.v1beta1.ProviderInfo",
+    email: "",
+    website: "",
+  };
 }
 
 export const ProviderInfo = {
+  $type: "akash.provider.v1beta1.ProviderInfo" as const,
+
   encode(
     message: ProviderInfo,
     writer: _m0.Writer = _m0.Writer.create()
@@ -90,6 +108,7 @@ export const ProviderInfo = {
 
   fromJSON(object: any): ProviderInfo {
     return {
+      $type: ProviderInfo.$type,
       email: isSet(object.email) ? String(object.email) : "",
       website: isSet(object.website) ? String(object.website) : "",
     };
@@ -112,11 +131,21 @@ export const ProviderInfo = {
   },
 };
 
+messageTypeRegistry.set(ProviderInfo.$type, ProviderInfo);
+
 function createBaseMsgCreateProvider(): MsgCreateProvider {
-  return { owner: "", hostUri: "", attributes: [], info: undefined };
+  return {
+    $type: "akash.provider.v1beta1.MsgCreateProvider",
+    owner: "",
+    hostUri: "",
+    attributes: [],
+    info: undefined,
+  };
 }
 
 export const MsgCreateProvider = {
+  $type: "akash.provider.v1beta1.MsgCreateProvider" as const,
+
   encode(
     message: MsgCreateProvider,
     writer: _m0.Writer = _m0.Writer.create()
@@ -165,6 +194,7 @@ export const MsgCreateProvider = {
 
   fromJSON(object: any): MsgCreateProvider {
     return {
+      $type: MsgCreateProvider.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       hostUri: isSet(object.hostUri) ? String(object.hostUri) : "",
       attributes: Array.isArray(object?.attributes)
@@ -206,11 +236,15 @@ export const MsgCreateProvider = {
   },
 };
 
+messageTypeRegistry.set(MsgCreateProvider.$type, MsgCreateProvider);
+
 function createBaseMsgCreateProviderResponse(): MsgCreateProviderResponse {
-  return {};
+  return { $type: "akash.provider.v1beta1.MsgCreateProviderResponse" };
 }
 
 export const MsgCreateProviderResponse = {
+  $type: "akash.provider.v1beta1.MsgCreateProviderResponse" as const,
+
   encode(
     _: MsgCreateProviderResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -237,7 +271,9 @@ export const MsgCreateProviderResponse = {
   },
 
   fromJSON(_: any): MsgCreateProviderResponse {
-    return {};
+    return {
+      $type: MsgCreateProviderResponse.$type,
+    };
   },
 
   toJSON(_: MsgCreateProviderResponse): unknown {
@@ -253,11 +289,24 @@ export const MsgCreateProviderResponse = {
   },
 };
 
+messageTypeRegistry.set(
+  MsgCreateProviderResponse.$type,
+  MsgCreateProviderResponse
+);
+
 function createBaseMsgUpdateProvider(): MsgUpdateProvider {
-  return { owner: "", hostUri: "", attributes: [], info: undefined };
+  return {
+    $type: "akash.provider.v1beta1.MsgUpdateProvider",
+    owner: "",
+    hostUri: "",
+    attributes: [],
+    info: undefined,
+  };
 }
 
 export const MsgUpdateProvider = {
+  $type: "akash.provider.v1beta1.MsgUpdateProvider" as const,
+
   encode(
     message: MsgUpdateProvider,
     writer: _m0.Writer = _m0.Writer.create()
@@ -306,6 +355,7 @@ export const MsgUpdateProvider = {
 
   fromJSON(object: any): MsgUpdateProvider {
     return {
+      $type: MsgUpdateProvider.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       hostUri: isSet(object.hostUri) ? String(object.hostUri) : "",
       attributes: Array.isArray(object?.attributes)
@@ -347,11 +397,15 @@ export const MsgUpdateProvider = {
   },
 };
 
+messageTypeRegistry.set(MsgUpdateProvider.$type, MsgUpdateProvider);
+
 function createBaseMsgUpdateProviderResponse(): MsgUpdateProviderResponse {
-  return {};
+  return { $type: "akash.provider.v1beta1.MsgUpdateProviderResponse" };
 }
 
 export const MsgUpdateProviderResponse = {
+  $type: "akash.provider.v1beta1.MsgUpdateProviderResponse" as const,
+
   encode(
     _: MsgUpdateProviderResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -378,7 +432,9 @@ export const MsgUpdateProviderResponse = {
   },
 
   fromJSON(_: any): MsgUpdateProviderResponse {
-    return {};
+    return {
+      $type: MsgUpdateProviderResponse.$type,
+    };
   },
 
   toJSON(_: MsgUpdateProviderResponse): unknown {
@@ -394,11 +450,18 @@ export const MsgUpdateProviderResponse = {
   },
 };
 
+messageTypeRegistry.set(
+  MsgUpdateProviderResponse.$type,
+  MsgUpdateProviderResponse
+);
+
 function createBaseMsgDeleteProvider(): MsgDeleteProvider {
-  return { owner: "" };
+  return { $type: "akash.provider.v1beta1.MsgDeleteProvider", owner: "" };
 }
 
 export const MsgDeleteProvider = {
+  $type: "akash.provider.v1beta1.MsgDeleteProvider" as const,
+
   encode(
     message: MsgDeleteProvider,
     writer: _m0.Writer = _m0.Writer.create()
@@ -429,6 +492,7 @@ export const MsgDeleteProvider = {
 
   fromJSON(object: any): MsgDeleteProvider {
     return {
+      $type: MsgDeleteProvider.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
     };
   },
@@ -448,11 +512,15 @@ export const MsgDeleteProvider = {
   },
 };
 
+messageTypeRegistry.set(MsgDeleteProvider.$type, MsgDeleteProvider);
+
 function createBaseMsgDeleteProviderResponse(): MsgDeleteProviderResponse {
-  return {};
+  return { $type: "akash.provider.v1beta1.MsgDeleteProviderResponse" };
 }
 
 export const MsgDeleteProviderResponse = {
+  $type: "akash.provider.v1beta1.MsgDeleteProviderResponse" as const,
+
   encode(
     _: MsgDeleteProviderResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -479,7 +547,9 @@ export const MsgDeleteProviderResponse = {
   },
 
   fromJSON(_: any): MsgDeleteProviderResponse {
-    return {};
+    return {
+      $type: MsgDeleteProviderResponse.$type,
+    };
   },
 
   toJSON(_: MsgDeleteProviderResponse): unknown {
@@ -495,11 +565,24 @@ export const MsgDeleteProviderResponse = {
   },
 };
 
+messageTypeRegistry.set(
+  MsgDeleteProviderResponse.$type,
+  MsgDeleteProviderResponse
+);
+
 function createBaseProvider(): Provider {
-  return { owner: "", hostUri: "", attributes: [], info: undefined };
+  return {
+    $type: "akash.provider.v1beta1.Provider",
+    owner: "",
+    hostUri: "",
+    attributes: [],
+    info: undefined,
+  };
 }
 
 export const Provider = {
+  $type: "akash.provider.v1beta1.Provider" as const,
+
   encode(
     message: Provider,
     writer: _m0.Writer = _m0.Writer.create()
@@ -548,6 +631,7 @@ export const Provider = {
 
   fromJSON(object: any): Provider {
     return {
+      $type: Provider.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       hostUri: isSet(object.hostUri) ? String(object.hostUri) : "",
       attributes: Array.isArray(object?.attributes)
@@ -586,6 +670,8 @@ export const Provider = {
     return message;
   },
 };
+
+messageTypeRegistry.set(Provider.$type, Provider);
 
 /** Msg defines the provider Msg service */
 export interface Msg {
@@ -680,14 +766,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

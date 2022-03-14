@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Provider } from "../../../akash/provider/v1beta1/provider";
@@ -7,14 +8,17 @@ export const protobufPackage = "akash.provider.v1beta1";
 
 /** GenesisState defines the basic genesis state used by provider module */
 export interface GenesisState {
+  $type: "akash.provider.v1beta1.GenesisState";
   providers: Provider[];
 }
 
 function createBaseGenesisState(): GenesisState {
-  return { providers: [] };
+  return { $type: "akash.provider.v1beta1.GenesisState", providers: [] };
 }
 
 export const GenesisState = {
+  $type: "akash.provider.v1beta1.GenesisState" as const,
+
   encode(
     message: GenesisState,
     writer: _m0.Writer = _m0.Writer.create()
@@ -45,6 +49,7 @@ export const GenesisState = {
 
   fromJSON(object: any): GenesisState {
     return {
+      $type: GenesisState.$type,
       providers: Array.isArray(object?.providers)
         ? object.providers.map((e: any) => Provider.fromJSON(e))
         : [],
@@ -73,6 +78,8 @@ export const GenesisState = {
   },
 };
 
+messageTypeRegistry.set(GenesisState.$type, GenesisState);
+
 type Builtin =
   | Date
   | Function
@@ -91,14 +98,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

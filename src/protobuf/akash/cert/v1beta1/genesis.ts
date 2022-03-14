@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Certificate } from "../../../akash/cert/v1beta1/cert";
@@ -7,20 +8,28 @@ export const protobufPackage = "akash.cert.v1beta1";
 
 /** GenesisCertificate defines certificate entry at genesis */
 export interface GenesisCertificate {
+  $type: "akash.cert.v1beta1.GenesisCertificate";
   owner: string;
   certificate?: Certificate;
 }
 
 /** GenesisState defines the basic genesis state used by cert module */
 export interface GenesisState {
+  $type: "akash.cert.v1beta1.GenesisState";
   certificates: GenesisCertificate[];
 }
 
 function createBaseGenesisCertificate(): GenesisCertificate {
-  return { owner: "", certificate: undefined };
+  return {
+    $type: "akash.cert.v1beta1.GenesisCertificate",
+    owner: "",
+    certificate: undefined,
+  };
 }
 
 export const GenesisCertificate = {
+  $type: "akash.cert.v1beta1.GenesisCertificate" as const,
+
   encode(
     message: GenesisCertificate,
     writer: _m0.Writer = _m0.Writer.create()
@@ -60,6 +69,7 @@ export const GenesisCertificate = {
 
   fromJSON(object: any): GenesisCertificate {
     return {
+      $type: GenesisCertificate.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       certificate: isSet(object.certificate)
         ? Certificate.fromJSON(object.certificate)
@@ -90,11 +100,15 @@ export const GenesisCertificate = {
   },
 };
 
+messageTypeRegistry.set(GenesisCertificate.$type, GenesisCertificate);
+
 function createBaseGenesisState(): GenesisState {
-  return { certificates: [] };
+  return { $type: "akash.cert.v1beta1.GenesisState", certificates: [] };
 }
 
 export const GenesisState = {
+  $type: "akash.cert.v1beta1.GenesisState" as const,
+
   encode(
     message: GenesisState,
     writer: _m0.Writer = _m0.Writer.create()
@@ -127,6 +141,7 @@ export const GenesisState = {
 
   fromJSON(object: any): GenesisState {
     return {
+      $type: GenesisState.$type,
       certificates: Array.isArray(object?.certificates)
         ? object.certificates.map((e: any) => GenesisCertificate.fromJSON(e))
         : [],
@@ -155,6 +170,8 @@ export const GenesisState = {
   },
 };
 
+messageTypeRegistry.set(GenesisState.$type, GenesisState);
+
 type Builtin =
   | Date
   | Function
@@ -173,14 +190,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

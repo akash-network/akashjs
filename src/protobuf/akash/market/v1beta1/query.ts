@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import {
@@ -22,77 +23,95 @@ export const protobufPackage = "akash.market.v1beta1";
 
 /** QueryOrdersRequest is request type for the Query/Orders RPC method */
 export interface QueryOrdersRequest {
+  $type: "akash.market.v1beta1.QueryOrdersRequest";
   filters?: OrderFilters;
   pagination?: PageRequest;
 }
 
 /** QueryOrdersResponse is response type for the Query/Orders RPC method */
 export interface QueryOrdersResponse {
+  $type: "akash.market.v1beta1.QueryOrdersResponse";
   orders: Order[];
   pagination?: PageResponse;
 }
 
 /** QueryOrderRequest is request type for the Query/Order RPC method */
 export interface QueryOrderRequest {
+  $type: "akash.market.v1beta1.QueryOrderRequest";
   id?: OrderID;
 }
 
 /** QueryOrderResponse is response type for the Query/Order RPC method */
 export interface QueryOrderResponse {
+  $type: "akash.market.v1beta1.QueryOrderResponse";
   order?: Order;
 }
 
 /** QueryBidsRequest is request type for the Query/Bids RPC method */
 export interface QueryBidsRequest {
+  $type: "akash.market.v1beta1.QueryBidsRequest";
   filters?: BidFilters;
   pagination?: PageRequest;
 }
 
 /** QueryBidsResponse is response type for the Query/Bids RPC method */
 export interface QueryBidsResponse {
+  $type: "akash.market.v1beta1.QueryBidsResponse";
   bids: QueryBidResponse[];
   pagination?: PageResponse;
 }
 
 /** QueryBidRequest is request type for the Query/Bid RPC method */
 export interface QueryBidRequest {
+  $type: "akash.market.v1beta1.QueryBidRequest";
   id?: BidID;
 }
 
 /** QueryBidResponse is response type for the Query/Bid RPC method */
 export interface QueryBidResponse {
+  $type: "akash.market.v1beta1.QueryBidResponse";
   bid?: Bid;
   escrowAccount?: Account;
 }
 
 /** QueryLeasesRequest is request type for the Query/Leases RPC method */
 export interface QueryLeasesRequest {
+  $type: "akash.market.v1beta1.QueryLeasesRequest";
   filters?: LeaseFilters;
   pagination?: PageRequest;
 }
 
 /** QueryLeasesResponse is response type for the Query/Leases RPC method */
 export interface QueryLeasesResponse {
+  $type: "akash.market.v1beta1.QueryLeasesResponse";
   leases: QueryLeaseResponse[];
   pagination?: PageResponse;
 }
 
 /** QueryLeaseRequest is request type for the Query/Lease RPC method */
 export interface QueryLeaseRequest {
+  $type: "akash.market.v1beta1.QueryLeaseRequest";
   id?: LeaseID;
 }
 
 /** QueryLeaseResponse is response type for the Query/Lease RPC method */
 export interface QueryLeaseResponse {
+  $type: "akash.market.v1beta1.QueryLeaseResponse";
   lease?: Lease;
   escrowPayment?: Payment;
 }
 
 function createBaseQueryOrdersRequest(): QueryOrdersRequest {
-  return { filters: undefined, pagination: undefined };
+  return {
+    $type: "akash.market.v1beta1.QueryOrdersRequest",
+    filters: undefined,
+    pagination: undefined,
+  };
 }
 
 export const QueryOrdersRequest = {
+  $type: "akash.market.v1beta1.QueryOrdersRequest" as const,
+
   encode(
     message: QueryOrdersRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -129,6 +148,7 @@ export const QueryOrdersRequest = {
 
   fromJSON(object: any): QueryOrdersRequest {
     return {
+      $type: QueryOrdersRequest.$type,
       filters: isSet(object.filters)
         ? OrderFilters.fromJSON(object.filters)
         : undefined,
@@ -167,11 +187,19 @@ export const QueryOrdersRequest = {
   },
 };
 
+messageTypeRegistry.set(QueryOrdersRequest.$type, QueryOrdersRequest);
+
 function createBaseQueryOrdersResponse(): QueryOrdersResponse {
-  return { orders: [], pagination: undefined };
+  return {
+    $type: "akash.market.v1beta1.QueryOrdersResponse",
+    orders: [],
+    pagination: undefined,
+  };
 }
 
 export const QueryOrdersResponse = {
+  $type: "akash.market.v1beta1.QueryOrdersResponse" as const,
+
   encode(
     message: QueryOrdersResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -211,6 +239,7 @@ export const QueryOrdersResponse = {
 
   fromJSON(object: any): QueryOrdersResponse {
     return {
+      $type: QueryOrdersResponse.$type,
       orders: Array.isArray(object?.orders)
         ? object.orders.map((e: any) => Order.fromJSON(e))
         : [],
@@ -247,11 +276,15 @@ export const QueryOrdersResponse = {
   },
 };
 
+messageTypeRegistry.set(QueryOrdersResponse.$type, QueryOrdersResponse);
+
 function createBaseQueryOrderRequest(): QueryOrderRequest {
-  return { id: undefined };
+  return { $type: "akash.market.v1beta1.QueryOrderRequest", id: undefined };
 }
 
 export const QueryOrderRequest = {
+  $type: "akash.market.v1beta1.QueryOrderRequest" as const,
+
   encode(
     message: QueryOrderRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -282,6 +315,7 @@ export const QueryOrderRequest = {
 
   fromJSON(object: any): QueryOrderRequest {
     return {
+      $type: QueryOrderRequest.$type,
       id: isSet(object.id) ? OrderID.fromJSON(object.id) : undefined,
     };
   },
@@ -305,11 +339,15 @@ export const QueryOrderRequest = {
   },
 };
 
+messageTypeRegistry.set(QueryOrderRequest.$type, QueryOrderRequest);
+
 function createBaseQueryOrderResponse(): QueryOrderResponse {
-  return { order: undefined };
+  return { $type: "akash.market.v1beta1.QueryOrderResponse", order: undefined };
 }
 
 export const QueryOrderResponse = {
+  $type: "akash.market.v1beta1.QueryOrderResponse" as const,
+
   encode(
     message: QueryOrderResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -340,6 +378,7 @@ export const QueryOrderResponse = {
 
   fromJSON(object: any): QueryOrderResponse {
     return {
+      $type: QueryOrderResponse.$type,
       order: isSet(object.order) ? Order.fromJSON(object.order) : undefined,
     };
   },
@@ -363,11 +402,19 @@ export const QueryOrderResponse = {
   },
 };
 
+messageTypeRegistry.set(QueryOrderResponse.$type, QueryOrderResponse);
+
 function createBaseQueryBidsRequest(): QueryBidsRequest {
-  return { filters: undefined, pagination: undefined };
+  return {
+    $type: "akash.market.v1beta1.QueryBidsRequest",
+    filters: undefined,
+    pagination: undefined,
+  };
 }
 
 export const QueryBidsRequest = {
+  $type: "akash.market.v1beta1.QueryBidsRequest" as const,
+
   encode(
     message: QueryBidsRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -404,6 +451,7 @@ export const QueryBidsRequest = {
 
   fromJSON(object: any): QueryBidsRequest {
     return {
+      $type: QueryBidsRequest.$type,
       filters: isSet(object.filters)
         ? BidFilters.fromJSON(object.filters)
         : undefined,
@@ -442,11 +490,19 @@ export const QueryBidsRequest = {
   },
 };
 
+messageTypeRegistry.set(QueryBidsRequest.$type, QueryBidsRequest);
+
 function createBaseQueryBidsResponse(): QueryBidsResponse {
-  return { bids: [], pagination: undefined };
+  return {
+    $type: "akash.market.v1beta1.QueryBidsResponse",
+    bids: [],
+    pagination: undefined,
+  };
 }
 
 export const QueryBidsResponse = {
+  $type: "akash.market.v1beta1.QueryBidsResponse" as const,
+
   encode(
     message: QueryBidsResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -486,6 +542,7 @@ export const QueryBidsResponse = {
 
   fromJSON(object: any): QueryBidsResponse {
     return {
+      $type: QueryBidsResponse.$type,
       bids: Array.isArray(object?.bids)
         ? object.bids.map((e: any) => QueryBidResponse.fromJSON(e))
         : [],
@@ -525,11 +582,15 @@ export const QueryBidsResponse = {
   },
 };
 
+messageTypeRegistry.set(QueryBidsResponse.$type, QueryBidsResponse);
+
 function createBaseQueryBidRequest(): QueryBidRequest {
-  return { id: undefined };
+  return { $type: "akash.market.v1beta1.QueryBidRequest", id: undefined };
 }
 
 export const QueryBidRequest = {
+  $type: "akash.market.v1beta1.QueryBidRequest" as const,
+
   encode(
     message: QueryBidRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -560,6 +621,7 @@ export const QueryBidRequest = {
 
   fromJSON(object: any): QueryBidRequest {
     return {
+      $type: QueryBidRequest.$type,
       id: isSet(object.id) ? BidID.fromJSON(object.id) : undefined,
     };
   },
@@ -583,11 +645,19 @@ export const QueryBidRequest = {
   },
 };
 
+messageTypeRegistry.set(QueryBidRequest.$type, QueryBidRequest);
+
 function createBaseQueryBidResponse(): QueryBidResponse {
-  return { bid: undefined, escrowAccount: undefined };
+  return {
+    $type: "akash.market.v1beta1.QueryBidResponse",
+    bid: undefined,
+    escrowAccount: undefined,
+  };
 }
 
 export const QueryBidResponse = {
+  $type: "akash.market.v1beta1.QueryBidResponse" as const,
+
   encode(
     message: QueryBidResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -624,6 +694,7 @@ export const QueryBidResponse = {
 
   fromJSON(object: any): QueryBidResponse {
     return {
+      $type: QueryBidResponse.$type,
       bid: isSet(object.bid) ? Bid.fromJSON(object.bid) : undefined,
       escrowAccount: isSet(object.escrowAccount)
         ? Account.fromJSON(object.escrowAccount)
@@ -658,11 +729,19 @@ export const QueryBidResponse = {
   },
 };
 
+messageTypeRegistry.set(QueryBidResponse.$type, QueryBidResponse);
+
 function createBaseQueryLeasesRequest(): QueryLeasesRequest {
-  return { filters: undefined, pagination: undefined };
+  return {
+    $type: "akash.market.v1beta1.QueryLeasesRequest",
+    filters: undefined,
+    pagination: undefined,
+  };
 }
 
 export const QueryLeasesRequest = {
+  $type: "akash.market.v1beta1.QueryLeasesRequest" as const,
+
   encode(
     message: QueryLeasesRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -699,6 +778,7 @@ export const QueryLeasesRequest = {
 
   fromJSON(object: any): QueryLeasesRequest {
     return {
+      $type: QueryLeasesRequest.$type,
       filters: isSet(object.filters)
         ? LeaseFilters.fromJSON(object.filters)
         : undefined,
@@ -737,11 +817,19 @@ export const QueryLeasesRequest = {
   },
 };
 
+messageTypeRegistry.set(QueryLeasesRequest.$type, QueryLeasesRequest);
+
 function createBaseQueryLeasesResponse(): QueryLeasesResponse {
-  return { leases: [], pagination: undefined };
+  return {
+    $type: "akash.market.v1beta1.QueryLeasesResponse",
+    leases: [],
+    pagination: undefined,
+  };
 }
 
 export const QueryLeasesResponse = {
+  $type: "akash.market.v1beta1.QueryLeasesResponse" as const,
+
   encode(
     message: QueryLeasesResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -783,6 +871,7 @@ export const QueryLeasesResponse = {
 
   fromJSON(object: any): QueryLeasesResponse {
     return {
+      $type: QueryLeasesResponse.$type,
       leases: Array.isArray(object?.leases)
         ? object.leases.map((e: any) => QueryLeaseResponse.fromJSON(e))
         : [],
@@ -822,11 +911,15 @@ export const QueryLeasesResponse = {
   },
 };
 
+messageTypeRegistry.set(QueryLeasesResponse.$type, QueryLeasesResponse);
+
 function createBaseQueryLeaseRequest(): QueryLeaseRequest {
-  return { id: undefined };
+  return { $type: "akash.market.v1beta1.QueryLeaseRequest", id: undefined };
 }
 
 export const QueryLeaseRequest = {
+  $type: "akash.market.v1beta1.QueryLeaseRequest" as const,
+
   encode(
     message: QueryLeaseRequest,
     writer: _m0.Writer = _m0.Writer.create()
@@ -857,6 +950,7 @@ export const QueryLeaseRequest = {
 
   fromJSON(object: any): QueryLeaseRequest {
     return {
+      $type: QueryLeaseRequest.$type,
       id: isSet(object.id) ? LeaseID.fromJSON(object.id) : undefined,
     };
   },
@@ -880,11 +974,19 @@ export const QueryLeaseRequest = {
   },
 };
 
+messageTypeRegistry.set(QueryLeaseRequest.$type, QueryLeaseRequest);
+
 function createBaseQueryLeaseResponse(): QueryLeaseResponse {
-  return { lease: undefined, escrowPayment: undefined };
+  return {
+    $type: "akash.market.v1beta1.QueryLeaseResponse",
+    lease: undefined,
+    escrowPayment: undefined,
+  };
 }
 
 export const QueryLeaseResponse = {
+  $type: "akash.market.v1beta1.QueryLeaseResponse" as const,
+
   encode(
     message: QueryLeaseResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -921,6 +1023,7 @@ export const QueryLeaseResponse = {
 
   fromJSON(object: any): QueryLeaseResponse {
     return {
+      $type: QueryLeaseResponse.$type,
       lease: isSet(object.lease) ? Lease.fromJSON(object.lease) : undefined,
       escrowPayment: isSet(object.escrowPayment)
         ? Payment.fromJSON(object.escrowPayment)
@@ -954,6 +1057,8 @@ export const QueryLeaseResponse = {
     return message;
   },
 };
+
+messageTypeRegistry.set(QueryLeaseResponse.$type, QueryLeaseResponse);
 
 /** Query defines the gRPC querier service */
 export interface Query {
@@ -1077,14 +1182,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

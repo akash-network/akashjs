@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 import { Attribute } from "../../../akash/base/v1beta1/attribute";
@@ -7,6 +8,7 @@ export const protobufPackage = "akash.audit.v1beta1";
 
 /** Provider stores owner auditor and attributes details */
 export interface Provider {
+  $type: "akash.audit.v1beta1.Provider";
   owner: string;
   auditor: string;
   attributes: Attribute[];
@@ -14,6 +16,7 @@ export interface Provider {
 
 /** Attributes */
 export interface AuditedAttributes {
+  $type: "akash.audit.v1beta1.AuditedAttributes";
   owner: string;
   auditor: string;
   attributes: Attribute[];
@@ -21,40 +24,55 @@ export interface AuditedAttributes {
 
 /** AttributesResponse represents details of deployment along with group details */
 export interface AttributesResponse {
+  $type: "akash.audit.v1beta1.AttributesResponse";
   attributes: AuditedAttributes[];
 }
 
 /** AttributesFilters defines filters used to filter deployments */
 export interface AttributesFilters {
+  $type: "akash.audit.v1beta1.AttributesFilters";
   auditors: string[];
   owners: string[];
 }
 
 /** MsgSignProviderAttributes defines an SDK message for signing a provider attributes */
 export interface MsgSignProviderAttributes {
+  $type: "akash.audit.v1beta1.MsgSignProviderAttributes";
   owner: string;
   auditor: string;
   attributes: Attribute[];
 }
 
 /** MsgSignProviderAttributesResponse defines the Msg/CreateProvider response type. */
-export interface MsgSignProviderAttributesResponse {}
+export interface MsgSignProviderAttributesResponse {
+  $type: "akash.audit.v1beta1.MsgSignProviderAttributesResponse";
+}
 
 /** MsgDeleteProviderAttributes defined the Msg/DeleteProviderAttributes */
 export interface MsgDeleteProviderAttributes {
+  $type: "akash.audit.v1beta1.MsgDeleteProviderAttributes";
   owner: string;
   auditor: string;
   keys: string[];
 }
 
 /** MsgDeleteProviderAttributesResponse defines the Msg/ProviderAttributes response type. */
-export interface MsgDeleteProviderAttributesResponse {}
+export interface MsgDeleteProviderAttributesResponse {
+  $type: "akash.audit.v1beta1.MsgDeleteProviderAttributesResponse";
+}
 
 function createBaseProvider(): Provider {
-  return { owner: "", auditor: "", attributes: [] };
+  return {
+    $type: "akash.audit.v1beta1.Provider",
+    owner: "",
+    auditor: "",
+    attributes: [],
+  };
 }
 
 export const Provider = {
+  $type: "akash.audit.v1beta1.Provider" as const,
+
   encode(
     message: Provider,
     writer: _m0.Writer = _m0.Writer.create()
@@ -97,6 +115,7 @@ export const Provider = {
 
   fromJSON(object: any): Provider {
     return {
+      $type: Provider.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       auditor: isSet(object.auditor) ? String(object.auditor) : "",
       attributes: Array.isArray(object?.attributes)
@@ -129,11 +148,20 @@ export const Provider = {
   },
 };
 
+messageTypeRegistry.set(Provider.$type, Provider);
+
 function createBaseAuditedAttributes(): AuditedAttributes {
-  return { owner: "", auditor: "", attributes: [] };
+  return {
+    $type: "akash.audit.v1beta1.AuditedAttributes",
+    owner: "",
+    auditor: "",
+    attributes: [],
+  };
 }
 
 export const AuditedAttributes = {
+  $type: "akash.audit.v1beta1.AuditedAttributes" as const,
+
   encode(
     message: AuditedAttributes,
     writer: _m0.Writer = _m0.Writer.create()
@@ -176,6 +204,7 @@ export const AuditedAttributes = {
 
   fromJSON(object: any): AuditedAttributes {
     return {
+      $type: AuditedAttributes.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       auditor: isSet(object.auditor) ? String(object.auditor) : "",
       attributes: Array.isArray(object?.attributes)
@@ -210,11 +239,15 @@ export const AuditedAttributes = {
   },
 };
 
+messageTypeRegistry.set(AuditedAttributes.$type, AuditedAttributes);
+
 function createBaseAttributesResponse(): AttributesResponse {
-  return { attributes: [] };
+  return { $type: "akash.audit.v1beta1.AttributesResponse", attributes: [] };
 }
 
 export const AttributesResponse = {
+  $type: "akash.audit.v1beta1.AttributesResponse" as const,
+
   encode(
     message: AttributesResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -247,6 +280,7 @@ export const AttributesResponse = {
 
   fromJSON(object: any): AttributesResponse {
     return {
+      $type: AttributesResponse.$type,
       attributes: Array.isArray(object?.attributes)
         ? object.attributes.map((e: any) => AuditedAttributes.fromJSON(e))
         : [],
@@ -275,11 +309,19 @@ export const AttributesResponse = {
   },
 };
 
+messageTypeRegistry.set(AttributesResponse.$type, AttributesResponse);
+
 function createBaseAttributesFilters(): AttributesFilters {
-  return { auditors: [], owners: [] };
+  return {
+    $type: "akash.audit.v1beta1.AttributesFilters",
+    auditors: [],
+    owners: [],
+  };
 }
 
 export const AttributesFilters = {
+  $type: "akash.audit.v1beta1.AttributesFilters" as const,
+
   encode(
     message: AttributesFilters,
     writer: _m0.Writer = _m0.Writer.create()
@@ -316,6 +358,7 @@ export const AttributesFilters = {
 
   fromJSON(object: any): AttributesFilters {
     return {
+      $type: AttributesFilters.$type,
       auditors: Array.isArray(object?.auditors)
         ? object.auditors.map((e: any) => String(e))
         : [],
@@ -350,11 +393,20 @@ export const AttributesFilters = {
   },
 };
 
+messageTypeRegistry.set(AttributesFilters.$type, AttributesFilters);
+
 function createBaseMsgSignProviderAttributes(): MsgSignProviderAttributes {
-  return { owner: "", auditor: "", attributes: [] };
+  return {
+    $type: "akash.audit.v1beta1.MsgSignProviderAttributes",
+    owner: "",
+    auditor: "",
+    attributes: [],
+  };
 }
 
 export const MsgSignProviderAttributes = {
+  $type: "akash.audit.v1beta1.MsgSignProviderAttributes" as const,
+
   encode(
     message: MsgSignProviderAttributes,
     writer: _m0.Writer = _m0.Writer.create()
@@ -400,6 +452,7 @@ export const MsgSignProviderAttributes = {
 
   fromJSON(object: any): MsgSignProviderAttributes {
     return {
+      $type: MsgSignProviderAttributes.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       auditor: isSet(object.auditor) ? String(object.auditor) : "",
       attributes: Array.isArray(object?.attributes)
@@ -434,11 +487,18 @@ export const MsgSignProviderAttributes = {
   },
 };
 
+messageTypeRegistry.set(
+  MsgSignProviderAttributes.$type,
+  MsgSignProviderAttributes
+);
+
 function createBaseMsgSignProviderAttributesResponse(): MsgSignProviderAttributesResponse {
-  return {};
+  return { $type: "akash.audit.v1beta1.MsgSignProviderAttributesResponse" };
 }
 
 export const MsgSignProviderAttributesResponse = {
+  $type: "akash.audit.v1beta1.MsgSignProviderAttributesResponse" as const,
+
   encode(
     _: MsgSignProviderAttributesResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -465,7 +525,9 @@ export const MsgSignProviderAttributesResponse = {
   },
 
   fromJSON(_: any): MsgSignProviderAttributesResponse {
-    return {};
+    return {
+      $type: MsgSignProviderAttributesResponse.$type,
+    };
   },
 
   toJSON(_: MsgSignProviderAttributesResponse): unknown {
@@ -481,11 +543,23 @@ export const MsgSignProviderAttributesResponse = {
   },
 };
 
+messageTypeRegistry.set(
+  MsgSignProviderAttributesResponse.$type,
+  MsgSignProviderAttributesResponse
+);
+
 function createBaseMsgDeleteProviderAttributes(): MsgDeleteProviderAttributes {
-  return { owner: "", auditor: "", keys: [] };
+  return {
+    $type: "akash.audit.v1beta1.MsgDeleteProviderAttributes",
+    owner: "",
+    auditor: "",
+    keys: [],
+  };
 }
 
 export const MsgDeleteProviderAttributes = {
+  $type: "akash.audit.v1beta1.MsgDeleteProviderAttributes" as const,
+
   encode(
     message: MsgDeleteProviderAttributes,
     writer: _m0.Writer = _m0.Writer.create()
@@ -531,6 +605,7 @@ export const MsgDeleteProviderAttributes = {
 
   fromJSON(object: any): MsgDeleteProviderAttributes {
     return {
+      $type: MsgDeleteProviderAttributes.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       auditor: isSet(object.auditor) ? String(object.auditor) : "",
       keys: Array.isArray(object?.keys)
@@ -562,11 +637,18 @@ export const MsgDeleteProviderAttributes = {
   },
 };
 
+messageTypeRegistry.set(
+  MsgDeleteProviderAttributes.$type,
+  MsgDeleteProviderAttributes
+);
+
 function createBaseMsgDeleteProviderAttributesResponse(): MsgDeleteProviderAttributesResponse {
-  return {};
+  return { $type: "akash.audit.v1beta1.MsgDeleteProviderAttributesResponse" };
 }
 
 export const MsgDeleteProviderAttributesResponse = {
+  $type: "akash.audit.v1beta1.MsgDeleteProviderAttributesResponse" as const,
+
   encode(
     _: MsgDeleteProviderAttributesResponse,
     writer: _m0.Writer = _m0.Writer.create()
@@ -593,7 +675,9 @@ export const MsgDeleteProviderAttributesResponse = {
   },
 
   fromJSON(_: any): MsgDeleteProviderAttributesResponse {
-    return {};
+    return {
+      $type: MsgDeleteProviderAttributesResponse.$type,
+    };
   },
 
   toJSON(_: MsgDeleteProviderAttributesResponse): unknown {
@@ -608,6 +692,11 @@ export const MsgDeleteProviderAttributesResponse = {
     return message;
   },
 };
+
+messageTypeRegistry.set(
+  MsgDeleteProviderAttributesResponse.$type,
+  MsgDeleteProviderAttributesResponse
+);
 
 /** Msg defines the provider Msg service */
 export interface Msg {
@@ -683,14 +772,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 

@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import _m0 from "protobufjs/minimal";
 
@@ -6,6 +7,7 @@ export const protobufPackage = "akash.base.v1beta1";
 
 /** Attribute represents key value pair */
 export interface Attribute {
+  $type: "akash.base.v1beta1.Attribute";
   key: string;
   value: string;
 }
@@ -17,6 +19,7 @@ export interface Attribute {
  * this behaviour to be discussed
  */
 export interface SignedBy {
+  $type: "akash.base.v1beta1.SignedBy";
   /** all_of all keys in this list must have signed attributes */
   allOf: string[];
   /** any_of at least of of the keys from the list must have signed attributes */
@@ -25,6 +28,7 @@ export interface SignedBy {
 
 /** PlacementRequirements */
 export interface PlacementRequirements {
+  $type: "akash.base.v1beta1.PlacementRequirements";
   /** SignedBy list of keys that tenants expect to have signatures from */
   signedBy?: SignedBy;
   /** Attribute list of attributes tenant expects from the provider */
@@ -32,10 +36,12 @@ export interface PlacementRequirements {
 }
 
 function createBaseAttribute(): Attribute {
-  return { key: "", value: "" };
+  return { $type: "akash.base.v1beta1.Attribute", key: "", value: "" };
 }
 
 export const Attribute = {
+  $type: "akash.base.v1beta1.Attribute" as const,
+
   encode(
     message: Attribute,
     writer: _m0.Writer = _m0.Writer.create()
@@ -72,6 +78,7 @@ export const Attribute = {
 
   fromJSON(object: any): Attribute {
     return {
+      $type: Attribute.$type,
       key: isSet(object.key) ? String(object.key) : "",
       value: isSet(object.value) ? String(object.value) : "",
     };
@@ -94,11 +101,15 @@ export const Attribute = {
   },
 };
 
+messageTypeRegistry.set(Attribute.$type, Attribute);
+
 function createBaseSignedBy(): SignedBy {
-  return { allOf: [], anyOf: [] };
+  return { $type: "akash.base.v1beta1.SignedBy", allOf: [], anyOf: [] };
 }
 
 export const SignedBy = {
+  $type: "akash.base.v1beta1.SignedBy" as const,
+
   encode(
     message: SignedBy,
     writer: _m0.Writer = _m0.Writer.create()
@@ -135,6 +146,7 @@ export const SignedBy = {
 
   fromJSON(object: any): SignedBy {
     return {
+      $type: SignedBy.$type,
       allOf: Array.isArray(object?.allOf)
         ? object.allOf.map((e: any) => String(e))
         : [],
@@ -167,11 +179,19 @@ export const SignedBy = {
   },
 };
 
+messageTypeRegistry.set(SignedBy.$type, SignedBy);
+
 function createBasePlacementRequirements(): PlacementRequirements {
-  return { signedBy: undefined, attributes: [] };
+  return {
+    $type: "akash.base.v1beta1.PlacementRequirements",
+    signedBy: undefined,
+    attributes: [],
+  };
 }
 
 export const PlacementRequirements = {
+  $type: "akash.base.v1beta1.PlacementRequirements" as const,
+
   encode(
     message: PlacementRequirements,
     writer: _m0.Writer = _m0.Writer.create()
@@ -211,6 +231,7 @@ export const PlacementRequirements = {
 
   fromJSON(object: any): PlacementRequirements {
     return {
+      $type: PlacementRequirements.$type,
       signedBy: isSet(object.signedBy)
         ? SignedBy.fromJSON(object.signedBy)
         : undefined,
@@ -250,6 +271,8 @@ export const PlacementRequirements = {
   },
 };
 
+messageTypeRegistry.set(PlacementRequirements.$type, PlacementRequirements);
+
 type Builtin =
   | Date
   | Function
@@ -268,14 +291,14 @@ export type DeepPartial<T> = T extends Builtin
   : T extends ReadonlyArray<infer U>
   ? ReadonlyArray<DeepPartial<U>>
   : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P>>,
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
         never
       >;
 
