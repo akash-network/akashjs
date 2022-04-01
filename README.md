@@ -1,5 +1,7 @@
 # akashjs
 
+![build:main](https://github.com/github/docs/actions/workflows/build.yml/badge.svg?branch=main)
+
 Connect and communicate with the Akash Network. Pure JS library can be used in browser for unsigned transactions, and with node.js for full compatibility.
 
 # compatibility
