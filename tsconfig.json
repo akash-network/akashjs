@@ -15,7 +15,7 @@
     // "sourceMap": true,                           /* Generates corresponding '.map' file. */
     // "outFile": "./",                             /* Concatenate and emit output to single file. */
     "outDir": "./build" /* Redirect output structure to the directory. */,
-    // "rootDir": "./",                             /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    // "rootDir": "./src",                             /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
     // "composite": true,                           /* Enable project compilation */
     // "tsBuildInfoFile": "./",                     /* Specify file to store incremental compilation information */
     // "removeComments": true,                      /* Do not emit comments to output. */
@@ -55,7 +55,7 @@
     // "allowUmdGlobalAccess": true,                /* Allow accessing UMD globals from modules. */
 
     /* Source Map Options */
-    // "sourceRoot": "",                            /* Specify the location where debugger should locate TypeScript files instead of source locations. */
+    // "sourceRoot": "./src",                            /* Specify the location where debugger should locate TypeScript files instead of source locations. */
     // "mapRoot": "",                               /* Specify the location where debugger should locate map files instead of generated locations. */
     // "inlineSourceMap": true,                     /* Emit a single file with source maps instead of having a separate file. */
     // "inlineSources": true,                       /* Emit the source alongside the sourcemaps within a single file; requires '--inlineSourceMap' or '--sourceMap' to be set. */
@@ -67,5 +67,9 @@
     /* Advanced Options */
     "skipLibCheck": true /* Skip type checking of declaration files. */,
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
-  }
+  },
+  "exclude": [
+    "./examples",
+    "./tests"
+  ]
 }
