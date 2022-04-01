@@ -13,7 +13,7 @@
     "build:tsc": "yarn tsc",
     "dev:watch": "yarn tsc -- --watch",
     "build:build": "yarn webpack",
-    "test": "echo \"pass\" && exit 0",
+    "test": "yarn test:unit",
     "test:unit": "tap --ts tests/test_*.ts",
     "prepublishOnly": "yarn build:production"
   },
