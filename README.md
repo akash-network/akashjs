@@ -1,6 +1,6 @@
 # akashjs
 
-Connect and communicate with the Akash Network using keplr wallet for signed transactions, and direct RPC for unsigned. Pure JS library for modern browser compatibility. NodeJS support, and a slick min CLI to reduce complexity.
+Connect and communicate with the Akash Network. Pure JS library can be used in browser for unsigned transactions, and with node.js for full compatibility.
 
 # compatibility
 
@@ -23,15 +23,6 @@ or use the umd bundle the object returned is `Window.akjs`
   src="https://unpkg.com/@akashnetwork/akashjs@0.0.6/umd/akashjs.js"
 ></script>
 ```
-
-install globally to use `akjs` cli
-
-```bash
-➜ npm i -g @akashnetwork/akashjs
-➜ akjs
-version: 0.0.7
-```
-
 ## stargate
 
 While `akashjs` manages much under the hood, more control is available through all of the exported types, clients and protocols.
@@ -55,6 +46,66 @@ const client = await SigningStargateClient.connectWithSigner(
   }
 );
 ```
+
+You can use the signer to create and sign requests. Below is an example of sending a deployment take-down message.
+
+```ts
+const mnemonic = "your wallet mnemonic";
+const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: "akash" });
+
+// get first account
+const [account] = await wallet.getAccounts();
+
+// Use the encode method for the message to wrap the data
+const message = MsgCloseDeployment.fromPartial({
+    id: {
+        dseq: "555555",
+        owner: account.address,
+    }
+});
+
+// Set the appropriate typeUrl and attach the encoded message as the value
+const msgAny = {
+    typeUrl: getTypeUrl(MsgCloseDeployment),
+    value: message
+};
+
+// You can use your own RPC node, or get a list of public nodes from akashjs
+const rpcEndpoint = "http://my.rpc.node";
+
+const myRegistry = new Registry(
+    getAkashTypeRegistry()
+);
+
+const client = await SigningStargateClient.connectWithSigner(
+    rpcEndpoint,
+    wallet,
+    {
+        registry: myRegistry
+    }
+);
+
+const fee = {
+    amount: [
+        {
+            denom: "uakt",
+            amount: "5000",
+        },
+    ],
+    gas: "800000",
+};
+
+const signedMessage = await client.signAndBroadcast(
+    account.address,
+    [msgAny],
+    fee,
+    "take down deployment"
+);
+```
+
+## examples
+
+Additional examples can be found in the [examples directory]( https://github.com/ovrclk/akashjs/tree/main/)
 
 ## contributing
 
