@@ -1,6 +1,6 @@
 {
   "name": "@akashnetwork/akashjs",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "description": "Akash Network JS SDK",
   "repository": {
     "url": "https://github.com/ovrclk/akashjs"
