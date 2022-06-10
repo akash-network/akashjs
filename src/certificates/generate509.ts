@@ -32,7 +32,7 @@ export async function create(address: string) {
     commonName: address,
   });
 
-  setValidityPeriod(cert, new Date(), 365); // Good from today for 730 days
+  setValidityPeriod(cert, new Date(), 365); // Good from today for 365 days
 
   const certBER = cert.toSchema(true).toBER(false);
   const spki = await crypto.exportKey("spki", keyPair.privateKey);
