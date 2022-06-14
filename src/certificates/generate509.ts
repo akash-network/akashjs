@@ -28,9 +28,11 @@ export async function create(address: string) {
   const algo = getAlgorithmParameters(SIGN_ALG, "generatekey");
 
   const keyPair = await crypto.generateKey(algo.algorithm, true, algo.usages);
-  const cert = await createCSR(keyPair, HASH_ALG, { commonName: address });
+  const cert = await createCSR(keyPair, HASH_ALG, {
+    commonName: address,
+  });
 
-  setValidityPeriod(cert, new Date(), 730); // Good from today for 730 days
+  setValidityPeriod(cert, new Date(), 365); // Good from today for 365 days
 
   const certBER = cert.toSchema(true).toBER(false);
   const spki = await crypto.exportKey("spki", keyPair.privateKey);
@@ -100,7 +102,7 @@ async function createCSR(keyPair: any, hashAlg: any, { commonName }: any) {
   //region Extended Key Usage
   const extKeyUsage = new ExtKeyUsage({
     keyPurposes: [
-      "1.3.6.1.5.5.7.3.1", // id-kp-serverAuth
+      "1.3.6.1.5.5.7.3.2", // id-kp-clientAuth
     ],
   });
 
