@@ -11,6 +11,13 @@ const fee = {
   gas: "100000",
 };
 
+export function createAminoMessage(message: messages, messageBody: any) {
+  return {
+    typeUrl: message,
+    value: messageBody,
+  };
+}
+
 export function createStarGateMessage(message: messages, messageBody: any) {
   return {
     message: {
