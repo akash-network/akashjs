@@ -6,3 +6,8 @@ export async function getRpc(endpoint: string) {
   const queryClient = new QueryClient(tmClient);
   return createProtobufRpcClient(queryClient);
 }
+
+function foo() [
+  const client = await getRpc("foo");
+return client.request;
+]

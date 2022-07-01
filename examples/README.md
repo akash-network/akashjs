@@ -92,7 +92,7 @@ const request = QueryDeploymentsRequest.fromJSON({
 Once the request has been created, it can be passed to the appropriate <Service>ClientImpl method (`Deployments` in this case).
 
 ```ts
-const client = new QueryClientImpl(getRpc("http://your.rpc.node"));
+const client = new QueryClientImpl(await getRpc("http://your.rpc.node"));
 const response = await client.Deployments(request);
 const data = QueryDeploymentsResponse.toJSON(response);
 ```
