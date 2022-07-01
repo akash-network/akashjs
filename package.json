@@ -8,7 +8,7 @@
   "main": "build/index.js",
   "types": "build/",
   "scripts": {
-    "build": "yarn build:tsc && yarn build:build",
+    "build": "rm -rf build/ && yarn build:tsc && yarn build:build",
     "build:production": "NODE_ENV=production yarn build:tsc && yarn build:build",
     "build:tsc": "yarn tsc",
     "dev:watch": "yarn tsc -- --watch",
@@ -22,12 +22,13 @@
   "dependencies": {
     "@cosmjs/launchpad": "^0.27.0",
     "@cosmjs/proto-signing": "^0.25.4",
-    "@cosmjs/stargate": "^0.25.4",
+    "@cosmjs/stargate": "^0.28.0",
     "@cosmjs/tendermint-rpc": "^0.25.4",
     "asn1js": "^2.1.1",
     "atob": "^2.1.2",
     "axios": "^0.24.0",
     "console-browserify": "^1.2.0",
+    "cosmwasm": "^1.1.1",
     "keytar": "^7.7.0",
     "node-fetch": "2",
     "pkijs": "^2.1.95",
