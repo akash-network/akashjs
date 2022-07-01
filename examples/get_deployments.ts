@@ -12,7 +12,7 @@ async function main() {
         }
     });
 
-    const client = new QueryClientImpl(getRpc("http://your.rpc.node"));
+    const client = new QueryClientImpl(await getRpc("http://your.rpc.node"));
     const response = await client.Deployments(request);
     const data = QueryDeploymentsResponse.toJSON(response);
 
