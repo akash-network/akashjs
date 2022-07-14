@@ -1,5 +1,5 @@
 /* eslint-disable */
-import _m0 from "protobufjs/minimal";
+import * as _m0 from "protobufjs/minimal";
 import Long from "long";
 
 export interface MessageType<Message extends UnknownMessage = UnknownMessage> {

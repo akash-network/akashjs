@@ -1,9 +1,9 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import Long from "long";
-import _m0 from "protobufjs/minimal";
 import { DecCoin } from "../../../cosmos/base/v1beta1/coin";
-import { BidID } from "../../../akash/market/v1beta2/bid";
+import { BidID } from "./bid";
+import Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.market.v1beta2";
 
@@ -71,8 +71,9 @@ export function lease_StateToJSON(object: Lease_State): string {
       return "insufficient_funds";
     case Lease_State.closed:
       return "closed";
+    case Lease_State.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -190,7 +191,7 @@ export const LeaseID = {
     return {
       $type: LeaseID.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
-      dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
+      dseq: isSet(object.dseq) ? Long.fromValue(object.dseq) : Long.UZERO,
       gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
       oseq: isSet(object.oseq) ? Number(object.oseq) : 0,
       provider: isSet(object.provider) ? String(object.provider) : "",
@@ -296,10 +297,10 @@ export const Lease = {
       state: isSet(object.state) ? lease_StateFromJSON(object.state) : 0,
       price: isSet(object.price) ? DecCoin.fromJSON(object.price) : undefined,
       createdAt: isSet(object.createdAt)
-        ? Long.fromString(object.createdAt)
+        ? Long.fromValue(object.createdAt)
         : Long.ZERO,
       closedOn: isSet(object.closedOn)
-        ? Long.fromString(object.closedOn)
+        ? Long.fromValue(object.closedOn)
         : Long.ZERO,
     };
   },
@@ -423,7 +424,7 @@ export const LeaseFilters = {
     return {
       $type: LeaseFilters.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
-      dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
+      dseq: isSet(object.dseq) ? Long.fromValue(object.dseq) : Long.UZERO,
       gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
       oseq: isSet(object.oseq) ? Number(object.oseq) : 0,
       provider: isSet(object.provider) ? String(object.provider) : "",

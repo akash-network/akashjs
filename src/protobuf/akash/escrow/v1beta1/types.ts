@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import Long from "long";
-import _m0 from "protobufjs/minimal";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
+import Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.escrow.v1beta1";
 
@@ -74,8 +74,9 @@ export function account_StateToJSON(object: Account_State): string {
       return "closed";
     case Account_State.overdrawn:
       return "overdrawn";
+    case Account_State.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -135,8 +136,9 @@ export function payment_StateToJSON(object: Payment_State): string {
       return "closed";
     case Payment_State.overdrawn:
       return "overdrawn";
+    case Payment_State.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -294,7 +296,7 @@ export const Account = {
         ? Coin.fromJSON(object.transferred)
         : undefined,
       settledAt: isSet(object.settledAt)
-        ? Long.fromString(object.settledAt)
+        ? Long.fromValue(object.settledAt)
         : Long.ZERO,
     };
   },

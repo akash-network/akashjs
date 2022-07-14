@@ -1,11 +1,8 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
-import _m0 from "protobufjs/minimal";
-import {
-  Account,
-  FractionalPayment,
-} from "../../../akash/escrow/v1beta2/types";
+import { Account, FractionalPayment } from "./types";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.escrow.v1beta2";
 

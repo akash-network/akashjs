@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import { GroupID } from "./groupid";
 import Long from "long";
-import _m0 from "protobufjs/minimal";
-import { GroupID } from "../../../akash/deployment/v1beta2/groupid";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta2";
 

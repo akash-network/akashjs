@@ -1,9 +1,9 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import Long from "long";
-import _m0 from "protobufjs/minimal";
-import { OrderID } from "../../../akash/market/v1beta2/order";
+import { OrderID } from "./order";
 import { DecCoin, Coin } from "../../../cosmos/base/v1beta1/coin";
+import Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.market.v1beta2";
 
@@ -105,8 +105,9 @@ export function bid_StateToJSON(object: Bid_State): string {
       return "lost";
     case Bid_State.closed:
       return "closed";
+    case Bid_State.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -462,7 +463,7 @@ export const BidID = {
     return {
       $type: BidID.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
-      dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
+      dseq: isSet(object.dseq) ? Long.fromValue(object.dseq) : Long.UZERO,
       gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
       oseq: isSet(object.oseq) ? Number(object.oseq) : 0,
       provider: isSet(object.provider) ? String(object.provider) : "",
@@ -559,7 +560,7 @@ export const Bid = {
       state: isSet(object.state) ? bid_StateFromJSON(object.state) : 0,
       price: isSet(object.price) ? DecCoin.fromJSON(object.price) : undefined,
       createdAt: isSet(object.createdAt)
-        ? Long.fromString(object.createdAt)
+        ? Long.fromValue(object.createdAt)
         : Long.ZERO,
     };
   },
@@ -674,7 +675,7 @@ export const BidFilters = {
     return {
       $type: BidFilters.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
-      dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
+      dseq: isSet(object.dseq) ? Long.fromValue(object.dseq) : Long.UZERO,
       gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
       oseq: isSet(object.oseq) ? Number(object.oseq) : 0,
       provider: isSet(object.provider) ? String(object.provider) : "",

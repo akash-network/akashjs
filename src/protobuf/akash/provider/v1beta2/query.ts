@@ -1,12 +1,12 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import Long from "long";
-import _m0 from "protobufjs/minimal";
 import {
   PageRequest,
   PageResponse,
 } from "../../../cosmos/base/query/v1beta1/pagination";
-import { Provider } from "../../../akash/provider/v1beta2/provider";
+import { Provider } from "./provider";
+import Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.provider.v1beta2";
 

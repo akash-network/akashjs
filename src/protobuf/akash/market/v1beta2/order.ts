@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import { GroupSpec } from "../../deployment/v1beta2/groupspec";
 import Long from "long";
-import _m0 from "protobufjs/minimal";
-import { GroupSpec } from "../../../akash/deployment/v1beta2/groupspec";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.market.v1beta2";
 
@@ -68,8 +68,9 @@ export function order_StateToJSON(object: Order_State): string {
       return "active";
     case Order_State.closed:
       return "closed";
+    case Order_State.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -146,7 +147,7 @@ export const OrderID = {
     return {
       $type: OrderID.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
-      dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
+      dseq: isSet(object.dseq) ? Long.fromValue(object.dseq) : Long.UZERO,
       gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
       oseq: isSet(object.oseq) ? Number(object.oseq) : 0,
     };
@@ -242,7 +243,7 @@ export const Order = {
       state: isSet(object.state) ? order_StateFromJSON(object.state) : 0,
       spec: isSet(object.spec) ? GroupSpec.fromJSON(object.spec) : undefined,
       createdAt: isSet(object.createdAt)
-        ? Long.fromString(object.createdAt)
+        ? Long.fromValue(object.createdAt)
         : Long.ZERO,
     };
   },
@@ -353,7 +354,7 @@ export const OrderFilters = {
     return {
       $type: OrderFilters.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
-      dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
+      dseq: isSet(object.dseq) ? Long.fromValue(object.dseq) : Long.UZERO,
       gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
       oseq: isSet(object.oseq) ? Number(object.oseq) : 0,
       state: isSet(object.state) ? String(object.state) : "",

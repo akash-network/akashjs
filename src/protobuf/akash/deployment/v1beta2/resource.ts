@@ -1,9 +1,9 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import Long from "long";
-import _m0 from "protobufjs/minimal";
-import { ResourceUnits } from "../../../akash/base/v1beta2/resourceunits";
+import { ResourceUnits } from "../../base/v1beta2/resourceunits";
 import { DecCoin } from "../../../cosmos/base/v1beta1/coin";
+import Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta2";
 

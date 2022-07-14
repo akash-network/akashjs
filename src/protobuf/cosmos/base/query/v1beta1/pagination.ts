@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../../typeRegistry";
 import Long from "long";
-import _m0 from "protobufjs/minimal";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "cosmos.base.query.v1beta1";
 
@@ -137,10 +137,8 @@ export const PageRequest = {
     return {
       $type: PageRequest.$type,
       key: isSet(object.key) ? bytesFromBase64(object.key) : new Uint8Array(),
-      offset: isSet(object.offset)
-        ? Long.fromString(object.offset)
-        : Long.UZERO,
-      limit: isSet(object.limit) ? Long.fromString(object.limit) : Long.UZERO,
+      offset: isSet(object.offset) ? Long.fromValue(object.offset) : Long.UZERO,
+      limit: isSet(object.limit) ? Long.fromValue(object.limit) : Long.UZERO,
       countTotal: isSet(object.countTotal) ? Boolean(object.countTotal) : false,
       reverse: isSet(object.reverse) ? Boolean(object.reverse) : false,
     };
@@ -233,7 +231,7 @@ export const PageResponse = {
       nextKey: isSet(object.nextKey)
         ? bytesFromBase64(object.nextKey)
         : new Uint8Array(),
-      total: isSet(object.total) ? Long.fromString(object.total) : Long.UZERO,
+      total: isSet(object.total) ? Long.fromValue(object.total) : Long.UZERO,
     };
   },
 
@@ -291,9 +289,9 @@ const btoa: (bin: string) => string =
   ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
   const bin: string[] = [];
-  for (const byte of arr) {
+  arr.forEach((byte) => {
     bin.push(String.fromCharCode(byte));
-  }
+  });
   return btoa(bin.join(""));
 }
 

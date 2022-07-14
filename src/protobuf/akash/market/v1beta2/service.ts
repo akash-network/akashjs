@@ -1,12 +1,10 @@
 /* eslint-disable */
-import Long from "long";
-import _m0 from "protobufjs/minimal";
 import {
   MsgCreateBidResponse,
   MsgCloseBidResponse,
   MsgCreateBid,
   MsgCloseBid,
-} from "../../../akash/market/v1beta2/bid";
+} from "./bid";
 import {
   MsgWithdrawLeaseResponse,
   MsgCreateLeaseResponse,
@@ -14,7 +12,8 @@ import {
   MsgWithdrawLease,
   MsgCreateLease,
   MsgCloseLease,
-} from "../../../akash/market/v1beta2/lease";
+} from "./lease";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.market.v1beta2";
 
@@ -109,9 +108,4 @@ interface Rpc {
     method: string,
     data: Uint8Array
   ): Promise<Uint8Array>;
-}
-
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
 }

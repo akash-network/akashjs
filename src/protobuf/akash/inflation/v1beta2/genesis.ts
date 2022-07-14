@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import { Params } from "./params";
 import Long from "long";
-import _m0 from "protobufjs/minimal";
-import { Params } from "../../../akash/inflation/v1beta2/params";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.inflation.v1beta2";
 

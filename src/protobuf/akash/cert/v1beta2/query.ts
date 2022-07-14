@@ -1,15 +1,12 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import Long from "long";
-import _m0 from "protobufjs/minimal";
-import {
-  Certificate,
-  CertificateFilter,
-} from "../../../akash/cert/v1beta2/cert";
+import { Certificate, CertificateFilter } from "./cert";
 import {
   PageRequest,
   PageResponse,
 } from "../../../cosmos/base/query/v1beta1/pagination";
+import Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.cert.v1beta2";
 

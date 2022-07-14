@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
-import _m0 from "protobufjs/minimal";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.base.v1beta1";
 
@@ -41,8 +41,9 @@ export function endpoint_KindToJSON(object: Endpoint_Kind): string {
       return "SHARED_HTTP";
     case Endpoint_Kind.RANDOM_PORT:
       return "RANDOM_PORT";
+    case Endpoint_Kind.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
