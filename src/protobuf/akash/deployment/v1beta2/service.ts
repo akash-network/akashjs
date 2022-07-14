@@ -1,6 +1,4 @@
 /* eslint-disable */
-import Long from "long";
-import _m0 from "protobufjs/minimal";
 import {
   MsgCreateDeploymentResponse,
   MsgDepositDeploymentResponse,
@@ -10,7 +8,7 @@ import {
   MsgDepositDeployment,
   MsgUpdateDeployment,
   MsgCloseDeployment,
-} from "../../../akash/deployment/v1beta2/deploymentmsg";
+} from "./deploymentmsg";
 import {
   MsgCloseGroupResponse,
   MsgPauseGroupResponse,
@@ -18,7 +16,8 @@ import {
   MsgCloseGroup,
   MsgPauseGroup,
   MsgStartGroup,
-} from "../../../akash/deployment/v1beta2/groupmsg";
+} from "./groupmsg";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta2";
 
@@ -159,9 +158,4 @@ interface Rpc {
     method: string,
     data: Uint8Array
   ): Promise<Uint8Array>;
-}
-
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
 }

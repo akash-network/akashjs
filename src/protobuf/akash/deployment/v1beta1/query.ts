@@ -1,18 +1,14 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import Long from "long";
-import _m0 from "protobufjs/minimal";
-import {
-  DeploymentFilters,
-  DeploymentID,
-  Deployment,
-} from "../../../akash/deployment/v1beta1/deployment";
+import { DeploymentFilters, DeploymentID, Deployment } from "./deployment";
 import {
   PageRequest,
   PageResponse,
 } from "../../../cosmos/base/query/v1beta1/pagination";
-import { Account } from "../../../akash/escrow/v1beta1/types";
-import { GroupID, Group } from "../../../akash/deployment/v1beta1/group";
+import { Account } from "../../escrow/v1beta1/types";
+import { GroupID, Group } from "./group";
+import Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta1";
 

@@ -1,9 +1,9 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import { GroupID } from "./groupid";
+import { GroupSpec } from "./groupspec";
 import Long from "long";
-import _m0 from "protobufjs/minimal";
-import { GroupID } from "../../../akash/deployment/v1beta2/groupid";
-import { GroupSpec } from "../../../akash/deployment/v1beta2/groupspec";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta2";
 
@@ -67,8 +67,9 @@ export function group_StateToJSON(object: Group_State): string {
       return "insufficient_funds";
     case Group_State.closed:
       return "closed";
+    case Group_State.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -139,7 +140,7 @@ export const Group = {
         ? GroupSpec.fromJSON(object.groupSpec)
         : undefined,
       createdAt: isSet(object.createdAt)
-        ? Long.fromString(object.createdAt)
+        ? Long.fromValue(object.createdAt)
         : Long.ZERO,
     };
   },

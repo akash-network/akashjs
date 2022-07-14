@@ -1,10 +1,10 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import Long from "long";
-import _m0 from "protobufjs/minimal";
-import { PlacementRequirements } from "../../../akash/base/v1beta1/attribute";
-import { ResourceUnits } from "../../../akash/base/v1beta1/resource";
+import { PlacementRequirements } from "../../base/v1beta1/attribute";
+import { ResourceUnits } from "../../base/v1beta1/resource";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
+import Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta1";
 
@@ -117,8 +117,9 @@ export function group_StateToJSON(object: Group_State): string {
       return "insufficient_funds";
     case Group_State.closed:
       return "closed";
+    case Group_State.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -534,7 +535,7 @@ export const GroupID = {
     return {
       $type: GroupID.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
-      dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
+      dseq: isSet(object.dseq) ? Long.fromValue(object.dseq) : Long.UZERO,
       gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
     };
   },
@@ -734,7 +735,7 @@ export const Group = {
         ? GroupSpec.fromJSON(object.groupSpec)
         : undefined,
       createdAt: isSet(object.createdAt)
-        ? Long.fromString(object.createdAt)
+        ? Long.fromValue(object.createdAt)
         : Long.ZERO,
     };
   },

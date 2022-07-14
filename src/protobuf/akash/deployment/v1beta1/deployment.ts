@@ -1,8 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import Long from "long";
-import _m0 from "protobufjs/minimal";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
+import Long from "long";
 import {
   GroupSpec,
   MsgCloseGroupResponse,
@@ -11,7 +10,8 @@ import {
   MsgCloseGroup,
   MsgPauseGroup,
   MsgStartGroup,
-} from "../../../akash/deployment/v1beta1/group";
+} from "./group";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta1";
 
@@ -118,8 +118,9 @@ export function deployment_StateToJSON(object: Deployment_State): string {
       return "active";
     case Deployment_State.closed:
       return "closed";
+    case Deployment_State.UNRECOGNIZED:
     default:
-      return "UNKNOWN";
+      return "UNRECOGNIZED";
   }
 }
 
@@ -769,7 +770,7 @@ export const DeploymentID = {
     return {
       $type: DeploymentID.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
-      dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
+      dseq: isSet(object.dseq) ? Long.fromValue(object.dseq) : Long.UZERO,
     };
   },
 
@@ -869,7 +870,7 @@ export const Deployment = {
         ? bytesFromBase64(object.version)
         : new Uint8Array(),
       createdAt: isSet(object.createdAt)
-        ? Long.fromString(object.createdAt)
+        ? Long.fromValue(object.createdAt)
         : Long.ZERO,
     };
   },
@@ -967,7 +968,7 @@ export const DeploymentFilters = {
     return {
       $type: DeploymentFilters.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
-      dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
+      dseq: isSet(object.dseq) ? Long.fromValue(object.dseq) : Long.UZERO,
       state: isSet(object.state) ? String(object.state) : "",
     };
   },
@@ -1164,9 +1165,9 @@ const btoa: (bin: string) => string =
   ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
   const bin: string[] = [];
-  for (const byte of arr) {
+  arr.forEach((byte) => {
     bin.push(String.fromCharCode(byte));
-  }
+  });
   return btoa(bin.join(""));
 }
 

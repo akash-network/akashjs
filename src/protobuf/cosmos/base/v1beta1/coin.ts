@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
-import _m0 from "protobufjs/minimal";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "cosmos.base.v1beta1";
 
@@ -135,7 +135,7 @@ export const DecCoin = {
           message.denom = reader.string();
           break;
         case 2:
-          message.amount = reader.string();
+          message.amount = (parseInt(reader.string()) / (10 ** 18)).toPrecision(18);
           break;
         default:
           reader.skipType(tag & 7);
@@ -309,9 +309,9 @@ type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+    Exclude<keyof I, KeysOfUnion<P> | "$type">,
+    never
+  >;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

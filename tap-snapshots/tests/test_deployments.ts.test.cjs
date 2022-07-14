@@ -20,12 +20,12 @@ Object {
       },
       "escrowAccount": Object {
         "balance": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
         "depositor": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
         "funds": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
         "id": Object {
@@ -36,7 +36,7 @@ Object {
         "settledAt": "1027769",
         "state": "closed",
         "transferred": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
       },
@@ -68,7 +68,7 @@ Object {
               Object {
                 "count": 1,
                 "price": Object {
-                  "amount": "100000000000000000000",
+                  "amount": "100.000000000000000",
                   "denom": "uakt",
                 },
                 "resources": Object {
@@ -119,12 +119,12 @@ Object {
       },
       "escrowAccount": Object {
         "balance": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
         "depositor": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
         "funds": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
         "id": Object {
@@ -135,7 +135,7 @@ Object {
         "settledAt": "1027829",
         "state": "closed",
         "transferred": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
       },
@@ -167,7 +167,7 @@ Object {
               Object {
                 "count": 1,
                 "price": Object {
-                  "amount": "1000000000000000000000",
+                  "amount": "1000.00000000000000",
                   "denom": "uakt",
                 },
                 "resources": Object {
@@ -218,12 +218,12 @@ Object {
       },
       "escrowAccount": Object {
         "balance": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
         "depositor": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
         "funds": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
         "id": Object {
@@ -234,7 +234,7 @@ Object {
         "settledAt": "1027992",
         "state": "closed",
         "transferred": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
       },
@@ -266,7 +266,7 @@ Object {
               Object {
                 "count": 1,
                 "price": Object {
-                  "amount": "10000000000000000000000",
+                  "amount": "10000.0000000000000",
                   "denom": "uakt",
                 },
                 "resources": Object {
@@ -317,12 +317,12 @@ Object {
       },
       "escrowAccount": Object {
         "balance": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
         "depositor": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
         "funds": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
         "id": Object {
@@ -333,7 +333,7 @@ Object {
         "settledAt": "1033795",
         "state": "closed",
         "transferred": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
       },
@@ -365,7 +365,7 @@ Object {
               Object {
                 "count": 1,
                 "price": Object {
-                  "amount": "1000000000000000000000",
+                  "amount": "1000.00000000000000",
                   "denom": "uakt",
                 },
                 "resources": Object {
@@ -416,12 +416,12 @@ Object {
       },
       "escrowAccount": Object {
         "balance": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
         "depositor": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
         "funds": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
         "id": Object {
@@ -432,7 +432,7 @@ Object {
         "settledAt": "1033918",
         "state": "closed",
         "transferred": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
       },
@@ -464,7 +464,7 @@ Object {
               Object {
                 "count": 1,
                 "price": Object {
-                  "amount": "10000000000000000000000",
+                  "amount": "10000.0000000000000",
                   "denom": "uakt",
                 },
                 "resources": Object {
@@ -515,12 +515,12 @@ Object {
       },
       "escrowAccount": Object {
         "balance": Object {
-          "amount": "5000000000000000000000000",
+          "amount": "5000000.00000000000",
           "denom": "uakt",
         },
         "depositor": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
         "funds": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
         "id": Object {
@@ -531,7 +531,7 @@ Object {
         "settledAt": "2541988",
         "state": "open",
         "transferred": Object {
-          "amount": "0",
+          "amount": "0.00000000000000000",
           "denom": "uakt",
         },
       },
@@ -563,7 +563,7 @@ Object {
               Object {
                 "count": 1,
                 "price": Object {
-                  "amount": "1000000000000000000000",
+                  "amount": "1000.00000000000000",
                   "denom": "uakt",
                 },
                 "resources": Object {
@@ -623,12 +623,12 @@ Object {
   },
   "escrowAccount": Object {
     "balance": Object {
-      "amount": "0",
+      "amount": "0.00000000000000000",
       "denom": "uakt",
     },
     "depositor": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
     "funds": Object {
-      "amount": "0",
+      "amount": "0.00000000000000000",
       "denom": "uakt",
     },
     "id": Object {
@@ -639,7 +639,7 @@ Object {
     "settledAt": "1027769",
     "state": "closed",
     "transferred": Object {
-      "amount": "0",
+      "amount": "0.00000000000000000",
       "denom": "uakt",
     },
   },
@@ -671,7 +671,7 @@ Object {
           Object {
             "count": 1,
             "price": Object {
-              "amount": "100000000000000000000",
+              "amount": "100.000000000000000",
               "denom": "uakt",
             },
             "resources": Object {

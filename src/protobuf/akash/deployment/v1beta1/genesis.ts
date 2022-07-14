@@ -1,10 +1,10 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import { Deployment } from "./deployment";
+import { Params } from "./params";
 import Long from "long";
-import _m0 from "protobufjs/minimal";
-import { Deployment } from "../../../akash/deployment/v1beta1/deployment";
-import { Params } from "../../../akash/deployment/v1beta1/params";
-import { Group } from "../../../akash/deployment/v1beta1/group";
+import { Group } from "./group";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta1";
 

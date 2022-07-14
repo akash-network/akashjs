@@ -1,10 +1,10 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import { Params } from "./params";
 import Long from "long";
-import _m0 from "protobufjs/minimal";
-import { Params } from "../../../akash/market/v1beta2/params";
-import { Order } from "../../../akash/market/v1beta2/order";
-import { Lease } from "../../../akash/market/v1beta2/lease";
+import { Order } from "./order";
+import { Lease } from "./lease";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.market.v1beta2";
 

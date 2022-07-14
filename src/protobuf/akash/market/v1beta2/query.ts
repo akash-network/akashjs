@@ -1,26 +1,15 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import Long from "long";
-import _m0 from "protobufjs/minimal";
-import {
-  OrderFilters,
-  OrderID,
-  Order,
-} from "../../../akash/market/v1beta2/order";
+import { OrderFilters, OrderID, Order } from "./order";
 import {
   PageRequest,
   PageResponse,
 } from "../../../cosmos/base/query/v1beta1/pagination";
-import { BidFilters, BidID, Bid } from "../../../akash/market/v1beta2/bid";
-import {
-  Account,
-  FractionalPayment,
-} from "../../../akash/escrow/v1beta2/types";
-import {
-  LeaseFilters,
-  LeaseID,
-  Lease,
-} from "../../../akash/market/v1beta2/lease";
+import { BidFilters, BidID, Bid } from "./bid";
+import { Account, FractionalPayment } from "../../escrow/v1beta2/types";
+import { LeaseFilters, LeaseID, Lease } from "./lease";
+import Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.market.v1beta2";
 

@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import { Certificate } from "./cert";
 import Long from "long";
-import _m0 from "protobufjs/minimal";
-import { Certificate } from "../../../akash/cert/v1beta2/cert";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.cert.v1beta2";
 

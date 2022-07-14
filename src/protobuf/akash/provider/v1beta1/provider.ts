@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
-import _m0 from "protobufjs/minimal";
-import { Attribute } from "../../../akash/base/v1beta1/attribute";
+import { Attribute } from "../../base/v1beta1/attribute";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.provider.v1beta1";
 
