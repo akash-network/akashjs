@@ -119,7 +119,7 @@ export const DecCoin = {
       writer.uint32(10).string(message.denom);
     }
     if (message.amount !== "") {
-      writer.uint32(18).string(message.amount);
+      writer.uint32(18).string(message.amount.padEnd(23, '0'));
     }
     return writer;
   },
