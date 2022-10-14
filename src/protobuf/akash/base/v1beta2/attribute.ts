@@ -87,7 +87,6 @@ export const Attribute = {
   toJSON(message: Attribute): unknown {
     const obj: any = {};
     message.key !== undefined && (obj.key = message.key);
-    message.value !== undefined && (obj.value = message.value);
     message.value !== undefined &&
     (obj.value = base64FromBytes(
         message.value !== undefined ? message.value : new Uint8Array()
