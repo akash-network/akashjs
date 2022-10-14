@@ -80,7 +80,7 @@ export const Attribute = {
     return {
       $type: Attribute.$type,
       key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.val) ? bytesFromBase64(object.val) : new Uint8Array(),
+      value: isSet(object.value) ? bytesFromBase64(object.value) : new Uint8Array(),
     };
   },
 
@@ -89,7 +89,7 @@ export const Attribute = {
     message.key !== undefined && (obj.key = message.key);
     message.value !== undefined && (obj.value = message.value);
     message.value !== undefined &&
-    (obj.val = base64FromBytes(
+    (obj.value = base64FromBytes(
         message.value !== undefined ? message.value : new Uint8Array()
     ));
     return obj;
