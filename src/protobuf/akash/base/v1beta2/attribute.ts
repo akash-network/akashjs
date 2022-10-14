@@ -9,7 +9,7 @@ export const protobufPackage = "akash.base.v1beta2";
 export interface Attribute {
   $type: "akash.base.v1beta2.Attribute";
   key: string;
-  value: string;
+  value: Uint8Array;
 }
 
 /**
@@ -36,7 +36,7 @@ export interface PlacementRequirements {
 }
 
 function createBaseAttribute(): Attribute {
-  return { $type: "akash.base.v1beta2.Attribute", key: "", value: "" };
+  return { $type: "akash.base.v1beta2.Attribute", key: "", value: new Uint8Array() };
 }
 
 export const Attribute = {
@@ -49,8 +49,8 @@ export const Attribute = {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
-    if (message.value !== "") {
-      writer.uint32(18).string(message.value);
+    if (message.value.length !== 0) {
+      writer.uint32(10).bytes(message.value);
     }
     return writer;
   },
@@ -66,7 +66,7 @@ export const Attribute = {
           message.key = reader.string();
           break;
         case 2:
-          message.value = reader.string();
+          message.value = reader.bytes();
           break;
         default:
           reader.skipType(tag & 7);
@@ -80,7 +80,7 @@ export const Attribute = {
     return {
       $type: Attribute.$type,
       key: isSet(object.key) ? String(object.key) : "",
-      value: isSet(object.value) ? String(object.value) : "",
+      value: isSet(object.val) ? bytesFromBase64(object.val) : new Uint8Array(),
     };
   },
 
@@ -88,6 +88,10 @@ export const Attribute = {
     const obj: any = {};
     message.key !== undefined && (obj.key = message.key);
     message.value !== undefined && (obj.value = message.value);
+    message.value !== undefined &&
+    (obj.val = base64FromBytes(
+        message.value !== undefined ? message.value : new Uint8Array()
+    ));
     return obj;
   },
 
@@ -96,7 +100,7 @@ export const Attribute = {
   ): Attribute {
     const message = createBaseAttribute();
     message.key = object.key ?? "";
-    message.value = object.value ?? "";
+    message.value = object.value ?? new Uint8Array();
     return message;
   },
 };
@@ -309,4 +313,27 @@ if (_m0.util.Long !== Long) {
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
+}
+
+const btoa: (bin: string) => string =
+    globalThis.btoa ||
+    ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
+function base64FromBytes(arr: Uint8Array): string {
+  const bin: string[] = [];
+  arr.forEach((byte) => {
+    bin.push(String.fromCharCode(byte));
+  });
+  return btoa(bin.join(""));
+}
+
+const atob: (b64: string) => string =
+    globalThis.atob ||
+    ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
+function bytesFromBase64(b64: string): Uint8Array {
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; ++i) {
+    arr[i] = bin.charCodeAt(i);
+  }
+  return arr;
 }
