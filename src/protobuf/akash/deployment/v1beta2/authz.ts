@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import Long from "long";
+import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta2";
@@ -16,7 +16,7 @@ export interface DepositDeploymentAuthorization {
    * SpendLimit is the amount the grantee is authorized to spend from the granter's account for
    * the purpose of deployment.
    */
-  spendLimit?: Coin;
+  spendLimit: Coin | undefined;
 }
 
 function createBaseDepositDeploymentAuthorization(): DepositDeploymentAuthorization {

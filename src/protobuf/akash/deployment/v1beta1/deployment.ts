@@ -1,6 +1,5 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import Long from "long";
 import {
   GroupSpec,
@@ -11,6 +10,7 @@ import {
   MsgPauseGroup,
   MsgStartGroup,
 } from "./group";
+import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta1";
@@ -18,10 +18,10 @@ export const protobufPackage = "akash.deployment.v1beta1";
 /** MsgCreateDeployment defines an SDK message for creating deployment */
 export interface MsgCreateDeployment {
   $type: "akash.deployment.v1beta1.MsgCreateDeployment";
-  id?: DeploymentID;
+  id: DeploymentID | undefined;
   groups: GroupSpec[];
   version: Uint8Array;
-  deposit?: Coin;
+  deposit: Coin | undefined;
 }
 
 /** MsgCreateDeploymentResponse defines the Msg/CreateDeployment response type. */
@@ -32,8 +32,8 @@ export interface MsgCreateDeploymentResponse {
 /** MsgDepositDeployment deposits more funds into the deposit account */
 export interface MsgDepositDeployment {
   $type: "akash.deployment.v1beta1.MsgDepositDeployment";
-  id?: DeploymentID;
-  amount?: Coin;
+  id: DeploymentID | undefined;
+  amount: Coin | undefined;
 }
 
 /** MsgCreateDeploymentResponse defines the Msg/CreateDeployment response type. */
@@ -44,7 +44,7 @@ export interface MsgDepositDeploymentResponse {
 /** MsgUpdateDeployment defines an SDK message for updating deployment */
 export interface MsgUpdateDeployment {
   $type: "akash.deployment.v1beta1.MsgUpdateDeployment";
-  id?: DeploymentID;
+  id: DeploymentID | undefined;
   groups: GroupSpec[];
   version: Uint8Array;
 }
@@ -57,7 +57,7 @@ export interface MsgUpdateDeploymentResponse {
 /** MsgCloseDeployment defines an SDK message for closing deployment */
 export interface MsgCloseDeployment {
   $type: "akash.deployment.v1beta1.MsgCloseDeployment";
-  id?: DeploymentID;
+  id: DeploymentID | undefined;
 }
 
 /** MsgCloseDeploymentResponse defines the Msg/CloseDeployment response type. */
@@ -75,7 +75,7 @@ export interface DeploymentID {
 /** Deployment stores deploymentID, state and version details */
 export interface Deployment {
   $type: "akash.deployment.v1beta1.Deployment";
-  deploymentId?: DeploymentID;
+  deploymentId: DeploymentID | undefined;
   state: Deployment_State;
   version: Uint8Array;
   createdAt: Long;

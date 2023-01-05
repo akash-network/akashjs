@@ -1,11 +1,11 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
+import { Provider } from "./audit";
 import {
   PageResponse,
   PageRequest,
 } from "../../../cosmos/base/query/v1beta1/pagination";
-import Long from "long";
-import { Provider } from "./audit";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.audit.v1beta2";
@@ -14,7 +14,7 @@ export const protobufPackage = "akash.audit.v1beta2";
 export interface QueryProvidersResponse {
   $type: "akash.audit.v1beta2.QueryProvidersResponse";
   providers: Provider[];
-  pagination?: PageResponse;
+  pagination: PageResponse | undefined;
 }
 
 /** QueryProviderRequest is request type for the Query/Provider RPC method */
@@ -27,14 +27,14 @@ export interface QueryProviderRequest {
 /** QueryAllProvidersAttributesRequest is request type for the Query/All Providers RPC method */
 export interface QueryAllProvidersAttributesRequest {
   $type: "akash.audit.v1beta2.QueryAllProvidersAttributesRequest";
-  pagination?: PageRequest;
+  pagination: PageRequest | undefined;
 }
 
 /** QueryProviderAttributesRequest is request type for the Query/Provider RPC method */
 export interface QueryProviderAttributesRequest {
   $type: "akash.audit.v1beta2.QueryProviderAttributesRequest";
   owner: string;
-  pagination?: PageRequest;
+  pagination: PageRequest | undefined;
 }
 
 /** QueryProviderAuditorRequest is request type for the Query/Providers RPC method */
@@ -48,7 +48,7 @@ export interface QueryProviderAuditorRequest {
 export interface QueryAuditorAttributesRequest {
   $type: "akash.audit.v1beta2.QueryAuditorAttributesRequest";
   auditor: string;
-  pagination?: PageRequest;
+  pagination: PageRequest | undefined;
 }
 
 function createBaseQueryProvidersResponse(): QueryProvidersResponse {

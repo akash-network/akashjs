@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { OrderFilters, OrderID, Order } from "./order";
+import Long from "long";
+import { OrderFilters, Order, OrderID } from "./order";
 import {
   PageRequest,
   PageResponse,
@@ -8,7 +9,6 @@ import {
 import { BidFilters, BidID, Bid } from "./bid";
 import { Account, FractionalPayment } from "../../escrow/v1beta2/types";
 import { LeaseFilters, LeaseID, Lease } from "./lease";
-import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.market.v1beta2";
@@ -16,81 +16,81 @@ export const protobufPackage = "akash.market.v1beta2";
 /** QueryOrdersRequest is request type for the Query/Orders RPC method */
 export interface QueryOrdersRequest {
   $type: "akash.market.v1beta2.QueryOrdersRequest";
-  filters?: OrderFilters;
-  pagination?: PageRequest;
+  filters: OrderFilters | undefined;
+  pagination: PageRequest | undefined;
 }
 
 /** QueryOrdersResponse is response type for the Query/Orders RPC method */
 export interface QueryOrdersResponse {
   $type: "akash.market.v1beta2.QueryOrdersResponse";
   orders: Order[];
-  pagination?: PageResponse;
+  pagination: PageResponse | undefined;
 }
 
 /** QueryOrderRequest is request type for the Query/Order RPC method */
 export interface QueryOrderRequest {
   $type: "akash.market.v1beta2.QueryOrderRequest";
-  id?: OrderID;
+  id: OrderID | undefined;
 }
 
 /** QueryOrderResponse is response type for the Query/Order RPC method */
 export interface QueryOrderResponse {
   $type: "akash.market.v1beta2.QueryOrderResponse";
-  order?: Order;
+  order: Order | undefined;
 }
 
 /** QueryBidsRequest is request type for the Query/Bids RPC method */
 export interface QueryBidsRequest {
   $type: "akash.market.v1beta2.QueryBidsRequest";
-  filters?: BidFilters;
-  pagination?: PageRequest;
+  filters: BidFilters | undefined;
+  pagination: PageRequest | undefined;
 }
 
 /** QueryBidsResponse is response type for the Query/Bids RPC method */
 export interface QueryBidsResponse {
   $type: "akash.market.v1beta2.QueryBidsResponse";
   bids: QueryBidResponse[];
-  pagination?: PageResponse;
+  pagination: PageResponse | undefined;
 }
 
 /** QueryBidRequest is request type for the Query/Bid RPC method */
 export interface QueryBidRequest {
   $type: "akash.market.v1beta2.QueryBidRequest";
-  id?: BidID;
+  id: BidID | undefined;
 }
 
 /** QueryBidResponse is response type for the Query/Bid RPC method */
 export interface QueryBidResponse {
   $type: "akash.market.v1beta2.QueryBidResponse";
-  bid?: Bid;
-  escrowAccount?: Account;
+  bid: Bid | undefined;
+  escrowAccount: Account | undefined;
 }
 
 /** QueryLeasesRequest is request type for the Query/Leases RPC method */
 export interface QueryLeasesRequest {
   $type: "akash.market.v1beta2.QueryLeasesRequest";
-  filters?: LeaseFilters;
-  pagination?: PageRequest;
+  filters: LeaseFilters | undefined;
+  pagination: PageRequest | undefined;
 }
 
 /** QueryLeasesResponse is response type for the Query/Leases RPC method */
 export interface QueryLeasesResponse {
   $type: "akash.market.v1beta2.QueryLeasesResponse";
   leases: QueryLeaseResponse[];
-  pagination?: PageResponse;
+  pagination: PageResponse | undefined;
 }
 
 /** QueryLeaseRequest is request type for the Query/Lease RPC method */
 export interface QueryLeaseRequest {
   $type: "akash.market.v1beta2.QueryLeaseRequest";
-  id?: LeaseID;
+  id: LeaseID | undefined;
 }
 
 /** QueryLeaseResponse is response type for the Query/Lease RPC method */
 export interface QueryLeaseResponse {
   $type: "akash.market.v1beta2.QueryLeaseResponse";
-  lease?: Lease;
-  escrowPayment?: FractionalPayment;
+  lease: Lease | undefined;
+  escrowPayment: FractionalPayment | undefined;
 }
 
 function createBaseQueryOrdersRequest(): QueryOrdersRequest {

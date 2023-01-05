@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { DecCoin, Coin } from "../../../cosmos/base/v1beta1/coin";
 import Long from "long";
+import { DecCoin, Coin } from "../../../cosmos/base/v1beta1/coin";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.escrow.v1beta2";
@@ -17,15 +17,15 @@ export interface AccountID {
 export interface Account {
   $type: "akash.escrow.v1beta2.Account";
   /** unique identifier for this escrow account */
-  id?: AccountID;
+  id: AccountID | undefined;
   /** bech32 encoded account address of the owner of this escrow account */
   owner: string;
   /** current state of this escrow account */
   state: Account_State;
   /** unspent coins received from the owner's wallet */
-  balance?: DecCoin;
+  balance: DecCoin | undefined;
   /** total coins spent by this account */
-  transferred?: DecCoin;
+  transferred: DecCoin | undefined;
   /** block height at which this account was last settled */
   settledAt: Long;
   /**
@@ -38,7 +38,7 @@ export interface Account {
    * Funds are unspent coins received from the (non-Owner) Depositor's wallet.
    * If there are any funds, they should be spent before spending the Balance.
    */
-  funds?: DecCoin;
+  funds: DecCoin | undefined;
 }
 
 /** State stores state for an escrow account */
@@ -94,13 +94,13 @@ export function account_StateToJSON(object: Account_State): string {
 /** Payment stores state for a payment */
 export interface FractionalPayment {
   $type: "akash.escrow.v1beta2.FractionalPayment";
-  accountId?: AccountID;
+  accountId: AccountID | undefined;
   paymentId: string;
   owner: string;
   state: FractionalPayment_State;
-  rate?: DecCoin;
-  balance?: DecCoin;
-  withdrawn?: Coin;
+  rate: DecCoin | undefined;
+  balance: DecCoin | undefined;
+  withdrawn: Coin | undefined;
 }
 
 /** Payment State */

@@ -1,9 +1,9 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { DeploymentID } from "./deployment";
-import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import Long from "long";
+import { DeploymentID } from "./deployment";
 import { GroupSpec } from "./groupspec";
+import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta2";
@@ -11,10 +11,10 @@ export const protobufPackage = "akash.deployment.v1beta2";
 /** MsgCreateDeployment defines an SDK message for creating deployment */
 export interface MsgCreateDeployment {
   $type: "akash.deployment.v1beta2.MsgCreateDeployment";
-  id?: DeploymentID;
+  id: DeploymentID | undefined;
   groups: GroupSpec[];
   version: Uint8Array;
-  deposit?: Coin;
+  deposit: Coin | undefined;
   /** Depositor pays for the deposit */
   depositor: string;
 }
@@ -27,8 +27,8 @@ export interface MsgCreateDeploymentResponse {
 /** MsgDepositDeployment deposits more funds into the deposit account */
 export interface MsgDepositDeployment {
   $type: "akash.deployment.v1beta2.MsgDepositDeployment";
-  id?: DeploymentID;
-  amount?: Coin;
+  id: DeploymentID | undefined;
+  amount: Coin | undefined;
   /** Depositor pays for the deposit */
   depositor: string;
 }
@@ -41,7 +41,7 @@ export interface MsgDepositDeploymentResponse {
 /** MsgUpdateDeployment defines an SDK message for updating deployment */
 export interface MsgUpdateDeployment {
   $type: "akash.deployment.v1beta2.MsgUpdateDeployment";
-  id?: DeploymentID;
+  id: DeploymentID | undefined;
   version: Uint8Array;
 }
 
@@ -53,7 +53,7 @@ export interface MsgUpdateDeploymentResponse {
 /** MsgCloseDeployment defines an SDK message for closing deployment */
 export interface MsgCloseDeployment {
   $type: "akash.deployment.v1beta2.MsgCloseDeployment";
-  id?: DeploymentID;
+  id: DeploymentID | undefined;
 }
 
 /** MsgCloseDeploymentResponse defines the Msg/CloseDeployment response type. */

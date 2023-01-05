@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { Certificate } from "./cert";
 import Long from "long";
+import { Certificate } from "./cert";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.cert.v1beta2";
@@ -10,7 +10,7 @@ export const protobufPackage = "akash.cert.v1beta2";
 export interface GenesisCertificate {
   $type: "akash.cert.v1beta2.GenesisCertificate";
   owner: string;
-  certificate?: Certificate;
+  certificate: Certificate | undefined;
 }
 
 /** GenesisState defines the basic genesis state used by cert module */

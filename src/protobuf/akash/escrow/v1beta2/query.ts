@@ -1,10 +1,10 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
 import {
   PageRequest,
   PageResponse,
 } from "../../../cosmos/base/query/v1beta1/pagination";
-import Long from "long";
 import { Account, FractionalPayment } from "./types";
 import * as _m0 from "protobufjs/minimal";
 
@@ -17,14 +17,14 @@ export interface QueryAccountsRequest {
   xid: string;
   owner: string;
   state: string;
-  pagination?: PageRequest;
+  pagination: PageRequest | undefined;
 }
 
 /** QueryProvidersResponse is response type for the Query/Providers RPC method */
 export interface QueryAccountsResponse {
   $type: "akash.escrow.v1beta2.QueryAccountsResponse";
   accounts: Account[];
-  pagination?: PageResponse;
+  pagination: PageResponse | undefined;
 }
 
 /** QueryPaymentRequest is request type for the Query/Payment RPC method */
@@ -35,14 +35,14 @@ export interface QueryPaymentsRequest {
   id: string;
   owner: string;
   state: string;
-  pagination?: PageRequest;
+  pagination: PageRequest | undefined;
 }
 
 /** QueryProvidersResponse is response type for the Query/Providers RPC method */
 export interface QueryPaymentsResponse {
   $type: "akash.escrow.v1beta2.QueryPaymentsResponse";
   payments: FractionalPayment[];
-  pagination?: PageResponse;
+  pagination: PageResponse | undefined;
 }
 
 function createBaseQueryAccountsRequest(): QueryAccountsRequest {

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { CPU, Memory, Storage } from "./resource";
 import Long from "long";
+import { CPU, Memory, Storage } from "./resource";
 import { Endpoint } from "./endpoint";
 import * as _m0 from "protobufjs/minimal";
 
@@ -13,8 +13,8 @@ export const protobufPackage = "akash.base.v1beta2";
  */
 export interface ResourceUnits {
   $type: "akash.base.v1beta2.ResourceUnits";
-  cpu?: CPU;
-  memory?: Memory;
+  cpu: CPU | undefined;
+  memory: Memory | undefined;
   storage: Storage[];
   endpoints: Endpoint[];
 }

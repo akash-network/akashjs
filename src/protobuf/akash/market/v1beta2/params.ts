@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import Long from "long";
+import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.market.v1beta2";
@@ -9,7 +9,7 @@ export const protobufPackage = "akash.market.v1beta2";
 /** Params is the params for the x/market module */
 export interface Params {
   $type: "akash.market.v1beta2.Params";
-  bidMinDeposit?: Coin;
+  bidMinDeposit: Coin | undefined;
   orderMaxBids: number;
 }
 

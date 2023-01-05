@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { Params } from "./params";
 import Long from "long";
+import { Params } from "./params";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.inflation.v1beta2";
@@ -9,7 +9,7 @@ export const protobufPackage = "akash.inflation.v1beta2";
 /** GenesisState stores slice of genesis deployment instance */
 export interface GenesisState {
   $type: "akash.inflation.v1beta2.GenesisState";
-  params?: Params;
+  params: Params | undefined;
 }
 
 function createBaseGenesisState(): GenesisState {
