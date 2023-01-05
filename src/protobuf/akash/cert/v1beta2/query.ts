@@ -1,11 +1,11 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
 import { Certificate, CertificateFilter } from "./cert";
 import {
   PageRequest,
   PageResponse,
 } from "../../../cosmos/base/query/v1beta1/pagination";
-import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.cert.v1beta2";
@@ -13,22 +13,22 @@ export const protobufPackage = "akash.cert.v1beta2";
 /** CertificateResponse contains a single X509 certificate and its serial number */
 export interface CertificateResponse {
   $type: "akash.cert.v1beta2.CertificateResponse";
-  certificate?: Certificate;
+  certificate: Certificate | undefined;
   serial: string;
 }
 
 /** QueryDeploymentsRequest is request type for the Query/Deployments RPC method */
 export interface QueryCertificatesRequest {
   $type: "akash.cert.v1beta2.QueryCertificatesRequest";
-  filter?: CertificateFilter;
-  pagination?: PageRequest;
+  filter: CertificateFilter | undefined;
+  pagination: PageRequest | undefined;
 }
 
 /** QueryCertificatesResponse is response type for the Query/Certificates RPC method */
 export interface QueryCertificatesResponse {
   $type: "akash.cert.v1beta2.QueryCertificatesResponse";
   certificates: CertificateResponse[];
-  pagination?: PageResponse;
+  pagination: PageResponse | undefined;
 }
 
 function createBaseCertificateResponse(): CertificateResponse {

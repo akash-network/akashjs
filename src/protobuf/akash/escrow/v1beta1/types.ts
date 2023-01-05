@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import Long from "long";
+import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.escrow.v1beta1";
@@ -17,15 +17,15 @@ export interface AccountID {
 export interface Account {
   $type: "akash.escrow.v1beta1.Account";
   /** unique identifier for this escrow account */
-  id?: AccountID;
+  id: AccountID | undefined;
   /** bech32 encoded account address of the owner of this escrow account */
   owner: string;
   /** current state of this escrow account */
   state: Account_State;
   /** unspent coins received from the owner's wallet */
-  balance?: Coin;
+  balance: Coin | undefined;
   /** total coins spent by this account */
-  transferred?: Coin;
+  transferred: Coin | undefined;
   /** block height at which this account was last settled */
   settledAt: Long;
 }
@@ -83,13 +83,13 @@ export function account_StateToJSON(object: Account_State): string {
 /** Payment stores state for a payment */
 export interface Payment {
   $type: "akash.escrow.v1beta1.Payment";
-  accountId?: AccountID;
+  accountId: AccountID | undefined;
   paymentId: string;
   owner: string;
   state: Payment_State;
-  rate?: Coin;
-  balance?: Coin;
-  withdrawn?: Coin;
+  rate: Coin | undefined;
+  balance: Coin | undefined;
+  withdrawn: Coin | undefined;
 }
 
 /** Payment State */

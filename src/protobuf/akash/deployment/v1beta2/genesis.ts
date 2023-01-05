@@ -1,9 +1,9 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { Deployment } from "./deployment";
-import { Params } from "./params";
 import Long from "long";
+import { Deployment } from "./deployment";
 import { Group } from "./group";
+import { Params } from "./params";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta2";
@@ -11,7 +11,7 @@ export const protobufPackage = "akash.deployment.v1beta2";
 /** GenesisDeployment defines the basic genesis state used by deployment module */
 export interface GenesisDeployment {
   $type: "akash.deployment.v1beta2.GenesisDeployment";
-  deployment?: Deployment;
+  deployment: Deployment | undefined;
   groups: Group[];
 }
 
@@ -19,7 +19,7 @@ export interface GenesisDeployment {
 export interface GenesisState {
   $type: "akash.deployment.v1beta2.GenesisState";
   deployments: GenesisDeployment[];
-  params?: Params;
+  params: Params | undefined;
 }
 
 function createBaseGenesisDeployment(): GenesisDeployment {

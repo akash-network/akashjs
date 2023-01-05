@@ -1,13 +1,13 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
 import { DeploymentFilters, DeploymentID, Deployment } from "./deployment";
 import {
   PageRequest,
   PageResponse,
 } from "../../../cosmos/base/query/v1beta1/pagination";
+import { Group, GroupID } from "./group";
 import { Account } from "../../escrow/v1beta1/types";
-import { GroupID, Group } from "./group";
-import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta1";
@@ -15,41 +15,41 @@ export const protobufPackage = "akash.deployment.v1beta1";
 /** QueryDeploymentsRequest is request type for the Query/Deployments RPC method */
 export interface QueryDeploymentsRequest {
   $type: "akash.deployment.v1beta1.QueryDeploymentsRequest";
-  filters?: DeploymentFilters;
-  pagination?: PageRequest;
+  filters: DeploymentFilters | undefined;
+  pagination: PageRequest | undefined;
 }
 
 /** QueryDeploymentsResponse is response type for the Query/Deployments RPC method */
 export interface QueryDeploymentsResponse {
   $type: "akash.deployment.v1beta1.QueryDeploymentsResponse";
   deployments: QueryDeploymentResponse[];
-  pagination?: PageResponse;
+  pagination: PageResponse | undefined;
 }
 
 /** QueryDeploymentRequest is request type for the Query/Deployment RPC method */
 export interface QueryDeploymentRequest {
   $type: "akash.deployment.v1beta1.QueryDeploymentRequest";
-  id?: DeploymentID;
+  id: DeploymentID | undefined;
 }
 
 /** QueryDeploymentResponse is response type for the Query/Deployment RPC method */
 export interface QueryDeploymentResponse {
   $type: "akash.deployment.v1beta1.QueryDeploymentResponse";
-  deployment?: Deployment;
+  deployment: Deployment | undefined;
   groups: Group[];
-  escrowAccount?: Account;
+  escrowAccount: Account | undefined;
 }
 
 /** QueryGroupRequest is request type for the Query/Group RPC method */
 export interface QueryGroupRequest {
   $type: "akash.deployment.v1beta1.QueryGroupRequest";
-  id?: GroupID;
+  id: GroupID | undefined;
 }
 
 /** QueryGroupResponse is response type for the Query/Group RPC method */
 export interface QueryGroupResponse {
   $type: "akash.deployment.v1beta1.QueryGroupResponse";
-  group?: Group;
+  group: Group | undefined;
 }
 
 function createBaseQueryDeploymentsRequest(): QueryDeploymentsRequest {

@@ -87,7 +87,7 @@ export interface MsgCreateCertificateResponse {
 /** MsgRevokeCertificate defines an SDK message for revoking certificate */
 export interface MsgRevokeCertificate {
   $type: "akash.cert.v1beta2.MsgRevokeCertificate";
-  id?: CertificateID;
+  id: CertificateID | undefined;
 }
 
 /** MsgRevokeCertificateResponse defines the Msg/RevokeCertificate response type. */

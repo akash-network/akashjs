@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
 import { GroupID } from "./groupid";
 import { GroupSpec } from "./groupspec";
-import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta2";
@@ -10,9 +10,9 @@ export const protobufPackage = "akash.deployment.v1beta2";
 /** Group stores group id, state and specifications of group */
 export interface Group {
   $type: "akash.deployment.v1beta2.Group";
-  groupId?: GroupID;
+  groupId: GroupID | undefined;
   state: Group_State;
-  groupSpec?: GroupSpec;
+  groupSpec: GroupSpec | undefined;
   createdAt: Long;
 }
 

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import Long from "long";
+import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta2";
@@ -9,7 +9,7 @@ export const protobufPackage = "akash.deployment.v1beta2";
 /** Params defines the parameters for the x/deployment package */
 export interface Params {
   $type: "akash.deployment.v1beta2.Params";
-  deploymentMinDeposit?: Coin;
+  deploymentMinDeposit: Coin | undefined;
 }
 
 function createBaseParams(): Params {

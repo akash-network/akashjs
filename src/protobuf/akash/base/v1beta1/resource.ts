@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { ResourceValue } from "./resourcevalue";
 import Long from "long";
+import { ResourceValue } from "./resourcevalue";
 import { Attribute } from "./attribute";
 import { Endpoint } from "./endpoint";
 import * as _m0 from "protobufjs/minimal";
@@ -11,21 +11,21 @@ export const protobufPackage = "akash.base.v1beta1";
 /** CPU stores resource units and cpu config attributes */
 export interface CPU {
   $type: "akash.base.v1beta1.CPU";
-  units?: ResourceValue;
+  units: ResourceValue | undefined;
   attributes: Attribute[];
 }
 
 /** Memory stores resource quantity and memory attributes */
 export interface Memory {
   $type: "akash.base.v1beta1.Memory";
-  quantity?: ResourceValue;
+  quantity: ResourceValue | undefined;
   attributes: Attribute[];
 }
 
 /** Storage stores resource quantity and storage attributes */
 export interface Storage {
   $type: "akash.base.v1beta1.Storage";
-  quantity?: ResourceValue;
+  quantity: ResourceValue | undefined;
   attributes: Attribute[];
 }
 
@@ -35,9 +35,9 @@ export interface Storage {
  */
 export interface ResourceUnits {
   $type: "akash.base.v1beta1.ResourceUnits";
-  cpu?: CPU;
-  memory?: Memory;
-  storage?: Storage;
+  cpu: CPU | undefined;
+  memory: Memory | undefined;
+  storage: Storage | undefined;
   endpoints: Endpoint[];
 }
 

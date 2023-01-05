@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { GroupID } from "./groupid";
 import Long from "long";
+import { GroupID } from "./groupid";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta2";
@@ -9,7 +9,7 @@ export const protobufPackage = "akash.deployment.v1beta2";
 /** MsgCloseGroup defines SDK message to close a single Group within a Deployment. */
 export interface MsgCloseGroup {
   $type: "akash.deployment.v1beta2.MsgCloseGroup";
-  id?: GroupID;
+  id: GroupID | undefined;
 }
 
 /** MsgCloseGroupResponse defines the Msg/CloseGroup response type. */
@@ -20,7 +20,7 @@ export interface MsgCloseGroupResponse {
 /** MsgPauseGroup defines SDK message to close a single Group within a Deployment. */
 export interface MsgPauseGroup {
   $type: "akash.deployment.v1beta2.MsgPauseGroup";
-  id?: GroupID;
+  id: GroupID | undefined;
 }
 
 /** MsgPauseGroupResponse defines the Msg/PauseGroup response type. */
@@ -31,7 +31,7 @@ export interface MsgPauseGroupResponse {
 /** MsgStartGroup defines SDK message to close a single Group within a Deployment. */
 export interface MsgStartGroup {
   $type: "akash.deployment.v1beta2.MsgStartGroup";
-  id?: GroupID;
+  id: GroupID | undefined;
 }
 
 /** MsgStartGroupResponse defines the Msg/StartGroup response type. */
