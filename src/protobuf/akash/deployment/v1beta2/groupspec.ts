@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { PlacementRequirements } from "../../base/v1beta2/attribute";
 import Long from "long";
+import { PlacementRequirements } from "../../base/v1beta2/attribute";
 import { Resource } from "./resource";
 import * as _m0 from "protobufjs/minimal";
 
@@ -11,7 +11,7 @@ export const protobufPackage = "akash.deployment.v1beta2";
 export interface GroupSpec {
   $type: "akash.deployment.v1beta2.GroupSpec";
   name: string;
-  requirements?: PlacementRequirements;
+  requirements: PlacementRequirements | undefined;
   resources: Resource[];
 }
 

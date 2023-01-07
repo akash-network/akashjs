@@ -15,7 +15,7 @@ export interface DeploymentID {
 /** Deployment stores deploymentID, state and version details */
 export interface Deployment {
   $type: "akash.deployment.v1beta2.Deployment";
-  deploymentId?: DeploymentID;
+  deploymentId: DeploymentID | undefined;
   state: Deployment_State;
   version: Uint8Array;
   createdAt: Long;

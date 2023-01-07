@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
 import { OrderID } from "./order";
 import { DecCoin, Coin } from "../../../cosmos/base/v1beta1/coin";
-import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.market.v1beta2";
@@ -10,10 +10,10 @@ export const protobufPackage = "akash.market.v1beta2";
 /** MsgCreateBid defines an SDK message for creating Bid */
 export interface MsgCreateBid {
   $type: "akash.market.v1beta2.MsgCreateBid";
-  order?: OrderID;
+  order: OrderID | undefined;
   provider: string;
-  price?: DecCoin;
-  deposit?: Coin;
+  price: DecCoin | undefined;
+  deposit: Coin | undefined;
 }
 
 /** MsgCreateBidResponse defines the Msg/CreateBid response type. */
@@ -24,7 +24,7 @@ export interface MsgCreateBidResponse {
 /** MsgCloseBid defines an SDK message for closing bid */
 export interface MsgCloseBid {
   $type: "akash.market.v1beta2.MsgCloseBid";
-  bidId?: BidID;
+  bidId: BidID | undefined;
 }
 
 /** MsgCloseBidResponse defines the Msg/CloseBid response type. */
@@ -48,9 +48,9 @@ export interface BidID {
 /** Bid stores BidID, state of bid and price */
 export interface Bid {
   $type: "akash.market.v1beta2.Bid";
-  bidId?: BidID;
+  bidId: BidID | undefined;
   state: Bid_State;
-  price?: DecCoin;
+  price: DecCoin | undefined;
   createdAt: Long;
 }
 

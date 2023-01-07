@@ -1,9 +1,9 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
 import { PlacementRequirements } from "../../base/v1beta1/attribute";
 import { ResourceUnits } from "../../base/v1beta1/resource";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
-import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta1";
@@ -11,7 +11,7 @@ export const protobufPackage = "akash.deployment.v1beta1";
 /** MsgCloseGroup defines SDK message to close a single Group within a Deployment. */
 export interface MsgCloseGroup {
   $type: "akash.deployment.v1beta1.MsgCloseGroup";
-  id?: GroupID;
+  id: GroupID | undefined;
 }
 
 /** MsgCloseGroupResponse defines the Msg/CloseGroup response type. */
@@ -22,7 +22,7 @@ export interface MsgCloseGroupResponse {
 /** MsgPauseGroup defines SDK message to close a single Group within a Deployment. */
 export interface MsgPauseGroup {
   $type: "akash.deployment.v1beta1.MsgPauseGroup";
-  id?: GroupID;
+  id: GroupID | undefined;
 }
 
 /** MsgPauseGroupResponse defines the Msg/PauseGroup response type. */
@@ -33,7 +33,7 @@ export interface MsgPauseGroupResponse {
 /** MsgStartGroup defines SDK message to close a single Group within a Deployment. */
 export interface MsgStartGroup {
   $type: "akash.deployment.v1beta1.MsgStartGroup";
-  id?: GroupID;
+  id: GroupID | undefined;
 }
 
 /** MsgStartGroupResponse defines the Msg/StartGroup response type. */
@@ -53,16 +53,16 @@ export interface GroupID {
 export interface GroupSpec {
   $type: "akash.deployment.v1beta1.GroupSpec";
   name: string;
-  requirements?: PlacementRequirements;
+  requirements: PlacementRequirements | undefined;
   resources: Resource[];
 }
 
 /** Group stores group id, state and specifications of group */
 export interface Group {
   $type: "akash.deployment.v1beta1.Group";
-  groupId?: GroupID;
+  groupId: GroupID | undefined;
   state: Group_State;
-  groupSpec?: GroupSpec;
+  groupSpec: GroupSpec | undefined;
   createdAt: Long;
 }
 
@@ -126,9 +126,9 @@ export function group_StateToJSON(object: Group_State): string {
 /** Resource stores unit, total count and price of resource */
 export interface Resource {
   $type: "akash.deployment.v1beta1.Resource";
-  resources?: ResourceUnits;
+  resources: ResourceUnits | undefined;
   count: number;
-  price?: Coin;
+  price: Coin | undefined;
 }
 
 function createBaseMsgCloseGroup(): MsgCloseGroup {

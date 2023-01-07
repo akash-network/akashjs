@@ -1,11 +1,11 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
 import {
   PageRequest,
   PageResponse,
 } from "../../../cosmos/base/query/v1beta1/pagination";
 import { Provider } from "./provider";
-import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.provider.v1beta2";
@@ -13,14 +13,14 @@ export const protobufPackage = "akash.provider.v1beta2";
 /** QueryProvidersRequest is request type for the Query/Providers RPC method */
 export interface QueryProvidersRequest {
   $type: "akash.provider.v1beta2.QueryProvidersRequest";
-  pagination?: PageRequest;
+  pagination: PageRequest | undefined;
 }
 
 /** QueryProvidersResponse is response type for the Query/Providers RPC method */
 export interface QueryProvidersResponse {
   $type: "akash.provider.v1beta2.QueryProvidersResponse";
   providers: Provider[];
-  pagination?: PageResponse;
+  pagination: PageResponse | undefined;
 }
 
 /** QueryProviderRequest is request type for the Query/Provider RPC method */
@@ -32,7 +32,7 @@ export interface QueryProviderRequest {
 /** QueryProviderResponse is response type for the Query/Provider RPC method */
 export interface QueryProviderResponse {
   $type: "akash.provider.v1beta2.QueryProviderResponse";
-  provider?: Provider;
+  provider: Provider | undefined;
 }
 
 function createBaseQueryProvidersRequest(): QueryProvidersRequest {

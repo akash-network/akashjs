@@ -1,9 +1,9 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { Params } from "./params";
 import Long from "long";
 import { Order } from "./order";
 import { Lease } from "./lease";
+import { Params } from "./params";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.market.v1beta2";
@@ -13,7 +13,7 @@ export interface GenesisState {
   $type: "akash.market.v1beta2.GenesisState";
   orders: Order[];
   leases: Lease[];
-  params?: Params;
+  params: Params | undefined;
 }
 
 function createBaseGenesisState(): GenesisState {

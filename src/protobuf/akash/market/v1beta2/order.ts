@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { GroupSpec } from "../../deployment/v1beta2/groupspec";
 import Long from "long";
+import { GroupSpec } from "../../deployment/v1beta2/groupspec";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.market.v1beta2";
@@ -18,9 +18,9 @@ export interface OrderID {
 /** Order stores orderID, state of order and other details */
 export interface Order {
   $type: "akash.market.v1beta2.Order";
-  orderId?: OrderID;
+  orderId: OrderID | undefined;
   state: Order_State;
-  spec?: GroupSpec;
+  spec: GroupSpec | undefined;
   createdAt: Long;
 }
 

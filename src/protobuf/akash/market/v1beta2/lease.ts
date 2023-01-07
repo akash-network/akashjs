@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
 import { DecCoin } from "../../../cosmos/base/v1beta1/coin";
 import { BidID } from "./bid";
-import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.market.v1beta2";
@@ -20,9 +20,9 @@ export interface LeaseID {
 /** Lease stores LeaseID, state of lease and price */
 export interface Lease {
   $type: "akash.market.v1beta2.Lease";
-  leaseId?: LeaseID;
+  leaseId: LeaseID | undefined;
   state: Lease_State;
-  price?: DecCoin;
+  price: DecCoin | undefined;
   createdAt: Long;
   closedOn: Long;
 }
@@ -91,7 +91,7 @@ export interface LeaseFilters {
 /** MsgCreateLease is sent to create a lease */
 export interface MsgCreateLease {
   $type: "akash.market.v1beta2.MsgCreateLease";
-  bidId?: BidID;
+  bidId: BidID | undefined;
 }
 
 /** MsgCreateLeaseResponse is the response from creating a lease */
@@ -102,7 +102,7 @@ export interface MsgCreateLeaseResponse {
 /** MsgWithdrawLease defines an SDK message for closing bid */
 export interface MsgWithdrawLease {
   $type: "akash.market.v1beta2.MsgWithdrawLease";
-  bidId?: LeaseID;
+  bidId: LeaseID | undefined;
 }
 
 /** MsgWithdrawLeaseResponse defines the Msg/WithdrawLease response type. */
@@ -113,7 +113,7 @@ export interface MsgWithdrawLeaseResponse {
 /** MsgCloseLease defines an SDK message for closing order */
 export interface MsgCloseLease {
   $type: "akash.market.v1beta2.MsgCloseLease";
-  leaseId?: LeaseID;
+  leaseId: LeaseID | undefined;
 }
 
 /** MsgCloseLeaseResponse defines the Msg/CloseLease response type. */

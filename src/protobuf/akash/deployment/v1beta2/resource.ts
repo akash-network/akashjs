@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
 import { ResourceUnits } from "../../base/v1beta2/resourceunits";
 import { DecCoin } from "../../../cosmos/base/v1beta1/coin";
-import Long from "long";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta2";
@@ -10,9 +10,9 @@ export const protobufPackage = "akash.deployment.v1beta2";
 /** Resource stores unit, total count and price of resource */
 export interface Resource {
   $type: "akash.deployment.v1beta2.Resource";
-  resources?: ResourceUnits;
+  resources: ResourceUnits | undefined;
   count: number;
-  price?: DecCoin;
+  price: DecCoin | undefined;
 }
 
 function createBaseResource(): Resource {

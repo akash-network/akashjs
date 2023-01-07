@@ -30,7 +30,7 @@ export interface SignedBy {
 export interface PlacementRequirements {
   $type: "akash.base.v1beta1.PlacementRequirements";
   /** SignedBy list of keys that tenants expect to have signatures from */
-  signedBy?: SignedBy;
+  signedBy: SignedBy | undefined;
   /** Attribute list of attributes tenant expects from the provider */
   attributes: Attribute[];
 }
