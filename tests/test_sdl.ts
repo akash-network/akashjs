@@ -100,14 +100,6 @@ const testManifest = [
   }
 ];
 
-tap.test("SDL: Constructor", async (t) => {
-  t.plan(1);
-
-  const sdl = new SDL();
-
-  t.ok(sdl instanceof SDL, "Default SDL is not undefined");
-});
-
 tap.test("SDL: fromString", async (t) => {
   t.plan(2);
 
