@@ -1,27 +1,6 @@
 import YAML from 'js-yaml';
-import { Manifest, Service, ServiceExpose, v2ComputeResources, v2Expose, v2ProfileCompute, v2ResourceCPU, v2ResourceMemory, v2ResourceStorageArray, v2Sdl, v2Service } from './types';
-
-const unitMultipliers = {
-    ki: 1024,
-    mi: 1024 * 1024,
-    gi: 1024 * 1024 * 1024,
-    ti: 1024 * 1024 * 1024 * 1024,
-    pi: 1024 * 1024 * 1024 * 1024 * 1024,
-    ei: 1024 * 1024 * 1024 * 1024 * 1024 * 1024,
-    k: 1000,
-    m: 1000 * 1000,
-    g: 1000 * 1000 * 1000,
-    t: 1000 * 1000 * 1000 * 1000,
-    p: 1000 * 1000 * 1000 * 1000 * 1000,
-    e: 1000 * 1000 * 1000 * 1000 * 1000 * 1000,
-    kb: 1000,
-    mb: 1000 * 1000,
-    gb: 1000 * 1000 * 1000,
-    tb: 1000 * 1000 * 1000 * 1000,
-    pb: 1000 * 1000 * 1000 * 1000 * 1000,
-    eb: 1000 * 1000 * 1000 * 1000 * 1000 * 1000
-};
-
+import { Manifest, Service, ServiceExpose, ServiceExposeHttpOptions, v2Expose, v2ProfileCompute, v2ResourceCPU, v2ResourceMemory, v2ResourceStorageArray, v2Sdl, v2Service } from './types';
+import { convertResourceString } from './sizes';
 export class SDL {
 
     data: v2Sdl;
@@ -33,14 +12,6 @@ export class SDL {
     static fromString(yaml: string) {
         const data = YAML.load(yaml) as v2Sdl
         return new SDL(data);
-    }
-
-    endpoints() {
-        return [];
-    }
-
-    resource() {
-        return {};
     }
 
     services() {
@@ -73,10 +44,6 @@ export class SDL {
         return placement || {};
     }
 
-    computeEndpointSequenceNumbers() {
-        return [];
-    }
-
     serviceNames() {
         const names = this.data
             ? Object.keys(this.data.services)
@@ -84,10 +51,6 @@ export class SDL {
 
         // TODO: sort these
         return names;
-    }
-
-    toManifestResources(res: any) {
-        return [];
     }
 
     deploymentsByPlacement(placement: string) {
@@ -99,26 +62,8 @@ export class SDL {
             .filter(([name, deployment]) => deployment.hasOwnProperty(placement));
     }
 
-    resourceAsNumber(resource: string): Number {
-        const matchStr = resource.toLowerCase();
-        const unit = Object.entries(unitMultipliers)
-            .find(([unit, _]) => matchStr.endsWith(unit));
-
-        if (unit) {
-            const [suffix, multiplier] = unit;
-            const numberStr = resource.substring(0, resource.length - suffix.length);
-            return parseFloat(numberStr) * multiplier;
-        } else {
-            return parseFloat(resource);
-        }
-    }
-
     resourceUnit(val: string) {
-        return { val: this.resourceAsNumber(val) };
-    }
-
-    memoryUnit(val: string) {
-        return { val: this.resourceAsNumber(val) };
+        return { val: convertResourceString(val) };
     }
 
     serviceResourceCpu(resource: v2ResourceCPU) {
@@ -131,7 +76,7 @@ export class SDL {
 
     serviceResourceMemory(resource: v2ResourceMemory) {
         return {
-            size: this.memoryUnit(resource.size)
+            size: this.resourceUnit(resource.size)
         };
     }
 
@@ -184,21 +129,30 @@ export class SDL {
     }
 
     manifestExposeHosts(expose: v2Expose) {
-        return null;
+        return expose.accept || null;
     }
 
-    manifestExposeHttpOptions(expose: any) {
-        return {
-            "MaxBodySize": 1048576,
-            "ReadTimeout": 60000,
-            "SendTimeout": 60000,
-            "NextTries": 3,
-            "NextTimeout": 0,
-            "NextCases": [
+    manifestExposeHttpOptions(expose: v2Expose): ServiceExposeHttpOptions {
+        const defaults = {
+            MaxBodySize: 1048576,
+            ReadTimeout: 60000,
+            SendTimeout: 60000,
+            NextTries: 3,
+            NextTimeout: 0,
+            NextCases: [
                 "error",
                 "timeout",
             ],
-        }
+        };
+
+        return {
+            MaxBodySize: expose.http_options?.max_body_size || defaults.MaxBodySize,
+            ReadTimeout: expose.http_options?.read_timeout || defaults.ReadTimeout,
+            SendTimeout: expose.http_options?.send_timeout || defaults.SendTimeout,
+            NextTries: expose.http_options?.next_tries || defaults.NextTries,
+            NextTimeout: expose.http_options?.next_timeout || defaults.NextTimeout,
+            NextCases: expose.http_options?.next_cases || defaults.NextCases,
+        };
     }
 
     manifestExpose(service: v2Service): ServiceExpose[] {
@@ -215,27 +169,28 @@ export class SDL {
         }));
     }
 
-    manifestService(name: string, deployment: string): Service {
+    manifestService(placement: string, name: string): Service {
         const service = this.data.services[name];
         const profile = this.data.profiles.compute[name];
+        const deployment = this.data.deployment[name];
 
         return {
             Name: name,
             Image: service.image,
-            Command: null,
-            Args: null,
-            Env: null,
+            Command: service.command,
+            Args: service.args,
+            Env: service.env,
             Resources: this.serviceResources(service, profile),
-            Count: 1,
+            Count: deployment[placement].count,
             Expose: this.manifestExpose(service),
         }
     }
 
     manifest(): Manifest {
-        return Object.entries(this.placements()).map(([name, placement]) => ({
+        return Object.keys(this.placements()).map(name => ({
             Name: name,
             Services: this.deploymentsByPlacement(name)
-                .map(([name, deployment]) => this.manifestService(name, deployment))
+                .map(([service]) => this.manifestService(name, service))
         }));
     }
 }

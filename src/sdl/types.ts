@@ -18,12 +18,29 @@ export type Service = {
     params?: ServiceParams,
 }
 
+export type ServiceExposeHttpOptions = {
+    MaxBodySize: number,
+    ReadTimeout: number,
+    SendTimeout: number,
+    NextTries: number,
+    NextTimeout: number,
+    NextCases: string[],
+}
+
 export type ResourceUnits = {
 
 }
 
 export type ServiceExpose = {
-
+    Port: number,
+    ExternalPort: number,
+    Proto: string,
+    Service: any,
+    Global: boolean,
+    Hosts: any,
+    HTTPOptions: ServiceExposeHttpOptions,
+    IP: string,
+    EndpointSequenceNumber: number,
 }
 
 export type ServiceParams = {
@@ -94,8 +111,8 @@ export type v2Service = {
 }
 
 export type v2ServiceDeployment = {
-    Profile: string,
-    Count: number,
+    profile: string,
+    count: number,
 }
 
 export type v2Deployment = Record<string, v2ServiceDeployment>
