@@ -120,12 +120,13 @@ export type v2Deployment = Record<string, v2ServiceDeployment>
 export type v2CPUAttributes = Attributes
 
 export type v2ResourceCPU = {
-    units: number,
+    units: number | string,
     attributes?: v2CPUAttributes,
 }
 
 export type v2ResourceMemory = {
     size: string;
+    attributes?: Attributes,
 }
 
 export type v2StorageAttributes = Attributes;
@@ -141,7 +142,7 @@ export type v2ResourceStorageArray = v2ResourceStorage[];
 export type v2ComputeResources = {
     cpu: v2ResourceCPU,
     memory: v2ResourceMemory,
-    storage: v2ResourceStorageArray,
+    storage: v2ResourceStorageArray | v2ResourceStorage,
 }
 
 export type v2ProfileCompute = {

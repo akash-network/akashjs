@@ -1,6 +1,17 @@
 import YAML from 'js-yaml';
-import { Manifest, Service, ServiceExpose, ServiceExposeHttpOptions, v2Expose, v2ProfileCompute, v2ResourceCPU, v2ResourceMemory, v2ResourceStorageArray, v2Sdl, v2Service } from './types';
+import { Manifest, Service, ServiceExpose, ServiceExposeHttpOptions, v2ComputeResources, v2Expose, v2ExposeTo, v2HTTPOptions, v2ProfileCompute, v2ResourceCPU, v2ResourceMemory, v2ResourceStorage, v2ResourceStorageArray, v2Sdl, v2Service } from './types';
 import { convertResourceString } from './sizes';
+import { default as stableStringify } from "json-stable-stringify";
+import crypto from "node:crypto";
+
+function isArray<T>(obj: any): obj is Array<T> {
+    return obj && obj.map !== undefined;
+}
+
+function isString(str: any): str is string {
+    return typeof str === 'string';
+}
+
 export class SDL {
 
     data: v2Sdl;
@@ -62,28 +73,51 @@ export class SDL {
             .filter(([name, deployment]) => deployment.hasOwnProperty(placement));
     }
 
-    resourceUnit(val: string) {
-        return { val: convertResourceString(val) };
+    resourceUnit(val: string, asString: boolean) {
+        return asString
+            ? { val: `${convertResourceString(val)}` }
+            : { val: convertResourceString(val) }
+    }
+
+    resourceValue(value: { toString: () => string } | null, asString: boolean) {
+        if (value === null) {
+            return value;
+        }
+
+        const strVal = value.toString();
+        const encoder = new TextEncoder();
+
+        return asString
+            ? strVal
+            : encoder.encode(strVal);
     }
 
     serviceResourceCpu(resource: v2ResourceCPU) {
+        const units = isString(resource.units)
+            ? convertResourceString(resource.units)
+            : resource.units;
+
         return {
             units: {
-                val: `${resource.units * 1000}`
+                val: `${units * 1000}`
             }
         };
     }
 
-    serviceResourceMemory(resource: v2ResourceMemory) {
+    serviceResourceMemory(resource: v2ResourceMemory, asString: boolean) {
         return {
-            size: this.resourceUnit(resource.size)
+            size: this.resourceUnit(resource.size, asString)
         };
     }
 
-    serviceResourceStorage(resource: v2ResourceStorageArray) {
-        return resource.map(storage => ({
+    serviceResourceStorage(resource: v2ResourceStorageArray | v2ResourceStorage, asString: boolean) {
+        const storage = isArray(resource)
+            ? resource
+            : [resource];
+
+        return storage.map(storage => ({
             name: storage.name || "default",
-            size: this.resourceUnit(storage.size)
+            size: this.resourceUnit(storage.size, asString)
         }));
     }
 
@@ -91,11 +125,11 @@ export class SDL {
         return null;
     }
 
-    serviceResources(service: v2Service, profile: v2ProfileCompute) {
+    serviceResources(profile: v2ProfileCompute, asString: boolean = false) {
         return {
             cpu: this.serviceResourceCpu(profile.resources.cpu),
-            memory: this.serviceResourceMemory(profile.resources.memory),
-            storage: this.serviceResourceStorage(profile.resources.storage),
+            memory: this.serviceResourceMemory(profile.resources.memory, asString),
+            storage: this.serviceResourceStorage(profile.resources.storage, asString),
             endpoints: this.serviceResourceEndpoints(),
         }
     }
@@ -124,15 +158,15 @@ export class SDL {
         return "";
     }
 
-    manifestExposeGlobal(expose: v2Expose) {
-        return true;
+    manifestExposeGlobal(to: v2ExposeTo) {
+        return to.global || false;
     }
 
     manifestExposeHosts(expose: v2Expose) {
         return expose.accept || null;
     }
 
-    manifestExposeHttpOptions(expose: v2Expose): ServiceExposeHttpOptions {
+    httpOptions(http_options: v2HTTPOptions | undefined) {
         const defaults = {
             MaxBodySize: 1048576,
             ReadTimeout: 60000,
@@ -145,31 +179,42 @@ export class SDL {
             ],
         };
 
+        if (!http_options) {
+            return { ...defaults };
+        }
+
         return {
-            MaxBodySize: expose.http_options?.max_body_size || defaults.MaxBodySize,
-            ReadTimeout: expose.http_options?.read_timeout || defaults.ReadTimeout,
-            SendTimeout: expose.http_options?.send_timeout || defaults.SendTimeout,
-            NextTries: expose.http_options?.next_tries || defaults.NextTries,
-            NextTimeout: expose.http_options?.next_timeout || defaults.NextTimeout,
-            NextCases: expose.http_options?.next_cases || defaults.NextCases,
+            MaxBodySize: http_options.max_body_size || defaults.MaxBodySize,
+            ReadTimeout: http_options.read_timeout || defaults.ReadTimeout,
+            SendTimeout: http_options.send_timeout || defaults.SendTimeout,
+            NextTries: http_options.next_tries || defaults.NextTries,
+            NextTimeout: http_options.next_timeout || defaults.NextTimeout,
+            NextCases: http_options.next_cases || defaults.NextCases,
         };
     }
 
-    manifestExpose(service: v2Service): ServiceExpose[] {
-        return service.expose.map((expose) => ({
-            Port: expose.port,
-            ExternalPort: expose.as || 0,
-            Proto: this.parseServiceProto(expose.proto),
-            Service: this.manifestExposeService(expose),
-            Global: this.manifestExposeGlobal(expose),
-            Hosts: this.manifestExposeHosts(expose),
-            HTTPOptions: this.manifestExposeHttpOptions(expose),
-            IP: "",
-            EndpointSequenceNumber: 0,
-        }));
+    manifestExposeHttpOptions(expose: v2Expose): ServiceExposeHttpOptions {
+        return this.httpOptions(expose.http_options);
     }
 
-    manifestService(placement: string, name: string): Service {
+    manifestExpose(service: v2Service): ServiceExpose[] {
+        return service.expose.flatMap((expose) => expose.to
+            ? expose.to.map((to) => ({
+                Port: expose.port,
+                ExternalPort: expose.as || 0,
+                Proto: this.parseServiceProto(expose.proto),
+                Service: this.manifestExposeService(expose),
+                Global: this.manifestExposeGlobal(to),
+                Hosts: this.manifestExposeHosts(expose),
+                HTTPOptions: this.manifestExposeHttpOptions(expose),
+                IP: "",
+                EndpointSequenceNumber: 0,
+            }))
+            : []
+        );
+    }
+
+    manifestService(placement: string, name: string, asString: boolean): Service {
         const service = this.data.services[name];
         const profile = this.data.profiles.compute[name];
         const deployment = this.data.deployment[name];
@@ -177,20 +222,260 @@ export class SDL {
         return {
             Name: name,
             Image: service.image,
-            Command: service.command,
-            Args: service.args,
-            Env: service.env,
-            Resources: this.serviceResources(service, profile),
+            Command: service.command || null,
+            Args: service.args || null,
+            Env: service.env || null,
+            Resources: this.serviceResources(profile, asString),
             Count: deployment[placement].count,
             Expose: this.manifestExpose(service),
         }
     }
 
-    manifest(): Manifest {
+    manifest(asString: boolean = false): Manifest {
         return Object.keys(this.placements()).map(name => ({
             Name: name,
             Services: this.deploymentsByPlacement(name)
-                .map(([service]) => this.manifestService(name, service))
+                .map(([service]) => this.manifestService(name, service, asString))
         }));
+    }
+
+    computeEndpointSequenceNumbers(sdl: v2Sdl) {
+        return Object.fromEntries(
+            Object.values(sdl.services).flatMap((service) => (
+                service.expose.map((expose) => (
+                    expose.to
+                        ? expose.to
+                            .filter((to) => to.global && to.ip?.length > 0)
+                            .map((to) => to.ip)
+                            .sort()
+                            .map((ip, index) => [ip, index + 1])
+                        : []
+                ))
+            ))
+        )
+    }
+
+    resourceUnitCpu(computeResources: v2ComputeResources, asString: boolean) {
+        const attributes = computeResources.cpu.attributes;
+        const cpu =
+            isString(computeResources.cpu.units)
+                ? convertResourceString(computeResources.cpu.units)
+                : (computeResources.cpu.units * 1000);
+
+        return {
+            units: { val: this.resourceValue(cpu, asString) },
+            attributes:
+                attributes &&
+                Object.entries(attributes)
+                    .sort(([k0,], [k1,]) => k0.localeCompare(k1))
+                    .map(([key, value]) => ({
+                        key: key,
+                        value: this.resourceValue(value, asString)
+                    }))
+        };
+    }
+
+    resourceUnitMemory(computeResources: v2ComputeResources, asString: boolean) {
+        const attributes = computeResources.memory.attributes;
+
+        return {
+            quantity: { val: this.resourceValue(convertResourceString(computeResources.memory.size), asString) },
+            attributes:
+                attributes &&
+                Object.entries(attributes)
+                    .sort(([k0,], [k1,]) => k0.localeCompare(k1))
+                    .map(([key, value]) => ({
+                        key: key,
+                        value: this.resourceValue(value, asString)
+                    }))
+        };
+    }
+
+    resourceUnitStorage(computeResources: v2ComputeResources, asString: boolean) {
+        const storages = isArray(computeResources.storage)
+            ? computeResources.storage
+            : [computeResources.storage];
+
+        return storages.map((storage) => ({
+            name: storage.name || "default",
+            quantity: { val: this.resourceValue(convertResourceString(storage.size), asString) },
+            attributes:
+                storage.attributes &&
+                Object.entries(storage.attributes)
+                    .sort(([k0,], [k1,]) => k0.localeCompare(k1))
+                    .map(([key, value]) => ({
+                        key: key,
+                        value: this.resourceValue(value, asString)
+                    }))
+        }));
+    }
+
+    groupResourceUnits(resource: v2ComputeResources | undefined, asString: boolean) {
+        if (!resource) return {};
+
+        let units = {
+            endpoints: null
+        } as any;
+
+        if (resource.cpu) {
+            units.cpu = this.resourceUnitCpu(resource, asString);
+        }
+
+        if (resource.memory) {
+            units.memory = this.resourceUnitMemory(resource, asString);
+        }
+
+        if (resource.storage) {
+            units.storage = this.resourceUnitStorage(resource, asString);
+        }
+
+        return units;
+    }
+
+    groups() {
+        const sdl = this;
+        const yamlJson = this.data;
+        const ipEndpointNames = this.computeEndpointSequenceNumbers(yamlJson);
+
+        let groups = {} as any;
+
+        function shouldBeIngress(expose: { proto: string, global: string }) {
+            return expose.proto === "TCP" && expose.global && 80 === exposeExternalPort(expose);
+        }
+
+        function exposeExternalPort(expose: any) {
+            if (expose.externalPort === 0) {
+                return expose.port;
+            }
+
+            return expose.externalPort;
+        }
+
+        const Endpoint_SHARED_HTTP = 0;
+        const Endpoint_RANDOM_PORT = 1;
+        const Endpoint_LEASED_IP = 2;
+
+        Object.keys(yamlJson.services).forEach((svcName) => {
+            const svc = yamlJson.services[svcName];
+            const depl = yamlJson.deployment[svcName];
+
+            Object.keys(depl).forEach((placementName) => {
+                const svcdepl = depl[placementName];
+                const compute = yamlJson.profiles.compute[svcdepl.profile];
+                const infra = yamlJson.profiles.placement[placementName];
+                const price = { ...infra.pricing[svcdepl.profile] } as any;
+
+                // Account needs to be a string
+                price.amount = price.amount.toString();
+
+                let group = groups[placementName];
+
+                if (!group) {
+                    group = {
+                        name: placementName,
+                        requirements: {
+                            attributes: infra.attributes
+                                ? Object.entries(infra.attributes).map(([key, value]) => ({ key, value }))
+                                : [],
+                            signed_by: {
+                                all_of: infra.signedBy?.allOf || [],
+                                any_of: infra.signedBy?.anyOf || []
+                            }
+                        },
+                        resources: []
+                    };
+
+                    if (group.requirements.attributes) {
+                        group.requirements.attributes = group.requirements.attributes
+                            .sort((a: any, b: any) => a.key < b.key);
+                    }
+
+                    groups[group.name] = group;
+                }
+
+                const resources = {
+                    resources: this.groupResourceUnits(compute.resources, false), // Changed resources => unit
+                    price: price,
+                    count: svcdepl.count
+                };
+
+                let endpoints = [] as any[];
+                svc?.expose?.forEach((expose) => {
+                    expose?.to
+                        ?.filter((to) => to.global)
+                        .forEach((to) => {
+                            const proto = sdl.parseServiceProto(expose.proto);
+
+                            const v = {
+                                port: expose.port,
+                                externalPort: expose.as || 0,
+                                proto: proto,
+                                service: to.service || null,
+                                global: !!to.global,
+                                hosts: expose.accept || null,
+                                HTTPOptions: sdl.httpOptions(expose.http_options)
+                            } as any;
+
+                            // Check to see if an IP endpoint is also specified
+                            if (to.ip?.length > 0) {
+                                const seqNo = ipEndpointNames[to.ip];
+                                v.EndpointSequenceNumber = seqNo || 0;
+                                endpoints.push({ kind: Endpoint_LEASED_IP, sequence_number: seqNo });
+                            }
+
+                            let kind = Endpoint_RANDOM_PORT;
+
+                            if (shouldBeIngress(v)) {
+                                kind = Endpoint_SHARED_HTTP;
+                            }
+
+                            endpoints.push({ kind: kind, sequence_number: 0 }); // TODO
+                        });
+                });
+
+                resources.resources.endpoints = endpoints;
+                group.resources.push(resources);
+            });
+        });
+
+        let names = Object.keys(groups);
+        names = names.sort((a, b) => a < b ? 1 : 0);
+
+        let result = names.map((name) => groups[name]);
+        return result;
+
+        return "";
+    }
+
+    escapeHtml(raw: string) {
+        return raw.replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/&/g, "\\u0026");
+    }
+
+    SortJSON(jsonStr: string) {
+        return this.escapeHtml(stableStringify(JSON.parse(jsonStr)));
+    }
+
+    manifestSortedJSON() {
+        const manifest = this.manifest(true);
+        let jsonStr = JSON.stringify(manifest);
+
+        if (jsonStr) {
+            jsonStr = jsonStr
+                .replaceAll('"quantity":{"val', '"size":{"val')
+                .replaceAll('"mount":', '"readOnlyTmp":')
+                .replaceAll('"readOnly":', '"mount":')
+                .replaceAll('"readOnlyTmp":', '"readOnly":');
+        }
+
+        return this.SortJSON(jsonStr);
+    }
+
+    async manifestVersion() {
+        const jsonStr = this.manifestSortedJSON();
+        const enc = new TextEncoder();
+        const sortedBytes = enc.encode(jsonStr);
+        const sum = await crypto.subtle.digest("SHA-256", sortedBytes);
+
+        return new Uint8Array(sum);
     }
 }

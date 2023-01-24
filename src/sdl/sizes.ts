@@ -12,12 +12,12 @@ function parseSizeString(size: string): [number, string, string] {
     throw new Error(`Invalid size string: ${size}`);
 }
 
-export function convertResourceString(resourceStr: string): number | null {
+export function convertResourceString(resourceStr: string): number {
     const [value, prefix, unit] = parseSizeString(resourceStr.toLowerCase());
     const power = prefixes.indexOf(prefix);
     const base = unit === 'i' ? 1024 : 1000;
 
     return power !== -1
         ? value * Math.pow(base, (power + 1))
-        : null;
+        : value;
 }
