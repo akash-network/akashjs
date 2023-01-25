@@ -6,3 +6,4 @@ export * as network from "./network";
 export * as rpc from './rpc';
 
 export * as protoclient from "./pbclient";
+export * as sdl from "./sdl";
