@@ -154,6 +154,7 @@ export type v2PlacementAttributes = Attributes
 export type v2Coin = {
     denom: string,
     value: number,
+    amount: number,
 }
 
 export type v2PlacementPricing = Record<string, v2Coin>

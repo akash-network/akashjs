@@ -336,16 +336,14 @@ export class SDL {
         return units;
     }
 
-    exposeShouldBeIngress(expose: { proto: string, global: boolean }) {
-        function exposeExternalPort(expose: any) {
-            if (expose.externalPort === 0) {
-                return expose.port;
-            }
+    exposeShouldBeIngress(expose: { proto: string, global: boolean, externalPort: number, port: number }) {
+        const externalPort = expose.externalPort === 0
+            ? expose.port
+            : expose.externalPort
 
-            return expose.externalPort;
-        }
-
-        return expose.proto === "TCP" && expose.global && 80 === exposeExternalPort(expose);
+        return expose.global
+            && expose.proto === "TCP"
+            && externalPort === 80;
     }
 
     groups() {
@@ -363,10 +361,11 @@ export class SDL {
                 const svcdepl = depl[placementName];
                 const compute = yamlJson.profiles.compute[svcdepl.profile];
                 const infra = yamlJson.profiles.placement[placementName];
-                const price = { ...infra.pricing[svcdepl.profile] } as any;
-
-                // Account needs to be a string
-                price.amount = price.amount.toString();
+                const pricing = infra.pricing[svcdepl.profile];
+                const price = {
+                    ...pricing,
+                    amount: pricing.amount.toString()
+                };
 
                 let group = groups[placementName];
 
@@ -404,33 +403,23 @@ export class SDL {
                     expose?.to
                         ?.filter((to) => to.global)
                         .forEach((to) => {
-                            const proto = sdl.parseServiceProto(expose.proto);
-
-                            const v = {
+                            const exposeSpec = {
                                 port: expose.port,
                                 externalPort: expose.as || 0,
-                                proto: proto,
-                                service: to.service || null,
+                                proto: sdl.parseServiceProto(expose.proto),
                                 global: !!to.global,
-                                hosts: expose.accept || null,
-                                HTTPOptions: sdl.httpOptions(expose.http_options),
-                                EndpointSequenceNumber: 0,
                             };
 
-                            // Check to see if an IP endpoint is also specified
                             if (to.ip?.length > 0) {
                                 const seqNo = ipEndpointNames[to.ip];
-                                v.EndpointSequenceNumber = seqNo || 0;
                                 endpoints.push({ kind: Endpoint_LEASED_IP, sequence_number: seqNo });
                             }
 
-                            let kind = Endpoint_RANDOM_PORT;
+                            const kind = sdl.exposeShouldBeIngress(exposeSpec)
+                                ? Endpoint_SHARED_HTTP
+                                : Endpoint_RANDOM_PORT;
 
-                            if (sdl.exposeShouldBeIngress(v)) {
-                                kind = Endpoint_SHARED_HTTP;
-                            }
-
-                            endpoints.push({ kind: kind, sequence_number: 0 }); // TODO
+                            endpoints.push({ kind: kind, sequence_number: 0 });
                         });
                 });
 
