@@ -3,6 +3,9 @@ const path = require("path");
 
 module.exports = {
   entry: "./src/index.ts",
+  externals: {
+    "node:crypto": "crypto"
+  },
   resolve: {
     alias: {
       // add as many aliases as you like!
