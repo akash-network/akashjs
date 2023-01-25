@@ -4,7 +4,7 @@ const path = require("path");
 module.exports = {
   entry: "./src/index.ts",
   externals: {
-    "node:crypto": "crypto"
+    "node:crypto": "src/webpack/crypto"
   },
   resolve: {
     alias: {

@@ -460,6 +460,8 @@ export class SDL {
         const jsonStr = this.manifestSortedJSON();
         const enc = new TextEncoder();
         const sortedBytes = enc.encode(jsonStr);
+
+        console.log(crypto.subtle);
         const sum = await crypto.subtle.digest("SHA-256", sortedBytes);
 
         return new Uint8Array(sum);
