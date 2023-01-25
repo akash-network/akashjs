@@ -4,6 +4,10 @@ import { convertResourceString } from './sizes';
 import { default as stableStringify } from "json-stable-stringify";
 import crypto from "node:crypto";
 
+const Endpoint_SHARED_HTTP = 0;
+const Endpoint_RANDOM_PORT = 1;
+const Endpoint_LEASED_IP = 2;
+
 function isArray<T>(obj: any): obj is Array<T> {
     return obj && obj.map !== undefined;
 }
@@ -332,17 +336,7 @@ export class SDL {
         return units;
     }
 
-    groups() {
-        const sdl = this;
-        const yamlJson = this.data;
-        const ipEndpointNames = this.computeEndpointSequenceNumbers(yamlJson);
-
-        let groups = {} as any;
-
-        function shouldBeIngress(expose: { proto: string, global: string }) {
-            return expose.proto === "TCP" && expose.global && 80 === exposeExternalPort(expose);
-        }
-
+    exposeShouldBeIngress(expose: { proto: string, global: boolean }) {
         function exposeExternalPort(expose: any) {
             if (expose.externalPort === 0) {
                 return expose.port;
@@ -351,9 +345,15 @@ export class SDL {
             return expose.externalPort;
         }
 
-        const Endpoint_SHARED_HTTP = 0;
-        const Endpoint_RANDOM_PORT = 1;
-        const Endpoint_LEASED_IP = 2;
+        return expose.proto === "TCP" && expose.global && 80 === exposeExternalPort(expose);
+    }
+
+    groups() {
+        const sdl = this;
+        const yamlJson = this.data;
+        const ipEndpointNames = this.computeEndpointSequenceNumbers(yamlJson);
+
+        let groups = {} as any;
 
         Object.keys(yamlJson.services).forEach((svcName) => {
             const svc = yamlJson.services[svcName];
@@ -413,8 +413,9 @@ export class SDL {
                                 service: to.service || null,
                                 global: !!to.global,
                                 hosts: expose.accept || null,
-                                HTTPOptions: sdl.httpOptions(expose.http_options)
-                            } as any;
+                                HTTPOptions: sdl.httpOptions(expose.http_options),
+                                EndpointSequenceNumber: 0,
+                            };
 
                             // Check to see if an IP endpoint is also specified
                             if (to.ip?.length > 0) {
@@ -425,7 +426,7 @@ export class SDL {
 
                             let kind = Endpoint_RANDOM_PORT;
 
-                            if (shouldBeIngress(v)) {
+                            if (sdl.exposeShouldBeIngress(v)) {
                                 kind = Endpoint_SHARED_HTTP;
                             }
 
@@ -438,13 +439,9 @@ export class SDL {
             });
         });
 
-        let names = Object.keys(groups);
-        names = names.sort((a, b) => a < b ? 1 : 0);
-
-        let result = names.map((name) => groups[name]);
-        return result;
-
-        return "";
+        return Object.keys(groups)
+            .sort((a, b) => a < b ? 1 : 0)
+            .map((name) => groups[name]);
     }
 
     escapeHtml(raw: string) {
