@@ -109,19 +109,22 @@ export class SDL {
     }
 
     serviceResourceMemory(resource: v2ResourceMemory, asString: boolean) {
+        const key = asString ? "quantity" : "size";
+
         return {
-            size: this.resourceUnit(resource.size, asString)
+            [key]: this.resourceUnit(resource.size, asString)
         };
     }
 
     serviceResourceStorage(resource: v2ResourceStorageArray | v2ResourceStorage, asString: boolean) {
+        const key = asString ? "quantity" : "size";
         const storage = isArray(resource)
             ? resource
             : [resource];
 
         return storage.map(storage => ({
             name: storage.name || "default",
-            size: this.resourceUnit(storage.size, asString)
+            [key]: this.resourceUnit(storage.size, asString)
         }));
     }
 
@@ -460,8 +463,6 @@ export class SDL {
         const jsonStr = this.manifestSortedJSON();
         const enc = new TextEncoder();
         const sortedBytes = enc.encode(jsonStr);
-
-        console.log(crypto.subtle);
         const sum = await crypto.subtle.digest("SHA-256", sortedBytes);
 
         return new Uint8Array(sum);
