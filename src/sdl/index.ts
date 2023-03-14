@@ -138,7 +138,7 @@ export class SDL {
             memory: this.serviceResourceMemory(profile.resources.memory, asString),
             storage: this.serviceResourceStorage(profile.resources.storage, asString),
             endpoints: this.serviceResourceEndpoints(),
-        }
+        };
     }
 
     parseServiceProto(proto?: string) {
@@ -223,8 +223,8 @@ export class SDL {
 
     manifestService(placement: string, name: string, asString: boolean): Service {
         const service = this.data.services[name];
-        const profile = this.data.profiles.compute[name];
         const deployment = this.data.deployment[name];
+        const profile = this.data.profiles.compute[deployment[placement].profile];
 
         return {
             Name: name,
