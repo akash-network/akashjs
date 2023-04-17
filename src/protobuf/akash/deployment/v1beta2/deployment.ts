@@ -1,7 +1,7 @@
 /* eslint-disable */
-import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
-import * as _m0 from "protobufjs/minimal";
+import _m0 from "protobufjs/minimal";
+import { messageTypeRegistry } from "../../../typeRegistry";
 
 export const protobufPackage = "akash.deployment.v1beta2";
 
@@ -73,20 +73,13 @@ export interface DeploymentFilters {
 }
 
 function createBaseDeploymentID(): DeploymentID {
-  return {
-    $type: "akash.deployment.v1beta2.DeploymentID",
-    owner: "",
-    dseq: Long.UZERO,
-  };
+  return { $type: "akash.deployment.v1beta2.DeploymentID", owner: "", dseq: Long.UZERO };
 }
 
 export const DeploymentID = {
   $type: "akash.deployment.v1beta2.DeploymentID" as const,
 
-  encode(
-    message: DeploymentID,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: DeploymentID, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -97,22 +90,31 @@ export const DeploymentID = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): DeploymentID {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeploymentID();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag != 10) {
+            break;
+          }
+
           message.owner = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag != 16) {
+            break;
+          }
+
           message.dseq = reader.uint64() as Long;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -128,20 +130,18 @@ export const DeploymentID = {
   toJSON(message: DeploymentID): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined &&
-      (obj.dseq = (message.dseq || Long.UZERO).toString());
+    message.dseq !== undefined && (obj.dseq = (message.dseq || Long.UZERO).toString());
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<DeploymentID>, I>>(
-    object: I
-  ): DeploymentID {
+  create<I extends Exact<DeepPartial<DeploymentID>, I>>(base?: I): DeploymentID {
+    return DeploymentID.fromPartial(base ?? {});
+  },
+
+  fromPartial<I extends Exact<DeepPartial<DeploymentID>, I>>(object: I): DeploymentID {
     const message = createBaseDeploymentID();
     message.owner = object.owner ?? "";
-    message.dseq =
-      object.dseq !== undefined && object.dseq !== null
-        ? Long.fromValue(object.dseq)
-        : Long.UZERO;
+    message.dseq = (object.dseq !== undefined && object.dseq !== null) ? Long.fromValue(object.dseq) : Long.UZERO;
     return message;
   },
 };
@@ -161,15 +161,9 @@ function createBaseDeployment(): Deployment {
 export const Deployment = {
   $type: "akash.deployment.v1beta2.Deployment" as const,
 
-  encode(
-    message: Deployment,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Deployment, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.deploymentId !== undefined) {
-      DeploymentID.encode(
-        message.deploymentId,
-        writer.uint32(10).fork()
-      ).ldelim();
+      DeploymentID.encode(message.deploymentId, writer.uint32(10).fork()).ldelim();
     }
     if (message.state !== 0) {
       writer.uint32(16).int32(message.state);
@@ -184,28 +178,45 @@ export const Deployment = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Deployment {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeployment();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag != 10) {
+            break;
+          }
+
           message.deploymentId = DeploymentID.decode(reader, reader.uint32());
-          break;
+          continue;
         case 2:
+          if (tag != 16) {
+            break;
+          }
+
           message.state = reader.int32() as any;
-          break;
+          continue;
         case 3:
+          if (tag != 26) {
+            break;
+          }
+
           message.version = reader.bytes();
-          break;
+          continue;
         case 4:
+          if (tag != 32) {
+            break;
+          }
+
           message.createdAt = reader.int64() as Long;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -213,50 +224,38 @@ export const Deployment = {
   fromJSON(object: any): Deployment {
     return {
       $type: Deployment.$type,
-      deploymentId: isSet(object.deploymentId)
-        ? DeploymentID.fromJSON(object.deploymentId)
-        : undefined,
+      deploymentId: isSet(object.deploymentId) ? DeploymentID.fromJSON(object.deploymentId) : undefined,
       state: isSet(object.state) ? deployment_StateFromJSON(object.state) : 0,
-      version: isSet(object.version)
-        ? bytesFromBase64(object.version)
-        : new Uint8Array(),
-      createdAt: isSet(object.createdAt)
-        ? Long.fromValue(object.createdAt)
-        : Long.ZERO,
+      version: isSet(object.version) ? bytesFromBase64(object.version) : new Uint8Array(),
+      createdAt: isSet(object.createdAt) ? Long.fromValue(object.createdAt) : Long.ZERO,
     };
   },
 
   toJSON(message: Deployment): unknown {
     const obj: any = {};
     message.deploymentId !== undefined &&
-      (obj.deploymentId = message.deploymentId
-        ? DeploymentID.toJSON(message.deploymentId)
-        : undefined);
-    message.state !== undefined &&
-      (obj.state = deployment_StateToJSON(message.state));
+      (obj.deploymentId = message.deploymentId ? DeploymentID.toJSON(message.deploymentId) : undefined);
+    message.state !== undefined && (obj.state = deployment_StateToJSON(message.state));
     message.version !== undefined &&
-      (obj.version = base64FromBytes(
-        message.version !== undefined ? message.version : new Uint8Array()
-      ));
-    message.createdAt !== undefined &&
-      (obj.createdAt = (message.createdAt || Long.ZERO).toString());
+      (obj.version = base64FromBytes(message.version !== undefined ? message.version : new Uint8Array()));
+    message.createdAt !== undefined && (obj.createdAt = (message.createdAt || Long.ZERO).toString());
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<Deployment>, I>>(
-    object: I
-  ): Deployment {
+  create<I extends Exact<DeepPartial<Deployment>, I>>(base?: I): Deployment {
+    return Deployment.fromPartial(base ?? {});
+  },
+
+  fromPartial<I extends Exact<DeepPartial<Deployment>, I>>(object: I): Deployment {
     const message = createBaseDeployment();
-    message.deploymentId =
-      object.deploymentId !== undefined && object.deploymentId !== null
-        ? DeploymentID.fromPartial(object.deploymentId)
-        : undefined;
+    message.deploymentId = (object.deploymentId !== undefined && object.deploymentId !== null)
+      ? DeploymentID.fromPartial(object.deploymentId)
+      : undefined;
     message.state = object.state ?? 0;
     message.version = object.version ?? new Uint8Array();
-    message.createdAt =
-      object.createdAt !== undefined && object.createdAt !== null
-        ? Long.fromValue(object.createdAt)
-        : Long.ZERO;
+    message.createdAt = (object.createdAt !== undefined && object.createdAt !== null)
+      ? Long.fromValue(object.createdAt)
+      : Long.ZERO;
     return message;
   },
 };
@@ -264,21 +263,13 @@ export const Deployment = {
 messageTypeRegistry.set(Deployment.$type, Deployment);
 
 function createBaseDeploymentFilters(): DeploymentFilters {
-  return {
-    $type: "akash.deployment.v1beta2.DeploymentFilters",
-    owner: "",
-    dseq: Long.UZERO,
-    state: "",
-  };
+  return { $type: "akash.deployment.v1beta2.DeploymentFilters", owner: "", dseq: Long.UZERO, state: "" };
 }
 
 export const DeploymentFilters = {
   $type: "akash.deployment.v1beta2.DeploymentFilters" as const,
 
-  encode(
-    message: DeploymentFilters,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: DeploymentFilters, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -292,25 +283,38 @@ export const DeploymentFilters = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): DeploymentFilters {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeploymentFilters();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag != 10) {
+            break;
+          }
+
           message.owner = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag != 16) {
+            break;
+          }
+
           message.dseq = reader.uint64() as Long;
-          break;
+          continue;
         case 3:
+          if (tag != 26) {
+            break;
+          }
+
           message.state = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -327,21 +331,19 @@ export const DeploymentFilters = {
   toJSON(message: DeploymentFilters): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined &&
-      (obj.dseq = (message.dseq || Long.UZERO).toString());
+    message.dseq !== undefined && (obj.dseq = (message.dseq || Long.UZERO).toString());
     message.state !== undefined && (obj.state = message.state);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<DeploymentFilters>, I>>(
-    object: I
-  ): DeploymentFilters {
+  create<I extends Exact<DeepPartial<DeploymentFilters>, I>>(base?: I): DeploymentFilters {
+    return DeploymentFilters.fromPartial(base ?? {});
+  },
+
+  fromPartial<I extends Exact<DeepPartial<DeploymentFilters>, I>>(object: I): DeploymentFilters {
     const message = createBaseDeploymentFilters();
     message.owner = object.owner ?? "";
-    message.dseq =
-      object.dseq !== undefined && object.dseq !== null
-        ? Long.fromValue(object.dseq)
-        : Long.UZERO;
+    message.dseq = (object.dseq !== undefined && object.dseq !== null) ? Long.fromValue(object.dseq) : Long.UZERO;
     message.state = object.state ?? "";
     return message;
   },
@@ -352,65 +354,58 @@ messageTypeRegistry.set(DeploymentFilters.$type, DeploymentFilters);
 declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
+var tsProtoGlobalThis: any = (() => {
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
   throw "Unable to locate global object";
 })();
 
-const atob: (b64: string) => string =
-  globalThis.atob ||
-  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
-  const bin = atob(b64);
-  const arr = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; ++i) {
-    arr[i] = bin.charCodeAt(i);
+  if (tsProtoGlobalThis.Buffer) {
+    return Uint8Array.from(tsProtoGlobalThis.Buffer.from(b64, "base64"));
+  } else {
+    const bin = tsProtoGlobalThis.atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; ++i) {
+      arr[i] = bin.charCodeAt(i);
+    }
+    return arr;
   }
-  return arr;
 }
 
-const btoa: (bin: string) => string =
-  globalThis.btoa ||
-  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
-  const bin: string[] = [];
-  arr.forEach((byte) => {
-    bin.push(String.fromCharCode(byte));
-  });
-  return btoa(bin.join(""));
+  if (tsProtoGlobalThis.Buffer) {
+    return tsProtoGlobalThis.Buffer.from(arr).toString("base64");
+  } else {
+    const bin: string[] = [];
+    arr.forEach((byte) => {
+      bin.push(String.fromCharCode(byte));
+    });
+    return tsProtoGlobalThis.btoa(bin.join(""));
+  }
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P> | "$type">]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

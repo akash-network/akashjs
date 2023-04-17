@@ -1,7 +1,7 @@
 /* eslint-disable */
-import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
-import * as _m0 from "protobufjs/minimal";
+import _m0 from "protobufjs/minimal";
+import { messageTypeRegistry } from "../../../typeRegistry";
 
 export const protobufPackage = "cosmos.base.v1beta1";
 
@@ -59,22 +59,31 @@ export const Coin = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Coin {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCoin();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag != 10) {
+            break;
+          }
+
           message.denom = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag != 18) {
+            break;
+          }
+
           message.amount = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -94,6 +103,10 @@ export const Coin = {
     return obj;
   },
 
+  create<I extends Exact<DeepPartial<Coin>, I>>(base?: I): Coin {
+    return Coin.fromPartial(base ?? {});
+  },
+
   fromPartial<I extends Exact<DeepPartial<Coin>, I>>(object: I): Coin {
     const message = createBaseCoin();
     message.denom = object.denom ?? "";
@@ -111,10 +124,7 @@ function createBaseDecCoin(): DecCoin {
 export const DecCoin = {
   $type: "cosmos.base.v1beta1.DecCoin" as const,
 
-  encode(
-    message: DecCoin,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: DecCoin, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.denom !== "") {
       writer.uint32(10).string(message.denom);
     }
@@ -125,22 +135,31 @@ export const DecCoin = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): DecCoin {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDecCoin();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag != 10) {
+            break;
+          }
+
           message.denom = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag != 18) {
+            break;
+          }
+
           message.amount = (parseInt(reader.string()) / (10 ** 18)).toPrecision(18);
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -160,6 +179,10 @@ export const DecCoin = {
     return obj;
   },
 
+  create<I extends Exact<DeepPartial<DecCoin>, I>>(base?: I): DecCoin {
+    return DecCoin.fromPartial(base ?? {});
+  },
+
   fromPartial<I extends Exact<DeepPartial<DecCoin>, I>>(object: I): DecCoin {
     const message = createBaseDecCoin();
     message.denom = object.denom ?? "";
@@ -177,10 +200,7 @@ function createBaseIntProto(): IntProto {
 export const IntProto = {
   $type: "cosmos.base.v1beta1.IntProto" as const,
 
-  encode(
-    message: IntProto,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: IntProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.int !== "") {
       writer.uint32(10).string(message.int);
     }
@@ -188,34 +208,40 @@ export const IntProto = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): IntProto {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseIntProto();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag != 10) {
+            break;
+          }
+
           message.int = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(object: any): IntProto {
-    return {
-      $type: IntProto.$type,
-      int: isSet(object.int) ? String(object.int) : "",
-    };
+    return { $type: IntProto.$type, int: isSet(object.int) ? String(object.int) : "" };
   },
 
   toJSON(message: IntProto): unknown {
     const obj: any = {};
     message.int !== undefined && (obj.int = message.int);
     return obj;
+  },
+
+  create<I extends Exact<DeepPartial<IntProto>, I>>(base?: I): IntProto {
+    return IntProto.fromPartial(base ?? {});
   },
 
   fromPartial<I extends Exact<DeepPartial<IntProto>, I>>(object: I): IntProto {
@@ -234,10 +260,7 @@ function createBaseDecProto(): DecProto {
 export const DecProto = {
   $type: "cosmos.base.v1beta1.DecProto" as const,
 
-  encode(
-    message: DecProto,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: DecProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.dec !== "") {
       writer.uint32(10).string(message.dec);
     }
@@ -245,34 +268,40 @@ export const DecProto = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): DecProto {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDecProto();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag != 10) {
+            break;
+          }
+
           message.dec = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(object: any): DecProto {
-    return {
-      $type: DecProto.$type,
-      dec: isSet(object.dec) ? String(object.dec) : "",
-    };
+    return { $type: DecProto.$type, dec: isSet(object.dec) ? String(object.dec) : "" };
   },
 
   toJSON(message: DecProto): unknown {
     const obj: any = {};
     message.dec !== undefined && (obj.dec = message.dec);
     return obj;
+  },
+
+  create<I extends Exact<DeepPartial<DecProto>, I>>(base?: I): DecProto {
+    return DecProto.fromPartial(base ?? {});
   },
 
   fromPartial<I extends Exact<DeepPartial<DecProto>, I>>(object: I): DecProto {
@@ -284,34 +313,17 @@ export const DecProto = {
 
 messageTypeRegistry.set(DecProto.$type, DecProto);
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-    Exclude<keyof I, KeysOfUnion<P> | "$type">,
-    never
-  >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P> | "$type">]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
