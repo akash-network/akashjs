@@ -1,6 +1,10 @@
 AKASH_DIR=$1
-PROTO_PATH="$1/proto/"
-SRC_PATHS=$(find "${AKASH_DIR}/proto/" -name "*.proto")
+API_DIR=$2
+PROTO_PATH="$2/proto/node"
+
+echo "Generating protobuf files for ${PROTO_PATH}"
+
+SRC_PATHS=$(find ${PROTO_PATH} -name "*.proto")
 OUTPUT_DIR="./src/protobuf"
 LOG_FILE="./generate.log"
 

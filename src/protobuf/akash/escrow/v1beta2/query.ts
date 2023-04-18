@@ -1,12 +1,9 @@
 /* eslint-disable */
-import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
-import {
-  PageRequest,
-  PageResponse,
-} from "../../../cosmos/base/query/v1beta1/pagination";
+import _m0 from "protobufjs/minimal";
+import { PageRequest, PageResponse } from "../../../cosmos/base/query/v1beta1/pagination";
+import { messageTypeRegistry } from "../../../typeRegistry";
 import { Account, FractionalPayment } from "./types";
-import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.escrow.v1beta2";
 
@@ -59,10 +56,7 @@ function createBaseQueryAccountsRequest(): QueryAccountsRequest {
 export const QueryAccountsRequest = {
   $type: "akash.escrow.v1beta2.QueryAccountsRequest" as const,
 
-  encode(
-    message: QueryAccountsRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryAccountsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.scope !== "") {
       writer.uint32(10).string(message.scope);
     }
@@ -81,35 +75,53 @@ export const QueryAccountsRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAccountsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAccountsRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAccountsRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag != 10) {
+            break;
+          }
+
           message.scope = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag != 18) {
+            break;
+          }
+
           message.xid = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag != 26) {
+            break;
+          }
+
           message.owner = reader.string();
-          break;
+          continue;
         case 4:
+          if (tag != 34) {
+            break;
+          }
+
           message.state = reader.string();
-          break;
+          continue;
         case 5:
+          if (tag != 42) {
+            break;
+          }
+
           message.pagination = PageRequest.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -121,9 +133,7 @@ export const QueryAccountsRequest = {
       xid: isSet(object.xid) ? String(object.xid) : "",
       owner: isSet(object.owner) ? String(object.owner) : "",
       state: isSet(object.state) ? String(object.state) : "",
-      pagination: isSet(object.pagination)
-        ? PageRequest.fromJSON(object.pagination)
-        : undefined,
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
     };
   },
 
@@ -134,24 +144,23 @@ export const QueryAccountsRequest = {
     message.owner !== undefined && (obj.owner = message.owner);
     message.state !== undefined && (obj.state = message.state);
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+      (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryAccountsRequest>, I>>(
-    object: I
-  ): QueryAccountsRequest {
+  create<I extends Exact<DeepPartial<QueryAccountsRequest>, I>>(base?: I): QueryAccountsRequest {
+    return QueryAccountsRequest.fromPartial(base ?? {});
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAccountsRequest>, I>>(object: I): QueryAccountsRequest {
     const message = createBaseQueryAccountsRequest();
     message.scope = object.scope ?? "";
     message.xid = object.xid ?? "";
     message.owner = object.owner ?? "";
     message.state = object.state ?? "";
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageRequest.fromPartial(object.pagination)
-        : undefined;
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
     return message;
   },
 };
@@ -159,52 +168,48 @@ export const QueryAccountsRequest = {
 messageTypeRegistry.set(QueryAccountsRequest.$type, QueryAccountsRequest);
 
 function createBaseQueryAccountsResponse(): QueryAccountsResponse {
-  return {
-    $type: "akash.escrow.v1beta2.QueryAccountsResponse",
-    accounts: [],
-    pagination: undefined,
-  };
+  return { $type: "akash.escrow.v1beta2.QueryAccountsResponse", accounts: [], pagination: undefined };
 }
 
 export const QueryAccountsResponse = {
   $type: "akash.escrow.v1beta2.QueryAccountsResponse" as const,
 
-  encode(
-    message: QueryAccountsResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryAccountsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.accounts) {
       Account.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(
-        message.pagination,
-        writer.uint32(18).fork()
-      ).ldelim();
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryAccountsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryAccountsResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryAccountsResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag != 10) {
+            break;
+          }
+
           message.accounts.push(Account.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 2:
+          if (tag != 18) {
+            break;
+          }
+
           message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -212,41 +217,33 @@ export const QueryAccountsResponse = {
   fromJSON(object: any): QueryAccountsResponse {
     return {
       $type: QueryAccountsResponse.$type,
-      accounts: Array.isArray(object?.accounts)
-        ? object.accounts.map((e: any) => Account.fromJSON(e))
-        : [],
-      pagination: isSet(object.pagination)
-        ? PageResponse.fromJSON(object.pagination)
-        : undefined,
+      accounts: Array.isArray(object?.accounts) ? object.accounts.map((e: any) => Account.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
     };
   },
 
   toJSON(message: QueryAccountsResponse): unknown {
     const obj: any = {};
     if (message.accounts) {
-      obj.accounts = message.accounts.map((e) =>
-        e ? Account.toJSON(e) : undefined
-      );
+      obj.accounts = message.accounts.map((e) => e ? Account.toJSON(e) : undefined);
     } else {
       obj.accounts = [];
     }
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+      (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryAccountsResponse>, I>>(
-    object: I
-  ): QueryAccountsResponse {
+  create<I extends Exact<DeepPartial<QueryAccountsResponse>, I>>(base?: I): QueryAccountsResponse {
+    return QueryAccountsResponse.fromPartial(base ?? {});
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryAccountsResponse>, I>>(object: I): QueryAccountsResponse {
     const message = createBaseQueryAccountsResponse();
-    message.accounts =
-      object.accounts?.map((e) => Account.fromPartial(e)) || [];
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageResponse.fromPartial(object.pagination)
-        : undefined;
+    message.accounts = object.accounts?.map((e) => Account.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
     return message;
   },
 };
@@ -268,10 +265,7 @@ function createBaseQueryPaymentsRequest(): QueryPaymentsRequest {
 export const QueryPaymentsRequest = {
   $type: "akash.escrow.v1beta2.QueryPaymentsRequest" as const,
 
-  encode(
-    message: QueryPaymentsRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryPaymentsRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.scope !== "") {
       writer.uint32(10).string(message.scope);
     }
@@ -293,38 +287,60 @@ export const QueryPaymentsRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryPaymentsRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPaymentsRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPaymentsRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag != 10) {
+            break;
+          }
+
           message.scope = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag != 18) {
+            break;
+          }
+
           message.xid = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag != 26) {
+            break;
+          }
+
           message.id = reader.string();
-          break;
+          continue;
         case 4:
+          if (tag != 34) {
+            break;
+          }
+
           message.owner = reader.string();
-          break;
+          continue;
         case 5:
+          if (tag != 42) {
+            break;
+          }
+
           message.state = reader.string();
-          break;
+          continue;
         case 6:
+          if (tag != 50) {
+            break;
+          }
+
           message.pagination = PageRequest.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -337,9 +353,7 @@ export const QueryPaymentsRequest = {
       id: isSet(object.id) ? String(object.id) : "",
       owner: isSet(object.owner) ? String(object.owner) : "",
       state: isSet(object.state) ? String(object.state) : "",
-      pagination: isSet(object.pagination)
-        ? PageRequest.fromJSON(object.pagination)
-        : undefined,
+      pagination: isSet(object.pagination) ? PageRequest.fromJSON(object.pagination) : undefined,
     };
   },
 
@@ -351,25 +365,24 @@ export const QueryPaymentsRequest = {
     message.owner !== undefined && (obj.owner = message.owner);
     message.state !== undefined && (obj.state = message.state);
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageRequest.toJSON(message.pagination)
-        : undefined);
+      (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryPaymentsRequest>, I>>(
-    object: I
-  ): QueryPaymentsRequest {
+  create<I extends Exact<DeepPartial<QueryPaymentsRequest>, I>>(base?: I): QueryPaymentsRequest {
+    return QueryPaymentsRequest.fromPartial(base ?? {});
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryPaymentsRequest>, I>>(object: I): QueryPaymentsRequest {
     const message = createBaseQueryPaymentsRequest();
     message.scope = object.scope ?? "";
     message.xid = object.xid ?? "";
     message.id = object.id ?? "";
     message.owner = object.owner ?? "";
     message.state = object.state ?? "";
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageRequest.fromPartial(object.pagination)
-        : undefined;
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageRequest.fromPartial(object.pagination)
+      : undefined;
     return message;
   },
 };
@@ -377,54 +390,48 @@ export const QueryPaymentsRequest = {
 messageTypeRegistry.set(QueryPaymentsRequest.$type, QueryPaymentsRequest);
 
 function createBaseQueryPaymentsResponse(): QueryPaymentsResponse {
-  return {
-    $type: "akash.escrow.v1beta2.QueryPaymentsResponse",
-    payments: [],
-    pagination: undefined,
-  };
+  return { $type: "akash.escrow.v1beta2.QueryPaymentsResponse", payments: [], pagination: undefined };
 }
 
 export const QueryPaymentsResponse = {
   $type: "akash.escrow.v1beta2.QueryPaymentsResponse" as const,
 
-  encode(
-    message: QueryPaymentsResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: QueryPaymentsResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.payments) {
       FractionalPayment.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.pagination !== undefined) {
-      PageResponse.encode(
-        message.pagination,
-        writer.uint32(18).fork()
-      ).ldelim();
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): QueryPaymentsResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryPaymentsResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseQueryPaymentsResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.payments.push(
-            FractionalPayment.decode(reader, reader.uint32())
-          );
-          break;
+          if (tag != 10) {
+            break;
+          }
+
+          message.payments.push(FractionalPayment.decode(reader, reader.uint32()));
+          continue;
         case 2:
+          if (tag != 18) {
+            break;
+          }
+
           message.pagination = PageResponse.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -432,41 +439,33 @@ export const QueryPaymentsResponse = {
   fromJSON(object: any): QueryPaymentsResponse {
     return {
       $type: QueryPaymentsResponse.$type,
-      payments: Array.isArray(object?.payments)
-        ? object.payments.map((e: any) => FractionalPayment.fromJSON(e))
-        : [],
-      pagination: isSet(object.pagination)
-        ? PageResponse.fromJSON(object.pagination)
-        : undefined,
+      payments: Array.isArray(object?.payments) ? object.payments.map((e: any) => FractionalPayment.fromJSON(e)) : [],
+      pagination: isSet(object.pagination) ? PageResponse.fromJSON(object.pagination) : undefined,
     };
   },
 
   toJSON(message: QueryPaymentsResponse): unknown {
     const obj: any = {};
     if (message.payments) {
-      obj.payments = message.payments.map((e) =>
-        e ? FractionalPayment.toJSON(e) : undefined
-      );
+      obj.payments = message.payments.map((e) => e ? FractionalPayment.toJSON(e) : undefined);
     } else {
       obj.payments = [];
     }
     message.pagination !== undefined &&
-      (obj.pagination = message.pagination
-        ? PageResponse.toJSON(message.pagination)
-        : undefined);
+      (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<QueryPaymentsResponse>, I>>(
-    object: I
-  ): QueryPaymentsResponse {
+  create<I extends Exact<DeepPartial<QueryPaymentsResponse>, I>>(base?: I): QueryPaymentsResponse {
+    return QueryPaymentsResponse.fromPartial(base ?? {});
+  },
+
+  fromPartial<I extends Exact<DeepPartial<QueryPaymentsResponse>, I>>(object: I): QueryPaymentsResponse {
     const message = createBaseQueryPaymentsResponse();
-    message.payments =
-      object.payments?.map((e) => FractionalPayment.fromPartial(e)) || [];
-    message.pagination =
-      object.pagination !== undefined && object.pagination !== null
-        ? PageResponse.fromPartial(object.pagination)
-        : undefined;
+    message.payments = object.payments?.map((e) => FractionalPayment.fromPartial(e)) || [];
+    message.pagination = (object.pagination !== undefined && object.pagination !== null)
+      ? PageResponse.fromPartial(object.pagination)
+      : undefined;
     return message;
   },
 };
@@ -491,72 +490,41 @@ export interface Query {
 
 export class QueryClientImpl implements Query {
   private readonly rpc: Rpc;
-  constructor(rpc: Rpc) {
+  private readonly service: string;
+  constructor(rpc: Rpc, opts?: { service?: string }) {
+    this.service = opts?.service || "akash.escrow.v1beta2.Query";
     this.rpc = rpc;
     this.Accounts = this.Accounts.bind(this);
     this.Payments = this.Payments.bind(this);
   }
   Accounts(request: QueryAccountsRequest): Promise<QueryAccountsResponse> {
     const data = QueryAccountsRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "akash.escrow.v1beta2.Query",
-      "Accounts",
-      data
-    );
-    return promise.then((data) =>
-      QueryAccountsResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "Accounts", data);
+    return promise.then((data) => QueryAccountsResponse.decode(_m0.Reader.create(data)));
   }
 
   Payments(request: QueryPaymentsRequest): Promise<QueryPaymentsResponse> {
     const data = QueryPaymentsRequest.encode(request).finish();
-    const promise = this.rpc.request(
-      "akash.escrow.v1beta2.Query",
-      "Payments",
-      data
-    );
-    return promise.then((data) =>
-      QueryPaymentsResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request(this.service, "Payments", data);
+    return promise.then((data) => QueryPaymentsResponse.decode(_m0.Reader.create(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P> | "$type">]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

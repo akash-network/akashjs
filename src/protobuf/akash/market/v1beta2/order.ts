@@ -1,8 +1,8 @@
 /* eslint-disable */
-import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
+import _m0 from "protobufjs/minimal";
+import { messageTypeRegistry } from "../../../typeRegistry";
 import { GroupSpec } from "../../deployment/v1beta2/groupspec";
-import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.market.v1beta2";
 
@@ -85,22 +85,13 @@ export interface OrderFilters {
 }
 
 function createBaseOrderID(): OrderID {
-  return {
-    $type: "akash.market.v1beta2.OrderID",
-    owner: "",
-    dseq: Long.UZERO,
-    gseq: 0,
-    oseq: 0,
-  };
+  return { $type: "akash.market.v1beta2.OrderID", owner: "", dseq: Long.UZERO, gseq: 0, oseq: 0 };
 }
 
 export const OrderID = {
   $type: "akash.market.v1beta2.OrderID" as const,
 
-  encode(
-    message: OrderID,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: OrderID, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -117,28 +108,45 @@ export const OrderID = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): OrderID {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrderID();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag != 10) {
+            break;
+          }
+
           message.owner = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag != 16) {
+            break;
+          }
+
           message.dseq = reader.uint64() as Long;
-          break;
+          continue;
         case 3:
+          if (tag != 24) {
+            break;
+          }
+
           message.gseq = reader.uint32();
-          break;
+          continue;
         case 4:
+          if (tag != 32) {
+            break;
+          }
+
           message.oseq = reader.uint32();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -156,20 +164,20 @@ export const OrderID = {
   toJSON(message: OrderID): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined &&
-      (obj.dseq = (message.dseq || Long.UZERO).toString());
+    message.dseq !== undefined && (obj.dseq = (message.dseq || Long.UZERO).toString());
     message.gseq !== undefined && (obj.gseq = Math.round(message.gseq));
     message.oseq !== undefined && (obj.oseq = Math.round(message.oseq));
     return obj;
   },
 
+  create<I extends Exact<DeepPartial<OrderID>, I>>(base?: I): OrderID {
+    return OrderID.fromPartial(base ?? {});
+  },
+
   fromPartial<I extends Exact<DeepPartial<OrderID>, I>>(object: I): OrderID {
     const message = createBaseOrderID();
     message.owner = object.owner ?? "";
-    message.dseq =
-      object.dseq !== undefined && object.dseq !== null
-        ? Long.fromValue(object.dseq)
-        : Long.UZERO;
+    message.dseq = (object.dseq !== undefined && object.dseq !== null) ? Long.fromValue(object.dseq) : Long.UZERO;
     message.gseq = object.gseq ?? 0;
     message.oseq = object.oseq ?? 0;
     return message;
@@ -179,13 +187,7 @@ export const OrderID = {
 messageTypeRegistry.set(OrderID.$type, OrderID);
 
 function createBaseOrder(): Order {
-  return {
-    $type: "akash.market.v1beta2.Order",
-    orderId: undefined,
-    state: 0,
-    spec: undefined,
-    createdAt: Long.ZERO,
-  };
+  return { $type: "akash.market.v1beta2.Order", orderId: undefined, state: 0, spec: undefined, createdAt: Long.ZERO };
 }
 
 export const Order = {
@@ -208,28 +210,45 @@ export const Order = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Order {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrder();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag != 10) {
+            break;
+          }
+
           message.orderId = OrderID.decode(reader, reader.uint32());
-          break;
+          continue;
         case 2:
+          if (tag != 16) {
+            break;
+          }
+
           message.state = reader.int32() as any;
-          break;
+          continue;
         case 3:
+          if (tag != 26) {
+            break;
+          }
+
           message.spec = GroupSpec.decode(reader, reader.uint32());
-          break;
+          continue;
         case 4:
+          if (tag != 32) {
+            break;
+          }
+
           message.createdAt = reader.int64() as Long;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -237,47 +256,36 @@ export const Order = {
   fromJSON(object: any): Order {
     return {
       $type: Order.$type,
-      orderId: isSet(object.orderId)
-        ? OrderID.fromJSON(object.orderId)
-        : undefined,
+      orderId: isSet(object.orderId) ? OrderID.fromJSON(object.orderId) : undefined,
       state: isSet(object.state) ? order_StateFromJSON(object.state) : 0,
       spec: isSet(object.spec) ? GroupSpec.fromJSON(object.spec) : undefined,
-      createdAt: isSet(object.createdAt)
-        ? Long.fromValue(object.createdAt)
-        : Long.ZERO,
+      createdAt: isSet(object.createdAt) ? Long.fromValue(object.createdAt) : Long.ZERO,
     };
   },
 
   toJSON(message: Order): unknown {
     const obj: any = {};
-    message.orderId !== undefined &&
-      (obj.orderId = message.orderId
-        ? OrderID.toJSON(message.orderId)
-        : undefined);
-    message.state !== undefined &&
-      (obj.state = order_StateToJSON(message.state));
-    message.spec !== undefined &&
-      (obj.spec = message.spec ? GroupSpec.toJSON(message.spec) : undefined);
-    message.createdAt !== undefined &&
-      (obj.createdAt = (message.createdAt || Long.ZERO).toString());
+    message.orderId !== undefined && (obj.orderId = message.orderId ? OrderID.toJSON(message.orderId) : undefined);
+    message.state !== undefined && (obj.state = order_StateToJSON(message.state));
+    message.spec !== undefined && (obj.spec = message.spec ? GroupSpec.toJSON(message.spec) : undefined);
+    message.createdAt !== undefined && (obj.createdAt = (message.createdAt || Long.ZERO).toString());
     return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Order>, I>>(base?: I): Order {
+    return Order.fromPartial(base ?? {});
   },
 
   fromPartial<I extends Exact<DeepPartial<Order>, I>>(object: I): Order {
     const message = createBaseOrder();
-    message.orderId =
-      object.orderId !== undefined && object.orderId !== null
-        ? OrderID.fromPartial(object.orderId)
-        : undefined;
+    message.orderId = (object.orderId !== undefined && object.orderId !== null)
+      ? OrderID.fromPartial(object.orderId)
+      : undefined;
     message.state = object.state ?? 0;
-    message.spec =
-      object.spec !== undefined && object.spec !== null
-        ? GroupSpec.fromPartial(object.spec)
-        : undefined;
-    message.createdAt =
-      object.createdAt !== undefined && object.createdAt !== null
-        ? Long.fromValue(object.createdAt)
-        : Long.ZERO;
+    message.spec = (object.spec !== undefined && object.spec !== null) ? GroupSpec.fromPartial(object.spec) : undefined;
+    message.createdAt = (object.createdAt !== undefined && object.createdAt !== null)
+      ? Long.fromValue(object.createdAt)
+      : Long.ZERO;
     return message;
   },
 };
@@ -285,23 +293,13 @@ export const Order = {
 messageTypeRegistry.set(Order.$type, Order);
 
 function createBaseOrderFilters(): OrderFilters {
-  return {
-    $type: "akash.market.v1beta2.OrderFilters",
-    owner: "",
-    dseq: Long.UZERO,
-    gseq: 0,
-    oseq: 0,
-    state: "",
-  };
+  return { $type: "akash.market.v1beta2.OrderFilters", owner: "", dseq: Long.UZERO, gseq: 0, oseq: 0, state: "" };
 }
 
 export const OrderFilters = {
   $type: "akash.market.v1beta2.OrderFilters" as const,
 
-  encode(
-    message: OrderFilters,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: OrderFilters, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -321,31 +319,52 @@ export const OrderFilters = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): OrderFilters {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrderFilters();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag != 10) {
+            break;
+          }
+
           message.owner = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag != 16) {
+            break;
+          }
+
           message.dseq = reader.uint64() as Long;
-          break;
+          continue;
         case 3:
+          if (tag != 24) {
+            break;
+          }
+
           message.gseq = reader.uint32();
-          break;
+          continue;
         case 4:
+          if (tag != 32) {
+            break;
+          }
+
           message.oseq = reader.uint32();
-          break;
+          continue;
         case 5:
+          if (tag != 42) {
+            break;
+          }
+
           message.state = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -364,23 +383,21 @@ export const OrderFilters = {
   toJSON(message: OrderFilters): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined &&
-      (obj.dseq = (message.dseq || Long.UZERO).toString());
+    message.dseq !== undefined && (obj.dseq = (message.dseq || Long.UZERO).toString());
     message.gseq !== undefined && (obj.gseq = Math.round(message.gseq));
     message.oseq !== undefined && (obj.oseq = Math.round(message.oseq));
     message.state !== undefined && (obj.state = message.state);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<OrderFilters>, I>>(
-    object: I
-  ): OrderFilters {
+  create<I extends Exact<DeepPartial<OrderFilters>, I>>(base?: I): OrderFilters {
+    return OrderFilters.fromPartial(base ?? {});
+  },
+
+  fromPartial<I extends Exact<DeepPartial<OrderFilters>, I>>(object: I): OrderFilters {
     const message = createBaseOrderFilters();
     message.owner = object.owner ?? "";
-    message.dseq =
-      object.dseq !== undefined && object.dseq !== null
-        ? Long.fromValue(object.dseq)
-        : Long.UZERO;
+    message.dseq = (object.dseq !== undefined && object.dseq !== null) ? Long.fromValue(object.dseq) : Long.UZERO;
     message.gseq = object.gseq ?? 0;
     message.oseq = object.oseq ?? 0;
     message.state = object.state ?? "";
@@ -390,34 +407,17 @@ export const OrderFilters = {
 
 messageTypeRegistry.set(OrderFilters.$type, OrderFilters);
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P> | "$type">]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

@@ -1,8 +1,8 @@
 /* eslint-disable */
-import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
+import _m0 from "protobufjs/minimal";
 import { Coin } from "../../../cosmos/base/v1beta1/coin";
-import * as _m0 from "protobufjs/minimal";
+import { messageTypeRegistry } from "../../../typeRegistry";
 
 export const protobufPackage = "akash.escrow.v1beta1";
 
@@ -17,15 +17,21 @@ export interface AccountID {
 export interface Account {
   $type: "akash.escrow.v1beta1.Account";
   /** unique identifier for this escrow account */
-  id: AccountID | undefined;
+  id:
+    | AccountID
+    | undefined;
   /** bech32 encoded account address of the owner of this escrow account */
   owner: string;
   /** current state of this escrow account */
   state: Account_State;
   /** unspent coins received from the owner's wallet */
-  balance: Coin | undefined;
+  balance:
+    | Coin
+    | undefined;
   /** total coins spent by this account */
-  transferred: Coin | undefined;
+  transferred:
+    | Coin
+    | undefined;
   /** block height at which this account was last settled */
   settledAt: Long;
 }
@@ -149,10 +155,7 @@ function createBaseAccountID(): AccountID {
 export const AccountID = {
   $type: "akash.escrow.v1beta1.AccountID" as const,
 
-  encode(
-    message: AccountID,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: AccountID, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.scope !== "") {
       writer.uint32(10).string(message.scope);
     }
@@ -163,22 +166,31 @@ export const AccountID = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): AccountID {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAccountID();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag != 10) {
+            break;
+          }
+
           message.scope = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag != 18) {
+            break;
+          }
+
           message.xid = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -198,9 +210,11 @@ export const AccountID = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<AccountID>, I>>(
-    object: I
-  ): AccountID {
+  create<I extends Exact<DeepPartial<AccountID>, I>>(base?: I): AccountID {
+    return AccountID.fromPartial(base ?? {});
+  },
+
+  fromPartial<I extends Exact<DeepPartial<AccountID>, I>>(object: I): AccountID {
     const message = createBaseAccountID();
     message.scope = object.scope ?? "";
     message.xid = object.xid ?? "";
@@ -225,10 +239,7 @@ function createBaseAccount(): Account {
 export const Account = {
   $type: "akash.escrow.v1beta1.Account" as const,
 
-  encode(
-    message: Account,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Account, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== undefined) {
       AccountID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -251,34 +262,59 @@ export const Account = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Account {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAccount();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag != 10) {
+            break;
+          }
+
           message.id = AccountID.decode(reader, reader.uint32());
-          break;
+          continue;
         case 2:
+          if (tag != 18) {
+            break;
+          }
+
           message.owner = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag != 24) {
+            break;
+          }
+
           message.state = reader.int32() as any;
-          break;
+          continue;
         case 4:
+          if (tag != 34) {
+            break;
+          }
+
           message.balance = Coin.decode(reader, reader.uint32());
-          break;
+          continue;
         case 5:
+          if (tag != 42) {
+            break;
+          }
+
           message.transferred = Coin.decode(reader, reader.uint32());
-          break;
+          continue;
         case 6:
+          if (tag != 48) {
+            break;
+          }
+
           message.settledAt = reader.int64() as Long;
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -289,58 +325,42 @@ export const Account = {
       id: isSet(object.id) ? AccountID.fromJSON(object.id) : undefined,
       owner: isSet(object.owner) ? String(object.owner) : "",
       state: isSet(object.state) ? account_StateFromJSON(object.state) : 0,
-      balance: isSet(object.balance)
-        ? Coin.fromJSON(object.balance)
-        : undefined,
-      transferred: isSet(object.transferred)
-        ? Coin.fromJSON(object.transferred)
-        : undefined,
-      settledAt: isSet(object.settledAt)
-        ? Long.fromValue(object.settledAt)
-        : Long.ZERO,
+      balance: isSet(object.balance) ? Coin.fromJSON(object.balance) : undefined,
+      transferred: isSet(object.transferred) ? Coin.fromJSON(object.transferred) : undefined,
+      settledAt: isSet(object.settledAt) ? Long.fromValue(object.settledAt) : Long.ZERO,
     };
   },
 
   toJSON(message: Account): unknown {
     const obj: any = {};
-    message.id !== undefined &&
-      (obj.id = message.id ? AccountID.toJSON(message.id) : undefined);
+    message.id !== undefined && (obj.id = message.id ? AccountID.toJSON(message.id) : undefined);
     message.owner !== undefined && (obj.owner = message.owner);
-    message.state !== undefined &&
-      (obj.state = account_StateToJSON(message.state));
-    message.balance !== undefined &&
-      (obj.balance = message.balance
-        ? Coin.toJSON(message.balance)
-        : undefined);
+    message.state !== undefined && (obj.state = account_StateToJSON(message.state));
+    message.balance !== undefined && (obj.balance = message.balance ? Coin.toJSON(message.balance) : undefined);
     message.transferred !== undefined &&
-      (obj.transferred = message.transferred
-        ? Coin.toJSON(message.transferred)
-        : undefined);
-    message.settledAt !== undefined &&
-      (obj.settledAt = (message.settledAt || Long.ZERO).toString());
+      (obj.transferred = message.transferred ? Coin.toJSON(message.transferred) : undefined);
+    message.settledAt !== undefined && (obj.settledAt = (message.settledAt || Long.ZERO).toString());
     return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Account>, I>>(base?: I): Account {
+    return Account.fromPartial(base ?? {});
   },
 
   fromPartial<I extends Exact<DeepPartial<Account>, I>>(object: I): Account {
     const message = createBaseAccount();
-    message.id =
-      object.id !== undefined && object.id !== null
-        ? AccountID.fromPartial(object.id)
-        : undefined;
+    message.id = (object.id !== undefined && object.id !== null) ? AccountID.fromPartial(object.id) : undefined;
     message.owner = object.owner ?? "";
     message.state = object.state ?? 0;
-    message.balance =
-      object.balance !== undefined && object.balance !== null
-        ? Coin.fromPartial(object.balance)
-        : undefined;
-    message.transferred =
-      object.transferred !== undefined && object.transferred !== null
-        ? Coin.fromPartial(object.transferred)
-        : undefined;
-    message.settledAt =
-      object.settledAt !== undefined && object.settledAt !== null
-        ? Long.fromValue(object.settledAt)
-        : Long.ZERO;
+    message.balance = (object.balance !== undefined && object.balance !== null)
+      ? Coin.fromPartial(object.balance)
+      : undefined;
+    message.transferred = (object.transferred !== undefined && object.transferred !== null)
+      ? Coin.fromPartial(object.transferred)
+      : undefined;
+    message.settledAt = (object.settledAt !== undefined && object.settledAt !== null)
+      ? Long.fromValue(object.settledAt)
+      : Long.ZERO;
     return message;
   },
 };
@@ -363,10 +383,7 @@ function createBasePayment(): Payment {
 export const Payment = {
   $type: "akash.escrow.v1beta1.Payment" as const,
 
-  encode(
-    message: Payment,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Payment, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.accountId !== undefined) {
       AccountID.encode(message.accountId, writer.uint32(10).fork()).ldelim();
     }
@@ -392,37 +409,66 @@ export const Payment = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Payment {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePayment();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag != 10) {
+            break;
+          }
+
           message.accountId = AccountID.decode(reader, reader.uint32());
-          break;
+          continue;
         case 2:
+          if (tag != 18) {
+            break;
+          }
+
           message.paymentId = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag != 26) {
+            break;
+          }
+
           message.owner = reader.string();
-          break;
+          continue;
         case 4:
+          if (tag != 32) {
+            break;
+          }
+
           message.state = reader.int32() as any;
-          break;
+          continue;
         case 5:
+          if (tag != 42) {
+            break;
+          }
+
           message.rate = Coin.decode(reader, reader.uint32());
-          break;
+          continue;
         case 6:
+          if (tag != 50) {
+            break;
+          }
+
           message.balance = Coin.decode(reader, reader.uint32());
-          break;
+          continue;
         case 7:
+          if (tag != 58) {
+            break;
+          }
+
           message.withdrawn = Coin.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) == 4 || tag == 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -430,100 +476,65 @@ export const Payment = {
   fromJSON(object: any): Payment {
     return {
       $type: Payment.$type,
-      accountId: isSet(object.accountId)
-        ? AccountID.fromJSON(object.accountId)
-        : undefined,
+      accountId: isSet(object.accountId) ? AccountID.fromJSON(object.accountId) : undefined,
       paymentId: isSet(object.paymentId) ? String(object.paymentId) : "",
       owner: isSet(object.owner) ? String(object.owner) : "",
       state: isSet(object.state) ? payment_StateFromJSON(object.state) : 0,
       rate: isSet(object.rate) ? Coin.fromJSON(object.rate) : undefined,
-      balance: isSet(object.balance)
-        ? Coin.fromJSON(object.balance)
-        : undefined,
-      withdrawn: isSet(object.withdrawn)
-        ? Coin.fromJSON(object.withdrawn)
-        : undefined,
+      balance: isSet(object.balance) ? Coin.fromJSON(object.balance) : undefined,
+      withdrawn: isSet(object.withdrawn) ? Coin.fromJSON(object.withdrawn) : undefined,
     };
   },
 
   toJSON(message: Payment): unknown {
     const obj: any = {};
     message.accountId !== undefined &&
-      (obj.accountId = message.accountId
-        ? AccountID.toJSON(message.accountId)
-        : undefined);
+      (obj.accountId = message.accountId ? AccountID.toJSON(message.accountId) : undefined);
     message.paymentId !== undefined && (obj.paymentId = message.paymentId);
     message.owner !== undefined && (obj.owner = message.owner);
-    message.state !== undefined &&
-      (obj.state = payment_StateToJSON(message.state));
-    message.rate !== undefined &&
-      (obj.rate = message.rate ? Coin.toJSON(message.rate) : undefined);
-    message.balance !== undefined &&
-      (obj.balance = message.balance
-        ? Coin.toJSON(message.balance)
-        : undefined);
-    message.withdrawn !== undefined &&
-      (obj.withdrawn = message.withdrawn
-        ? Coin.toJSON(message.withdrawn)
-        : undefined);
+    message.state !== undefined && (obj.state = payment_StateToJSON(message.state));
+    message.rate !== undefined && (obj.rate = message.rate ? Coin.toJSON(message.rate) : undefined);
+    message.balance !== undefined && (obj.balance = message.balance ? Coin.toJSON(message.balance) : undefined);
+    message.withdrawn !== undefined && (obj.withdrawn = message.withdrawn ? Coin.toJSON(message.withdrawn) : undefined);
     return obj;
+  },
+
+  create<I extends Exact<DeepPartial<Payment>, I>>(base?: I): Payment {
+    return Payment.fromPartial(base ?? {});
   },
 
   fromPartial<I extends Exact<DeepPartial<Payment>, I>>(object: I): Payment {
     const message = createBasePayment();
-    message.accountId =
-      object.accountId !== undefined && object.accountId !== null
-        ? AccountID.fromPartial(object.accountId)
-        : undefined;
+    message.accountId = (object.accountId !== undefined && object.accountId !== null)
+      ? AccountID.fromPartial(object.accountId)
+      : undefined;
     message.paymentId = object.paymentId ?? "";
     message.owner = object.owner ?? "";
     message.state = object.state ?? 0;
-    message.rate =
-      object.rate !== undefined && object.rate !== null
-        ? Coin.fromPartial(object.rate)
-        : undefined;
-    message.balance =
-      object.balance !== undefined && object.balance !== null
-        ? Coin.fromPartial(object.balance)
-        : undefined;
-    message.withdrawn =
-      object.withdrawn !== undefined && object.withdrawn !== null
-        ? Coin.fromPartial(object.withdrawn)
-        : undefined;
+    message.rate = (object.rate !== undefined && object.rate !== null) ? Coin.fromPartial(object.rate) : undefined;
+    message.balance = (object.balance !== undefined && object.balance !== null)
+      ? Coin.fromPartial(object.balance)
+      : undefined;
+    message.withdrawn = (object.withdrawn !== undefined && object.withdrawn !== null)
+      ? Coin.fromPartial(object.withdrawn)
+      : undefined;
     return message;
   },
 };
 
 messageTypeRegistry.set(Payment.$type, Payment);
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin
-  ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+export type Exact<P, I extends P> = P extends Builtin ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P> | "$type">]: never };
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
