@@ -36,8 +36,8 @@ export interface FileDescriptorProto {
   service: ServiceDescriptorProto[];
   extension: FieldDescriptorProto[];
   options:
-    | FileOptions
-    | undefined;
+  | FileOptions
+  | undefined;
   /**
    * This field contains optional information about the original source code.
    * You may safely remove this entire field without harming runtime
@@ -45,8 +45,8 @@ export interface FileDescriptorProto {
    * development tools.
    */
   sourceCodeInfo:
-    | SourceCodeInfo
-    | undefined;
+  | SourceCodeInfo
+  | undefined;
   /**
    * The syntax of the proto file.
    * The supported values are "proto2" and "proto3".
@@ -146,8 +146,8 @@ export interface FieldDescriptorProto {
    */
   jsonName: string;
   options:
-    | FieldOptions
-    | undefined;
+  | FieldOptions
+  | undefined;
   /**
    * If true, this is a proto3 "optional". When a proto3 field is optional, it
    * tracks presence regardless of field type.
@@ -378,8 +378,8 @@ export interface EnumDescriptorProto {
   name: string;
   value: EnumValueDescriptorProto[];
   options:
-    | EnumOptions
-    | undefined;
+  | EnumOptions
+  | undefined;
   /**
    * Range of reserved numeric values. Reserved numeric values may not be used
    * by enum values in the same enum declaration. Reserved ranges may not
@@ -436,8 +436,8 @@ export interface MethodDescriptorProto {
   inputType: string;
   outputType: string;
   options:
-    | MethodOptions
-    | undefined;
+  | MethodOptions
+  | undefined;
   /** Identifies if client streams multiple client messages */
   clientStreaming: boolean;
   /** Identifies if server streams multiple server messages */
@@ -1159,7 +1159,7 @@ function createBaseFileDescriptorSet(): FileDescriptorSet {
   return { $type: "google.protobuf.FileDescriptorSet", file: [] };
 }
 
-export const FileDescriptorSet = {
+export const FileDescriptorSet: any = {
   $type: "google.protobuf.FileDescriptorSet" as const,
 
   encode(message: FileDescriptorSet, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
@@ -1240,7 +1240,7 @@ function createBaseFileDescriptorProto(): FileDescriptorProto {
   };
 }
 
-export const FileDescriptorProto = {
+export const FileDescriptorProto: any = {
   $type: "google.protobuf.FileDescriptorProto" as const,
 
   encode(message: FileDescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
@@ -1519,7 +1519,7 @@ function createBaseDescriptorProto(): DescriptorProto {
   };
 }
 
-export const DescriptorProto = {
+export const DescriptorProto: any = {
   $type: "google.protobuf.DescriptorProto" as const,
 
   encode(message: DescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
