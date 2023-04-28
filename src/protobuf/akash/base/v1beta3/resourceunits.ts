@@ -19,7 +19,7 @@ export interface ResourceUnits {
   cpu: CPU | undefined;
   memory: Memory | undefined;
   storage: Storage[];
-  gpu: GPU | undefined;
+  gpu: GPU | 0;
   endpoints: Endpoint[];
 }
 
@@ -29,7 +29,7 @@ function createBaseResourceUnits(): ResourceUnits {
     cpu: undefined,
     memory: undefined,
     storage: [],
-    gpu: undefined,
+    gpu: 0,
     endpoints: [],
   };
 }
@@ -47,7 +47,7 @@ export const ResourceUnits = {
     for (const v of message.storage) {
       Storage.encode(v!, writer.uint32(26).fork()).ldelim();
     }
-    if (message.gpu !== undefined) {
+    if (message.gpu !== 0) {
       GPU.encode(message.gpu, writer.uint32(34).fork()).ldelim();
     }
     for (const v of message.endpoints) {
@@ -113,7 +113,7 @@ export const ResourceUnits = {
       cpu: isSet(object.cpu) ? CPU.fromJSON(object.cpu) : undefined,
       memory: isSet(object.memory) ? Memory.fromJSON(object.memory) : undefined,
       storage: Array.isArray(object?.storage) ? object.storage.map((e: any) => Storage.fromJSON(e)) : [],
-      gpu: isSet(object.gpu) ? GPU.fromJSON(object.gpu) : undefined,
+      gpu: isSet(object.gpu) ? GPU.fromJSON(object.gpu) : 0,
       endpoints: Array.isArray(object?.endpoints) ? object.endpoints.map((e: any) => Endpoint.fromJSON(e)) : [],
     };
   },
@@ -127,7 +127,7 @@ export const ResourceUnits = {
     } else {
       obj.storage = [];
     }
-    message.gpu !== undefined && (obj.gpu = message.gpu ? GPU.toJSON(message.gpu) : undefined);
+    message.gpu !== undefined && (obj.gpu = message.gpu ? GPU.toJSON(message.gpu) : 0);
     if (message.endpoints) {
       obj.endpoints = message.endpoints.map((e) => e ? Endpoint.toJSON(e) : undefined);
     } else {
@@ -147,7 +147,7 @@ export const ResourceUnits = {
       ? Memory.fromPartial(object.memory)
       : undefined;
     message.storage = object.storage?.map((e) => Storage.fromPartial(e)) || [];
-    message.gpu = (object.gpu !== undefined && object.gpu !== null) ? GPU.fromPartial(object.gpu) : undefined;
+    message.gpu = (object.gpu !== 0 && object.gpu !== undefined) ? GPU.fromPartial(object.gpu) : 0;
     message.endpoints = object.endpoints?.map((e) => Endpoint.fromPartial(e)) || [];
     return message;
   },
