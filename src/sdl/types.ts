@@ -129,6 +129,11 @@ export type v2ResourceMemory = {
     attributes?: Attributes,
 }
 
+export type v2ResourceGPU = {
+    units: number | string,
+    attributes?: Attributes,
+}
+
 export type v2StorageAttributes = Attributes;
 
 export type v2ResourceStorage = {
@@ -143,6 +148,7 @@ export type v2ComputeResources = {
     cpu: v2ResourceCPU,
     memory: v2ResourceMemory,
     storage: v2ResourceStorageArray | v2ResourceStorage,
+    gpu?: v2ResourceGPU,
 }
 
 export type v2ProfileCompute = {

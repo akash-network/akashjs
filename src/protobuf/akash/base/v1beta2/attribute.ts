@@ -1,7 +1,7 @@
 /* eslint-disable */
-import Long from "long";
-import _m0 from "protobufjs/minimal";
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.base.v1beta2";
 
@@ -30,9 +30,7 @@ export interface SignedBy {
 export interface PlacementRequirements {
   $type: "akash.base.v1beta2.PlacementRequirements";
   /** SignedBy list of keys that tenants expect to have signatures from */
-  signedBy:
-    | SignedBy
-    | undefined;
+  signedBy: SignedBy | undefined;
   /** Attribute list of attributes tenant expects from the provider */
   attributes: Attribute[];
 }
@@ -44,7 +42,10 @@ function createBaseAttribute(): Attribute {
 export const Attribute = {
   $type: "akash.base.v1beta2.Attribute" as const,
 
-  encode(message: Attribute, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Attribute,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.key !== "") {
       writer.uint32(10).string(message.key);
     }
@@ -55,31 +56,22 @@ export const Attribute = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Attribute {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAttribute();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.key = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag != 18) {
-            break;
-          }
-
           message.value = reader.string();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -99,11 +91,9 @@ export const Attribute = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<Attribute>, I>>(base?: I): Attribute {
-    return Attribute.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<Attribute>, I>>(object: I): Attribute {
+  fromPartial<I extends Exact<DeepPartial<Attribute>, I>>(
+    object: I
+  ): Attribute {
     const message = createBaseAttribute();
     message.key = object.key ?? "";
     message.value = object.value ?? "";
@@ -120,7 +110,10 @@ function createBaseSignedBy(): SignedBy {
 export const SignedBy = {
   $type: "akash.base.v1beta2.SignedBy" as const,
 
-  encode(message: SignedBy, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: SignedBy,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.allOf) {
       writer.uint32(10).string(v!);
     }
@@ -131,31 +124,22 @@ export const SignedBy = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): SignedBy {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSignedBy();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.allOf.push(reader.string());
-          continue;
+          break;
         case 2:
-          if (tag != 18) {
-            break;
-          }
-
           message.anyOf.push(reader.string());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -163,8 +147,12 @@ export const SignedBy = {
   fromJSON(object: any): SignedBy {
     return {
       $type: SignedBy.$type,
-      allOf: Array.isArray(object?.allOf) ? object.allOf.map((e: any) => String(e)) : [],
-      anyOf: Array.isArray(object?.anyOf) ? object.anyOf.map((e: any) => String(e)) : [],
+      allOf: Array.isArray(object?.allOf)
+        ? object.allOf.map((e: any) => String(e))
+        : [],
+      anyOf: Array.isArray(object?.anyOf)
+        ? object.anyOf.map((e: any) => String(e))
+        : [],
     };
   },
 
@@ -183,10 +171,6 @@ export const SignedBy = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<SignedBy>, I>>(base?: I): SignedBy {
-    return SignedBy.fromPartial(base ?? {});
-  },
-
   fromPartial<I extends Exact<DeepPartial<SignedBy>, I>>(object: I): SignedBy {
     const message = createBaseSignedBy();
     message.allOf = object.allOf?.map((e) => e) || [];
@@ -198,13 +182,20 @@ export const SignedBy = {
 messageTypeRegistry.set(SignedBy.$type, SignedBy);
 
 function createBasePlacementRequirements(): PlacementRequirements {
-  return { $type: "akash.base.v1beta2.PlacementRequirements", signedBy: undefined, attributes: [] };
+  return {
+    $type: "akash.base.v1beta2.PlacementRequirements",
+    signedBy: undefined,
+    attributes: [],
+  };
 }
 
 export const PlacementRequirements = {
   $type: "akash.base.v1beta2.PlacementRequirements" as const,
 
-  encode(message: PlacementRequirements, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: PlacementRequirements,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.signedBy !== undefined) {
       SignedBy.encode(message.signedBy, writer.uint32(10).fork()).ldelim();
     }
@@ -214,32 +205,26 @@ export const PlacementRequirements = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PlacementRequirements {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): PlacementRequirements {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePlacementRequirements();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.signedBy = SignedBy.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag != 18) {
-            break;
-          }
-
           message.attributes.push(Attribute.decode(reader, reader.uint32()));
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -247,49 +232,75 @@ export const PlacementRequirements = {
   fromJSON(object: any): PlacementRequirements {
     return {
       $type: PlacementRequirements.$type,
-      signedBy: isSet(object.signedBy) ? SignedBy.fromJSON(object.signedBy) : undefined,
-      attributes: Array.isArray(object?.attributes) ? object.attributes.map((e: any) => Attribute.fromJSON(e)) : [],
+      signedBy: isSet(object.signedBy)
+        ? SignedBy.fromJSON(object.signedBy)
+        : undefined,
+      attributes: Array.isArray(object?.attributes)
+        ? object.attributes.map((e: any) => Attribute.fromJSON(e))
+        : [],
     };
   },
 
   toJSON(message: PlacementRequirements): unknown {
     const obj: any = {};
-    message.signedBy !== undefined && (obj.signedBy = message.signedBy ? SignedBy.toJSON(message.signedBy) : undefined);
+    message.signedBy !== undefined &&
+      (obj.signedBy = message.signedBy
+        ? SignedBy.toJSON(message.signedBy)
+        : undefined);
     if (message.attributes) {
-      obj.attributes = message.attributes.map((e) => e ? Attribute.toJSON(e) : undefined);
+      obj.attributes = message.attributes.map((e) =>
+        e ? Attribute.toJSON(e) : undefined
+      );
     } else {
       obj.attributes = [];
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<PlacementRequirements>, I>>(base?: I): PlacementRequirements {
-    return PlacementRequirements.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<PlacementRequirements>, I>>(object: I): PlacementRequirements {
+  fromPartial<I extends Exact<DeepPartial<PlacementRequirements>, I>>(
+    object: I
+  ): PlacementRequirements {
     const message = createBasePlacementRequirements();
-    message.signedBy = (object.signedBy !== undefined && object.signedBy !== null)
-      ? SignedBy.fromPartial(object.signedBy)
-      : undefined;
-    message.attributes = object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
+    message.signedBy =
+      object.signedBy !== undefined && object.signedBy !== null
+        ? SignedBy.fromPartial(object.signedBy)
+        : undefined;
+    message.attributes =
+      object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
     return message;
   },
 };
 
 messageTypeRegistry.set(PlacementRequirements.$type, PlacementRequirements);
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P> | "$type">]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
+        never
+      >;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

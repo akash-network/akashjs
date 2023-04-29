@@ -1,17 +1,17 @@
 /* eslint-disable */
-import Long from "long";
-import _m0 from "protobufjs/minimal";
-import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
 import {
   GroupSpec,
-  MsgCloseGroup,
   MsgCloseGroupResponse,
-  MsgPauseGroup,
   MsgPauseGroupResponse,
-  MsgStartGroup,
   MsgStartGroupResponse,
+  MsgCloseGroup,
+  MsgPauseGroup,
+  MsgStartGroup,
 } from "./group";
+import { Coin } from "../../../cosmos/base/v1beta1/coin";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta1";
 
@@ -145,7 +145,10 @@ function createBaseMsgCreateDeployment(): MsgCreateDeployment {
 export const MsgCreateDeployment = {
   $type: "akash.deployment.v1beta1.MsgCreateDeployment" as const,
 
-  encode(message: MsgCreateDeployment, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgCreateDeployment,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       DeploymentID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -162,45 +165,28 @@ export const MsgCreateDeployment = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateDeployment {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateDeployment();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.id = DeploymentID.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag != 18) {
-            break;
-          }
-
           message.groups.push(GroupSpec.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 3:
-          if (tag != 26) {
-            break;
-          }
-
           message.version = reader.bytes();
-          continue;
+          break;
         case 4:
-          if (tag != 34) {
-            break;
-          }
-
           message.deposit = Coin.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -209,38 +195,54 @@ export const MsgCreateDeployment = {
     return {
       $type: MsgCreateDeployment.$type,
       id: isSet(object.id) ? DeploymentID.fromJSON(object.id) : undefined,
-      groups: Array.isArray(object?.groups) ? object.groups.map((e: any) => GroupSpec.fromJSON(e)) : [],
-      version: isSet(object.version) ? bytesFromBase64(object.version) : new Uint8Array(),
-      deposit: isSet(object.deposit) ? Coin.fromJSON(object.deposit) : undefined,
+      groups: Array.isArray(object?.groups)
+        ? object.groups.map((e: any) => GroupSpec.fromJSON(e))
+        : [],
+      version: isSet(object.version)
+        ? bytesFromBase64(object.version)
+        : new Uint8Array(),
+      deposit: isSet(object.deposit)
+        ? Coin.fromJSON(object.deposit)
+        : undefined,
     };
   },
 
   toJSON(message: MsgCreateDeployment): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = message.id ? DeploymentID.toJSON(message.id) : undefined);
+    message.id !== undefined &&
+      (obj.id = message.id ? DeploymentID.toJSON(message.id) : undefined);
     if (message.groups) {
-      obj.groups = message.groups.map((e) => e ? GroupSpec.toJSON(e) : undefined);
+      obj.groups = message.groups.map((e) =>
+        e ? GroupSpec.toJSON(e) : undefined
+      );
     } else {
       obj.groups = [];
     }
     message.version !== undefined &&
-      (obj.version = base64FromBytes(message.version !== undefined ? message.version : new Uint8Array()));
-    message.deposit !== undefined && (obj.deposit = message.deposit ? Coin.toJSON(message.deposit) : undefined);
+      (obj.version = base64FromBytes(
+        message.version !== undefined ? message.version : new Uint8Array()
+      ));
+    message.deposit !== undefined &&
+      (obj.deposit = message.deposit
+        ? Coin.toJSON(message.deposit)
+        : undefined);
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgCreateDeployment>, I>>(base?: I): MsgCreateDeployment {
-    return MsgCreateDeployment.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgCreateDeployment>, I>>(object: I): MsgCreateDeployment {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateDeployment>, I>>(
+    object: I
+  ): MsgCreateDeployment {
     const message = createBaseMsgCreateDeployment();
-    message.id = (object.id !== undefined && object.id !== null) ? DeploymentID.fromPartial(object.id) : undefined;
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? DeploymentID.fromPartial(object.id)
+        : undefined;
     message.groups = object.groups?.map((e) => GroupSpec.fromPartial(e)) || [];
     message.version = object.version ?? new Uint8Array();
-    message.deposit = (object.deposit !== undefined && object.deposit !== null)
-      ? Coin.fromPartial(object.deposit)
-      : undefined;
+    message.deposit =
+      object.deposit !== undefined && object.deposit !== null
+        ? Coin.fromPartial(object.deposit)
+        : undefined;
     return message;
   },
 };
@@ -254,28 +256,35 @@ function createBaseMsgCreateDeploymentResponse(): MsgCreateDeploymentResponse {
 export const MsgCreateDeploymentResponse = {
   $type: "akash.deployment.v1beta1.MsgCreateDeploymentResponse" as const,
 
-  encode(_: MsgCreateDeploymentResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgCreateDeploymentResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateDeploymentResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgCreateDeploymentResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateDeploymentResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(_: any): MsgCreateDeploymentResponse {
-    return { $type: MsgCreateDeploymentResponse.$type };
+    return {
+      $type: MsgCreateDeploymentResponse.$type,
+    };
   },
 
   toJSON(_: MsgCreateDeploymentResponse): unknown {
@@ -283,26 +292,34 @@ export const MsgCreateDeploymentResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgCreateDeploymentResponse>, I>>(base?: I): MsgCreateDeploymentResponse {
-    return MsgCreateDeploymentResponse.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgCreateDeploymentResponse>, I>>(_: I): MsgCreateDeploymentResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateDeploymentResponse>, I>>(
+    _: I
+  ): MsgCreateDeploymentResponse {
     const message = createBaseMsgCreateDeploymentResponse();
     return message;
   },
 };
 
-messageTypeRegistry.set(MsgCreateDeploymentResponse.$type, MsgCreateDeploymentResponse);
+messageTypeRegistry.set(
+  MsgCreateDeploymentResponse.$type,
+  MsgCreateDeploymentResponse
+);
 
 function createBaseMsgDepositDeployment(): MsgDepositDeployment {
-  return { $type: "akash.deployment.v1beta1.MsgDepositDeployment", id: undefined, amount: undefined };
+  return {
+    $type: "akash.deployment.v1beta1.MsgDepositDeployment",
+    id: undefined,
+    amount: undefined,
+  };
 }
 
 export const MsgDepositDeployment = {
   $type: "akash.deployment.v1beta1.MsgDepositDeployment" as const,
 
-  encode(message: MsgDepositDeployment, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgDepositDeployment,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       DeploymentID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -312,32 +329,26 @@ export const MsgDepositDeployment = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDepositDeployment {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgDepositDeployment {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDepositDeployment();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.id = DeploymentID.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag != 18) {
-            break;
-          }
-
           message.amount = Coin.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -352,21 +363,25 @@ export const MsgDepositDeployment = {
 
   toJSON(message: MsgDepositDeployment): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = message.id ? DeploymentID.toJSON(message.id) : undefined);
-    message.amount !== undefined && (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
+    message.id !== undefined &&
+      (obj.id = message.id ? DeploymentID.toJSON(message.id) : undefined);
+    message.amount !== undefined &&
+      (obj.amount = message.amount ? Coin.toJSON(message.amount) : undefined);
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgDepositDeployment>, I>>(base?: I): MsgDepositDeployment {
-    return MsgDepositDeployment.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgDepositDeployment>, I>>(object: I): MsgDepositDeployment {
+  fromPartial<I extends Exact<DeepPartial<MsgDepositDeployment>, I>>(
+    object: I
+  ): MsgDepositDeployment {
     const message = createBaseMsgDepositDeployment();
-    message.id = (object.id !== undefined && object.id !== null) ? DeploymentID.fromPartial(object.id) : undefined;
-    message.amount = (object.amount !== undefined && object.amount !== null)
-      ? Coin.fromPartial(object.amount)
-      : undefined;
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? DeploymentID.fromPartial(object.id)
+        : undefined;
+    message.amount =
+      object.amount !== undefined && object.amount !== null
+        ? Coin.fromPartial(object.amount)
+        : undefined;
     return message;
   },
 };
@@ -380,28 +395,35 @@ function createBaseMsgDepositDeploymentResponse(): MsgDepositDeploymentResponse 
 export const MsgDepositDeploymentResponse = {
   $type: "akash.deployment.v1beta1.MsgDepositDeploymentResponse" as const,
 
-  encode(_: MsgDepositDeploymentResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgDepositDeploymentResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgDepositDeploymentResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgDepositDeploymentResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgDepositDeploymentResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(_: any): MsgDepositDeploymentResponse {
-    return { $type: MsgDepositDeploymentResponse.$type };
+    return {
+      $type: MsgDepositDeploymentResponse.$type,
+    };
   },
 
   toJSON(_: MsgDepositDeploymentResponse): unknown {
@@ -409,17 +431,18 @@ export const MsgDepositDeploymentResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgDepositDeploymentResponse>, I>>(base?: I): MsgDepositDeploymentResponse {
-    return MsgDepositDeploymentResponse.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgDepositDeploymentResponse>, I>>(_: I): MsgDepositDeploymentResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgDepositDeploymentResponse>, I>>(
+    _: I
+  ): MsgDepositDeploymentResponse {
     const message = createBaseMsgDepositDeploymentResponse();
     return message;
   },
 };
 
-messageTypeRegistry.set(MsgDepositDeploymentResponse.$type, MsgDepositDeploymentResponse);
+messageTypeRegistry.set(
+  MsgDepositDeploymentResponse.$type,
+  MsgDepositDeploymentResponse
+);
 
 function createBaseMsgUpdateDeployment(): MsgUpdateDeployment {
   return {
@@ -433,7 +456,10 @@ function createBaseMsgUpdateDeployment(): MsgUpdateDeployment {
 export const MsgUpdateDeployment = {
   $type: "akash.deployment.v1beta1.MsgUpdateDeployment" as const,
 
-  encode(message: MsgUpdateDeployment, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgUpdateDeployment,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       DeploymentID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -447,38 +473,25 @@ export const MsgUpdateDeployment = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateDeployment {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateDeployment();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.id = DeploymentID.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag != 18) {
-            break;
-          }
-
           message.groups.push(GroupSpec.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 3:
-          if (tag != 26) {
-            break;
-          }
-
           message.version = reader.bytes();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -487,31 +500,41 @@ export const MsgUpdateDeployment = {
     return {
       $type: MsgUpdateDeployment.$type,
       id: isSet(object.id) ? DeploymentID.fromJSON(object.id) : undefined,
-      groups: Array.isArray(object?.groups) ? object.groups.map((e: any) => GroupSpec.fromJSON(e)) : [],
-      version: isSet(object.version) ? bytesFromBase64(object.version) : new Uint8Array(),
+      groups: Array.isArray(object?.groups)
+        ? object.groups.map((e: any) => GroupSpec.fromJSON(e))
+        : [],
+      version: isSet(object.version)
+        ? bytesFromBase64(object.version)
+        : new Uint8Array(),
     };
   },
 
   toJSON(message: MsgUpdateDeployment): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = message.id ? DeploymentID.toJSON(message.id) : undefined);
+    message.id !== undefined &&
+      (obj.id = message.id ? DeploymentID.toJSON(message.id) : undefined);
     if (message.groups) {
-      obj.groups = message.groups.map((e) => e ? GroupSpec.toJSON(e) : undefined);
+      obj.groups = message.groups.map((e) =>
+        e ? GroupSpec.toJSON(e) : undefined
+      );
     } else {
       obj.groups = [];
     }
     message.version !== undefined &&
-      (obj.version = base64FromBytes(message.version !== undefined ? message.version : new Uint8Array()));
+      (obj.version = base64FromBytes(
+        message.version !== undefined ? message.version : new Uint8Array()
+      ));
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgUpdateDeployment>, I>>(base?: I): MsgUpdateDeployment {
-    return MsgUpdateDeployment.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateDeployment>, I>>(object: I): MsgUpdateDeployment {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateDeployment>, I>>(
+    object: I
+  ): MsgUpdateDeployment {
     const message = createBaseMsgUpdateDeployment();
-    message.id = (object.id !== undefined && object.id !== null) ? DeploymentID.fromPartial(object.id) : undefined;
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? DeploymentID.fromPartial(object.id)
+        : undefined;
     message.groups = object.groups?.map((e) => GroupSpec.fromPartial(e)) || [];
     message.version = object.version ?? new Uint8Array();
     return message;
@@ -527,28 +550,35 @@ function createBaseMsgUpdateDeploymentResponse(): MsgUpdateDeploymentResponse {
 export const MsgUpdateDeploymentResponse = {
   $type: "akash.deployment.v1beta1.MsgUpdateDeploymentResponse" as const,
 
-  encode(_: MsgUpdateDeploymentResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgUpdateDeploymentResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgUpdateDeploymentResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgUpdateDeploymentResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgUpdateDeploymentResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(_: any): MsgUpdateDeploymentResponse {
-    return { $type: MsgUpdateDeploymentResponse.$type };
+    return {
+      $type: MsgUpdateDeploymentResponse.$type,
+    };
   },
 
   toJSON(_: MsgUpdateDeploymentResponse): unknown {
@@ -556,26 +586,33 @@ export const MsgUpdateDeploymentResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgUpdateDeploymentResponse>, I>>(base?: I): MsgUpdateDeploymentResponse {
-    return MsgUpdateDeploymentResponse.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgUpdateDeploymentResponse>, I>>(_: I): MsgUpdateDeploymentResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgUpdateDeploymentResponse>, I>>(
+    _: I
+  ): MsgUpdateDeploymentResponse {
     const message = createBaseMsgUpdateDeploymentResponse();
     return message;
   },
 };
 
-messageTypeRegistry.set(MsgUpdateDeploymentResponse.$type, MsgUpdateDeploymentResponse);
+messageTypeRegistry.set(
+  MsgUpdateDeploymentResponse.$type,
+  MsgUpdateDeploymentResponse
+);
 
 function createBaseMsgCloseDeployment(): MsgCloseDeployment {
-  return { $type: "akash.deployment.v1beta1.MsgCloseDeployment", id: undefined };
+  return {
+    $type: "akash.deployment.v1beta1.MsgCloseDeployment",
+    id: undefined,
+  };
 }
 
 export const MsgCloseDeployment = {
   $type: "akash.deployment.v1beta1.MsgCloseDeployment" as const,
 
-  encode(message: MsgCloseDeployment, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgCloseDeployment,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       DeploymentID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -583,45 +620,45 @@ export const MsgCloseDeployment = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgCloseDeployment {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCloseDeployment();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.id = DeploymentID.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(object: any): MsgCloseDeployment {
-    return { $type: MsgCloseDeployment.$type, id: isSet(object.id) ? DeploymentID.fromJSON(object.id) : undefined };
+    return {
+      $type: MsgCloseDeployment.$type,
+      id: isSet(object.id) ? DeploymentID.fromJSON(object.id) : undefined,
+    };
   },
 
   toJSON(message: MsgCloseDeployment): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = message.id ? DeploymentID.toJSON(message.id) : undefined);
+    message.id !== undefined &&
+      (obj.id = message.id ? DeploymentID.toJSON(message.id) : undefined);
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgCloseDeployment>, I>>(base?: I): MsgCloseDeployment {
-    return MsgCloseDeployment.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgCloseDeployment>, I>>(object: I): MsgCloseDeployment {
+  fromPartial<I extends Exact<DeepPartial<MsgCloseDeployment>, I>>(
+    object: I
+  ): MsgCloseDeployment {
     const message = createBaseMsgCloseDeployment();
-    message.id = (object.id !== undefined && object.id !== null) ? DeploymentID.fromPartial(object.id) : undefined;
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? DeploymentID.fromPartial(object.id)
+        : undefined;
     return message;
   },
 };
@@ -635,28 +672,35 @@ function createBaseMsgCloseDeploymentResponse(): MsgCloseDeploymentResponse {
 export const MsgCloseDeploymentResponse = {
   $type: "akash.deployment.v1beta1.MsgCloseDeploymentResponse" as const,
 
-  encode(_: MsgCloseDeploymentResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgCloseDeploymentResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCloseDeploymentResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgCloseDeploymentResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCloseDeploymentResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(_: any): MsgCloseDeploymentResponse {
-    return { $type: MsgCloseDeploymentResponse.$type };
+    return {
+      $type: MsgCloseDeploymentResponse.$type,
+    };
   },
 
   toJSON(_: MsgCloseDeploymentResponse): unknown {
@@ -664,26 +708,34 @@ export const MsgCloseDeploymentResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgCloseDeploymentResponse>, I>>(base?: I): MsgCloseDeploymentResponse {
-    return MsgCloseDeploymentResponse.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgCloseDeploymentResponse>, I>>(_: I): MsgCloseDeploymentResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCloseDeploymentResponse>, I>>(
+    _: I
+  ): MsgCloseDeploymentResponse {
     const message = createBaseMsgCloseDeploymentResponse();
     return message;
   },
 };
 
-messageTypeRegistry.set(MsgCloseDeploymentResponse.$type, MsgCloseDeploymentResponse);
+messageTypeRegistry.set(
+  MsgCloseDeploymentResponse.$type,
+  MsgCloseDeploymentResponse
+);
 
 function createBaseDeploymentID(): DeploymentID {
-  return { $type: "akash.deployment.v1beta1.DeploymentID", owner: "", dseq: Long.UZERO };
+  return {
+    $type: "akash.deployment.v1beta1.DeploymentID",
+    owner: "",
+    dseq: Long.UZERO,
+  };
 }
 
 export const DeploymentID = {
   $type: "akash.deployment.v1beta1.DeploymentID" as const,
 
-  encode(message: DeploymentID, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: DeploymentID,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -694,31 +746,22 @@ export const DeploymentID = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): DeploymentID {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeploymentID();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.owner = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag != 16) {
-            break;
-          }
-
           message.dseq = reader.uint64() as Long;
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -734,18 +777,20 @@ export const DeploymentID = {
   toJSON(message: DeploymentID): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined && (obj.dseq = (message.dseq || Long.UZERO).toString());
+    message.dseq !== undefined &&
+      (obj.dseq = (message.dseq || Long.UZERO).toString());
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<DeploymentID>, I>>(base?: I): DeploymentID {
-    return DeploymentID.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<DeploymentID>, I>>(object: I): DeploymentID {
+  fromPartial<I extends Exact<DeepPartial<DeploymentID>, I>>(
+    object: I
+  ): DeploymentID {
     const message = createBaseDeploymentID();
     message.owner = object.owner ?? "";
-    message.dseq = (object.dseq !== undefined && object.dseq !== null) ? Long.fromValue(object.dseq) : Long.UZERO;
+    message.dseq =
+      object.dseq !== undefined && object.dseq !== null
+        ? Long.fromValue(object.dseq)
+        : Long.UZERO;
     return message;
   },
 };
@@ -765,9 +810,15 @@ function createBaseDeployment(): Deployment {
 export const Deployment = {
   $type: "akash.deployment.v1beta1.Deployment" as const,
 
-  encode(message: Deployment, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Deployment,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.deploymentId !== undefined) {
-      DeploymentID.encode(message.deploymentId, writer.uint32(10).fork()).ldelim();
+      DeploymentID.encode(
+        message.deploymentId,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     if (message.state !== 0) {
       writer.uint32(16).int32(message.state);
@@ -782,45 +833,28 @@ export const Deployment = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Deployment {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeployment();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.deploymentId = DeploymentID.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag != 16) {
-            break;
-          }
-
           message.state = reader.int32() as any;
-          continue;
+          break;
         case 3:
-          if (tag != 26) {
-            break;
-          }
-
           message.version = reader.bytes();
-          continue;
+          break;
         case 4:
-          if (tag != 32) {
-            break;
-          }
-
           message.createdAt = reader.int64() as Long;
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -828,38 +862,50 @@ export const Deployment = {
   fromJSON(object: any): Deployment {
     return {
       $type: Deployment.$type,
-      deploymentId: isSet(object.deploymentId) ? DeploymentID.fromJSON(object.deploymentId) : undefined,
+      deploymentId: isSet(object.deploymentId)
+        ? DeploymentID.fromJSON(object.deploymentId)
+        : undefined,
       state: isSet(object.state) ? deployment_StateFromJSON(object.state) : 0,
-      version: isSet(object.version) ? bytesFromBase64(object.version) : new Uint8Array(),
-      createdAt: isSet(object.createdAt) ? Long.fromValue(object.createdAt) : Long.ZERO,
+      version: isSet(object.version)
+        ? bytesFromBase64(object.version)
+        : new Uint8Array(),
+      createdAt: isSet(object.createdAt)
+        ? Long.fromValue(object.createdAt)
+        : Long.ZERO,
     };
   },
 
   toJSON(message: Deployment): unknown {
     const obj: any = {};
     message.deploymentId !== undefined &&
-      (obj.deploymentId = message.deploymentId ? DeploymentID.toJSON(message.deploymentId) : undefined);
-    message.state !== undefined && (obj.state = deployment_StateToJSON(message.state));
+      (obj.deploymentId = message.deploymentId
+        ? DeploymentID.toJSON(message.deploymentId)
+        : undefined);
+    message.state !== undefined &&
+      (obj.state = deployment_StateToJSON(message.state));
     message.version !== undefined &&
-      (obj.version = base64FromBytes(message.version !== undefined ? message.version : new Uint8Array()));
-    message.createdAt !== undefined && (obj.createdAt = (message.createdAt || Long.ZERO).toString());
+      (obj.version = base64FromBytes(
+        message.version !== undefined ? message.version : new Uint8Array()
+      ));
+    message.createdAt !== undefined &&
+      (obj.createdAt = (message.createdAt || Long.ZERO).toString());
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<Deployment>, I>>(base?: I): Deployment {
-    return Deployment.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<Deployment>, I>>(object: I): Deployment {
+  fromPartial<I extends Exact<DeepPartial<Deployment>, I>>(
+    object: I
+  ): Deployment {
     const message = createBaseDeployment();
-    message.deploymentId = (object.deploymentId !== undefined && object.deploymentId !== null)
-      ? DeploymentID.fromPartial(object.deploymentId)
-      : undefined;
+    message.deploymentId =
+      object.deploymentId !== undefined && object.deploymentId !== null
+        ? DeploymentID.fromPartial(object.deploymentId)
+        : undefined;
     message.state = object.state ?? 0;
     message.version = object.version ?? new Uint8Array();
-    message.createdAt = (object.createdAt !== undefined && object.createdAt !== null)
-      ? Long.fromValue(object.createdAt)
-      : Long.ZERO;
+    message.createdAt =
+      object.createdAt !== undefined && object.createdAt !== null
+        ? Long.fromValue(object.createdAt)
+        : Long.ZERO;
     return message;
   },
 };
@@ -867,13 +913,21 @@ export const Deployment = {
 messageTypeRegistry.set(Deployment.$type, Deployment);
 
 function createBaseDeploymentFilters(): DeploymentFilters {
-  return { $type: "akash.deployment.v1beta1.DeploymentFilters", owner: "", dseq: Long.UZERO, state: "" };
+  return {
+    $type: "akash.deployment.v1beta1.DeploymentFilters",
+    owner: "",
+    dseq: Long.UZERO,
+    state: "",
+  };
 }
 
 export const DeploymentFilters = {
   $type: "akash.deployment.v1beta1.DeploymentFilters" as const,
 
-  encode(message: DeploymentFilters, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: DeploymentFilters,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -887,38 +941,25 @@ export const DeploymentFilters = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): DeploymentFilters {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeploymentFilters();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.owner = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag != 16) {
-            break;
-          }
-
           message.dseq = reader.uint64() as Long;
-          continue;
+          break;
         case 3:
-          if (tag != 26) {
-            break;
-          }
-
           message.state = reader.string();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -935,19 +976,21 @@ export const DeploymentFilters = {
   toJSON(message: DeploymentFilters): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined && (obj.dseq = (message.dseq || Long.UZERO).toString());
+    message.dseq !== undefined &&
+      (obj.dseq = (message.dseq || Long.UZERO).toString());
     message.state !== undefined && (obj.state = message.state);
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<DeploymentFilters>, I>>(base?: I): DeploymentFilters {
-    return DeploymentFilters.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<DeploymentFilters>, I>>(object: I): DeploymentFilters {
+  fromPartial<I extends Exact<DeepPartial<DeploymentFilters>, I>>(
+    object: I
+  ): DeploymentFilters {
     const message = createBaseDeploymentFilters();
     message.owner = object.owner ?? "";
-    message.dseq = (object.dseq !== undefined && object.dseq !== null) ? Long.fromValue(object.dseq) : Long.UZERO;
+    message.dseq =
+      object.dseq !== undefined && object.dseq !== null
+        ? Long.fromValue(object.dseq)
+        : Long.UZERO;
     message.state = object.state ?? "";
     return message;
   },
@@ -958,13 +1001,21 @@ messageTypeRegistry.set(DeploymentFilters.$type, DeploymentFilters);
 /** Msg defines the deployment Msg service. */
 export interface Msg {
   /** CreateDeployment defines a method to create new deployment given proper inputs. */
-  CreateDeployment(request: MsgCreateDeployment): Promise<MsgCreateDeploymentResponse>;
+  CreateDeployment(
+    request: MsgCreateDeployment
+  ): Promise<MsgCreateDeploymentResponse>;
   /** DepositDeployment deposits more funds into the deployment account */
-  DepositDeployment(request: MsgDepositDeployment): Promise<MsgDepositDeploymentResponse>;
+  DepositDeployment(
+    request: MsgDepositDeployment
+  ): Promise<MsgDepositDeploymentResponse>;
   /** UpdateDeployment defines a method to update a deployment given proper inputs. */
-  UpdateDeployment(request: MsgUpdateDeployment): Promise<MsgUpdateDeploymentResponse>;
+  UpdateDeployment(
+    request: MsgUpdateDeployment
+  ): Promise<MsgUpdateDeploymentResponse>;
   /** CloseDeployment defines a method to close a deployment given proper inputs. */
-  CloseDeployment(request: MsgCloseDeployment): Promise<MsgCloseDeploymentResponse>;
+  CloseDeployment(
+    request: MsgCloseDeployment
+  ): Promise<MsgCloseDeploymentResponse>;
   /** CloseGroup defines a method to close a group of a deployment given proper inputs. */
   CloseGroup(request: MsgCloseGroup): Promise<MsgCloseGroupResponse>;
   /** PauseGroup defines a method to close a group of a deployment given proper inputs. */
@@ -975,9 +1026,7 @@ export interface Msg {
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  private readonly service: string;
-  constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || "akash.deployment.v1beta1.Msg";
+  constructor(rpc: Rpc) {
     this.rpc = rpc;
     this.CreateDeployment = this.CreateDeployment.bind(this);
     this.DepositDeployment = this.DepositDeployment.bind(this);
@@ -987,108 +1036,169 @@ export class MsgClientImpl implements Msg {
     this.PauseGroup = this.PauseGroup.bind(this);
     this.StartGroup = this.StartGroup.bind(this);
   }
-  CreateDeployment(request: MsgCreateDeployment): Promise<MsgCreateDeploymentResponse> {
+  CreateDeployment(
+    request: MsgCreateDeployment
+  ): Promise<MsgCreateDeploymentResponse> {
     const data = MsgCreateDeployment.encode(request).finish();
-    const promise = this.rpc.request(this.service, "CreateDeployment", data);
-    return promise.then((data) => MsgCreateDeploymentResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "akash.deployment.v1beta1.Msg",
+      "CreateDeployment",
+      data
+    );
+    return promise.then((data) =>
+      MsgCreateDeploymentResponse.decode(new _m0.Reader(data))
+    );
   }
 
-  DepositDeployment(request: MsgDepositDeployment): Promise<MsgDepositDeploymentResponse> {
+  DepositDeployment(
+    request: MsgDepositDeployment
+  ): Promise<MsgDepositDeploymentResponse> {
     const data = MsgDepositDeployment.encode(request).finish();
-    const promise = this.rpc.request(this.service, "DepositDeployment", data);
-    return promise.then((data) => MsgDepositDeploymentResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "akash.deployment.v1beta1.Msg",
+      "DepositDeployment",
+      data
+    );
+    return promise.then((data) =>
+      MsgDepositDeploymentResponse.decode(new _m0.Reader(data))
+    );
   }
 
-  UpdateDeployment(request: MsgUpdateDeployment): Promise<MsgUpdateDeploymentResponse> {
+  UpdateDeployment(
+    request: MsgUpdateDeployment
+  ): Promise<MsgUpdateDeploymentResponse> {
     const data = MsgUpdateDeployment.encode(request).finish();
-    const promise = this.rpc.request(this.service, "UpdateDeployment", data);
-    return promise.then((data) => MsgUpdateDeploymentResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "akash.deployment.v1beta1.Msg",
+      "UpdateDeployment",
+      data
+    );
+    return promise.then((data) =>
+      MsgUpdateDeploymentResponse.decode(new _m0.Reader(data))
+    );
   }
 
-  CloseDeployment(request: MsgCloseDeployment): Promise<MsgCloseDeploymentResponse> {
+  CloseDeployment(
+    request: MsgCloseDeployment
+  ): Promise<MsgCloseDeploymentResponse> {
     const data = MsgCloseDeployment.encode(request).finish();
-    const promise = this.rpc.request(this.service, "CloseDeployment", data);
-    return promise.then((data) => MsgCloseDeploymentResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "akash.deployment.v1beta1.Msg",
+      "CloseDeployment",
+      data
+    );
+    return promise.then((data) =>
+      MsgCloseDeploymentResponse.decode(new _m0.Reader(data))
+    );
   }
 
   CloseGroup(request: MsgCloseGroup): Promise<MsgCloseGroupResponse> {
     const data = MsgCloseGroup.encode(request).finish();
-    const promise = this.rpc.request(this.service, "CloseGroup", data);
-    return promise.then((data) => MsgCloseGroupResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "akash.deployment.v1beta1.Msg",
+      "CloseGroup",
+      data
+    );
+    return promise.then((data) =>
+      MsgCloseGroupResponse.decode(new _m0.Reader(data))
+    );
   }
 
   PauseGroup(request: MsgPauseGroup): Promise<MsgPauseGroupResponse> {
     const data = MsgPauseGroup.encode(request).finish();
-    const promise = this.rpc.request(this.service, "PauseGroup", data);
-    return promise.then((data) => MsgPauseGroupResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "akash.deployment.v1beta1.Msg",
+      "PauseGroup",
+      data
+    );
+    return promise.then((data) =>
+      MsgPauseGroupResponse.decode(new _m0.Reader(data))
+    );
   }
 
   StartGroup(request: MsgStartGroup): Promise<MsgStartGroupResponse> {
     const data = MsgStartGroup.encode(request).finish();
-    const promise = this.rpc.request(this.service, "StartGroup", data);
-    return promise.then((data) => MsgStartGroupResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "akash.deployment.v1beta1.Msg",
+      "StartGroup",
+      data
+    );
+    return promise.then((data) =>
+      MsgStartGroupResponse.decode(new _m0.Reader(data))
+    );
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array
+  ): Promise<Uint8Array>;
 }
 
 declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
-var tsProtoGlobalThis: any = (() => {
-  if (typeof globalThis !== "undefined") {
-    return globalThis;
-  }
-  if (typeof self !== "undefined") {
-    return self;
-  }
-  if (typeof window !== "undefined") {
-    return window;
-  }
-  if (typeof global !== "undefined") {
-    return global;
-  }
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
   throw "Unable to locate global object";
 })();
 
+const atob: (b64: string) => string =
+  globalThis.atob ||
+  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
-  if (tsProtoGlobalThis.Buffer) {
-    return Uint8Array.from(tsProtoGlobalThis.Buffer.from(b64, "base64"));
-  } else {
-    const bin = tsProtoGlobalThis.atob(b64);
-    const arr = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; ++i) {
-      arr[i] = bin.charCodeAt(i);
-    }
-    return arr;
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; ++i) {
+    arr[i] = bin.charCodeAt(i);
   }
+  return arr;
 }
 
+const btoa: (bin: string) => string =
+  globalThis.btoa ||
+  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
-  if (tsProtoGlobalThis.Buffer) {
-    return tsProtoGlobalThis.Buffer.from(arr).toString("base64");
-  } else {
-    const bin: string[] = [];
-    arr.forEach((byte) => {
-      bin.push(String.fromCharCode(byte));
-    });
-    return tsProtoGlobalThis.btoa(bin.join(""));
-  }
+  const bin: string[] = [];
+  arr.forEach((byte) => {
+    bin.push(String.fromCharCode(byte));
+  });
+  return btoa(bin.join(""));
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P> | "$type">]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
+        never
+      >;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

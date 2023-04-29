@@ -1,5 +1,5 @@
 import YAML from 'js-yaml';
-import { Manifest, Service, ServiceExpose, ServiceExposeHttpOptions, v2ComputeResources, v2Expose, v2ExposeTo, v2HTTPOptions, v2ProfileCompute, v2ResourceCPU, v2ResourceMemory, v2ResourceStorage, v2ResourceStorageArray, v2Sdl, v2Service } from './types';
+import { Manifest, Service, ServiceExpose, ServiceExposeHttpOptions, v2ComputeResources, v2Expose, v2ExposeTo, v2HTTPOptions, v2ProfileCompute, v2ResourceCPU, v2ResourceGPU, v2ResourceMemory, v2ResourceStorage, v2ResourceStorageArray, v2Sdl, v2Service } from './types';
 import { convertResourceString } from './sizes';
 import { default as stableStringify } from "json-stable-stringify";
 import crypto from "node:crypto";
@@ -16,17 +16,21 @@ function isString(str: any): str is string {
     return typeof str === 'string';
 }
 
+type NetworkVersion = 'beta2' | 'beta3';
+
 export class SDL {
 
     data: v2Sdl;
+    version: NetworkVersion;
 
-    constructor(data: v2Sdl) {
+    constructor(data: v2Sdl, version: NetworkVersion = 'beta2') {
         this.data = data;
+        this.version = version;
     }
 
-    static fromString(yaml: string) {
+    static fromString(yaml: string, version: NetworkVersion = 'beta2') {
         const data = YAML.load(yaml) as v2Sdl
-        return new SDL(data);
+        return new SDL(data, version);
     }
 
     services() {
@@ -128,16 +132,40 @@ export class SDL {
         }));
     }
 
+    serviceResourceGpu(resource: v2ResourceGPU | undefined, asString: boolean) {
+        const value = (resource?.units || 0);
+        const numVal = isString(value)
+            ? Buffer.from(value, 'ascii')
+            : value;
+        const strVal = !isString(value)
+            ? value.toString()
+            : value;
+
+        return {
+            units: asString ? { val: strVal } : { val: numVal }
+        };
+    }
+
     serviceResourceEndpoints() {
         return null;
     }
 
-    serviceResources(profile: v2ProfileCompute, asString: boolean = false) {
+    serviceResourcesBeta2(profile: v2ProfileCompute, asString: boolean = false) {
         return {
             cpu: this.serviceResourceCpu(profile.resources.cpu),
             memory: this.serviceResourceMemory(profile.resources.memory, asString),
             storage: this.serviceResourceStorage(profile.resources.storage, asString),
             endpoints: this.serviceResourceEndpoints(),
+        };
+    }
+
+    serviceResourcesBeta3(profile: v2ProfileCompute, asString: boolean = false) {
+        return {
+            cpu: this.serviceResourceCpu(profile.resources.cpu),
+            memory: this.serviceResourceMemory(profile.resources.memory, asString),
+            storage: this.serviceResourceStorage(profile.resources.storage, asString),
+            endpoints: this.serviceResourceEndpoints(),
+            gpu: this.serviceResourceGpu(profile.resources.gpu, asString),
         };
     }
 
@@ -232,7 +260,9 @@ export class SDL {
             Command: service.command || null,
             Args: service.args || null,
             Env: service.env || null,
-            Resources: this.serviceResources(profile, asString),
+            Resources: this.version === 'beta2'
+                ? this.serviceResourcesBeta2(profile, asString)
+                : this.serviceResourcesBeta3(profile, asString),
             Count: deployment[placement].count,
             Expose: this.manifestExpose(service),
         }
@@ -317,6 +347,27 @@ export class SDL {
         }));
     }
 
+    resourceUnitGpu(computeResources: v2ComputeResources, asString: boolean) {
+        const attributes = computeResources.gpu?.attributes;
+        const units = (computeResources.gpu?.units || "0");
+        const gpu = isString(units)
+            ? parseInt(units)
+            : units
+
+        return {
+            units: { val: this.resourceValue(gpu, asString) },
+            attributes:
+                attributes &&
+                Object.entries(attributes)
+                    .sort(([k0,], [k1,]) => k0.localeCompare(k1))
+                    .map(([key, value]) => ({
+                        key: key,
+                        value: this.resourceValue(value, asString)
+                    }))
+
+        };
+    }
+
     groupResourceUnits(resource: v2ComputeResources | undefined, asString: boolean) {
         if (!resource) return {};
 
@@ -334,6 +385,10 @@ export class SDL {
 
         if (resource.storage) {
             units.storage = this.resourceUnitStorage(resource, asString);
+        }
+
+        if (this.version === 'beta3') {
+            units.gpu = this.resourceUnitGpu(resource, asString);
         }
 
         return units;

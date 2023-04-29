@@ -1,7 +1,7 @@
 /* eslint-disable */
-import Long from "long";
-import _m0 from "protobufjs/minimal";
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.base.v1beta2";
 
@@ -62,7 +62,10 @@ function createBaseEndpoint(): Endpoint {
 export const Endpoint = {
   $type: "akash.base.v1beta2.Endpoint" as const,
 
-  encode(message: Endpoint, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Endpoint,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.kind !== 0) {
       writer.uint32(8).int32(message.kind);
     }
@@ -73,31 +76,22 @@ export const Endpoint = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Endpoint {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEndpoint();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 8) {
-            break;
-          }
-
           message.kind = reader.int32() as any;
-          continue;
+          break;
         case 2:
-          if (tag != 16) {
-            break;
-          }
-
           message.sequenceNumber = reader.uint32();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -106,19 +100,19 @@ export const Endpoint = {
     return {
       $type: Endpoint.$type,
       kind: isSet(object.kind) ? endpoint_KindFromJSON(object.kind) : 0,
-      sequenceNumber: isSet(object.sequenceNumber) ? Number(object.sequenceNumber) : 0,
+      sequenceNumber: isSet(object.sequenceNumber)
+        ? Number(object.sequenceNumber)
+        : 0,
     };
   },
 
   toJSON(message: Endpoint): unknown {
     const obj: any = {};
-    message.kind !== undefined && (obj.kind = endpoint_KindToJSON(message.kind));
-    message.sequenceNumber !== undefined && (obj.sequenceNumber = Math.round(message.sequenceNumber));
+    message.kind !== undefined &&
+      (obj.kind = endpoint_KindToJSON(message.kind));
+    message.sequenceNumber !== undefined &&
+      (obj.sequenceNumber = Math.round(message.sequenceNumber));
     return obj;
-  },
-
-  create<I extends Exact<DeepPartial<Endpoint>, I>>(base?: I): Endpoint {
-    return Endpoint.fromPartial(base ?? {});
   },
 
   fromPartial<I extends Exact<DeepPartial<Endpoint>, I>>(object: I): Endpoint {
@@ -131,17 +125,34 @@ export const Endpoint = {
 
 messageTypeRegistry.set(Endpoint.$type, Endpoint);
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P> | "$type">]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
+        never
+      >;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
