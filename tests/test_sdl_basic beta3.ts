@@ -42,23 +42,18 @@ deployment:
 
 const expectedManifest = [
   {
-    "Name": "akash",
-    "Services": [
+    "name": "akash",
+    "services": [
       {
-        "Name": "tetris",
-        "Image": "bsord/tetris",
-        "Command": null,
-        "Args": null,
-        "Env": null,
-        "Resources": {
+        "name": "tetris",
+        "image": "bsord/tetris",
+        "command": null,
+        "args": null,
+        "env": null,
+        "resources": {
           "cpu": {
             "units": {
               "val": "1000"
-            }
-          },
-          "gpu": {
-            "units": {
-              "val": "0"
             }
           },
           "memory": {
@@ -74,32 +69,38 @@ const expectedManifest = [
               }
             }
           ],
+          "gpu": {
+            "units": {
+              "val": "0"
+            }
+          },
           "endpoints": null
         },
-        "Count": 1,
-        "Expose": [
+        "count": 1,
+        "expose": [
           {
-            "Port": 80,
-            "ExternalPort": 80,
-            "Proto": "TCP",
-            "Service": "",
-            "Global": true,
-            "Hosts": null,
-            "HTTPOptions": {
-              "MaxBodySize": 1048576,
-              "ReadTimeout": 60000,
-              "SendTimeout": 60000,
-              "NextTries": 3,
-              "NextTimeout": 0,
-              "NextCases": [
+            "port": 80,
+            "externalPort": 80,
+            "proto": "TCP",
+            "service": "",
+            "global": true,
+            "hosts": null,
+            "httpOptions": {
+              "maxBodySize": 1048576,
+              "readTimeout": 60000,
+              "sendTimeout": 60000,
+              "nextTries": 3,
+              "nextTimeout": 0,
+              "nextCases": [
                 "error",
                 "timeout"
               ]
             },
-            "IP": "",
-            "EndpointSequenceNumber": 0
+            "ip": "",
+            "endpointSequenceNumber": 0
           }
-        ]
+        ],
+        "params": null
       }
     ]
   }
@@ -197,13 +198,12 @@ const expectedGroups = [
   }
 ];
 
-const expectedPreVersionJson = '[{"Name":"akash","Services":[{"Args":null,"Command":null,"Count":1,"Env":null,"Expose":[{"EndpointSequenceNumber":0,"ExternalPort":80,"Global":true,"HTTPOptions":{"MaxBodySize":1048576,"NextCases":["error","timeout"],"NextTimeout":0,"NextTries":3,"ReadTimeout":60000,"SendTimeout":60000},"Hosts":null,"IP":"","Port":80,"Proto":"TCP","Service":""}],"Image":"bsord/tetris","Name":"tetris","Resources":{"cpu":{"units":{"val":"1000"}},"endpoints":null,"gpu":{"units":{"val":"0"}},"memory":{"size":{"val":"536870912"}},"storage":[{"name":"default","size":{"val":"536870912"}}]}}]}]';
+const expectedPreVersionJson = '[{"name":"akash","services":[{"args":null,"command":null,"count":1,"env":null,"expose":[{"endpointSequenceNumber":0,"externalPort":80,"global":true,"hosts":null,"httpOptions":{"maxBodySize":1048576,"nextCases":["error","timeout"],"nextTimeout":0,"nextTries":3,"readTimeout":60000,"sendTimeout":60000},"ip":"","port":80,"proto":"TCP","service":""}],"image":"bsord/tetris","name":"tetris","params":null,"resources":{"cpu":{"units":{"val":"1000"}},"endpoints":null,"gpu":{"units":{"val":"0"}},"memory":{"size":{"val":"536870912"}},"storage":[{"name":"default","size":{"val":"536870912"}}]}}]}]';
 
 const expectedVersion = new Uint8Array([
-  198, 76, 53, 149, 9, 159, 56, 22,
-  10, 75, 181, 229, 10, 244, 170, 160,
-  183, 205, 227, 198, 175, 48, 251, 108,
-  126, 97, 183, 237, 170, 199, 231, 199
+  7, 61, 15, 67, 217, 144, 164, 105, 60, 27, 165,
+  41, 182, 16, 117, 223, 165, 47, 90, 177, 69, 231,
+  64, 38, 251, 236, 9, 34, 117, 55, 132, 49
 ]);
 
 tap.test("SDL: fromString", async (t) => {
@@ -252,8 +252,6 @@ tap.test("SDL: Version", async (t) => {
   const preVersionJson = sdl.manifestSortedJSON();
   const result = await sdl.manifestVersion();
   const expected = expectedVersion;
-
-  console.log(result.join(', '))
 
   t.same(
     formatHelper(preVersionJson),

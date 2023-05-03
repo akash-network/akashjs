@@ -1,5 +1,27 @@
 import YAML from 'js-yaml';
-import { Manifest, Service, ServiceExpose, ServiceExposeHttpOptions, v2ComputeResources, v2Expose, v2ExposeTo, v2HTTPOptions, v2ProfileCompute, v2ResourceCPU, v2ResourceGPU, v2ResourceMemory, v2ResourceStorage, v2ResourceStorageArray, v2Sdl, v2Service } from './types';
+import {
+    v2Manifest,
+    v3Manifest,
+    v2ManifestService,
+    v3ManifestService,
+    v2ServiceExpose,
+    v3ServiceExpose,
+    v2ComputeResources,
+    v2Expose,
+    v2ExposeTo,
+    v2HTTPOptions,
+    v2ProfileCompute,
+    v2ResourceCPU,
+    v2ResourceGPU,
+    v2ResourceMemory,
+    v2ResourceStorage,
+    v2ResourceStorageArray,
+    v2Sdl,
+    v2Service,
+    v2ServiceExposeHttpOptions,
+    v3ServiceExposeHttpOptions,
+    ServiceParams
+} from './types';
 import { convertResourceString } from './sizes';
 import { default as stableStringify } from "json-stable-stringify";
 import crypto from "node:crypto";
@@ -201,7 +223,7 @@ export class SDL {
         return expose.accept || null;
     }
 
-    httpOptions(http_options: v2HTTPOptions | undefined) {
+    v2HttpOptions(http_options: v2HTTPOptions | undefined) {
         const defaults = {
             MaxBodySize: 1048576,
             ReadTimeout: 60000,
@@ -228,11 +250,42 @@ export class SDL {
         };
     }
 
-    manifestExposeHttpOptions(expose: v2Expose): ServiceExposeHttpOptions {
-        return this.httpOptions(expose.http_options);
+    v3HttpOptions(http_options: v2HTTPOptions | undefined) {
+        const defaults = {
+            maxBodySize: 1048576,
+            readTimeout: 60000,
+            sendTimeout: 60000,
+            nextTries: 3,
+            nextTimeout: 0,
+            nextCases: [
+                "error",
+                "timeout",
+            ],
+        };
+
+        if (!http_options) {
+            return { ...defaults };
+        }
+
+        return {
+            maxBodySize: http_options.max_body_size || defaults.maxBodySize,
+            readTimeout: http_options.read_timeout || defaults.readTimeout,
+            sendTimeout: http_options.send_timeout || defaults.sendTimeout,
+            nextTries: http_options.next_tries || defaults.nextTries,
+            nextTimeout: http_options.next_timeout || defaults.nextTimeout,
+            nextCases: http_options.next_cases || defaults.nextCases,
+        };
     }
 
-    manifestExpose(service: v2Service): ServiceExpose[] {
+    v2ManifestExposeHttpOptions(expose: v2Expose): v2ServiceExposeHttpOptions {
+        return this.v2HttpOptions(expose.http_options);
+    }
+
+    v3ManifestExposeHttpOptions(expose: v2Expose): v3ServiceExposeHttpOptions {
+        return this.v3HttpOptions(expose.http_options);
+    }
+
+    v2ManifestExpose(service: v2Service): v2ServiceExpose[] {
         return service.expose.flatMap((expose) => expose.to
             ? expose.to.map((to) => ({
                 Port: expose.port,
@@ -241,7 +294,7 @@ export class SDL {
                 Service: this.manifestExposeService(expose),
                 Global: this.manifestExposeGlobal(to),
                 Hosts: this.manifestExposeHosts(expose),
-                HTTPOptions: this.manifestExposeHttpOptions(expose),
+                HTTPOptions: this.v2ManifestExposeHttpOptions(expose),
                 IP: "",
                 EndpointSequenceNumber: 0,
             }))
@@ -249,7 +302,28 @@ export class SDL {
         );
     }
 
-    manifestService(placement: string, name: string, asString: boolean): Service {
+    v3ManifestExpose(service: v2Service): v3ServiceExpose[] {
+        return service.expose.flatMap((expose) => expose.to
+            ? expose.to.map((to) => ({
+                port: expose.port,
+                externalPort: expose.as || 0,
+                proto: this.parseServiceProto(expose.proto),
+                service: this.manifestExposeService(expose),
+                global: this.manifestExposeGlobal(to),
+                hosts: this.manifestExposeHosts(expose),
+                httpOptions: this.v3ManifestExposeHttpOptions(expose),
+                ip: "",
+                endpointSequenceNumber: 0,
+            }))
+            : []
+        );
+    }
+
+    v3ManifestServiceParams(service: v2Service): ServiceParams | null {
+        return null;
+    }
+
+    v2ManifestService(placement: string, name: string, asString: boolean): v2ManifestService {
         const service = this.data.services[name];
         const deployment = this.data.deployment[name];
         const profile = this.data.profiles.compute[deployment[placement].profile];
@@ -264,16 +338,50 @@ export class SDL {
                 ? this.serviceResourcesBeta2(profile, asString)
                 : this.serviceResourcesBeta3(profile, asString),
             Count: deployment[placement].count,
-            Expose: this.manifestExpose(service),
+            Expose: this.v2ManifestExpose(service),
         }
     }
 
-    manifest(asString: boolean = false): Manifest {
+    v3ManifestService(placement: string, name: string, asString: boolean): v3ManifestService {
+        const service = this.data.services[name];
+        const deployment = this.data.deployment[name];
+        const profile = this.data.profiles.compute[deployment[placement].profile];
+
+        return {
+            name: name,
+            image: service.image,
+            command: service.command || null,
+            args: service.args || null,
+            env: service.env || null,
+            resources: this.version === 'beta2'
+                ? this.serviceResourcesBeta2(profile, asString)
+                : this.serviceResourcesBeta3(profile, asString),
+            count: deployment[placement].count,
+            expose: this.v3ManifestExpose(service),
+            params: this.v3ManifestServiceParams(service),
+        }
+    }
+
+    v2Manifest(asString: boolean = false): v2Manifest {
         return Object.keys(this.placements()).map(name => ({
             Name: name,
             Services: this.deploymentsByPlacement(name)
-                .map(([service]) => this.manifestService(name, service, asString))
+                .map(([service]) => this.v2ManifestService(name, service, asString))
         }));
+    }
+
+    v3Manifest(asString: boolean = false): v3Manifest {
+        return Object.keys(this.placements()).map(name => ({
+            name: name,
+            services: this.deploymentsByPlacement(name)
+                .map(([service]) => this.v3ManifestService(name, service, asString))
+        }));
+    }
+
+    manifest(asString: boolean = false): v2Manifest | v3Manifest {
+        return this.version === 'beta2'
+            ? this.v2Manifest(asString)
+            : this.v3Manifest(asString);
     }
 
     computeEndpointSequenceNumbers(sdl: v2Sdl) {
