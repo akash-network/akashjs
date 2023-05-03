@@ -1,10 +1,10 @@
 /* eslint-disable */
-import Long from "long";
-import _m0 from "protobufjs/minimal";
-import { Coin } from "../../../cosmos/base/v1beta1/coin";
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
 import { PlacementRequirements } from "../../base/v1beta1/attribute";
 import { ResourceUnits } from "../../base/v1beta1/resource";
+import { Coin } from "../../../cosmos/base/v1beta1/coin";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta1";
 
@@ -138,7 +138,10 @@ function createBaseMsgCloseGroup(): MsgCloseGroup {
 export const MsgCloseGroup = {
   $type: "akash.deployment.v1beta1.MsgCloseGroup" as const,
 
-  encode(message: MsgCloseGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgCloseGroup,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       GroupID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -146,45 +149,45 @@ export const MsgCloseGroup = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgCloseGroup {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCloseGroup();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.id = GroupID.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(object: any): MsgCloseGroup {
-    return { $type: MsgCloseGroup.$type, id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined };
+    return {
+      $type: MsgCloseGroup.$type,
+      id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined,
+    };
   },
 
   toJSON(message: MsgCloseGroup): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = message.id ? GroupID.toJSON(message.id) : undefined);
+    message.id !== undefined &&
+      (obj.id = message.id ? GroupID.toJSON(message.id) : undefined);
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgCloseGroup>, I>>(base?: I): MsgCloseGroup {
-    return MsgCloseGroup.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgCloseGroup>, I>>(object: I): MsgCloseGroup {
+  fromPartial<I extends Exact<DeepPartial<MsgCloseGroup>, I>>(
+    object: I
+  ): MsgCloseGroup {
     const message = createBaseMsgCloseGroup();
-    message.id = (object.id !== undefined && object.id !== null) ? GroupID.fromPartial(object.id) : undefined;
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? GroupID.fromPartial(object.id)
+        : undefined;
     return message;
   },
 };
@@ -198,28 +201,35 @@ function createBaseMsgCloseGroupResponse(): MsgCloseGroupResponse {
 export const MsgCloseGroupResponse = {
   $type: "akash.deployment.v1beta1.MsgCloseGroupResponse" as const,
 
-  encode(_: MsgCloseGroupResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgCloseGroupResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCloseGroupResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgCloseGroupResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCloseGroupResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(_: any): MsgCloseGroupResponse {
-    return { $type: MsgCloseGroupResponse.$type };
+    return {
+      $type: MsgCloseGroupResponse.$type,
+    };
   },
 
   toJSON(_: MsgCloseGroupResponse): unknown {
@@ -227,11 +237,9 @@ export const MsgCloseGroupResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgCloseGroupResponse>, I>>(base?: I): MsgCloseGroupResponse {
-    return MsgCloseGroupResponse.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgCloseGroupResponse>, I>>(_: I): MsgCloseGroupResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCloseGroupResponse>, I>>(
+    _: I
+  ): MsgCloseGroupResponse {
     const message = createBaseMsgCloseGroupResponse();
     return message;
   },
@@ -246,7 +254,10 @@ function createBaseMsgPauseGroup(): MsgPauseGroup {
 export const MsgPauseGroup = {
   $type: "akash.deployment.v1beta1.MsgPauseGroup" as const,
 
-  encode(message: MsgPauseGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgPauseGroup,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       GroupID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -254,45 +265,45 @@ export const MsgPauseGroup = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgPauseGroup {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgPauseGroup();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.id = GroupID.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(object: any): MsgPauseGroup {
-    return { $type: MsgPauseGroup.$type, id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined };
+    return {
+      $type: MsgPauseGroup.$type,
+      id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined,
+    };
   },
 
   toJSON(message: MsgPauseGroup): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = message.id ? GroupID.toJSON(message.id) : undefined);
+    message.id !== undefined &&
+      (obj.id = message.id ? GroupID.toJSON(message.id) : undefined);
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgPauseGroup>, I>>(base?: I): MsgPauseGroup {
-    return MsgPauseGroup.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgPauseGroup>, I>>(object: I): MsgPauseGroup {
+  fromPartial<I extends Exact<DeepPartial<MsgPauseGroup>, I>>(
+    object: I
+  ): MsgPauseGroup {
     const message = createBaseMsgPauseGroup();
-    message.id = (object.id !== undefined && object.id !== null) ? GroupID.fromPartial(object.id) : undefined;
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? GroupID.fromPartial(object.id)
+        : undefined;
     return message;
   },
 };
@@ -306,28 +317,35 @@ function createBaseMsgPauseGroupResponse(): MsgPauseGroupResponse {
 export const MsgPauseGroupResponse = {
   $type: "akash.deployment.v1beta1.MsgPauseGroupResponse" as const,
 
-  encode(_: MsgPauseGroupResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgPauseGroupResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgPauseGroupResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgPauseGroupResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgPauseGroupResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(_: any): MsgPauseGroupResponse {
-    return { $type: MsgPauseGroupResponse.$type };
+    return {
+      $type: MsgPauseGroupResponse.$type,
+    };
   },
 
   toJSON(_: MsgPauseGroupResponse): unknown {
@@ -335,11 +353,9 @@ export const MsgPauseGroupResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgPauseGroupResponse>, I>>(base?: I): MsgPauseGroupResponse {
-    return MsgPauseGroupResponse.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgPauseGroupResponse>, I>>(_: I): MsgPauseGroupResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgPauseGroupResponse>, I>>(
+    _: I
+  ): MsgPauseGroupResponse {
     const message = createBaseMsgPauseGroupResponse();
     return message;
   },
@@ -354,7 +370,10 @@ function createBaseMsgStartGroup(): MsgStartGroup {
 export const MsgStartGroup = {
   $type: "akash.deployment.v1beta1.MsgStartGroup" as const,
 
-  encode(message: MsgStartGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MsgStartGroup,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== undefined) {
       GroupID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -362,45 +381,45 @@ export const MsgStartGroup = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): MsgStartGroup {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgStartGroup();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.id = GroupID.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(object: any): MsgStartGroup {
-    return { $type: MsgStartGroup.$type, id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined };
+    return {
+      $type: MsgStartGroup.$type,
+      id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined,
+    };
   },
 
   toJSON(message: MsgStartGroup): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = message.id ? GroupID.toJSON(message.id) : undefined);
+    message.id !== undefined &&
+      (obj.id = message.id ? GroupID.toJSON(message.id) : undefined);
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgStartGroup>, I>>(base?: I): MsgStartGroup {
-    return MsgStartGroup.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgStartGroup>, I>>(object: I): MsgStartGroup {
+  fromPartial<I extends Exact<DeepPartial<MsgStartGroup>, I>>(
+    object: I
+  ): MsgStartGroup {
     const message = createBaseMsgStartGroup();
-    message.id = (object.id !== undefined && object.id !== null) ? GroupID.fromPartial(object.id) : undefined;
+    message.id =
+      object.id !== undefined && object.id !== null
+        ? GroupID.fromPartial(object.id)
+        : undefined;
     return message;
   },
 };
@@ -414,28 +433,35 @@ function createBaseMsgStartGroupResponse(): MsgStartGroupResponse {
 export const MsgStartGroupResponse = {
   $type: "akash.deployment.v1beta1.MsgStartGroupResponse" as const,
 
-  encode(_: MsgStartGroupResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    _: MsgStartGroupResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): MsgStartGroupResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): MsgStartGroupResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgStartGroupResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(_: any): MsgStartGroupResponse {
-    return { $type: MsgStartGroupResponse.$type };
+    return {
+      $type: MsgStartGroupResponse.$type,
+    };
   },
 
   toJSON(_: MsgStartGroupResponse): unknown {
@@ -443,11 +469,9 @@ export const MsgStartGroupResponse = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<MsgStartGroupResponse>, I>>(base?: I): MsgStartGroupResponse {
-    return MsgStartGroupResponse.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<MsgStartGroupResponse>, I>>(_: I): MsgStartGroupResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgStartGroupResponse>, I>>(
+    _: I
+  ): MsgStartGroupResponse {
     const message = createBaseMsgStartGroupResponse();
     return message;
   },
@@ -456,13 +480,21 @@ export const MsgStartGroupResponse = {
 messageTypeRegistry.set(MsgStartGroupResponse.$type, MsgStartGroupResponse);
 
 function createBaseGroupID(): GroupID {
-  return { $type: "akash.deployment.v1beta1.GroupID", owner: "", dseq: Long.UZERO, gseq: 0 };
+  return {
+    $type: "akash.deployment.v1beta1.GroupID",
+    owner: "",
+    dseq: Long.UZERO,
+    gseq: 0,
+  };
 }
 
 export const GroupID = {
   $type: "akash.deployment.v1beta1.GroupID" as const,
 
-  encode(message: GroupID, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: GroupID,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -476,38 +508,25 @@ export const GroupID = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): GroupID {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGroupID();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.owner = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag != 16) {
-            break;
-          }
-
           message.dseq = reader.uint64() as Long;
-          continue;
+          break;
         case 3:
-          if (tag != 24) {
-            break;
-          }
-
           message.gseq = reader.uint32();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -524,19 +543,19 @@ export const GroupID = {
   toJSON(message: GroupID): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined && (obj.dseq = (message.dseq || Long.UZERO).toString());
+    message.dseq !== undefined &&
+      (obj.dseq = (message.dseq || Long.UZERO).toString());
     message.gseq !== undefined && (obj.gseq = Math.round(message.gseq));
     return obj;
-  },
-
-  create<I extends Exact<DeepPartial<GroupID>, I>>(base?: I): GroupID {
-    return GroupID.fromPartial(base ?? {});
   },
 
   fromPartial<I extends Exact<DeepPartial<GroupID>, I>>(object: I): GroupID {
     const message = createBaseGroupID();
     message.owner = object.owner ?? "";
-    message.dseq = (object.dseq !== undefined && object.dseq !== null) ? Long.fromValue(object.dseq) : Long.UZERO;
+    message.dseq =
+      object.dseq !== undefined && object.dseq !== null
+        ? Long.fromValue(object.dseq)
+        : Long.UZERO;
     message.gseq = object.gseq ?? 0;
     return message;
   },
@@ -545,18 +564,29 @@ export const GroupID = {
 messageTypeRegistry.set(GroupID.$type, GroupID);
 
 function createBaseGroupSpec(): GroupSpec {
-  return { $type: "akash.deployment.v1beta1.GroupSpec", name: "", requirements: undefined, resources: [] };
+  return {
+    $type: "akash.deployment.v1beta1.GroupSpec",
+    name: "",
+    requirements: undefined,
+    resources: [],
+  };
 }
 
 export const GroupSpec = {
   $type: "akash.deployment.v1beta1.GroupSpec" as const,
 
-  encode(message: GroupSpec, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: GroupSpec,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
     if (message.requirements !== undefined) {
-      PlacementRequirements.encode(message.requirements, writer.uint32(18).fork()).ldelim();
+      PlacementRequirements.encode(
+        message.requirements,
+        writer.uint32(18).fork()
+      ).ldelim();
     }
     for (const v of message.resources) {
       Resource.encode(v!, writer.uint32(26).fork()).ldelim();
@@ -565,38 +595,28 @@ export const GroupSpec = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): GroupSpec {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGroupSpec();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.name = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag != 18) {
-            break;
-          }
-
-          message.requirements = PlacementRequirements.decode(reader, reader.uint32());
-          continue;
+          message.requirements = PlacementRequirements.decode(
+            reader,
+            reader.uint32()
+          );
+          break;
         case 3:
-          if (tag != 26) {
-            break;
-          }
-
           message.resources.push(Resource.decode(reader, reader.uint32()));
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -605,8 +625,12 @@ export const GroupSpec = {
     return {
       $type: GroupSpec.$type,
       name: isSet(object.name) ? String(object.name) : "",
-      requirements: isSet(object.requirements) ? PlacementRequirements.fromJSON(object.requirements) : undefined,
-      resources: Array.isArray(object?.resources) ? object.resources.map((e: any) => Resource.fromJSON(e)) : [],
+      requirements: isSet(object.requirements)
+        ? PlacementRequirements.fromJSON(object.requirements)
+        : undefined,
+      resources: Array.isArray(object?.resources)
+        ? object.resources.map((e: any) => Resource.fromJSON(e))
+        : [],
     };
   },
 
@@ -614,26 +638,30 @@ export const GroupSpec = {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     message.requirements !== undefined &&
-      (obj.requirements = message.requirements ? PlacementRequirements.toJSON(message.requirements) : undefined);
+      (obj.requirements = message.requirements
+        ? PlacementRequirements.toJSON(message.requirements)
+        : undefined);
     if (message.resources) {
-      obj.resources = message.resources.map((e) => e ? Resource.toJSON(e) : undefined);
+      obj.resources = message.resources.map((e) =>
+        e ? Resource.toJSON(e) : undefined
+      );
     } else {
       obj.resources = [];
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GroupSpec>, I>>(base?: I): GroupSpec {
-    return GroupSpec.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GroupSpec>, I>>(object: I): GroupSpec {
+  fromPartial<I extends Exact<DeepPartial<GroupSpec>, I>>(
+    object: I
+  ): GroupSpec {
     const message = createBaseGroupSpec();
     message.name = object.name ?? "";
-    message.requirements = (object.requirements !== undefined && object.requirements !== null)
-      ? PlacementRequirements.fromPartial(object.requirements)
-      : undefined;
-    message.resources = object.resources?.map((e) => Resource.fromPartial(e)) || [];
+    message.requirements =
+      object.requirements !== undefined && object.requirements !== null
+        ? PlacementRequirements.fromPartial(object.requirements)
+        : undefined;
+    message.resources =
+      object.resources?.map((e) => Resource.fromPartial(e)) || [];
     return message;
   },
 };
@@ -670,45 +698,28 @@ export const Group = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Group {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGroup();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.groupId = GroupID.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag != 16) {
-            break;
-          }
-
           message.state = reader.int32() as any;
-          continue;
+          break;
         case 3:
-          if (tag != 26) {
-            break;
-          }
-
           message.groupSpec = GroupSpec.decode(reader, reader.uint32());
-          continue;
+          break;
         case 4:
-          if (tag != 32) {
-            break;
-          }
-
           message.createdAt = reader.int64() as Long;
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -716,39 +727,51 @@ export const Group = {
   fromJSON(object: any): Group {
     return {
       $type: Group.$type,
-      groupId: isSet(object.groupId) ? GroupID.fromJSON(object.groupId) : undefined,
+      groupId: isSet(object.groupId)
+        ? GroupID.fromJSON(object.groupId)
+        : undefined,
       state: isSet(object.state) ? group_StateFromJSON(object.state) : 0,
-      groupSpec: isSet(object.groupSpec) ? GroupSpec.fromJSON(object.groupSpec) : undefined,
-      createdAt: isSet(object.createdAt) ? Long.fromValue(object.createdAt) : Long.ZERO,
+      groupSpec: isSet(object.groupSpec)
+        ? GroupSpec.fromJSON(object.groupSpec)
+        : undefined,
+      createdAt: isSet(object.createdAt)
+        ? Long.fromValue(object.createdAt)
+        : Long.ZERO,
     };
   },
 
   toJSON(message: Group): unknown {
     const obj: any = {};
-    message.groupId !== undefined && (obj.groupId = message.groupId ? GroupID.toJSON(message.groupId) : undefined);
-    message.state !== undefined && (obj.state = group_StateToJSON(message.state));
+    message.groupId !== undefined &&
+      (obj.groupId = message.groupId
+        ? GroupID.toJSON(message.groupId)
+        : undefined);
+    message.state !== undefined &&
+      (obj.state = group_StateToJSON(message.state));
     message.groupSpec !== undefined &&
-      (obj.groupSpec = message.groupSpec ? GroupSpec.toJSON(message.groupSpec) : undefined);
-    message.createdAt !== undefined && (obj.createdAt = (message.createdAt || Long.ZERO).toString());
+      (obj.groupSpec = message.groupSpec
+        ? GroupSpec.toJSON(message.groupSpec)
+        : undefined);
+    message.createdAt !== undefined &&
+      (obj.createdAt = (message.createdAt || Long.ZERO).toString());
     return obj;
-  },
-
-  create<I extends Exact<DeepPartial<Group>, I>>(base?: I): Group {
-    return Group.fromPartial(base ?? {});
   },
 
   fromPartial<I extends Exact<DeepPartial<Group>, I>>(object: I): Group {
     const message = createBaseGroup();
-    message.groupId = (object.groupId !== undefined && object.groupId !== null)
-      ? GroupID.fromPartial(object.groupId)
-      : undefined;
+    message.groupId =
+      object.groupId !== undefined && object.groupId !== null
+        ? GroupID.fromPartial(object.groupId)
+        : undefined;
     message.state = object.state ?? 0;
-    message.groupSpec = (object.groupSpec !== undefined && object.groupSpec !== null)
-      ? GroupSpec.fromPartial(object.groupSpec)
-      : undefined;
-    message.createdAt = (object.createdAt !== undefined && object.createdAt !== null)
-      ? Long.fromValue(object.createdAt)
-      : Long.ZERO;
+    message.groupSpec =
+      object.groupSpec !== undefined && object.groupSpec !== null
+        ? GroupSpec.fromPartial(object.groupSpec)
+        : undefined;
+    message.createdAt =
+      object.createdAt !== undefined && object.createdAt !== null
+        ? Long.fromValue(object.createdAt)
+        : Long.ZERO;
     return message;
   },
 };
@@ -756,15 +779,26 @@ export const Group = {
 messageTypeRegistry.set(Group.$type, Group);
 
 function createBaseResource(): Resource {
-  return { $type: "akash.deployment.v1beta1.Resource", resources: undefined, count: 0, price: undefined };
+  return {
+    $type: "akash.deployment.v1beta1.Resource",
+    resources: undefined,
+    count: 0,
+    price: undefined,
+  };
 }
 
 export const Resource = {
   $type: "akash.deployment.v1beta1.Resource" as const,
 
-  encode(message: Resource, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Resource,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.resources !== undefined) {
-      ResourceUnits.encode(message.resources, writer.uint32(10).fork()).ldelim();
+      ResourceUnits.encode(
+        message.resources,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     if (message.count !== 0) {
       writer.uint32(16).uint32(message.count);
@@ -776,38 +810,25 @@ export const Resource = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Resource {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseResource();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.resources = ResourceUnits.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag != 16) {
-            break;
-          }
-
           message.count = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag != 26) {
-            break;
-          }
-
           message.price = Coin.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -815,7 +836,9 @@ export const Resource = {
   fromJSON(object: any): Resource {
     return {
       $type: Resource.$type,
-      resources: isSet(object.resources) ? ResourceUnits.fromJSON(object.resources) : undefined,
+      resources: isSet(object.resources)
+        ? ResourceUnits.fromJSON(object.resources)
+        : undefined,
       count: isSet(object.count) ? Number(object.count) : 0,
       price: isSet(object.price) ? Coin.fromJSON(object.price) : undefined,
     };
@@ -824,40 +847,60 @@ export const Resource = {
   toJSON(message: Resource): unknown {
     const obj: any = {};
     message.resources !== undefined &&
-      (obj.resources = message.resources ? ResourceUnits.toJSON(message.resources) : undefined);
+      (obj.resources = message.resources
+        ? ResourceUnits.toJSON(message.resources)
+        : undefined);
     message.count !== undefined && (obj.count = Math.round(message.count));
-    message.price !== undefined && (obj.price = message.price ? Coin.toJSON(message.price) : undefined);
+    message.price !== undefined &&
+      (obj.price = message.price ? Coin.toJSON(message.price) : undefined);
     return obj;
-  },
-
-  create<I extends Exact<DeepPartial<Resource>, I>>(base?: I): Resource {
-    return Resource.fromPartial(base ?? {});
   },
 
   fromPartial<I extends Exact<DeepPartial<Resource>, I>>(object: I): Resource {
     const message = createBaseResource();
-    message.resources = (object.resources !== undefined && object.resources !== null)
-      ? ResourceUnits.fromPartial(object.resources)
-      : undefined;
+    message.resources =
+      object.resources !== undefined && object.resources !== null
+        ? ResourceUnits.fromPartial(object.resources)
+        : undefined;
     message.count = object.count ?? 0;
-    message.price = (object.price !== undefined && object.price !== null) ? Coin.fromPartial(object.price) : undefined;
+    message.price =
+      object.price !== undefined && object.price !== null
+        ? Coin.fromPartial(object.price)
+        : undefined;
     return message;
   },
 };
 
 messageTypeRegistry.set(Resource.$type, Resource);
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P> | "$type">]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
+        never
+      >;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

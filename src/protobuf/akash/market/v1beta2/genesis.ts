@@ -1,10 +1,10 @@
 /* eslint-disable */
-import Long from "long";
-import _m0 from "protobufjs/minimal";
 import { messageTypeRegistry } from "../../../typeRegistry";
-import { Lease } from "./lease";
+import Long from "long";
 import { Order } from "./order";
+import { Lease } from "./lease";
 import { Params } from "./params";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.market.v1beta2";
 
@@ -17,13 +17,21 @@ export interface GenesisState {
 }
 
 function createBaseGenesisState(): GenesisState {
-  return { $type: "akash.market.v1beta2.GenesisState", orders: [], leases: [], params: undefined };
+  return {
+    $type: "akash.market.v1beta2.GenesisState",
+    orders: [],
+    leases: [],
+    params: undefined,
+  };
 }
 
 export const GenesisState = {
   $type: "akash.market.v1beta2.GenesisState" as const,
 
-  encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: GenesisState,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.orders) {
       Order.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -37,38 +45,25 @@ export const GenesisState = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): GenesisState {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGenesisState();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.orders.push(Order.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag != 18) {
-            break;
-          }
-
           message.leases.push(Lease.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 3:
-          if (tag != 26) {
-            break;
-          }
-
           message.params = Params.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -76,8 +71,12 @@ export const GenesisState = {
   fromJSON(object: any): GenesisState {
     return {
       $type: GenesisState.$type,
-      orders: Array.isArray(object?.orders) ? object.orders.map((e: any) => Order.fromJSON(e)) : [],
-      leases: Array.isArray(object?.leases) ? object.leases.map((e: any) => Lease.fromJSON(e)) : [],
+      orders: Array.isArray(object?.orders)
+        ? object.orders.map((e: any) => Order.fromJSON(e))
+        : [],
+      leases: Array.isArray(object?.leases)
+        ? object.leases.map((e: any) => Lease.fromJSON(e))
+        : [],
       params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
     };
   },
@@ -85,47 +84,64 @@ export const GenesisState = {
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
     if (message.orders) {
-      obj.orders = message.orders.map((e) => e ? Order.toJSON(e) : undefined);
+      obj.orders = message.orders.map((e) => (e ? Order.toJSON(e) : undefined));
     } else {
       obj.orders = [];
     }
     if (message.leases) {
-      obj.leases = message.leases.map((e) => e ? Lease.toJSON(e) : undefined);
+      obj.leases = message.leases.map((e) => (e ? Lease.toJSON(e) : undefined));
     } else {
       obj.leases = [];
     }
-    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
+    message.params !== undefined &&
+      (obj.params = message.params ? Params.toJSON(message.params) : undefined);
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GenesisState>, I>>(base?: I): GenesisState {
-    return GenesisState.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(
+    object: I
+  ): GenesisState {
     const message = createBaseGenesisState();
     message.orders = object.orders?.map((e) => Order.fromPartial(e)) || [];
     message.leases = object.leases?.map((e) => Lease.fromPartial(e)) || [];
-    message.params = (object.params !== undefined && object.params !== null)
-      ? Params.fromPartial(object.params)
-      : undefined;
+    message.params =
+      object.params !== undefined && object.params !== null
+        ? Params.fromPartial(object.params)
+        : undefined;
     return message;
   },
 };
 
 messageTypeRegistry.set(GenesisState.$type, GenesisState);
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P> | "$type">]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
+        never
+      >;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

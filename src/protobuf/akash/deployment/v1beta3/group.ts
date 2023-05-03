@@ -1,9 +1,9 @@
 /* eslint-disable */
-import Long from "long";
-import _m0 from "protobufjs/minimal";
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
 import { GroupID } from "./groupid";
 import { GroupSpec } from "./groupspec";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta3";
 
@@ -103,45 +103,28 @@ export const Group = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Group {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGroup();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.groupId = GroupID.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag != 16) {
-            break;
-          }
-
           message.state = reader.int32() as any;
-          continue;
+          break;
         case 3:
-          if (tag != 26) {
-            break;
-          }
-
           message.groupSpec = GroupSpec.decode(reader, reader.uint32());
-          continue;
+          break;
         case 4:
-          if (tag != 32) {
-            break;
-          }
-
           message.createdAt = reader.int64() as Long;
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -149,56 +132,85 @@ export const Group = {
   fromJSON(object: any): Group {
     return {
       $type: Group.$type,
-      groupId: isSet(object.groupId) ? GroupID.fromJSON(object.groupId) : undefined,
+      groupId: isSet(object.groupId)
+        ? GroupID.fromJSON(object.groupId)
+        : undefined,
       state: isSet(object.state) ? group_StateFromJSON(object.state) : 0,
-      groupSpec: isSet(object.groupSpec) ? GroupSpec.fromJSON(object.groupSpec) : undefined,
-      createdAt: isSet(object.createdAt) ? Long.fromValue(object.createdAt) : Long.ZERO,
+      groupSpec: isSet(object.groupSpec)
+        ? GroupSpec.fromJSON(object.groupSpec)
+        : undefined,
+      createdAt: isSet(object.createdAt)
+        ? Long.fromValue(object.createdAt)
+        : Long.ZERO,
     };
   },
 
   toJSON(message: Group): unknown {
     const obj: any = {};
-    message.groupId !== undefined && (obj.groupId = message.groupId ? GroupID.toJSON(message.groupId) : undefined);
-    message.state !== undefined && (obj.state = group_StateToJSON(message.state));
+    message.groupId !== undefined &&
+      (obj.groupId = message.groupId
+        ? GroupID.toJSON(message.groupId)
+        : undefined);
+    message.state !== undefined &&
+      (obj.state = group_StateToJSON(message.state));
     message.groupSpec !== undefined &&
-      (obj.groupSpec = message.groupSpec ? GroupSpec.toJSON(message.groupSpec) : undefined);
-    message.createdAt !== undefined && (obj.createdAt = (message.createdAt || Long.ZERO).toString());
+      (obj.groupSpec = message.groupSpec
+        ? GroupSpec.toJSON(message.groupSpec)
+        : undefined);
+    message.createdAt !== undefined &&
+      (obj.createdAt = (message.createdAt || Long.ZERO).toString());
     return obj;
-  },
-
-  create<I extends Exact<DeepPartial<Group>, I>>(base?: I): Group {
-    return Group.fromPartial(base ?? {});
   },
 
   fromPartial<I extends Exact<DeepPartial<Group>, I>>(object: I): Group {
     const message = createBaseGroup();
-    message.groupId = (object.groupId !== undefined && object.groupId !== null)
-      ? GroupID.fromPartial(object.groupId)
-      : undefined;
+    message.groupId =
+      object.groupId !== undefined && object.groupId !== null
+        ? GroupID.fromPartial(object.groupId)
+        : undefined;
     message.state = object.state ?? 0;
-    message.groupSpec = (object.groupSpec !== undefined && object.groupSpec !== null)
-      ? GroupSpec.fromPartial(object.groupSpec)
-      : undefined;
-    message.createdAt = (object.createdAt !== undefined && object.createdAt !== null)
-      ? Long.fromValue(object.createdAt)
-      : Long.ZERO;
+    message.groupSpec =
+      object.groupSpec !== undefined && object.groupSpec !== null
+        ? GroupSpec.fromPartial(object.groupSpec)
+        : undefined;
+    message.createdAt =
+      object.createdAt !== undefined && object.createdAt !== null
+        ? Long.fromValue(object.createdAt)
+        : Long.ZERO;
     return message;
   },
 };
 
 messageTypeRegistry.set(Group.$type, Group);
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P> | "$type">]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
+        never
+      >;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

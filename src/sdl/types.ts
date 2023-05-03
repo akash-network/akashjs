@@ -1,12 +1,19 @@
 
-export type Manifest = Group[];
+export type v2Manifest = v2Group[];
 
-export type Group = {
-    Name: string,
-    Services: Service[],
+export type v3Manifest = v3Group[];
+
+export type v3Group = {
+    name: string,
+    services: v3ManifestService[],
 }
 
-export type Service = {
+export type v2Group = {
+    Name: string,
+    Services: v2ManifestService[],
+}
+
+export type v2ManifestService = {
     Name: string,
     Image: string,
     Command: string[] | null,
@@ -14,11 +21,23 @@ export type Service = {
     Env: string[] | null,
     Resources: ResourceUnits,
     Count: number
-    Expose: ServiceExpose[],
+    Expose: v2ServiceExpose[],
     params?: ServiceParams,
 }
 
-export type ServiceExposeHttpOptions = {
+export type v3ManifestService = {
+    name: string,
+    image: string,
+    command: string[] | null,
+    args: string[] | null,
+    env: string[] | null,
+    resources: ResourceUnits,
+    count: number
+    expose: v3ServiceExpose[],
+    params: ServiceParams | null,
+}
+
+export type v2ServiceExposeHttpOptions = {
     MaxBodySize: number,
     ReadTimeout: number,
     SendTimeout: number,
@@ -27,20 +46,41 @@ export type ServiceExposeHttpOptions = {
     NextCases: string[],
 }
 
+export type v3ServiceExposeHttpOptions = {
+    maxBodySize: number,
+    readTimeout: number,
+    sendTimeout: number,
+    nextTries: number,
+    nextTimeout: number,
+    nextCases: string[],
+}
+
 export type ResourceUnits = {
 
 }
 
-export type ServiceExpose = {
+export type v2ServiceExpose = {
     Port: number,
     ExternalPort: number,
     Proto: string,
     Service: any,
     Global: boolean,
     Hosts: any,
-    HTTPOptions: ServiceExposeHttpOptions,
+    HTTPOptions: v2ServiceExposeHttpOptions,
     IP: string,
     EndpointSequenceNumber: number,
+}
+
+export type v3ServiceExpose = {
+    port: number,
+    externalPort: number,
+    proto: string,
+    service: any,
+    global: boolean,
+    hosts: any,
+    httpOptions: v3ServiceExposeHttpOptions,
+    ip: string,
+    endpointSequenceNumber: number,
 }
 
 export type ServiceParams = {
@@ -129,6 +169,11 @@ export type v2ResourceMemory = {
     attributes?: Attributes,
 }
 
+export type v2ResourceGPU = {
+    units: number | string,
+    attributes?: Attributes,
+}
+
 export type v2StorageAttributes = Attributes;
 
 export type v2ResourceStorage = {
@@ -143,6 +188,7 @@ export type v2ComputeResources = {
     cpu: v2ResourceCPU,
     memory: v2ResourceMemory,
     storage: v2ResourceStorageArray | v2ResourceStorage,
+    gpu?: v2ResourceGPU,
 }
 
 export type v2ProfileCompute = {

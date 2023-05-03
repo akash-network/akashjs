@@ -1,7 +1,7 @@
 /* eslint-disable */
-import Long from "long";
-import _m0 from "protobufjs/minimal";
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.gov.v1beta3";
 
@@ -16,13 +16,19 @@ export interface DepositParams {
 }
 
 function createBaseDepositParams(): DepositParams {
-  return { $type: "akash.gov.v1beta3.DepositParams", minInitialDepositRate: new Uint8Array() };
+  return {
+    $type: "akash.gov.v1beta3.DepositParams",
+    minInitialDepositRate: new Uint8Array(),
+  };
 }
 
 export const DepositParams = {
   $type: "akash.gov.v1beta3.DepositParams" as const,
 
-  encode(message: DepositParams, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: DepositParams,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.minInitialDepositRate.length !== 0) {
       writer.uint32(10).bytes(message.minInitialDepositRate);
     }
@@ -30,24 +36,19 @@ export const DepositParams = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): DepositParams {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDepositParams();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.minInitialDepositRate = reader.bytes();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -65,18 +66,19 @@ export const DepositParams = {
     const obj: any = {};
     message.minInitialDepositRate !== undefined &&
       (obj.minInitialDepositRate = base64FromBytes(
-        message.minInitialDepositRate !== undefined ? message.minInitialDepositRate : new Uint8Array(),
+        message.minInitialDepositRate !== undefined
+          ? message.minInitialDepositRate
+          : new Uint8Array()
       ));
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<DepositParams>, I>>(base?: I): DepositParams {
-    return DepositParams.fromPartial(base ?? {});
-  },
-
-  fromPartial<I extends Exact<DeepPartial<DepositParams>, I>>(object: I): DepositParams {
+  fromPartial<I extends Exact<DeepPartial<DepositParams>, I>>(
+    object: I
+  ): DepositParams {
     const message = createBaseDepositParams();
-    message.minInitialDepositRate = object.minInitialDepositRate ?? new Uint8Array();
+    message.minInitialDepositRate =
+      object.minInitialDepositRate ?? new Uint8Array();
     return message;
   },
 };
@@ -86,58 +88,65 @@ messageTypeRegistry.set(DepositParams.$type, DepositParams);
 declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
-var tsProtoGlobalThis: any = (() => {
-  if (typeof globalThis !== "undefined") {
-    return globalThis;
-  }
-  if (typeof self !== "undefined") {
-    return self;
-  }
-  if (typeof window !== "undefined") {
-    return window;
-  }
-  if (typeof global !== "undefined") {
-    return global;
-  }
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") return globalThis;
+  if (typeof self !== "undefined") return self;
+  if (typeof window !== "undefined") return window;
+  if (typeof global !== "undefined") return global;
   throw "Unable to locate global object";
 })();
 
+const atob: (b64: string) => string =
+  globalThis.atob ||
+  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
-  if (tsProtoGlobalThis.Buffer) {
-    return Uint8Array.from(tsProtoGlobalThis.Buffer.from(b64, "base64"));
-  } else {
-    const bin = tsProtoGlobalThis.atob(b64);
-    const arr = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; ++i) {
-      arr[i] = bin.charCodeAt(i);
-    }
-    return arr;
+  const bin = atob(b64);
+  const arr = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; ++i) {
+    arr[i] = bin.charCodeAt(i);
   }
+  return arr;
 }
 
+const btoa: (bin: string) => string =
+  globalThis.btoa ||
+  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
-  if (tsProtoGlobalThis.Buffer) {
-    return tsProtoGlobalThis.Buffer.from(arr).toString("base64");
-  } else {
-    const bin: string[] = [];
-    arr.forEach((byte) => {
-      bin.push(String.fromCharCode(byte));
-    });
-    return tsProtoGlobalThis.btoa(bin.join(""));
-  }
+  const bin: string[] = [];
+  arr.forEach((byte) => {
+    bin.push(String.fromCharCode(byte));
+  });
+  return btoa(bin.join(""));
 }
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P> | "$type">]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
+        never
+      >;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

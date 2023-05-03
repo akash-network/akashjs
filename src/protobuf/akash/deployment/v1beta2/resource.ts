@@ -1,9 +1,9 @@
 /* eslint-disable */
-import Long from "long";
-import _m0 from "protobufjs/minimal";
-import { DecCoin } from "../../../cosmos/base/v1beta1/coin";
 import { messageTypeRegistry } from "../../../typeRegistry";
+import Long from "long";
 import { ResourceUnits } from "../../base/v1beta2/resourceunits";
+import { DecCoin } from "../../../cosmos/base/v1beta1/coin";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta2";
 
@@ -16,15 +16,26 @@ export interface Resource {
 }
 
 function createBaseResource(): Resource {
-  return { $type: "akash.deployment.v1beta2.Resource", resources: undefined, count: 0, price: undefined };
+  return {
+    $type: "akash.deployment.v1beta2.Resource",
+    resources: undefined,
+    count: 0,
+    price: undefined,
+  };
 }
 
 export const Resource = {
   $type: "akash.deployment.v1beta2.Resource" as const,
 
-  encode(message: Resource, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Resource,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.resources !== undefined) {
-      ResourceUnits.encode(message.resources, writer.uint32(10).fork()).ldelim();
+      ResourceUnits.encode(
+        message.resources,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     if (message.count !== 0) {
       writer.uint32(16).uint32(message.count);
@@ -36,38 +47,25 @@ export const Resource = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Resource {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseResource();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag != 10) {
-            break;
-          }
-
           message.resources = ResourceUnits.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag != 16) {
-            break;
-          }
-
           message.count = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag != 26) {
-            break;
-          }
-
           message.price = DecCoin.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) == 4 || tag == 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -75,7 +73,9 @@ export const Resource = {
   fromJSON(object: any): Resource {
     return {
       $type: Resource.$type,
-      resources: isSet(object.resources) ? ResourceUnits.fromJSON(object.resources) : undefined,
+      resources: isSet(object.resources)
+        ? ResourceUnits.fromJSON(object.resources)
+        : undefined,
       count: isSet(object.count) ? Number(object.count) : 0,
       price: isSet(object.price) ? DecCoin.fromJSON(object.price) : undefined,
     };
@@ -84,42 +84,60 @@ export const Resource = {
   toJSON(message: Resource): unknown {
     const obj: any = {};
     message.resources !== undefined &&
-      (obj.resources = message.resources ? ResourceUnits.toJSON(message.resources) : undefined);
+      (obj.resources = message.resources
+        ? ResourceUnits.toJSON(message.resources)
+        : undefined);
     message.count !== undefined && (obj.count = Math.round(message.count));
-    message.price !== undefined && (obj.price = message.price ? DecCoin.toJSON(message.price) : undefined);
+    message.price !== undefined &&
+      (obj.price = message.price ? DecCoin.toJSON(message.price) : undefined);
     return obj;
-  },
-
-  create<I extends Exact<DeepPartial<Resource>, I>>(base?: I): Resource {
-    return Resource.fromPartial(base ?? {});
   },
 
   fromPartial<I extends Exact<DeepPartial<Resource>, I>>(object: I): Resource {
     const message = createBaseResource();
-    message.resources = (object.resources !== undefined && object.resources !== null)
-      ? ResourceUnits.fromPartial(object.resources)
-      : undefined;
+    message.resources =
+      object.resources !== undefined && object.resources !== null
+        ? ResourceUnits.fromPartial(object.resources)
+        : undefined;
     message.count = object.count ?? 0;
-    message.price = (object.price !== undefined && object.price !== null)
-      ? DecCoin.fromPartial(object.price)
-      : undefined;
+    message.price =
+      object.price !== undefined && object.price !== null
+        ? DecCoin.fromPartial(object.price)
+        : undefined;
     return message;
   },
 };
 
 messageTypeRegistry.set(Resource.$type, Resource);
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Long ? string | number | Long : T extends Array<infer U> ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Long
+  ? string | number | Long
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P> | "$type">]: never };
+export type Exact<P, I extends P> = P extends Builtin
+  ? P
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
+        never
+      >;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

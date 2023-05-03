@@ -1,36 +1,44 @@
 /* eslint-disable */
-import _m0 from "protobufjs/minimal";
 import {
-  MsgCloseDeployment,
+  MsgCreateDeploymentResponse,
+  MsgDepositDeploymentResponse,
+  MsgUpdateDeploymentResponse,
   MsgCloseDeploymentResponse,
   MsgCreateDeployment,
-  MsgCreateDeploymentResponse,
   MsgDepositDeployment,
-  MsgDepositDeploymentResponse,
   MsgUpdateDeployment,
-  MsgUpdateDeploymentResponse,
+  MsgCloseDeployment,
 } from "./deploymentmsg";
 import {
-  MsgCloseGroup,
   MsgCloseGroupResponse,
-  MsgPauseGroup,
   MsgPauseGroupResponse,
-  MsgStartGroup,
   MsgStartGroupResponse,
+  MsgCloseGroup,
+  MsgPauseGroup,
+  MsgStartGroup,
 } from "./groupmsg";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta3";
 
 /** Msg defines the deployment Msg service. */
 export interface Msg {
   /** CreateDeployment defines a method to create new deployment given proper inputs. */
-  CreateDeployment(request: MsgCreateDeployment): Promise<MsgCreateDeploymentResponse>;
+  CreateDeployment(
+    request: MsgCreateDeployment
+  ): Promise<MsgCreateDeploymentResponse>;
   /** DepositDeployment deposits more funds into the deployment account */
-  DepositDeployment(request: MsgDepositDeployment): Promise<MsgDepositDeploymentResponse>;
+  DepositDeployment(
+    request: MsgDepositDeployment
+  ): Promise<MsgDepositDeploymentResponse>;
   /** UpdateDeployment defines a method to update a deployment given proper inputs. */
-  UpdateDeployment(request: MsgUpdateDeployment): Promise<MsgUpdateDeploymentResponse>;
+  UpdateDeployment(
+    request: MsgUpdateDeployment
+  ): Promise<MsgUpdateDeploymentResponse>;
   /** CloseDeployment defines a method to close a deployment given proper inputs. */
-  CloseDeployment(request: MsgCloseDeployment): Promise<MsgCloseDeploymentResponse>;
+  CloseDeployment(
+    request: MsgCloseDeployment
+  ): Promise<MsgCloseDeploymentResponse>;
   /** CloseGroup defines a method to close a group of a deployment given proper inputs. */
   CloseGroup(request: MsgCloseGroup): Promise<MsgCloseGroupResponse>;
   /** PauseGroup defines a method to close a group of a deployment given proper inputs. */
@@ -41,9 +49,7 @@ export interface Msg {
 
 export class MsgClientImpl implements Msg {
   private readonly rpc: Rpc;
-  private readonly service: string;
-  constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || "akash.deployment.v1beta3.Msg";
+  constructor(rpc: Rpc) {
     this.rpc = rpc;
     this.CreateDeployment = this.CreateDeployment.bind(this);
     this.DepositDeployment = this.DepositDeployment.bind(this);
@@ -53,49 +59,103 @@ export class MsgClientImpl implements Msg {
     this.PauseGroup = this.PauseGroup.bind(this);
     this.StartGroup = this.StartGroup.bind(this);
   }
-  CreateDeployment(request: MsgCreateDeployment): Promise<MsgCreateDeploymentResponse> {
+  CreateDeployment(
+    request: MsgCreateDeployment
+  ): Promise<MsgCreateDeploymentResponse> {
     const data = MsgCreateDeployment.encode(request).finish();
-    const promise = this.rpc.request(this.service, "CreateDeployment", data);
-    return promise.then((data) => MsgCreateDeploymentResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "akash.deployment.v1beta3.Msg",
+      "CreateDeployment",
+      data
+    );
+    return promise.then((data) =>
+      MsgCreateDeploymentResponse.decode(new _m0.Reader(data))
+    );
   }
 
-  DepositDeployment(request: MsgDepositDeployment): Promise<MsgDepositDeploymentResponse> {
+  DepositDeployment(
+    request: MsgDepositDeployment
+  ): Promise<MsgDepositDeploymentResponse> {
     const data = MsgDepositDeployment.encode(request).finish();
-    const promise = this.rpc.request(this.service, "DepositDeployment", data);
-    return promise.then((data) => MsgDepositDeploymentResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "akash.deployment.v1beta3.Msg",
+      "DepositDeployment",
+      data
+    );
+    return promise.then((data) =>
+      MsgDepositDeploymentResponse.decode(new _m0.Reader(data))
+    );
   }
 
-  UpdateDeployment(request: MsgUpdateDeployment): Promise<MsgUpdateDeploymentResponse> {
+  UpdateDeployment(
+    request: MsgUpdateDeployment
+  ): Promise<MsgUpdateDeploymentResponse> {
     const data = MsgUpdateDeployment.encode(request).finish();
-    const promise = this.rpc.request(this.service, "UpdateDeployment", data);
-    return promise.then((data) => MsgUpdateDeploymentResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "akash.deployment.v1beta3.Msg",
+      "UpdateDeployment",
+      data
+    );
+    return promise.then((data) =>
+      MsgUpdateDeploymentResponse.decode(new _m0.Reader(data))
+    );
   }
 
-  CloseDeployment(request: MsgCloseDeployment): Promise<MsgCloseDeploymentResponse> {
+  CloseDeployment(
+    request: MsgCloseDeployment
+  ): Promise<MsgCloseDeploymentResponse> {
     const data = MsgCloseDeployment.encode(request).finish();
-    const promise = this.rpc.request(this.service, "CloseDeployment", data);
-    return promise.then((data) => MsgCloseDeploymentResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "akash.deployment.v1beta3.Msg",
+      "CloseDeployment",
+      data
+    );
+    return promise.then((data) =>
+      MsgCloseDeploymentResponse.decode(new _m0.Reader(data))
+    );
   }
 
   CloseGroup(request: MsgCloseGroup): Promise<MsgCloseGroupResponse> {
     const data = MsgCloseGroup.encode(request).finish();
-    const promise = this.rpc.request(this.service, "CloseGroup", data);
-    return promise.then((data) => MsgCloseGroupResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "akash.deployment.v1beta3.Msg",
+      "CloseGroup",
+      data
+    );
+    return promise.then((data) =>
+      MsgCloseGroupResponse.decode(new _m0.Reader(data))
+    );
   }
 
   PauseGroup(request: MsgPauseGroup): Promise<MsgPauseGroupResponse> {
     const data = MsgPauseGroup.encode(request).finish();
-    const promise = this.rpc.request(this.service, "PauseGroup", data);
-    return promise.then((data) => MsgPauseGroupResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "akash.deployment.v1beta3.Msg",
+      "PauseGroup",
+      data
+    );
+    return promise.then((data) =>
+      MsgPauseGroupResponse.decode(new _m0.Reader(data))
+    );
   }
 
   StartGroup(request: MsgStartGroup): Promise<MsgStartGroupResponse> {
     const data = MsgStartGroup.encode(request).finish();
-    const promise = this.rpc.request(this.service, "StartGroup", data);
-    return promise.then((data) => MsgStartGroupResponse.decode(_m0.Reader.create(data)));
+    const promise = this.rpc.request(
+      "akash.deployment.v1beta3.Msg",
+      "StartGroup",
+      data
+    );
+    return promise.then((data) =>
+      MsgStartGroupResponse.decode(new _m0.Reader(data))
+    );
   }
 }
 
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  request(
+    service: string,
+    method: string,
+    data: Uint8Array
+  ): Promise<Uint8Array>;
 }
