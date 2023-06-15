@@ -462,11 +462,16 @@ export class SDL {
 
     transformGpuAttributes(attributes: v3GPUAttributes): Array<{key: string, value: string}> {
         return Object.entries(attributes.vendor).flatMap(([vendor, models]) => (
-            models.map((model) => ({
-                key: `vendor/${vendor}/model/${model.model}`,
-                value: "true"
-            })
-        )));
+            models 
+                ? models.map((model) => ({
+                    key: `vendor/${vendor}/model/${model.model}`,
+                    value: "true"
+                }))
+                : [{
+                    key: `vendor/${vendor}`,
+                    value: "true"
+                }]
+        ));
     }
 
     resourceUnitGpu(computeResources: v2ComputeResources, asString: boolean) {
