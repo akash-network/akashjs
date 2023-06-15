@@ -12,7 +12,7 @@ import {
     v2HTTPOptions,
     v2ProfileCompute,
     v2ResourceCPU,
-    v2ResourceGPU,
+    v3ResourceGPU,
     v2ResourceMemory,
     v2ResourceStorage,
     v2ResourceStorageArray,
@@ -20,9 +20,11 @@ import {
     v2Service,
     v2ServiceExposeHttpOptions,
     v3ServiceExposeHttpOptions,
-    ServiceParams
+    ServiceParams,
+    Attribute,
+    v3GPUAttributes
 } from './types';
-import { convertResourceString } from './sizes';
+import { convertCpuResourceString, convertResourceString } from './sizes';
 import { default as stableStringify } from "json-stable-stringify";
 import crypto from "node:crypto";
 
@@ -124,12 +126,12 @@ export class SDL {
 
     serviceResourceCpu(resource: v2ResourceCPU) {
         const units = isString(resource.units)
-            ? convertResourceString(resource.units)
-            : resource.units;
+            ? convertCpuResourceString(resource.units)
+            : resource.units * 1000;
 
         return {
             units: {
-                val: `${units * 1000}`
+                val: `${units}`
             }
         };
     }
@@ -154,7 +156,7 @@ export class SDL {
         }));
     }
 
-    serviceResourceGpu(resource: v2ResourceGPU | undefined, asString: boolean) {
+    serviceResourceGpu(resource: v3ResourceGPU | undefined, asString: boolean) {
         const value = (resource?.units || 0);
         const numVal = isString(value)
             ? Buffer.from(value, 'ascii')
@@ -163,7 +165,10 @@ export class SDL {
             ? value.toString()
             : value;
 
-        return {
+        return resource?.attributes ? {
+            units: asString ? { val: strVal } : { val: numVal },
+            attributes: this.transformGpuAttributes(resource?.attributes)
+        } : {
             units: asString ? { val: strVal } : { val: numVal }
         };
     }
@@ -404,7 +409,7 @@ export class SDL {
         const attributes = computeResources.cpu.attributes;
         const cpu =
             isString(computeResources.cpu.units)
-                ? convertResourceString(computeResources.cpu.units)
+                ? convertCpuResourceString(computeResources.cpu.units)
                 : (computeResources.cpu.units * 1000);
 
         return {
@@ -455,6 +460,15 @@ export class SDL {
         }));
     }
 
+    transformGpuAttributes(attributes: v3GPUAttributes): Array<{key: string, value: string}> {
+        return Object.entries(attributes.vendor).flatMap(([vendor, models]) => (
+            models.map((model) => ({
+                key: `vendor/${vendor}/model/${model.model}`,
+                value: "true"
+            })
+        )));
+    }
+
     resourceUnitGpu(computeResources: v2ComputeResources, asString: boolean) {
         const attributes = computeResources.gpu?.attributes;
         const units = (computeResources.gpu?.units || "0");
@@ -465,14 +479,7 @@ export class SDL {
         return {
             units: { val: this.resourceValue(gpu, asString) },
             attributes:
-                attributes &&
-                Object.entries(attributes)
-                    .sort(([k0,], [k1,]) => k0.localeCompare(k1))
-                    .map(([key, value]) => ({
-                        key: key,
-                        value: this.resourceValue(value, asString)
-                    }))
-
+                attributes && this.transformGpuAttributes(attributes)
         };
     }
 
