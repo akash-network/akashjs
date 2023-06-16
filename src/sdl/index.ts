@@ -468,7 +468,7 @@ export class SDL {
                     value: "true"
                 }))
                 : [{
-                    key: `vendor/${vendor}`,
+                    key: `vendor/${vendor}/model/*`,
                     value: "true"
                 }]
         ));
