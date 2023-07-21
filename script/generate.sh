@@ -1,6 +1,5 @@
-AKASH_DIR=$1
-API_DIR=$2
-PROTO_PATH="$2/proto/node"
+API_DIR=$1
+PROTO_PATH="$1/proto/node"
 
 echo "Generating protobuf files for ${PROTO_PATH}"
 
@@ -15,10 +14,10 @@ fi
 
 echo "Generating new definitions in ${OUTPUT_DIR}"
 if protoc \
-    -I="${AKASH_DIR}/vendor/github.com/gogo/protobuf" \
-    -I="${AKASH_DIR}/vendor/github.com/cosmos/cosmos-sdk/third_party/proto" \
-    -I="${AKASH_DIR}/vendor/github.com/cosmos/cosmos-sdk/proto" \
     --plugin="./node_modules/.bin/protoc-gen-ts_proto" \
+    -I="${API_DIR}/vendor/github.com/gogo/protobuf" \
+    -I="${API_DIR}/vendor/github.com/cosmos/cosmos-sdk/third_party/proto" \
+    -I="${API_DIR}/vendor/github.com/cosmos/cosmos-sdk/proto" \
     --proto_path=${PROTO_PATH} \
     --ts_proto_out=${OUTPUT_DIR} \
     --ts_proto_opt=esModuleInterop=true,forceLong=long,outputTypeRegistry=true \
