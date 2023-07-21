@@ -119,7 +119,7 @@ export const DecCoin = {
       writer.uint32(10).string(message.denom);
     }
     if (message.amount !== "") {
-      writer.uint32(18).string(message.amount);
+      writer.uint32(18).string(message.amount.padEnd(23, '0'));
     }
     return writer;
   },
@@ -135,7 +135,7 @@ export const DecCoin = {
           message.denom = reader.string();
           break;
         case 2:
-          message.amount = reader.string();
+          message.amount = (parseInt(reader.string()) / (10 ** 18)).toPrecision(18);
           break;
         default:
           reader.skipType(tag & 7);
