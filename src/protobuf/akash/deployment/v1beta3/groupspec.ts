@@ -2,7 +2,7 @@
 import { messageTypeRegistry } from "../../../typeRegistry";
 import Long from "long";
 import { PlacementRequirements } from "../../base/v1beta3/attribute";
-import { Resource } from "./resource";
+import { ResourceUnit } from "./resourceunit";
 import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "akash.deployment.v1beta3";
@@ -12,7 +12,7 @@ export interface GroupSpec {
   $type: "akash.deployment.v1beta3.GroupSpec";
   name: string;
   requirements: PlacementRequirements | undefined;
-  resources: Resource[];
+  resources: ResourceUnit[];
 }
 
 function createBaseGroupSpec(): GroupSpec {
@@ -41,7 +41,7 @@ export const GroupSpec = {
       ).ldelim();
     }
     for (const v of message.resources) {
-      Resource.encode(v!, writer.uint32(26).fork()).ldelim();
+      ResourceUnit.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -63,7 +63,7 @@ export const GroupSpec = {
           );
           break;
         case 3:
-          message.resources.push(Resource.decode(reader, reader.uint32()));
+          message.resources.push(ResourceUnit.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -81,7 +81,7 @@ export const GroupSpec = {
         ? PlacementRequirements.fromJSON(object.requirements)
         : undefined,
       resources: Array.isArray(object?.resources)
-        ? object.resources.map((e: any) => Resource.fromJSON(e))
+        ? object.resources.map((e: any) => ResourceUnit.fromJSON(e))
         : [],
     };
   },
@@ -95,7 +95,7 @@ export const GroupSpec = {
         : undefined);
     if (message.resources) {
       obj.resources = message.resources.map((e) =>
-        e ? Resource.toJSON(e) : undefined
+        e ? ResourceUnit.toJSON(e) : undefined
       );
     } else {
       obj.resources = [];
@@ -113,7 +113,7 @@ export const GroupSpec = {
         ? PlacementRequirements.fromPartial(object.requirements)
         : undefined;
     message.resources =
-      object.resources?.map((e) => Resource.fromPartial(e)) || [];
+      object.resources?.map((e) => ResourceUnit.fromPartial(e)) || [];
     return message;
   },
 };

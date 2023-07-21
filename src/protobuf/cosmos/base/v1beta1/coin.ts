@@ -119,7 +119,7 @@ export const DecCoin = {
       writer.uint32(10).string(message.denom);
     }
     if (message.amount !== "") {
-      writer.uint32(18).string(message.amount.padEnd(23, '0'));
+      writer.uint32(18).string(message.amount);
     }
     return writer;
   },
@@ -135,7 +135,7 @@ export const DecCoin = {
           message.denom = reader.string();
           break;
         case 2:
-          message.amount = (parseInt(reader.string()) / (10 ** 18)).toPrecision(18);
+          message.amount = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -309,9 +309,9 @@ type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-    Exclude<keyof I, KeysOfUnion<P> | "$type">,
-    never
-  >;
+        Exclude<keyof I, KeysOfUnion<P> | "$type">,
+        never
+      >;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
