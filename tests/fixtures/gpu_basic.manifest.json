@@ -1,0 +1,94 @@
+[
+  {
+    "name": "westcoast",
+    "services": [
+      {
+        "name": "web",
+        "image": "nginx",
+        "command": null,
+        "args": null,
+        "env": null,
+        "resources": {
+          "cpu": {
+            "units": {
+              "val": "100"
+            }
+          },
+          "memory": {
+            "size": {
+              "val": "134217728"
+            }
+          },
+          "storage": [
+            {
+              "name": "default",
+              "size": {
+                "val": "1073741824"
+              }
+            }
+          ],
+          "gpu": {
+            "units": {
+              "val": "1"
+            },
+            "attributes": [
+              {
+                "key": "vendor/nvidia/model/a100",
+                "value": "true"
+              }
+            ]
+          },
+          "endpoints": null
+        },
+        "count": 2,
+        "expose": [
+          {
+            "port": 80,
+            "externalPort": 0,
+            "proto": "TCP",
+            "service": "",
+            "global": true,
+            "hosts": [
+              "ahostname.com"
+            ],
+            "httpOptions": {
+              "maxBodySize": 1048576,
+              "readTimeout": 60000,
+              "sendTimeout": 60000,
+              "nextTries": 3,
+              "nextTimeout": 0,
+              "nextCases": [
+                "error",
+                "timeout"
+              ]
+            },
+            "ip": "",
+            "endpointSequenceNumber": 0
+          },
+          {
+            "port": 12345,
+            "externalPort": 0,
+            "proto": "UDP",
+            "service": "",
+            "global": true,
+            "hosts": null,
+            "httpOptions": {
+              "maxBodySize": 1048576,
+              "readTimeout": 60000,
+              "sendTimeout": 60000,
+              "nextTries": 3,
+              "nextTimeout": 0,
+              "nextCases": [
+                "error",
+                "timeout"
+              ]
+            },
+            "ip": "",
+            "endpointSequenceNumber": 0
+          }
+        ],
+        "params": null
+      }
+    ]
+  }
+]
