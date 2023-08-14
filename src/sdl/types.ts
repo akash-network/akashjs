@@ -89,7 +89,14 @@ export type ServiceParams = {
 
 export type v2Sdl = {
     services: Record<string, v2Service>,
-    profiles: v2profiles,
+    profiles: v2Profiles,
+    deployment: Record<string, v2Deployment>,
+    endpoints: Record<string, v2Endpoint>,
+}
+
+export type v3Sdl = {
+    services: Record<string, v2Service>,
+    profiles: v3Profiles,
     deployment: Record<string, v2Deployment>,
     endpoints: Record<string, v2Endpoint>,
 }
@@ -194,11 +201,21 @@ export type v2ComputeResources = {
     cpu: v2ResourceCPU,
     memory: v2ResourceMemory,
     storage: v2ResourceStorageArray | v2ResourceStorage,
-    gpu?: v3ResourceGPU,
+}
+
+export type v3ComputeResources = {
+    cpu: v2ResourceCPU,
+    memory: v2ResourceMemory,
+    storage: v2ResourceStorageArray | v2ResourceStorage,
+    gpu: v3ResourceGPU,
 }
 
 export type v2ProfileCompute = {
     resources: v2ComputeResources,
+}
+
+export type v3ProfileCompute = {
+    resources: v3ComputeResources,
 }
 
 export type v2PlacementAttributes = Attributes
@@ -222,8 +239,13 @@ export type v2ProfilePlacement = {
     pricing: v2PlacementPricing,
 }
 
-export type v2profiles = {
+export type v2Profiles = {
     compute: Record<string, v2ProfileCompute>,
+    placement: Record<string, v2ProfilePlacement>,
+}
+
+export type v3Profiles = {
+    compute: Record<string, v3ProfileCompute>,
     placement: Record<string, v2ProfilePlacement>,
 }
 

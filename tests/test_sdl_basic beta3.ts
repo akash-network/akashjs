@@ -17,6 +17,8 @@ profiles:
       resources:
         cpu:
           units: 1
+        gpu:
+          units: 0
         memory:
           size: 512Mi
         storage:

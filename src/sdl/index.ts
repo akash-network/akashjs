@@ -21,8 +21,10 @@ import {
     v2ServiceExposeHttpOptions,
     v3ServiceExposeHttpOptions,
     ServiceParams,
-    Attribute,
-    v3GPUAttributes
+    v3GPUAttributes,
+    v3Sdl,
+    v3ProfileCompute,
+    v3ComputeResources
 } from './types';
 import { convertCpuResourceString, convertResourceString } from './sizes';
 import { default as stableStringify } from "json-stable-stringify";
@@ -53,8 +55,52 @@ export class SDL {
     }
 
     static fromString(yaml: string, version: NetworkVersion = 'beta2') {
-        const data = YAML.load(yaml) as v2Sdl
+        const data = SDL.validate(yaml, version) as v2Sdl;
+
         return new SDL(data, version);
+    }
+
+    static validate(yaml: string, version: NetworkVersion) {
+        // TODO: this should really be cast to unknown, then assigned
+        // to v2 or v3 SDL only after being validated
+        const data = YAML.load(yaml) as v3Sdl;
+
+        for (const [name, profile] of Object.entries(data.profiles.compute)) {
+            if (version === 'beta3') {
+                SDL.validateGPU(name, profile.resources.gpu);
+            }
+        }
+
+        return data;
+    }
+
+    static validateGPU(name: string, gpu: v3ResourceGPU | undefined) {
+        if (!gpu) {
+            throw new Error("GPU resource is required for profile " + name);
+        }
+
+        if (typeof gpu.units === 'undefined') {
+            console.log(JSON.stringify(gpu, null, 2))
+            throw new Error("GPU units must be specified for profile " + name);
+        }
+
+        const units = parseInt(gpu.units.toString());
+
+        if (units == 0 && gpu.attributes !== undefined) {
+            throw new Error("GPU must not have attributes if units is 0");
+        }
+
+        if (units > 0 && gpu.attributes === undefined) {
+            throw new Error("GPU must not have attributes if units is 0");
+        }
+
+        if (units > 0 && gpu.attributes?.vendor === undefined) {
+            throw new Error("GPU must specify a vendor if units is not 0");
+        }
+
+        if (units > 0 && gpu.attributes?.vendor?.nvidia === undefined) {
+            throw Error("GPU must specify models if units is not 0");
+        }
     }
 
     services() {
@@ -186,7 +232,7 @@ export class SDL {
         };
     }
 
-    serviceResourcesBeta3(profile: v2ProfileCompute, asString: boolean = false) {
+    serviceResourcesBeta3(profile: v3ProfileCompute, asString: boolean = false) {
         return {
             cpu: this.serviceResourceCpu(profile.resources.cpu),
             memory: this.serviceResourceMemory(profile.resources.memory, asString),
@@ -341,7 +387,7 @@ export class SDL {
             Env: service.env || null,
             Resources: this.version === 'beta2'
                 ? this.serviceResourcesBeta2(profile, asString)
-                : this.serviceResourcesBeta3(profile, asString),
+                : this.serviceResourcesBeta3(profile as v3ProfileCompute, asString),
             Count: deployment[placement].count,
             Expose: this.v2ManifestExpose(service),
         }
@@ -360,7 +406,7 @@ export class SDL {
             env: service.env || null,
             resources: this.version === 'beta2'
                 ? this.serviceResourcesBeta2(profile, asString)
-                : this.serviceResourcesBeta3(profile, asString),
+                : this.serviceResourcesBeta3(profile as v3ProfileCompute, asString),
             count: deployment[placement].count,
             expose: this.v3ManifestExpose(service),
             params: this.v3ManifestServiceParams(service),
@@ -460,9 +506,9 @@ export class SDL {
         }));
     }
 
-    transformGpuAttributes(attributes: v3GPUAttributes): Array<{key: string, value: string}> {
+    transformGpuAttributes(attributes: v3GPUAttributes): Array<{ key: string, value: string }> {
         return Object.entries(attributes.vendor).flatMap(([vendor, models]) => (
-            models 
+            models
                 ? models.map((model) => ({
                     key: `vendor/${vendor}/model/${model.model}`,
                     value: "true"
@@ -474,7 +520,7 @@ export class SDL {
         ));
     }
 
-    resourceUnitGpu(computeResources: v2ComputeResources, asString: boolean) {
+    resourceUnitGpu(computeResources: v3ComputeResources, asString: boolean) {
         const attributes = computeResources.gpu?.attributes;
         const units = (computeResources.gpu?.units || "0");
         const gpu = isString(units)
@@ -508,7 +554,7 @@ export class SDL {
         }
 
         if (this.version === 'beta3') {
-            units.gpu = this.resourceUnitGpu(resource, asString);
+            units.gpu = this.resourceUnitGpu(resource as v3ComputeResources, asString);
         }
 
         return units;
