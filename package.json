@@ -11,9 +11,9 @@
     "node": ">18.0.0"
   },
   "scripts": {
-    "build": "rm -rf build/ && yarn build:tsc && yarn build:build",
+    "build": "rimraf build && yarn build:tsc && yarn build:build",
     "build:production": "NODE_ENV=production yarn build:tsc && yarn build:build",
-    "build:tsc": "rm -Rf build && yarn tsc",
+    "build:tsc": "rimraf build && yarn tsc",
     "dev:watch": "yarn tsc -- --watch",
     "build:build": "yarn webpack",
     "test": "yarn test:unit",
@@ -49,6 +49,7 @@
     "@types/sinon": "^10.0.11",
     "@types/tap": "^15.0.5",
     "node-polyfill-webpack-plugin": "^1.1.4",
+    "rimraf": "^5.0.1",
     "sinon": "^13.0.1",
     "tap": "^15.1.6",
     "ts-loader": "^9.2.3",
