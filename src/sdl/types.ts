@@ -84,7 +84,7 @@ export type v3ServiceExpose = {
 }
 
 export type ServiceParams = {
-
+    Storage: v2ServiceStorageParams[],
 }
 
 export type v2Sdl = {
@@ -164,7 +164,7 @@ export type v2ServiceDeployment = {
 
 export type v2Deployment = Record<string, v2ServiceDeployment>
 
-export type v2CPUAttributes = Attributes
+export type v2CPUAttributes = Record<string,any>
 
 export type v2ResourceCPU = {
     units: number | string,
@@ -173,7 +173,7 @@ export type v2ResourceCPU = {
 
 export type v2ResourceMemory = {
     size: string;
-    attributes?: Attributes,
+    attributes?: Record<string,any>,
 }
 
 export type v3GPUAttributes = {
@@ -187,7 +187,7 @@ export type v3ResourceGPU = {
     attributes?: v3GPUAttributes,
 }
 
-export type v2StorageAttributes = Attributes;
+export type v2StorageAttributes = Record<string,any>;
 
 export type v2ResourceStorage = {
     name: string,
