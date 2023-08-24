@@ -9,6 +9,7 @@
         "args": null,
         "env": null,
         "resources": {
+          "id": 1,
           "cpu": {
             "units": {
               "val": "100"
@@ -38,7 +39,15 @@
               }
             ]
           },
-          "endpoints": null
+          "endpoints": [
+            {
+              "sequence_number": 0
+            },
+            {
+              "kind": 1,
+              "sequence_number": 0
+            }
+          ]
         },
         "count": 2,
         "expose": [
