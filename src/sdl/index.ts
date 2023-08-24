@@ -24,7 +24,8 @@ import {
     v3GPUAttributes,
     v3Sdl,
     v3ProfileCompute,
-    v3ComputeResources
+    v3ComputeResources,
+    v2ServiceParams
 } from './types';
 import { convertCpuResourceString, convertResourceString } from './sizes';
 import { default as stableStringify } from "json-stable-stringify";
@@ -175,17 +176,21 @@ export class SDL {
             ? convertCpuResourceString(resource.units)
             : resource.units * 1000;
 
-        return {
-            units: {
-                val: `${units}`
-            }
-        };
+        return resource.attributes ? {
+            units: { val: `${units}` },
+            attributes: this.serviceResourceAttributes(resource.attributes)
+        } : {
+            units: { val: `${units}` }
+        }
     }
 
     serviceResourceMemory(resource: v2ResourceMemory, asString: boolean) {
         const key = asString ? "quantity" : "size";
 
-        return {
+        return resource.attributes ? {
+            [key]: this.resourceUnit(resource.size, asString),
+            attributes: this.serviceResourceAttributes(resource.attributes)
+        } : {
             [key]: this.resourceUnit(resource.size, asString)
         };
     }
@@ -196,10 +201,18 @@ export class SDL {
             ? resource
             : [resource];
 
-        return storage.map(storage => ({
+        return storage.map(storage => storage.attributes ? {
+            name: storage.name || "default",
+            [key]: this.resourceUnit(storage.size, asString),
+            attributes: this.serviceResourceAttributes(storage.attributes)
+        } : {
             name: storage.name || "default",
             [key]: this.resourceUnit(storage.size, asString)
-        }));
+        });
+    }
+
+    serviceResourceAttributes(attributes?: Record<string,any>) {
+        return attributes && Object.keys(attributes).sort().map((key) => ({ key, value: attributes[key].toString() }));
     }
 
     serviceResourceGpu(resource: v3ResourceGPU | undefined, asString: boolean) {
@@ -219,25 +232,37 @@ export class SDL {
         };
     }
 
-    serviceResourceEndpoints() {
-        return null;
+    serviceResourceEndpoints(service: v2Service) {
+        const endpointSequenceNumbers = this.computeEndpointSequenceNumbers(this.data);
+        const endpoints = service.expose.flatMap((expose) => (
+            expose.to
+                ? expose.to
+                    .filter((to) => to.global && to.ip?.length > 0)
+                    .map((to) => ({
+                        kind: Endpoint_LEASED_IP,
+                        sequence_number: endpointSequenceNumbers[to.ip] || 0
+                    }))
+                : []
+        ));
+
+        return endpoints.length > 0 ? endpoints : null;
     }
 
-    serviceResourcesBeta2(profile: v2ProfileCompute, asString: boolean = false) {
+    serviceResourcesBeta2(profile: v2ProfileCompute, service: v2Service, asString: boolean = false) {
         return {
             cpu: this.serviceResourceCpu(profile.resources.cpu),
             memory: this.serviceResourceMemory(profile.resources.memory, asString),
             storage: this.serviceResourceStorage(profile.resources.storage, asString),
-            endpoints: this.serviceResourceEndpoints(),
+            endpoints: this.serviceResourceEndpoints(service),
         };
     }
 
-    serviceResourcesBeta3(profile: v3ProfileCompute, asString: boolean = false) {
+    serviceResourcesBeta3(profile: v3ProfileCompute, service: v2Service, asString: boolean = false) {
         return {
             cpu: this.serviceResourceCpu(profile.resources.cpu),
             memory: this.serviceResourceMemory(profile.resources.memory, asString),
             storage: this.serviceResourceStorage(profile.resources.storage, asString),
-            endpoints: this.serviceResourceEndpoints(),
+            endpoints: this.serviceResourceEndpoints(service),
             gpu: this.serviceResourceGpu(profile.resources.gpu, asString),
         };
     }
@@ -262,8 +287,8 @@ export class SDL {
         return result;
     }
 
-    manifestExposeService(expose: v2Expose) {
-        return "";
+    manifestExposeService(to: v2ExposeTo) {
+        return to.service || "";
     }
 
     manifestExposeGlobal(to: v2ExposeTo) {
@@ -337,37 +362,52 @@ export class SDL {
     }
 
     v2ManifestExpose(service: v2Service): v2ServiceExpose[] {
+        const endpointSequenceNumbers = this.computeEndpointSequenceNumbers(this.data);
         return service.expose.flatMap((expose) => expose.to
             ? expose.to.map((to) => ({
                 Port: expose.port,
                 ExternalPort: expose.as || 0,
                 Proto: this.parseServiceProto(expose.proto),
-                Service: this.manifestExposeService(expose),
+                Service: this.manifestExposeService(to),
                 Global: this.manifestExposeGlobal(to),
                 Hosts: this.manifestExposeHosts(expose),
                 HTTPOptions: this.v2ManifestExposeHttpOptions(expose),
-                IP: "",
-                EndpointSequenceNumber: 0,
+                IP: to.ip || "",
+                EndpointSequenceNumber: endpointSequenceNumbers[to.ip] || 0,
             }))
             : []
         );
     }
 
     v3ManifestExpose(service: v2Service): v3ServiceExpose[] {
+        const endpointSequenceNumbers = this.computeEndpointSequenceNumbers(this.data);
         return service.expose.flatMap((expose) => expose.to
             ? expose.to.map((to) => ({
                 port: expose.port,
                 externalPort: expose.as || 0,
                 proto: this.parseServiceProto(expose.proto),
-                service: this.manifestExposeService(expose),
+                service: this.manifestExposeService(to),
                 global: this.manifestExposeGlobal(to),
                 hosts: this.manifestExposeHosts(expose),
                 httpOptions: this.v3ManifestExposeHttpOptions(expose),
-                ip: "",
-                endpointSequenceNumber: 0,
+                ip: to.ip || "",
+                endpointSequenceNumber: endpointSequenceNumbers[to.ip] || 0,
             }))
             : []
         );
+    }
+    
+    v2ManifestServiceParams(params: v2ServiceParams ): ServiceParams | undefined {
+        return  {
+            Storage: Object.keys(params?.storage ?? {}).map(name => {
+                if(!params?.storage) throw new Error("Storage is undefined");
+                return {
+                    name: name,
+                    mount:  params.storage[name].mount,
+                    readOnly: params.storage[name].readOnly || false
+                }
+            })
+          };;
     }
 
     v3ManifestServiceParams(service: v2Service): ServiceParams | null {
@@ -379,18 +419,24 @@ export class SDL {
         const deployment = this.data.deployment[name];
         const profile = this.data.profiles.compute[deployment[placement].profile];
 
-        return {
+        let manifestService: v2ManifestService  =  {
             Name: name,
             Image: service.image,
             Command: service.command || null,
             Args: service.args || null,
             Env: service.env || null,
             Resources: this.version === 'beta2'
-                ? this.serviceResourcesBeta2(profile, asString)
-                : this.serviceResourcesBeta3(profile as v3ProfileCompute, asString),
+                ? this.serviceResourcesBeta2(profile, service, asString)
+                : this.serviceResourcesBeta3(profile as v3ProfileCompute, service, asString),
             Count: deployment[placement].count,
             Expose: this.v2ManifestExpose(service),
         }
+
+        if (service.params) {
+            manifestService.params = this.v2ManifestServiceParams(service.params)
+        }
+
+        return manifestService;
     }
 
     v3ManifestService(placement: string, name: string, asString: boolean): v3ManifestService {
@@ -405,8 +451,8 @@ export class SDL {
             args: service.args || null,
             env: service.env || null,
             resources: this.version === 'beta2'
-                ? this.serviceResourcesBeta2(profile, asString)
-                : this.serviceResourcesBeta3(profile as v3ProfileCompute, asString),
+                ? this.serviceResourcesBeta2(profile, service, asString)
+                : this.serviceResourcesBeta3(profile as v3ProfileCompute, service, asString),
             count: deployment[placement].count,
             expose: this.v3ManifestExpose(service),
             params: this.v3ManifestServiceParams(service),
@@ -438,7 +484,7 @@ export class SDL {
     computeEndpointSequenceNumbers(sdl: v2Sdl) {
         return Object.fromEntries(
             Object.values(sdl.services).flatMap((service) => (
-                service.expose.map((expose) => (
+                service.expose.flatMap((expose) => (
                     expose.to
                         ? expose.to
                             .filter((to) => to.global && to.ip?.length > 0)
@@ -466,7 +512,7 @@ export class SDL {
                     .sort(([k0,], [k1,]) => k0.localeCompare(k1))
                     .map(([key, value]) => ({
                         key: key,
-                        value: this.resourceValue(value, asString)
+                        value: value.toString()
                     }))
         };
     }
@@ -482,7 +528,7 @@ export class SDL {
                     .sort(([k0,], [k1,]) => k0.localeCompare(k1))
                     .map(([key, value]) => ({
                         key: key,
-                        value: this.resourceValue(value, asString)
+                        value: value.toString()
                     }))
         };
     }
@@ -501,7 +547,7 @@ export class SDL {
                     .sort(([k0,], [k1,]) => k0.localeCompare(k1))
                     .map(([key, value]) => ({
                         key: key,
-                        value: this.resourceValue(value, asString)
+                        value: value.toString()
                     }))
         }));
     }
@@ -574,7 +620,7 @@ export class SDL {
         const sdl = this;
         const yamlJson = this.data;
         const ipEndpointNames = this.computeEndpointSequenceNumbers(yamlJson);
-
+        
         let groups = {} as any;
 
         Object.keys(yamlJson.services).forEach((svcName) => {
