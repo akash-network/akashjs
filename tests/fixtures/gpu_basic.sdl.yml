@@ -32,6 +32,7 @@ profiles:
     westcoast:
       attributes:
         region: us-west
+        foo: bar
       signedBy:
         anyOf:
           - 1
