@@ -254,7 +254,7 @@ export class SDL {
         const endpoints = service.expose.flatMap((expose) => (
             expose.to
                 ? expose.to
-                    .filter((to) => to.global && to.ip?.length > 0)
+                    .filter((to) => to.global)
                     .flatMap((to) => {
                         const exposeSpec = {
                             port: expose.port,
@@ -267,7 +267,10 @@ export class SDL {
                             ? Endpoint_SHARED_HTTP
                             : Endpoint_RANDOM_PORT;
 
-                        const defaultEp = { kind: kind, sequence_number: 0 };
+                        const defaultEp = kind !== 0
+                            ? { kind: kind, sequence_number: 0 }
+                            : { sequence_number: 0 };
+
                         const leasedEp = to.ip?.length > 0
                             ? { kind: Endpoint_LEASED_IP, sequence_number: endpointSequenceNumbers[to.ip] || 0 }
                             : undefined;
