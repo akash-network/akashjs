@@ -139,6 +139,7 @@ export type v2Dependency = {
 }
 
 export type v2ServiceStorageParams = {
+    name: string,
     mount: string,
     readOnly: boolean,
 }
@@ -164,7 +165,7 @@ export type v2ServiceDeployment = {
 
 export type v2Deployment = Record<string, v2ServiceDeployment>
 
-export type v2CPUAttributes = Record<string,any>
+export type v2CPUAttributes = Record<string, any>
 
 export type v2ResourceCPU = {
     units: number | string,
@@ -173,7 +174,7 @@ export type v2ResourceCPU = {
 
 export type v2ResourceMemory = {
     size: string;
-    attributes?: Record<string,any>,
+    attributes?: Record<string, any>,
 }
 
 export type v3GPUAttributes = {
@@ -187,7 +188,7 @@ export type v3ResourceGPU = {
     attributes?: v3GPUAttributes,
 }
 
-export type v2StorageAttributes = Record<string,any>;
+export type v2StorageAttributes = Record<string, any>;
 
 export type v2ResourceStorage = {
     name: string,
@@ -253,5 +254,22 @@ export type Attribute = {
     key: string,
     value: string,
 }
+
+export type v3DeploymentGroup = any;
+
+// export type v3DeploymentGroup = {
+//     dgroup: {
+//         name: string,
+//         resources: v3ComputeResources[],
+//         requirements: {
+//             attributes: Attributes,
+//             signedBy: SignedBy,
+//         }
+//     },
+//     mgroup: {
+//         name: string,
+//     },
+//     boundComputes: Record<string, any>,
+// }
 
 export type Attributes = Attribute[];

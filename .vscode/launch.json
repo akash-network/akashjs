@@ -14,7 +14,7 @@
             "program": "${workspaceFolder}/node_modules/tap/bin/run.js",
             "args": [
                 "--ts",
-                "${workspaceFolder}/tests/test_*.ts"
+                "${workspaceFolder}/tests/test_sdl_v3_resources.ts"
             ],
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
