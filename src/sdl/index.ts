@@ -662,31 +662,36 @@ export class SDL {
             for (const [placementName, svcdepl] of Object.entries(this.data.deployment[svcName])) {
                 // objects below have been ensured to exist
                 const compute = this.data.profiles.compute[svcdepl.profile];
-                const svc = this.data.services[svcName];
                 const infra = this.data.profiles.placement[placementName];
-                const price = infra.pricing[svcdepl.profile];
+                const pricing = infra.pricing[svcdepl.profile];
+                const price = {
+                    ...pricing,
+                    amount: pricing.amount.toString()
+                };
 
                 let group = groups.get(placementName);
 
                 if (!group) {
+                    const attributes = infra.attributes
+                        ? Object.entries(infra.attributes).map(([key, value]) => ({ key, value }))
+                        : [];
+
+                    attributes.sort((a, b) => a.key.localeCompare(b.key));
+
                     group = {
                         dgroup: {
                             name: placementName,
                             resources: [],
                             requirements: {
-                                attributes: infra.attributes,
-                                signedBy: infra.signedBy
-                            }
-                        },
-                        mgroup: {
-                            name: placementName,
-                            services: []
+                                attributes: attributes,
+                                signed_by: {
+                                    all_of: infra.signedBy?.allOf || [],
+                                    any_of: infra.signedBy?.anyOf || []
+                                }
+                            },
                         },
                         boundComputes: {}
                     };
-
-                    // keep ordering stable
-                    // group?.dgroup.requirements.attributes.sort();
 
                     groups.set(placementName, group as v3DeploymentGroup);
                 }
@@ -695,7 +700,6 @@ export class SDL {
                     group.boundComputes[placementName] = {};
                 }
 
-                const expose = this.v3ManifestExpose(service);
                 const resources = this.serviceResourcesBeta3(compute as v3ProfileCompute, service, false);
                 const location = group.boundComputes[placementName][svcdepl.profile];
 
@@ -708,8 +712,8 @@ export class SDL {
                     resources.id = res.ID;
 
                     group.dgroup.resources.push({
-                        resources: res,
-                        price: price.value,
+                        resource: res,
+                        price: price,
                         count: svcdepl.count
                     } as any);
 
@@ -720,68 +724,14 @@ export class SDL {
 
                     group.dgroup.resources[location].count += svcdepl.count;
                     group.dgroup.resources[location].endpoints += endpoints;
-                    // group.dgroup.resources[location].endpoints.sort();
+                    group.dgroup.resources[location].endpoints.sort();
                 }
-
-                const msvc = {
-                    name: svcName,
-                    image: svc.image,
-                    args: svc.args,
-                    env: svc.env,
-                    resources: resources,
-                    count: svcdepl.count,
-                    command: svc.command,
-                    expose: expose,
-                };
-
-                if (svc.params !== null) {
-                    const params: v3ManifestService['params'] = {
-                        Storage: []
-                    };
-
-                    if (svc.params?.storage?.length) {
-                        params.Storage = [];
-
-                        for (const [volName, volParams] of Object.entries(svc.params.storage)) {
-                            params.Storage.push({
-                                name: volName,
-                                mount: volParams.mount,
-                                readOnly: volParams.readOnly
-                            });
-                        }
-                    }
-
-                    (msvc as any).params = params;
-                }
-
-                group.mgroup.services.push(msvc);
             }
         }
 
         // keep ordering stable
         const names: string[] = [...groups.keys()].sort();
-
-        const result = {
-            dgroups: [] as any[],
-            mgroups: [] as any[],
-        };
-
-        for (const name of names) {
-            const group = groups.get(name);
-
-            if (group) {
-                const mgroup = { ...group.mgroup };
-                // stable ordering services by name
-                mgroup.services.sort();
-
-                if (group) {
-                    result.dgroups.push(group.dgroup);
-                    result.mgroups.push(mgroup);
-                }
-            }
-        }
-
-        return result;
+        return names.map((name) => groups.get(name).dgroup);
     }
 
     v2Groups() {
