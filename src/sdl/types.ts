@@ -257,19 +257,4 @@ export type Attribute = {
 
 export type v3DeploymentGroup = any;
 
-// export type v3DeploymentGroup = {
-//     dgroup: {
-//         name: string,
-//         resources: v3ComputeResources[],
-//         requirements: {
-//             attributes: Attributes,
-//             signedBy: SignedBy,
-//         }
-//     },
-//     mgroup: {
-//         name: string,
-//     },
-//     boundComputes: Record<string, any>,
-// }
-
 export type Attributes = Attribute[];
