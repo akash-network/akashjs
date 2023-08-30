@@ -25,7 +25,8 @@ import {
     v3Sdl,
     v3ProfileCompute,
     v3ComputeResources,
-    v2ServiceParams
+    v2ServiceParams,
+    v3DeploymentGroup
 } from './types';
 import { convertCpuResourceString, convertResourceString } from './sizes';
 import { default as stableStringify } from "json-stable-stringify";
@@ -211,7 +212,7 @@ export class SDL {
         });
     }
 
-    serviceResourceAttributes(attributes?: Record<string,any>) {
+    serviceResourceAttributes(attributes?: Record<string, any>) {
         return attributes && Object.keys(attributes).sort().map((key) => ({ key, value: attributes[key].toString() }));
     }
 
@@ -232,7 +233,7 @@ export class SDL {
         };
     }
 
-    serviceResourceEndpoints(service: v2Service) {
+    v2ServiceResourceEndpoints(service: v2Service) {
         const endpointSequenceNumbers = this.computeEndpointSequenceNumbers(this.data);
         const endpoints = service.expose.flatMap((expose) => (
             expose.to
@@ -248,21 +249,53 @@ export class SDL {
         return endpoints.length > 0 ? endpoints : null;
     }
 
+    v3ServiceResourceEndpoints(service: v2Service) {
+        const endpointSequenceNumbers = this.computeEndpointSequenceNumbers(this.data);
+        const endpoints = service.expose.flatMap((expose) => (
+            expose.to
+                ? expose.to
+                    .filter((to) => to.global && to.ip?.length > 0)
+                    .flatMap((to) => {
+                        const exposeSpec = {
+                            port: expose.port,
+                            externalPort: expose.as || 0,
+                            proto: this.parseServiceProto(expose.proto),
+                            global: !!to.global,
+                        };
+
+                        const kind = this.exposeShouldBeIngress(exposeSpec)
+                            ? Endpoint_SHARED_HTTP
+                            : Endpoint_RANDOM_PORT;
+
+                        const defaultEp = { kind: kind, sequence_number: 0 };
+                        const leasedEp = to.ip?.length > 0
+                            ? { kind: Endpoint_LEASED_IP, sequence_number: endpointSequenceNumbers[to.ip] || 0 }
+                            : undefined;
+
+                        return leasedEp ? [defaultEp, leasedEp] : [defaultEp];
+                    })
+                : []
+        ));
+
+        return endpoints.length > 0 ? endpoints : null;
+    }
+
     serviceResourcesBeta2(profile: v2ProfileCompute, service: v2Service, asString: boolean = false) {
         return {
             cpu: this.serviceResourceCpu(profile.resources.cpu),
             memory: this.serviceResourceMemory(profile.resources.memory, asString),
             storage: this.serviceResourceStorage(profile.resources.storage, asString),
-            endpoints: this.serviceResourceEndpoints(service),
+            endpoints: this.v2ServiceResourceEndpoints(service),
         };
     }
 
     serviceResourcesBeta3(profile: v3ProfileCompute, service: v2Service, asString: boolean = false) {
         return {
+            id: 1,
             cpu: this.serviceResourceCpu(profile.resources.cpu),
             memory: this.serviceResourceMemory(profile.resources.memory, asString),
             storage: this.serviceResourceStorage(profile.resources.storage, asString),
-            endpoints: this.serviceResourceEndpoints(service),
+            endpoints: this.v3ServiceResourceEndpoints(service),
             gpu: this.serviceResourceGpu(profile.resources.gpu, asString),
         };
     }
@@ -396,22 +429,26 @@ export class SDL {
             : []
         );
     }
-    
-    v2ManifestServiceParams(params: v2ServiceParams ): ServiceParams | undefined {
-        return  {
+
+    v2ManifestServiceParams(params: v2ServiceParams): ServiceParams | undefined {
+        return {
             Storage: Object.keys(params?.storage ?? {}).map(name => {
-                if(!params?.storage) throw new Error("Storage is undefined");
+                if (!params?.storage) throw new Error("Storage is undefined");
                 return {
                     name: name,
-                    mount:  params.storage[name].mount,
+                    mount: params.storage[name].mount,
                     readOnly: params.storage[name].readOnly || false
                 }
             })
-          };;
+        };
     }
 
-    v3ManifestServiceParams(service: v2Service): ServiceParams | null {
-        return null;
+    v3ManifestServiceParams(params: v2ServiceParams | undefined): ServiceParams | null {
+        if (params === undefined) {
+            return null;
+        }
+
+        return this.v2ManifestServiceParams(params) || null;
     }
 
     v2ManifestService(placement: string, name: string, asString: boolean): v2ManifestService {
@@ -419,15 +456,13 @@ export class SDL {
         const deployment = this.data.deployment[name];
         const profile = this.data.profiles.compute[deployment[placement].profile];
 
-        let manifestService: v2ManifestService  =  {
+        let manifestService: v2ManifestService = {
             Name: name,
             Image: service.image,
             Command: service.command || null,
             Args: service.args || null,
             Env: service.env || null,
-            Resources: this.version === 'beta2'
-                ? this.serviceResourcesBeta2(profile, service, asString)
-                : this.serviceResourcesBeta3(profile as v3ProfileCompute, service, asString),
+            Resources: this.serviceResourcesBeta2(profile, service, asString),
             Count: deployment[placement].count,
             Expose: this.v2ManifestExpose(service),
         }
@@ -450,12 +485,10 @@ export class SDL {
             command: service.command || null,
             args: service.args || null,
             env: service.env || null,
-            resources: this.version === 'beta2'
-                ? this.serviceResourcesBeta2(profile, service, asString)
-                : this.serviceResourcesBeta3(profile as v3ProfileCompute, service, asString),
+            resources: this.serviceResourcesBeta3(profile as v3ProfileCompute, service, asString),
             count: deployment[placement].count,
             expose: this.v3ManifestExpose(service),
-            params: this.v3ManifestServiceParams(service),
+            params: this.v3ManifestServiceParams(service.params),
         }
     }
 
@@ -617,10 +650,145 @@ export class SDL {
     }
 
     groups() {
+        return this.version === 'beta2'
+            ? this.v2Groups()
+            : this.v3Groups();
+    }
+
+    v3Groups() {
+        const groups = new Map<string, v3DeploymentGroup>();
+
+        for (const [svcName, service] of Object.entries(this.data.services)) {
+            for (const [placementName, svcdepl] of Object.entries(this.data.deployment[svcName])) {
+                // objects below have been ensured to exist
+                const compute = this.data.profiles.compute[svcdepl.profile];
+                const svc = this.data.services[svcName];
+                const infra = this.data.profiles.placement[placementName];
+                const price = infra.pricing[svcdepl.profile];
+
+                let group = groups.get(placementName);
+
+                if (!group) {
+                    group = {
+                        dgroup: {
+                            name: placementName,
+                            resources: [],
+                            requirements: {
+                                attributes: infra.attributes,
+                                signedBy: infra.signedBy
+                            }
+                        },
+                        mgroup: {
+                            name: placementName,
+                            services: []
+                        },
+                        boundComputes: {}
+                    };
+
+                    // keep ordering stable
+                    // group?.dgroup.requirements.attributes.sort();
+
+                    groups.set(placementName, group as v3DeploymentGroup);
+                }
+
+                if (!group.boundComputes[placementName]) {
+                    group.boundComputes[placementName] = {};
+                }
+
+                const expose = this.v3ManifestExpose(service);
+                const resources = this.serviceResourcesBeta3(compute as v3ProfileCompute, service, false);
+                const location = group.boundComputes[placementName][svcdepl.profile];
+
+                if (!location) {
+                    const res = this.groupResourceUnits(compute.resources, false);
+                    res.endpoints = this.v3ServiceResourceEndpoints(service);
+
+                    const resID = group.dgroup.resources.length > 0 ? group.dgroup.resources.length + 1 : 1;
+                    res.id = resID;
+                    resources.id = res.ID;
+
+                    group.dgroup.resources.push({
+                        resources: res,
+                        price: price.value,
+                        count: svcdepl.count
+                    } as any);
+
+                    group.boundComputes[placementName][svcdepl.profile] = group.dgroup.resources.length - 1;
+                } else {
+                    const endpoints = this.v3ServiceResourceEndpoints(service);
+                    resources.id = group.dgroup.resources[location].id;
+
+                    group.dgroup.resources[location].count += svcdepl.count;
+                    group.dgroup.resources[location].endpoints += endpoints;
+                    // group.dgroup.resources[location].endpoints.sort();
+                }
+
+                const msvc = {
+                    name: svcName,
+                    image: svc.image,
+                    args: svc.args,
+                    env: svc.env,
+                    resources: resources,
+                    count: svcdepl.count,
+                    command: svc.command,
+                    expose: expose,
+                };
+
+                if (svc.params !== null) {
+                    const params: v3ManifestService['params'] = {
+                        Storage: []
+                    };
+
+                    if (svc.params?.storage?.length) {
+                        params.Storage = [];
+
+                        for (const [volName, volParams] of Object.entries(svc.params.storage)) {
+                            params.Storage.push({
+                                name: volName,
+                                mount: volParams.mount,
+                                readOnly: volParams.readOnly
+                            });
+                        }
+                    }
+
+                    (msvc as any).params = params;
+                }
+
+                group.mgroup.services.push(msvc);
+            }
+        }
+
+        // keep ordering stable
+        const names: string[] = [...groups.keys()].sort();
+
+        const result = {
+            dgroups: [] as any[],
+            mgroups: [] as any[],
+        };
+
+        for (const name of names) {
+            const group = groups.get(name);
+
+            if (group) {
+                const mgroup = { ...group.mgroup };
+                // stable ordering services by name
+                mgroup.services.sort();
+
+                if (group) {
+                    result.dgroups.push(group.dgroup);
+                    result.mgroups.push(mgroup);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    v2Groups() {
         const sdl = this;
         const yamlJson = this.data;
         const ipEndpointNames = this.computeEndpointSequenceNumbers(yamlJson);
-        
+
         let groups = {} as any;
 
         Object.keys(yamlJson.services).forEach((svcName) => {
@@ -631,6 +799,7 @@ export class SDL {
                 const svcdepl = depl[placementName];
                 const compute = yamlJson.profiles.compute[svcdepl.profile];
                 const infra = yamlJson.profiles.placement[placementName];
+
                 const pricing = infra.pricing[svcdepl.profile];
                 const price = {
                     ...pricing,
