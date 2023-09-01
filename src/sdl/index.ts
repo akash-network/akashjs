@@ -671,8 +671,10 @@ export class SDL {
 
     v3Groups() {
         const groups = new Map<string, v3DeploymentGroup>();
+        const services = Object.entries(this.data.services)
+            .sort(([a], [b]) => a.localeCompare(b));
 
-        for (const [svcName, service] of Object.entries(this.data.services)) {
+        for (const [svcName, service] of services) {
             for (const [placementName, svcdepl] of Object.entries(this.data.deployment[svcName])) {
                 // objects below have been ensured to exist
                 const compute = this.data.profiles.compute[svcdepl.profile];
