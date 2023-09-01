@@ -22,7 +22,7 @@ export type v2ManifestService = {
     Resources: ResourceUnits,
     Count: number
     Expose: v2ServiceExpose[],
-    params?: ServiceParams,
+    params?: v2ManifestServiceParams,
 }
 
 export type v3ManifestService = {
@@ -34,7 +34,7 @@ export type v3ManifestService = {
     resources: ResourceUnits,
     count: number
     expose: v3ServiceExpose[],
-    params: ServiceParams | null,
+    params: v3ManifestServiceParams | null,
 }
 
 export type v2ServiceExposeHttpOptions = {
@@ -83,8 +83,12 @@ export type v3ServiceExpose = {
     endpointSequenceNumber: number,
 }
 
-export type ServiceParams = {
+export type v2ManifestServiceParams = {
     Storage: v2ServiceStorageParams[],
+}
+
+export type v3ManifestServiceParams = {
+    storage: v2ServiceStorageParams[],
 }
 
 export type v2Sdl = {
