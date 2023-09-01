@@ -5,11 +5,8 @@ import { testSnap } from "./util";
 import { getRpc } from "../src/rpc";
 import {
     QueryClientImpl,
-    QueryLeaseRequest,
-    QueryLeaseResponse,
     QueryLeasesRequest,
-    QueryLeasesResponse,
-} from "../src/protobuf/akash/market/v1beta2/query";
+} from "../src/protobuf/akash/market/v1beta3/query";
 
 tap.test("Deployments: query lease escrow matches expected result", async (t) => {
     t.plan(1);
