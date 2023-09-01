@@ -20,13 +20,14 @@ import {
     v2Service,
     v2ServiceExposeHttpOptions,
     v3ServiceExposeHttpOptions,
-    ServiceParams,
+    v2ManifestServiceParams,
     v3GPUAttributes,
     v3Sdl,
     v3ProfileCompute,
     v3ComputeResources,
     v2ServiceParams,
-    v3DeploymentGroup
+    v3DeploymentGroup,
+    v3ManifestServiceParams
 } from './types';
 import { convertCpuResourceString, convertResourceString } from './sizes';
 import { default as stableStringify } from "json-stable-stringify";
@@ -280,7 +281,7 @@ export class SDL {
                 : []
         ));
 
-        return endpoints.length > 0 ? endpoints : null;
+        return endpoints;
     }
 
     serviceResourcesBeta2(profile: v2ProfileCompute, service: v2Service, asString: boolean = false) {
@@ -433,7 +434,7 @@ export class SDL {
         );
     }
 
-    v2ManifestServiceParams(params: v2ServiceParams): ServiceParams | undefined {
+    v2ManifestServiceParams(params: v2ServiceParams): v2ManifestServiceParams | undefined {
         return {
             Storage: Object.keys(params?.storage ?? {}).map(name => {
                 if (!params?.storage) throw new Error("Storage is undefined");
@@ -446,12 +447,21 @@ export class SDL {
         };
     }
 
-    v3ManifestServiceParams(params: v2ServiceParams | undefined): ServiceParams | null {
+    v3ManifestServiceParams(params: v2ServiceParams | undefined): v3ManifestServiceParams | null {
         if (params === undefined) {
             return null;
         }
 
-        return this.v2ManifestServiceParams(params) || null;
+        return {
+            storage: Object.keys(params?.storage ?? {}).map(name => {
+                if (!params?.storage) throw new Error("Storage is undefined");
+                return {
+                    name: name,
+                    mount: params.storage[name].mount,
+                    readOnly: params.storage[name].readOnly || false
+                }
+            })
+        };
     }
 
     v2ManifestService(placement: string, name: string, asString: boolean): v2ManifestService {
@@ -508,6 +518,7 @@ export class SDL {
             name: name,
             services: this.deploymentsByPlacement(name)
                 .map(([service]) => this.v3ManifestService(name, service, asString))
+                .sort((a, b) => a.name.localeCompare(b.name))
         }));
     }
 
@@ -712,7 +723,7 @@ export class SDL {
 
                     const resID = group.dgroup.resources.length > 0 ? group.dgroup.resources.length + 1 : 1;
                     res.id = resID;
-                    resources.id = res.ID;
+                    resources.id = res.id;
 
                     group.dgroup.resources.push({
                         resource: res,
@@ -839,10 +850,7 @@ export class SDL {
 
         if (jsonStr) {
             jsonStr = jsonStr
-                .replaceAll('"quantity":{"val', '"size":{"val')
-                .replaceAll('"mount":', '"readOnlyTmp":')
-                .replaceAll('"readOnly":', '"mount":')
-                .replaceAll('"readOnlyTmp":', '"readOnly":');
+                .replaceAll('"quantity":{"val', '"size":{"val');
         }
 
         return this.SortJSON(jsonStr);
