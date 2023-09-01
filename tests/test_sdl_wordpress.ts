@@ -18,6 +18,15 @@ tap.test("SDL: Wordpress Manifest", async (t) => {
   t.same(result, expectedManifest, "Manifest matches expected result");
 });
 
+tap.test("SDL: Wordpress Deployment Groups", async (t) => {
+  t.plan(1);
+
+  const sdl = SDL.fromString(testSDL, 'beta3');
+  const result = sdl.groups();
+
+  t.matchSnapshot(result, "Groups matches expected result");
+});
+
 tap.test("SDL: Wordpress Version", async (t) => {
   t.plan(1);
 
