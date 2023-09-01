@@ -71,7 +71,7 @@ Object {
                   "amount": "100.000000000000000",
                   "denom": "uakt",
                 },
-                "resources": Object {
+                "resource": Object {
                   "cpu": Object {
                     "attributes": Array [],
                     "units": Object {
@@ -84,6 +84,13 @@ Object {
                       "sequenceNumber": 0,
                     },
                   ],
+                  "gpu": Object {
+                    "attributes": Array [],
+                    "units": Object {
+                      "val": "MA==",
+                    },
+                  },
+                  "id": 1,
                   "memory": Object {
                     "attributes": Array [],
                     "quantity": Object {
@@ -170,7 +177,7 @@ Object {
                   "amount": "1000.00000000000000",
                   "denom": "uakt",
                 },
-                "resources": Object {
+                "resource": Object {
                   "cpu": Object {
                     "attributes": Array [],
                     "units": Object {
@@ -183,6 +190,13 @@ Object {
                       "sequenceNumber": 0,
                     },
                   ],
+                  "gpu": Object {
+                    "attributes": Array [],
+                    "units": Object {
+                      "val": "MA==",
+                    },
+                  },
+                  "id": 1,
                   "memory": Object {
                     "attributes": Array [],
                     "quantity": Object {
@@ -269,7 +283,7 @@ Object {
                   "amount": "10000.0000000000000",
                   "denom": "uakt",
                 },
-                "resources": Object {
+                "resource": Object {
                   "cpu": Object {
                     "attributes": Array [],
                     "units": Object {
@@ -282,6 +296,13 @@ Object {
                       "sequenceNumber": 0,
                     },
                   ],
+                  "gpu": Object {
+                    "attributes": Array [],
+                    "units": Object {
+                      "val": "MA==",
+                    },
+                  },
+                  "id": 1,
                   "memory": Object {
                     "attributes": Array [],
                     "quantity": Object {
@@ -368,7 +389,7 @@ Object {
                   "amount": "1000.00000000000000",
                   "denom": "uakt",
                 },
-                "resources": Object {
+                "resource": Object {
                   "cpu": Object {
                     "attributes": Array [],
                     "units": Object {
@@ -381,6 +402,13 @@ Object {
                       "sequenceNumber": 0,
                     },
                   ],
+                  "gpu": Object {
+                    "attributes": Array [],
+                    "units": Object {
+                      "val": "MA==",
+                    },
+                  },
+                  "id": 1,
                   "memory": Object {
                     "attributes": Array [],
                     "quantity": Object {
@@ -467,7 +495,7 @@ Object {
                   "amount": "10000.0000000000000",
                   "denom": "uakt",
                 },
-                "resources": Object {
+                "resource": Object {
                   "cpu": Object {
                     "attributes": Array [],
                     "units": Object {
@@ -480,6 +508,13 @@ Object {
                       "sequenceNumber": 0,
                     },
                   ],
+                  "gpu": Object {
+                    "attributes": Array [],
+                    "units": Object {
+                      "val": "MA==",
+                    },
+                  },
+                  "id": 1,
                   "memory": Object {
                     "attributes": Array [],
                     "quantity": Object {
@@ -566,7 +601,7 @@ Object {
                   "amount": "1000.00000000000000",
                   "denom": "uakt",
                 },
-                "resources": Object {
+                "resource": Object {
                   "cpu": Object {
                     "attributes": Array [],
                     "units": Object {
@@ -579,6 +614,13 @@ Object {
                       "sequenceNumber": 0,
                     },
                   ],
+                  "gpu": Object {
+                    "attributes": Array [],
+                    "units": Object {
+                      "val": "MA==",
+                    },
+                  },
+                  "id": 1,
                   "memory": Object {
                     "attributes": Array [],
                     "quantity": Object {
@@ -674,7 +716,7 @@ Object {
               "amount": "100.000000000000000",
               "denom": "uakt",
             },
-            "resources": Object {
+            "resource": Object {
               "cpu": Object {
                 "attributes": Array [],
                 "units": Object {
@@ -687,6 +729,13 @@ Object {
                   "sequenceNumber": 0,
                 },
               ],
+              "gpu": Object {
+                "attributes": Array [],
+                "units": Object {
+                  "val": "MA==",
+                },
+              },
+              "id": 1,
               "memory": Object {
                 "attributes": Array [],
                 "quantity": Object {
