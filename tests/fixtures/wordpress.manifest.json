@@ -1,0 +1,208 @@
+[
+  {
+    "name": "akash",
+    "services": [
+      {
+        "name": "db",
+        "image": "mariadb:10.6.4",
+        "command": null,
+        "args": null,
+        "env": [
+          "MYSQL_RANDOM_ROOT_PASSWORD=1",
+          "MYSQL_DATABASE=wordpress",
+          "MYSQL_USER=wordpress",
+          "MYSQL_PASSWORD=testpass4you"
+        ],
+        "resources": {
+          "id": 1,
+          "cpu": {
+            "units": {
+              "val": "1000"
+            }
+          },
+          "memory": {
+            "size": {
+              "val": "1073741824"
+            }
+          },
+          "storage": [
+            {
+              "name": "default",
+              "size": {
+                "val": "1073741824"
+              }
+            },
+            {
+              "name": "wordpress-db",
+              "size": {
+                "val": "8589934592"
+              },
+              "attributes": [
+                {
+                  "key": "class",
+                  "value": "beta3"
+                },
+                {
+                  "key": "persistent",
+                  "value": "true"
+                }
+              ]
+            }
+          ],
+          "gpu": {
+            "units": {
+              "val": "0"
+            }
+          },
+          "endpoints": []
+        },
+        "count": 1,
+        "expose": [
+          {
+            "port": 3306,
+            "externalPort": 0,
+            "proto": "TCP",
+            "service": "wordpress",
+            "global": false,
+            "hosts": null,
+            "httpOptions": {
+              "maxBodySize": 1048576,
+              "readTimeout": 60000,
+              "sendTimeout": 60000,
+              "nextTries": 3,
+              "nextTimeout": 0,
+              "nextCases": [
+                "error",
+                "timeout"
+              ]
+            },
+            "ip": "",
+            "endpointSequenceNumber": 0
+          },
+          {
+            "port": 33060,
+            "externalPort": 0,
+            "proto": "TCP",
+            "service": "wordpress",
+            "global": false,
+            "hosts": null,
+            "httpOptions": {
+              "maxBodySize": 1048576,
+              "readTimeout": 60000,
+              "sendTimeout": 60000,
+              "nextTries": 3,
+              "nextTimeout": 0,
+              "nextCases": [
+                "error",
+                "timeout"
+              ]
+            },
+            "ip": "",
+            "endpointSequenceNumber": 0
+          }
+        ],
+        "params": {
+          "storage": [
+            {
+              "name": "wordpress-db",
+              "mount": "/var/lib/mysql",
+              "readOnly": false
+            }
+          ]
+        }
+      },
+      {
+        "name": "wordpress",
+        "image": "wordpress",
+        "command": null,
+        "args": null,
+        "env": [
+          "WORDPRESS_DB_HOST=db",
+          "WORDPRESS_DB_USER=wordpress",
+          "WORDPRESS_DB_PASSWORD=testpass4you",
+          "WORDPRESS_DB_NAME=wordpress"
+        ],
+        "resources": {
+          "id": 2,
+          "cpu": {
+            "units": {
+              "val": "4000"
+            }
+          },
+          "memory": {
+            "size": {
+              "val": "4294967296"
+            }
+          },
+          "storage": [
+            {
+              "name": "default",
+              "size": {
+                "val": "4294967296"
+              }
+            },
+            {
+              "name": "wordpress-data",
+              "size": {
+                "val": "34359738368"
+              },
+              "attributes": [
+                {
+                  "key": "class",
+                  "value": "beta3"
+                },
+                {
+                  "key": "persistent",
+                  "value": "true"
+                }
+              ]
+            }
+          ],
+          "gpu": {
+            "units": {
+              "val": "0"
+            }
+          },
+          "endpoints": [
+            {
+              "sequence_number": 0
+            }
+          ]
+        },
+        "count": 1,
+        "expose": [
+          {
+            "port": 80,
+            "externalPort": 0,
+            "proto": "TCP",
+            "service": "",
+            "global": true,
+            "hosts": null,
+            "httpOptions": {
+              "maxBodySize": 104857600,
+              "readTimeout": 60000,
+              "sendTimeout": 60000,
+              "nextTries": 3,
+              "nextTimeout": 0,
+              "nextCases": [
+                "error",
+                "timeout"
+              ]
+            },
+            "ip": "",
+            "endpointSequenceNumber": 0
+          }
+        ],
+        "params": {
+          "storage": [
+            {
+              "name": "wordpress-data",
+              "mount": "/var/www/html",
+              "readOnly": false
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

@@ -293,9 +293,9 @@ export class SDL {
         };
     }
 
-    serviceResourcesBeta3(profile: v3ProfileCompute, service: v2Service, asString: boolean = false) {
+    serviceResourcesBeta3(id: number, profile: v3ProfileCompute, service: v2Service, asString: boolean = false) {
         return {
-            id: 1,
+            id: id,
             cpu: this.serviceResourceCpu(profile.resources.cpu),
             memory: this.serviceResourceMemory(profile.resources.memory, asString),
             storage: this.serviceResourceStorage(profile.resources.storage, asString),
@@ -487,7 +487,7 @@ export class SDL {
         return manifestService;
     }
 
-    v3ManifestService(placement: string, name: string, asString: boolean): v3ManifestService {
+    v3ManifestService(id: number, placement: string, name: string, asString: boolean): v3ManifestService {
         const service = this.data.services[name];
         const deployment = this.data.deployment[name];
         const profile = this.data.profiles.compute[deployment[placement].profile];
@@ -498,7 +498,7 @@ export class SDL {
             command: service.command || null,
             args: service.args || null,
             env: service.env || null,
-            resources: this.serviceResourcesBeta3(profile as v3ProfileCompute, service, asString),
+            resources: this.serviceResourcesBeta3(id, profile as v3ProfileCompute, service, asString),
             count: deployment[placement].count,
             expose: this.v3ManifestExpose(service),
             params: this.v3ManifestServiceParams(service.params),
@@ -517,8 +517,8 @@ export class SDL {
         return Object.keys(this.placements()).map(name => ({
             name: name,
             services: this.deploymentsByPlacement(name)
-                .map(([service]) => this.v3ManifestService(name, service, asString))
-                .sort((a, b) => a.name.localeCompare(b.name))
+                .sort(([a], [b]) => a.localeCompare(b))
+                .map(([service], idx) => this.v3ManifestService(idx + 1, name, service, asString))
         }));
     }
 
@@ -714,7 +714,7 @@ export class SDL {
                     group.boundComputes[placementName] = {};
                 }
 
-                const resources = this.serviceResourcesBeta3(compute as v3ProfileCompute, service, false);
+                const resources = this.serviceResourcesBeta3(0, compute as v3ProfileCompute, service, false);
                 const location = group.boundComputes[placementName][svcdepl.profile];
 
                 if (!location) {
@@ -863,5 +863,10 @@ export class SDL {
         const sum = await crypto.subtle.digest("SHA-256", sortedBytes);
 
         return new Uint8Array(sum);
+    }
+
+    manifestSorted() {
+        const sorted = this.manifestSortedJSON();
+        return JSON.parse(sorted);
     }
 }
