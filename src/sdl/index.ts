@@ -514,11 +514,16 @@ export class SDL {
     }
 
     v3Manifest(asString: boolean = false): v3Manifest {
-        return Object.keys(this.placements()).map(name => ({
+        const groups = this.v3Groups();
+        const serviceId = (pIdx: number, sIdx: number) => (
+            groups[pIdx].resources[sIdx].resource.id
+        );
+
+        return Object.keys(this.placements()).map((name, pIdx) => ({
             name: name,
             services: this.deploymentsByPlacement(name)
                 .sort(([a], [b]) => a.localeCompare(b))
-                .map(([service], idx) => this.v3ManifestService(idx + 1, name, service, asString))
+                .map(([service], idx) => this.v3ManifestService(serviceId(pIdx, idx), name, service, asString))
         }));
     }
 
@@ -670,7 +675,7 @@ export class SDL {
     }
 
     v3Groups() {
-        const groups = new Map<string, v3DeploymentGroup>();
+        const groups = new Map<string, { dgroup: v3DeploymentGroup, boundComputes: Record<string, Record<string, number>> }>();
         const services = Object.entries(this.data.services)
             .sort(([a], [b]) => a.localeCompare(b));
 
@@ -688,9 +693,9 @@ export class SDL {
                 let group = groups.get(placementName);
 
                 if (!group) {
-                    const attributes = infra.attributes
+                    const attributes = (infra.attributes
                         ? Object.entries(infra.attributes).map(([key, value]) => ({ key, value }))
-                        : [];
+                        : []) as unknown as Array<{ key: string, value: string }>;
 
                     attributes.sort((a, b) => a.key.localeCompare(b.key));
 
@@ -709,14 +714,14 @@ export class SDL {
                         boundComputes: {}
                     };
 
-                    groups.set(placementName, group as v3DeploymentGroup);
+                    groups.set(placementName, group);
                 }
 
                 if (!group.boundComputes[placementName]) {
                     group.boundComputes[placementName] = {};
                 }
 
-                const resources = this.serviceResourcesBeta3(0, compute as v3ProfileCompute, service, false);
+                // const resources = this.serviceResourcesBeta3(0, compute as v3ProfileCompute, service, false);
                 const location = group.boundComputes[placementName][svcdepl.profile];
 
                 if (!location) {
@@ -725,7 +730,7 @@ export class SDL {
 
                     const resID = group.dgroup.resources.length > 0 ? group.dgroup.resources.length + 1 : 1;
                     res.id = resID;
-                    resources.id = res.id;
+                    // resources.id = res.id;
 
                     group.dgroup.resources.push({
                         resource: res,
@@ -736,10 +741,10 @@ export class SDL {
                     group.boundComputes[placementName][svcdepl.profile] = group.dgroup.resources.length - 1;
                 } else {
                     const endpoints = this.v3ServiceResourceEndpoints(service);
-                    resources.id = group.dgroup.resources[location].id;
+                    // resources.id = group.dgroup.resources[location].id;
 
                     group.dgroup.resources[location].count += svcdepl.count;
-                    group.dgroup.resources[location].endpoints += endpoints;
+                    group.dgroup.resources[location].endpoints += endpoints as any;
                     group.dgroup.resources[location].endpoints.sort();
                 }
             }
@@ -747,7 +752,8 @@ export class SDL {
 
         // keep ordering stable
         const names: string[] = [...groups.keys()].sort();
-        return names.map((name) => groups.get(name).dgroup);
+        return names.map((name) => groups.get(name))
+            .map(group => group ? group.dgroup as typeof group.dgroup : {}) as Array<v3DeploymentGroup>;
     }
 
     v2Groups() {
