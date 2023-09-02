@@ -431,7 +431,14 @@ export class SDL {
                 endpointSequenceNumber: endpointSequenceNumbers[to.ip] || 0,
             }))
             : []
-        );
+        ).sort((a,b) => {
+            if(a.service != b.service) return a.service.localeCompare(b.service);
+            if(a.port != b.port) return a.port - b.port;
+            if(a.proto != b.proto) return a.proto.localeCompare(b.proto);
+            if(a.global != b.global) return a.global ? -1 : 1;
+
+            return 0;
+        });
     }
 
     v2ManifestServiceParams(params: v2ServiceParams): v2ManifestServiceParams | undefined {
