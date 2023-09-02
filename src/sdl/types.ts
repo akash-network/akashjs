@@ -213,6 +213,7 @@ export type v3ComputeResources = {
     memory: v2ResourceMemory,
     storage: v2ResourceStorageArray | v2ResourceStorage,
     gpu: v3ResourceGPU,
+    id: number,
 }
 
 export type v2ProfileCompute = {
@@ -259,6 +260,21 @@ export type Attribute = {
     value: string,
 }
 
-export type v3DeploymentGroup = any;
+export type v3DeploymentGroup = {
+    name: string,
+    resources: Array<{
+        resource: v3ComputeResources,
+        price: number,
+        count: number,
+        endpoints: Array<{ kind: number; sequence_number: number; }>,
+    }>,
+    requirements: {
+        attributes: Array<Attribute>,
+        signed_by: {
+            all_of: string[],
+            any_of: string[],
+        },
+    },
+};
 
 export type Attributes = Attribute[];
