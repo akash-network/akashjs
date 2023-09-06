@@ -712,9 +712,9 @@ export class SDL {
                             resources: [],
                             requirements: {
                                 attributes: attributes,
-                                signed_by: {
-                                    all_of: infra.signedBy?.allOf || [],
-                                    any_of: infra.signedBy?.anyOf || []
+                                signedBy: {
+                                    allOf: infra.signedBy?.allOf || [],
+                                    anyOf: infra.signedBy?.anyOf || []
                                 }
                             },
                         },
@@ -794,9 +794,9 @@ export class SDL {
                             attributes: infra.attributes
                                 ? Object.entries(infra.attributes).map(([key, value]) => ({ key, value }))
                                 : [],
-                            signed_by: {
-                                all_of: infra.signedBy?.allOf || [],
-                                any_of: infra.signedBy?.anyOf || []
+                            signedBy: {
+                                allOf: infra.signedBy?.allOf || [],
+                                anyOf: infra.signedBy?.anyOf || []
                             }
                         },
                         resources: []

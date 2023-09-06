@@ -270,9 +270,9 @@ export type v3DeploymentGroup = {
     }>,
     requirements: {
         attributes: Array<Attribute>,
-        signed_by: {
-            all_of: string[],
-            any_of: string[],
+        signedBy: {
+            allOf: string[],
+            anyOf: string[],
         },
     },
 };
