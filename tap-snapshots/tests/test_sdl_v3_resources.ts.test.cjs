@@ -20,12 +20,12 @@ Array [
           "value": "us-west",
         },
       ],
-      "signed_by": Object {
-        "all_of": Array [
+      "signedBy": Object {
+        "allOf": Array [
           3,
           4,
         ],
-        "any_of": Array [
+        "anyOf": Array [
           1,
           2,
         ],
