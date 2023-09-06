@@ -11,9 +11,9 @@ Array [
     "name": "akash",
     "requirements": Object {
       "attributes": Array [],
-      "signed_by": Object {
-        "all_of": Array [],
-        "any_of": Array [
+      "signedBy": Object {
+        "allOf": Array [],
+        "anyOf": Array [
           "akash1365yvmc4s7awdyj3n2sav7xfx76adc6dnmlx63",
           "akash18qa2a2ltfyvkyj0ggj3hkvuj6twzyumuaru9s4",
         ],

@@ -52,9 +52,9 @@ const expectedGroups = [
           "value": "akash"
         }
       ],
-      "signed_by": {
-        "all_of": [],
-        "any_of": [
+      "signedBy": {
+        "allOf": [],
+        "anyOf": [
           "akash1365yvmc4s7awdyj3n2sav7xfx76adc6dnmlx63",
           "akash18qa2a2ltfyvkyj0ggj3hkvuj6twzyumuaru9s4"
         ]
