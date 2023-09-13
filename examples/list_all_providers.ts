@@ -1,4 +1,4 @@
-import { QueryClientImpl, QueryProvidersRequest, QueryProvidersResponse } from "@akashnetwork/akashjs/build/protobuf/akash/provider/v1beta2/query";
+import { QueryClientImpl, QueryProvidersRequest, QueryProvidersResponse } from "@akashnetwork/akashjs/build/protobuf/akash/provider/v1beta3/query";
 import { getRpc } from "@akashnetwork/akashjs/build/rpc"
 
 async function main() {
