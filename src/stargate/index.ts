@@ -24,5 +24,5 @@ export enum messages {
   MsgCloseGroup = "/akash.deployment.v1beta3.MsgCloseGroup",
   MsgPauseGroup = "/akash.deployment.v1beta3.MsgPauseGroup",
   MsgStartGroup = "/akash.deployment.v1beta3.MsgStartGroup",
-  MsgCreateLease = "/akash.market.v1beta3.MsgCreateLease",
+  MsgCreateLease = "/akash.market.v1beta4.MsgCreateLease",
 }
