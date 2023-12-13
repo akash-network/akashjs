@@ -3,6 +3,9 @@ import {
   messageTypeRegistry,
   UnknownMessage,
 } from "../protobuf/typeRegistry";
+import {protobufPackage as protobufPackageCert} from "../protobuf/akash/cert/v1beta3/query";
+import {protobufPackage as protobufPackageDeployment} from "../protobuf/akash/deployment/v1beta3/query";
+import {protobufPackage as protobufPackageMarket} from "../protobuf/akash/market/v1beta4/query";
 
 export const getAkashTypeRegistry: () => [
   string,
@@ -13,16 +16,15 @@ export const getAkashTypeRegistry: () => [
 export const getTypeUrl: (type: MessageType) => string = (type) =>
   `/${type.$type}`;
 
-/* TODO: this should be generated from the proto files */
 export enum messages {
-  MsgCreateCertificate = "/akash.cert.v1beta3.MsgCreateCertificate",
-  MsgRevokeCertificate = "/akash.cert.v1beta3.MsgRevokeCertificate",
-  MsgCreateDeployment = "/akash.deployment.v1beta3.MsgCreateDeployment",
-  MsgCloseDeployment = "/akash.deployment.v1beta3.MsgCloseDeployment",
-  MsgDepositDeployment = "/akash.deployment.v1beta3.MsgDepositDeployment",
-  MsgUpdateDeployment = "/akash.deployment.v1beta3.MsgUpdateDeployment",
-  MsgCloseGroup = "/akash.deployment.v1beta3.MsgCloseGroup",
-  MsgPauseGroup = "/akash.deployment.v1beta3.MsgPauseGroup",
-  MsgStartGroup = "/akash.deployment.v1beta3.MsgStartGroup",
-  MsgCreateLease = "/akash.market.v1beta4.MsgCreateLease",
+  MsgCreateCertificate = `/${protobufPackageCert}.MsgCreateCertificate`,
+  MsgRevokeCertificate = `/${protobufPackageCert}.MsgRevokeCertificate`,
+  MsgCreateDeployment = `/${protobufPackageDeployment}.MsgCreateDeployment`,
+  MsgCloseDeployment = `/${protobufPackageDeployment}.MsgCloseDeployment`,
+  MsgDepositDeployment = `/${protobufPackageDeployment}.MsgDepositDeployment`,
+  MsgUpdateDeployment = `/${protobufPackageDeployment}.MsgUpdateDeployment`,
+  MsgCloseGroup = `/${protobufPackageDeployment}.MsgCloseGroup`,
+  MsgPauseGroup = `/${protobufPackageDeployment}.MsgPauseGroup`,
+  MsgStartGroup = `/${protobufPackageDeployment}.MsgStartGroup`,
+  MsgCreateLease = `/${protobufPackageMarket}.MsgCreateLease`,
 }
