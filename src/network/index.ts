@@ -1,15 +1,8 @@
 import fetch from 'node-fetch';
 import { performance } from 'perf_hooks';
 import { awaitAll, filter, map, prop, sortBy } from '../util';
+import {ENDPOINT_TYPE, NETWORK_TYPE} from "../types";
 
-type NETWORK_TYPE =
-    "mainnet" |
-    "testnet" |
-    "edgenet";
-
-type ENDPOINT_TYPE =
-    "rpc" |
-    "rest";
 
 interface INetworkMetadata {
     "chain_name": string;

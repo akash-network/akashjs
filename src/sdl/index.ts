@@ -28,7 +28,7 @@ import {
     v2ServiceParams,
     v3DeploymentGroup,
     v3ManifestServiceParams
-} from './types';
+} from '../types';
 import { convertCpuResourceString, convertResourceString } from './sizes';
 import { default as stableStringify } from "json-stable-stringify";
 import crypto from "node:crypto";
