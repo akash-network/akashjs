@@ -5,7 +5,7 @@ const fee = {
   amount: [
     {
       denom: "uakt",
-      amount: "1000",
+      amount: "2500",
     },
   ],
   gas: "100000",
