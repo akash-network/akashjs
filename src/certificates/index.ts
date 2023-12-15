@@ -6,7 +6,7 @@ import { createStarGateMessage } from "../pbclient";
 import {
   QueryCertificatesRequest,
   QueryCertificatesResponse,
-} from "../protobuf/akash/cert/v1beta1/query"
+} from "../protobuf/akash/cert/v1beta3/query"
 import { CertificateFilter } from "../protobuf/akash/cert/v1beta1/cert";
 
 const JsonRPC = require("simple-jsonrpc-js");
@@ -15,7 +15,7 @@ const jrpc = JsonRPC.connect_xhr(
   "https://bridge.testnet.akash.network/akashnetwork"
 );
 
-export { pems };
+export type { pems };
 
 export async function broadcastCertificate(
   { csr, publicKey }: pems,
@@ -75,13 +75,17 @@ export async function queryCertificates(filter: CertificateFilter) {
 }
 
 function base64ToUInt(base64: string) {
-  var binary_string = window.atob(base64);
-  var len = binary_string.length;
-  var bytes = new Uint8Array(len);
-  for (var i = 0; i < len; i++) {
-    bytes[i] = binary_string.charCodeAt(i);
+  if (typeof window !== "undefined") {
+    var binary_string = window.atob(base64);
+    var len = binary_string.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) {
+      bytes[i] = binary_string.charCodeAt(i);
+    }
+    return bytes;
   }
-  return bytes;
+
+  return Buffer.from(base64, "base64");
 }
 
 function bufferToHex(buffer: any) {
