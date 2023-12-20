@@ -16,9 +16,8 @@ import { MsgCreateLease } from '../build/protobuf/akash/market/v1beta4/lease';
 import { BidID } from "../build/protobuf/akash/market/v1beta4/bid";
 
 // update this with your wallet mnemonic
-const mnemonic = "your wallet mnemonic here";
-
 const rpcEndpoint = "https://rpc.akashnet.net:443";
+const mnemonic = fs.readFileSync("./fixtures/mnemonic.txt", "utf8").trim();
 const rawSDL = fs.readFileSync("./fixtures/example.sdl.yaml", "utf8");
 const certificatePath = "./fixtures/cert.json";
 
@@ -415,7 +414,7 @@ async function deploy() {
     console.log("Sending manifest...");
     const status: any = await sendManifest(sdl, lease, wallet, certificate);
 
-
+    return status;
 }
 
 deploy().catch(console.error);
