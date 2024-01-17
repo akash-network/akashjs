@@ -2,7 +2,7 @@ import {
     QueryDeploymentsResponse,
     QueryDeploymentsRequest,
     QueryClientImpl
-} from "@akashnetwork/akashjs/build/protobuf/akash/deployment/v1beta1/query";
+} from "@akashnetwork/akashjs/build/protobuf/akash/deployment/v1beta3/query";
 import { getRpc } from "@akashnetwork/akashjs/build/rpc"
 
 async function main() {

@@ -1,4 +1,4 @@
-import { QueryClientImpl, QueryLeaseRequest, QueryLeaseResponse} from "@akashnetwork/akashjs/build/protobuf/akash/market/v1beta2/query";
+import { QueryClientImpl, QueryLeaseRequest, QueryLeaseResponse} from "@akashnetwork/akashjs/build/protobuf/akash/market/v1beta3/query";
 import { getRpc } from "@akashnetwork/akashjs/build/rpc"
 
 async function main() {

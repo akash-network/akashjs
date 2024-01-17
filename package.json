@@ -1,6 +1,6 @@
 {
   "name": "@akashnetwork/akashjs",
-  "version": "0.5.1",
+  "version": "0.5.4",
   "description": "Akash Network JS SDK",
   "repository": {
     "url": "https://github.com/ovrclk/akashjs"
@@ -36,7 +36,7 @@
     "json-stable-stringify": "^1.0.2",
     "keytar": "^7.7.0",
     "node-fetch": "2",
-    "pkijs": "^2.1.95",
+    "pkijs": "^3.0.0",
     "process": "^0.11.10",
     "pvutils": "^1.0.17",
     "simple-jsonrpc-js": "^1.2.0"

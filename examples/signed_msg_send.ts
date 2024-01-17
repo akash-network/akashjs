@@ -51,7 +51,7 @@ async function main() {
         account.address,
         [msgAny],
         fee,
-        "take down deployment"
+        "send funds with akashjs"
     );
 
     console.log(msg);

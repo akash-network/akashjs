@@ -1,3 +1,5 @@
+global.crypto = require("node:crypto");
+
 const {
   getCrypto,
   getAlgorithmParameters,
