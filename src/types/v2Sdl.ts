@@ -1,12 +1,6 @@
+import {Attributes, ResourceUnits, SignedBy} from "./sharedSdl";
 
 export type v2Manifest = v2Group[];
-
-export type v3Manifest = v3Group[];
-
-export type v3Group = {
-    name: string,
-    services: v3ManifestService[],
-}
 
 export type v2Group = {
     Name: string,
@@ -25,18 +19,6 @@ export type v2ManifestService = {
     params?: v2ManifestServiceParams,
 }
 
-export type v3ManifestService = {
-    name: string,
-    image: string,
-    command: string[] | null,
-    args: string[] | null,
-    env: string[] | null,
-    resources: ResourceUnits,
-    count: number
-    expose: v3ServiceExpose[],
-    params: v3ManifestServiceParams | null,
-}
-
 export type v2ServiceExposeHttpOptions = {
     MaxBodySize: number,
     ReadTimeout: number,
@@ -44,19 +26,6 @@ export type v2ServiceExposeHttpOptions = {
     NextTries: number,
     NextTimeout: number,
     NextCases: string[],
-}
-
-export type v3ServiceExposeHttpOptions = {
-    maxBodySize: number,
-    readTimeout: number,
-    sendTimeout: number,
-    nextTries: number,
-    nextTimeout: number,
-    nextCases: string[],
-}
-
-export type ResourceUnits = {
-
 }
 
 export type v2ServiceExpose = {
@@ -71,36 +40,13 @@ export type v2ServiceExpose = {
     EndpointSequenceNumber: number,
 }
 
-export type v3ServiceExpose = {
-    port: number,
-    externalPort: number,
-    proto: string,
-    service: any,
-    global: boolean,
-    hosts: any,
-    httpOptions: v3ServiceExposeHttpOptions,
-    ip: string,
-    endpointSequenceNumber: number,
-}
-
 export type v2ManifestServiceParams = {
     Storage: v2ServiceStorageParams[],
-}
-
-export type v3ManifestServiceParams = {
-    storage: v2ServiceStorageParams[],
 }
 
 export type v2Sdl = {
     services: Record<string, v2Service>,
     profiles: v2Profiles,
-    deployment: Record<string, v2Deployment>,
-    endpoints: Record<string, v2Endpoint>,
-}
-
-export type v3Sdl = {
-    services: Record<string, v2Service>,
-    profiles: v3Profiles,
     deployment: Record<string, v2Deployment>,
     endpoints: Record<string, v2Endpoint>,
 }
@@ -181,17 +127,6 @@ export type v2ResourceMemory = {
     attributes?: Record<string, any>,
 }
 
-export type v3GPUAttributes = {
-    vendor: {
-        [vendor: string]: Array<{ model: string }>
-    }
-}
-
-export type v3ResourceGPU = {
-    units: number | string,
-    attributes?: v3GPUAttributes,
-}
-
 export type v2StorageAttributes = Record<string, any>;
 
 export type v2ResourceStorage = {
@@ -208,20 +143,8 @@ export type v2ComputeResources = {
     storage: v2ResourceStorageArray | v2ResourceStorage,
 }
 
-export type v3ComputeResources = {
-    cpu: v2ResourceCPU,
-    memory: v2ResourceMemory,
-    storage: v2ResourceStorageArray | v2ResourceStorage,
-    gpu: v3ResourceGPU,
-    id: number,
-}
-
 export type v2ProfileCompute = {
     resources: v2ComputeResources,
-}
-
-export type v3ProfileCompute = {
-    resources: v3ComputeResources,
 }
 
 export type v2PlacementAttributes = Attributes
@@ -234,11 +157,6 @@ export type v2Coin = {
 
 export type v2PlacementPricing = Record<string, v2Coin>
 
-export type SignedBy = {
-    allOf: string[],
-    anyOf: string[],
-}
-
 export type v2ProfilePlacement = {
     attributes: v2PlacementAttributes,
     signedBy: SignedBy,
@@ -249,32 +167,3 @@ export type v2Profiles = {
     compute: Record<string, v2ProfileCompute>,
     placement: Record<string, v2ProfilePlacement>,
 }
-
-export type v3Profiles = {
-    compute: Record<string, v3ProfileCompute>,
-    placement: Record<string, v2ProfilePlacement>,
-}
-
-export type Attribute = {
-    key: string,
-    value: string,
-}
-
-export type v3DeploymentGroup = {
-    name: string,
-    resources: Array<{
-        resource: v3ComputeResources,
-        price: number,
-        count: number,
-        endpoints: Array<{ kind: number; sequence_number: number; }>,
-    }>,
-    requirements: {
-        attributes: Array<Attribute>,
-        signedBy: {
-            allOf: string[],
-            anyOf: string[],
-        },
-    },
-};
-
-export type Attributes = Attribute[];

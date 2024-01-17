@@ -1,15 +1,9 @@
 import fetch from 'node-fetch';
 import { performance } from 'perf_hooks';
 import { awaitAll, filter, map, prop, sortBy } from '../util';
+import {ENDPOINT_TYPE, NETWORK_TYPE} from "../types";
 
-type NETWORK_TYPE =
-    "mainnet" |
-    "testnet" |
-    "edgenet";
-
-type ENDPOINT_TYPE =
-    "rpc" |
-    "rest";
+let networkMetadata: INetworkMetadata | null = null
 
 interface INetworkMetadata {
     "chain_name": string;
@@ -50,10 +44,21 @@ interface INetworkMetadata {
     }
 }
 
-// TODO: this should probably be cached to avoid pulling for every request
 export async function getMetadata(network: NETWORK_TYPE): Promise<INetworkMetadata> {
-    return fetch(`https://raw.githubusercontent.com/ovrclk/net/master/${network}/meta.json`)
-        .then(res => res.json());
+    if (networkMetadata) {
+        return networkMetadata
+    } else {
+        return fetch(`https://raw.githubusercontent.com/ovrclk/net/master/${network}/meta.json`)
+            .then(res => res.json())
+            .then(res => {
+                networkMetadata = res;
+                return res;
+            })
+            .catch(err => {
+                throw err
+            });
+    }
+
 }
 
 export function getEndpoints(network: NETWORK_TYPE, type: ENDPOINT_TYPE) {
