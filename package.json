@@ -18,6 +18,7 @@
     "build:build": "yarn webpack",
     "test": "yarn test:unit",
     "test:unit": "tap --ts tests/test_*.ts",
+    "test:unit-snapshot": "tap --ts --snapshot tests/test_*.ts",
     "prepublishOnly": "yarn build:production"
   },
   "author": "",

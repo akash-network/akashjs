@@ -183,7 +183,7 @@ export type v2ResourceMemory = {
 
 export type v3GPUAttributes = {
     vendor: {
-        [vendor: string]: Array<{ model: string }>
+        [vendor: string]: Array<{ model: string, ram?: string }>
     }
 }
 
