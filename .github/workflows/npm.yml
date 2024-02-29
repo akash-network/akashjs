@@ -23,7 +23,7 @@ jobs:
           ref: main
       - uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: 18
       - run: npm install
       - run: npm test
       - uses: JS-DevTools/npm-publish@v1
