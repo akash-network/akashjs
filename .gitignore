@@ -1,6 +1,19 @@
-node_modules
+# Node.js dependencies
+node_modules/
+
+# Build outputs
+build/
+umd/
+
+# Coverage directory
+.nyc_output/
+
+# Log files
 yarn-error.log
-build
-.nyc_output
-umd
+
+# OS-generated files
 .DS_Store
+
+# IDE-specific directories
+.idea/
+.vscode/

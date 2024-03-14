@@ -11,15 +11,15 @@
     "node": ">18.0.0"
   },
   "scripts": {
-    "build": "rimraf build && yarn build:tsc && yarn build:build",
-    "build:production": "NODE_ENV=production yarn build:tsc && yarn build:build",
-    "build:tsc": "rimraf build && yarn tsc",
-    "dev:watch": "yarn tsc -- --watch",
-    "build:build": "yarn webpack",
-    "test": "yarn test:unit",
+    "build": "rimraf build && npm run build:tsc && npm run build:build",
+    "build:production": "NODE_ENV=production npm run build:tsc && npm run build:build",
+    "build:tsc": "rimraf build && tsc",
+    "dev:watch": "tsc -- --watch",
+    "build:build": "webpack",
+    "test": "npm run test:unit",
     "test:unit": "tap --ts tests/test_*.ts",
     "test:unit-snapshot": "tap --ts --snapshot tests/test_*.ts",
-    "prepublishOnly": "yarn build:production"
+    "prepublishOnly": "npm run build:production"
   },
   "author": "",
   "license": "Apache-2.0",
