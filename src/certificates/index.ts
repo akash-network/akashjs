@@ -1,7 +1,7 @@
 import { create as create509, pems } from "./generate509";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { messages as stargateMessages } from "../stargate";
-import { createStarGateMessage } from "../pbclient";
+import { createStarGateMessage } from "../pbclient/pbclient";
 
 import { QueryCertificatesRequest, QueryCertificatesResponse } from "../protobuf/akash/cert/v1beta3/query";
 import { CertificateFilter } from "../protobuf/akash/cert/v1beta1/cert";

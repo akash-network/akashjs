@@ -17,3 +17,7 @@ yarn-error.log
 # IDE-specific directories
 .idea/
 .vscode/
+
+# Tests artifacts
+.coverage/
+
