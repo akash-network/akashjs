@@ -36,7 +36,7 @@ export enum Lease_State {
   insufficient_funds = 2,
   /** closed - LeaseClosed denotes state for lease closed */
   closed = 3,
-  UNRECOGNIZED = -1,
+  UNRECOGNIZED = -1
 }
 
 export function lease_StateFromJSON(object: any): Lease_State {
@@ -126,17 +126,14 @@ function createBaseLeaseID(): LeaseID {
     dseq: Long.UZERO,
     gseq: 0,
     oseq: 0,
-    provider: "",
+    provider: ""
   };
 }
 
 export const LeaseID = {
   $type: "akash.market.v1beta1.LeaseID" as const,
 
-  encode(
-    message: LeaseID,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: LeaseID, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -192,15 +189,14 @@ export const LeaseID = {
       dseq: isSet(object.dseq) ? Long.fromString(object.dseq) : Long.UZERO,
       gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
       oseq: isSet(object.oseq) ? Number(object.oseq) : 0,
-      provider: isSet(object.provider) ? String(object.provider) : "",
+      provider: isSet(object.provider) ? String(object.provider) : ""
     };
   },
 
   toJSON(message: LeaseID): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined &&
-      (obj.dseq = (message.dseq || Long.UZERO).toString());
+    message.dseq !== undefined && (obj.dseq = (message.dseq || Long.UZERO).toString());
     message.gseq !== undefined && (obj.gseq = Math.round(message.gseq));
     message.oseq !== undefined && (obj.oseq = Math.round(message.oseq));
     message.provider !== undefined && (obj.provider = message.provider);
@@ -210,15 +206,12 @@ export const LeaseID = {
   fromPartial<I extends Exact<DeepPartial<LeaseID>, I>>(object: I): LeaseID {
     const message = createBaseLeaseID();
     message.owner = object.owner ?? "";
-    message.dseq =
-      object.dseq !== undefined && object.dseq !== null
-        ? Long.fromValue(object.dseq)
-        : Long.UZERO;
+    message.dseq = object.dseq !== undefined && object.dseq !== null ? Long.fromValue(object.dseq) : Long.UZERO;
     message.gseq = object.gseq ?? 0;
     message.oseq = object.oseq ?? 0;
     message.provider = object.provider ?? "";
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(LeaseID.$type, LeaseID);
@@ -229,7 +222,7 @@ function createBaseLease(): Lease {
     leaseId: undefined,
     state: 0,
     price: undefined,
-    createdAt: Long.ZERO,
+    createdAt: Long.ZERO
   };
 }
 
@@ -282,49 +275,30 @@ export const Lease = {
   fromJSON(object: any): Lease {
     return {
       $type: Lease.$type,
-      leaseId: isSet(object.leaseId)
-        ? LeaseID.fromJSON(object.leaseId)
-        : undefined,
+      leaseId: isSet(object.leaseId) ? LeaseID.fromJSON(object.leaseId) : undefined,
       state: isSet(object.state) ? lease_StateFromJSON(object.state) : 0,
       price: isSet(object.price) ? Coin.fromJSON(object.price) : undefined,
-      createdAt: isSet(object.createdAt)
-        ? Long.fromString(object.createdAt)
-        : Long.ZERO,
+      createdAt: isSet(object.createdAt) ? Long.fromString(object.createdAt) : Long.ZERO
     };
   },
 
   toJSON(message: Lease): unknown {
     const obj: any = {};
-    message.leaseId !== undefined &&
-      (obj.leaseId = message.leaseId
-        ? LeaseID.toJSON(message.leaseId)
-        : undefined);
-    message.state !== undefined &&
-      (obj.state = lease_StateToJSON(message.state));
-    message.price !== undefined &&
-      (obj.price = message.price ? Coin.toJSON(message.price) : undefined);
-    message.createdAt !== undefined &&
-      (obj.createdAt = (message.createdAt || Long.ZERO).toString());
+    message.leaseId !== undefined && (obj.leaseId = message.leaseId ? LeaseID.toJSON(message.leaseId) : undefined);
+    message.state !== undefined && (obj.state = lease_StateToJSON(message.state));
+    message.price !== undefined && (obj.price = message.price ? Coin.toJSON(message.price) : undefined);
+    message.createdAt !== undefined && (obj.createdAt = (message.createdAt || Long.ZERO).toString());
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<Lease>, I>>(object: I): Lease {
     const message = createBaseLease();
-    message.leaseId =
-      object.leaseId !== undefined && object.leaseId !== null
-        ? LeaseID.fromPartial(object.leaseId)
-        : undefined;
+    message.leaseId = object.leaseId !== undefined && object.leaseId !== null ? LeaseID.fromPartial(object.leaseId) : undefined;
     message.state = object.state ?? 0;
-    message.price =
-      object.price !== undefined && object.price !== null
-        ? Coin.fromPartial(object.price)
-        : undefined;
-    message.createdAt =
-      object.createdAt !== undefined && object.createdAt !== null
-        ? Long.fromValue(object.createdAt)
-        : Long.ZERO;
+    message.price = object.price !== undefined && object.price !== null ? Coin.fromPartial(object.price) : undefined;
+    message.createdAt = object.createdAt !== undefined && object.createdAt !== null ? Long.fromValue(object.createdAt) : Long.ZERO;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(Lease.$type, Lease);
@@ -337,17 +311,14 @@ function createBaseLeaseFilters(): LeaseFilters {
     gseq: 0,
     oseq: 0,
     provider: "",
-    state: "",
+    state: ""
   };
 }
 
 export const LeaseFilters = {
   $type: "akash.market.v1beta1.LeaseFilters" as const,
 
-  encode(
-    message: LeaseFilters,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: LeaseFilters, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -410,15 +381,14 @@ export const LeaseFilters = {
       gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
       oseq: isSet(object.oseq) ? Number(object.oseq) : 0,
       provider: isSet(object.provider) ? String(object.provider) : "",
-      state: isSet(object.state) ? String(object.state) : "",
+      state: isSet(object.state) ? String(object.state) : ""
     };
   },
 
   toJSON(message: LeaseFilters): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined &&
-      (obj.dseq = (message.dseq || Long.UZERO).toString());
+    message.dseq !== undefined && (obj.dseq = (message.dseq || Long.UZERO).toString());
     message.gseq !== undefined && (obj.gseq = Math.round(message.gseq));
     message.oseq !== undefined && (obj.oseq = Math.round(message.oseq));
     message.provider !== undefined && (obj.provider = message.provider);
@@ -426,21 +396,16 @@ export const LeaseFilters = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<LeaseFilters>, I>>(
-    object: I
-  ): LeaseFilters {
+  fromPartial<I extends Exact<DeepPartial<LeaseFilters>, I>>(object: I): LeaseFilters {
     const message = createBaseLeaseFilters();
     message.owner = object.owner ?? "";
-    message.dseq =
-      object.dseq !== undefined && object.dseq !== null
-        ? Long.fromValue(object.dseq)
-        : Long.UZERO;
+    message.dseq = object.dseq !== undefined && object.dseq !== null ? Long.fromValue(object.dseq) : Long.UZERO;
     message.gseq = object.gseq ?? 0;
     message.oseq = object.oseq ?? 0;
     message.provider = object.provider ?? "";
     message.state = object.state ?? "";
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(LeaseFilters.$type, LeaseFilters);
@@ -452,10 +417,7 @@ function createBaseMsgCreateLease(): MsgCreateLease {
 export const MsgCreateLease = {
   $type: "akash.market.v1beta1.MsgCreateLease" as const,
 
-  encode(
-    message: MsgCreateLease,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgCreateLease, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bidId !== undefined) {
       BidID.encode(message.bidId, writer.uint32(10).fork()).ldelim();
     }
@@ -483,27 +445,21 @@ export const MsgCreateLease = {
   fromJSON(object: any): MsgCreateLease {
     return {
       $type: MsgCreateLease.$type,
-      bidId: isSet(object.bidId) ? BidID.fromJSON(object.bidId) : undefined,
+      bidId: isSet(object.bidId) ? BidID.fromJSON(object.bidId) : undefined
     };
   },
 
   toJSON(message: MsgCreateLease): unknown {
     const obj: any = {};
-    message.bidId !== undefined &&
-      (obj.bidId = message.bidId ? BidID.toJSON(message.bidId) : undefined);
+    message.bidId !== undefined && (obj.bidId = message.bidId ? BidID.toJSON(message.bidId) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateLease>, I>>(
-    object: I
-  ): MsgCreateLease {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateLease>, I>>(object: I): MsgCreateLease {
     const message = createBaseMsgCreateLease();
-    message.bidId =
-      object.bidId !== undefined && object.bidId !== null
-        ? BidID.fromPartial(object.bidId)
-        : undefined;
+    message.bidId = object.bidId !== undefined && object.bidId !== null ? BidID.fromPartial(object.bidId) : undefined;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgCreateLease.$type, MsgCreateLease);
@@ -515,17 +471,11 @@ function createBaseMsgCreateLeaseResponse(): MsgCreateLeaseResponse {
 export const MsgCreateLeaseResponse = {
   $type: "akash.market.v1beta1.MsgCreateLeaseResponse" as const,
 
-  encode(
-    _: MsgCreateLeaseResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgCreateLeaseResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgCreateLeaseResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateLeaseResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateLeaseResponse();
@@ -542,7 +492,7 @@ export const MsgCreateLeaseResponse = {
 
   fromJSON(_: any): MsgCreateLeaseResponse {
     return {
-      $type: MsgCreateLeaseResponse.$type,
+      $type: MsgCreateLeaseResponse.$type
     };
   },
 
@@ -551,12 +501,10 @@ export const MsgCreateLeaseResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateLeaseResponse>, I>>(
-    _: I
-  ): MsgCreateLeaseResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateLeaseResponse>, I>>(_: I): MsgCreateLeaseResponse {
     const message = createBaseMsgCreateLeaseResponse();
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgCreateLeaseResponse.$type, MsgCreateLeaseResponse);
@@ -568,10 +516,7 @@ function createBaseMsgWithdrawLease(): MsgWithdrawLease {
 export const MsgWithdrawLease = {
   $type: "akash.market.v1beta1.MsgWithdrawLease" as const,
 
-  encode(
-    message: MsgWithdrawLease,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgWithdrawLease, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bidId !== undefined) {
       LeaseID.encode(message.bidId, writer.uint32(10).fork()).ldelim();
     }
@@ -599,27 +544,21 @@ export const MsgWithdrawLease = {
   fromJSON(object: any): MsgWithdrawLease {
     return {
       $type: MsgWithdrawLease.$type,
-      bidId: isSet(object.bidId) ? LeaseID.fromJSON(object.bidId) : undefined,
+      bidId: isSet(object.bidId) ? LeaseID.fromJSON(object.bidId) : undefined
     };
   },
 
   toJSON(message: MsgWithdrawLease): unknown {
     const obj: any = {};
-    message.bidId !== undefined &&
-      (obj.bidId = message.bidId ? LeaseID.toJSON(message.bidId) : undefined);
+    message.bidId !== undefined && (obj.bidId = message.bidId ? LeaseID.toJSON(message.bidId) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgWithdrawLease>, I>>(
-    object: I
-  ): MsgWithdrawLease {
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawLease>, I>>(object: I): MsgWithdrawLease {
     const message = createBaseMsgWithdrawLease();
-    message.bidId =
-      object.bidId !== undefined && object.bidId !== null
-        ? LeaseID.fromPartial(object.bidId)
-        : undefined;
+    message.bidId = object.bidId !== undefined && object.bidId !== null ? LeaseID.fromPartial(object.bidId) : undefined;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgWithdrawLease.$type, MsgWithdrawLease);
@@ -631,17 +570,11 @@ function createBaseMsgWithdrawLeaseResponse(): MsgWithdrawLeaseResponse {
 export const MsgWithdrawLeaseResponse = {
   $type: "akash.market.v1beta1.MsgWithdrawLeaseResponse" as const,
 
-  encode(
-    _: MsgWithdrawLeaseResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgWithdrawLeaseResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgWithdrawLeaseResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgWithdrawLeaseResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgWithdrawLeaseResponse();
@@ -658,7 +591,7 @@ export const MsgWithdrawLeaseResponse = {
 
   fromJSON(_: any): MsgWithdrawLeaseResponse {
     return {
-      $type: MsgWithdrawLeaseResponse.$type,
+      $type: MsgWithdrawLeaseResponse.$type
     };
   },
 
@@ -667,18 +600,13 @@ export const MsgWithdrawLeaseResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgWithdrawLeaseResponse>, I>>(
-    _: I
-  ): MsgWithdrawLeaseResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgWithdrawLeaseResponse>, I>>(_: I): MsgWithdrawLeaseResponse {
     const message = createBaseMsgWithdrawLeaseResponse();
     return message;
-  },
+  }
 };
 
-messageTypeRegistry.set(
-  MsgWithdrawLeaseResponse.$type,
-  MsgWithdrawLeaseResponse
-);
+messageTypeRegistry.set(MsgWithdrawLeaseResponse.$type, MsgWithdrawLeaseResponse);
 
 function createBaseMsgCloseLease(): MsgCloseLease {
   return { $type: "akash.market.v1beta1.MsgCloseLease", leaseId: undefined };
@@ -687,10 +615,7 @@ function createBaseMsgCloseLease(): MsgCloseLease {
 export const MsgCloseLease = {
   $type: "akash.market.v1beta1.MsgCloseLease" as const,
 
-  encode(
-    message: MsgCloseLease,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgCloseLease, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.leaseId !== undefined) {
       LeaseID.encode(message.leaseId, writer.uint32(10).fork()).ldelim();
     }
@@ -718,31 +643,21 @@ export const MsgCloseLease = {
   fromJSON(object: any): MsgCloseLease {
     return {
       $type: MsgCloseLease.$type,
-      leaseId: isSet(object.leaseId)
-        ? LeaseID.fromJSON(object.leaseId)
-        : undefined,
+      leaseId: isSet(object.leaseId) ? LeaseID.fromJSON(object.leaseId) : undefined
     };
   },
 
   toJSON(message: MsgCloseLease): unknown {
     const obj: any = {};
-    message.leaseId !== undefined &&
-      (obj.leaseId = message.leaseId
-        ? LeaseID.toJSON(message.leaseId)
-        : undefined);
+    message.leaseId !== undefined && (obj.leaseId = message.leaseId ? LeaseID.toJSON(message.leaseId) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCloseLease>, I>>(
-    object: I
-  ): MsgCloseLease {
+  fromPartial<I extends Exact<DeepPartial<MsgCloseLease>, I>>(object: I): MsgCloseLease {
     const message = createBaseMsgCloseLease();
-    message.leaseId =
-      object.leaseId !== undefined && object.leaseId !== null
-        ? LeaseID.fromPartial(object.leaseId)
-        : undefined;
+    message.leaseId = object.leaseId !== undefined && object.leaseId !== null ? LeaseID.fromPartial(object.leaseId) : undefined;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgCloseLease.$type, MsgCloseLease);
@@ -754,17 +669,11 @@ function createBaseMsgCloseLeaseResponse(): MsgCloseLeaseResponse {
 export const MsgCloseLeaseResponse = {
   $type: "akash.market.v1beta1.MsgCloseLeaseResponse" as const,
 
-  encode(
-    _: MsgCloseLeaseResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgCloseLeaseResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgCloseLeaseResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCloseLeaseResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCloseLeaseResponse();
@@ -781,7 +690,7 @@ export const MsgCloseLeaseResponse = {
 
   fromJSON(_: any): MsgCloseLeaseResponse {
     return {
-      $type: MsgCloseLeaseResponse.$type,
+      $type: MsgCloseLeaseResponse.$type
     };
   },
 
@@ -790,44 +699,32 @@ export const MsgCloseLeaseResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCloseLeaseResponse>, I>>(
-    _: I
-  ): MsgCloseLeaseResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCloseLeaseResponse>, I>>(_: I): MsgCloseLeaseResponse {
     const message = createBaseMsgCloseLeaseResponse();
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgCloseLeaseResponse.$type, MsgCloseLeaseResponse);
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
-  : Partial<T>;
+    ? string | number | Long
+    : T extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : T extends ReadonlyArray<infer U>
+        ? ReadonlyArray<DeepPartial<U>>
+        : T extends {}
+          ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+          : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<Exclude<keyof I, KeysOfUnion<P> | "$type">, never>;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

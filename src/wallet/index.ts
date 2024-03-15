@@ -9,7 +9,7 @@ export async function createAccount(password: string) {
   keytar.setPassword("AkashNetwork", address, wallet.mnemonic);
   return {
     mnemonic: wallet.mnemonic,
-    address,
+    address
   };
 }
 

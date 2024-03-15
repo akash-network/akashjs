@@ -9,9 +9,9 @@ export function getChains() {
     mainnet: {
       id: "akashnet-2",
       name: "Akash Mainnet",
-      messagePath: "v1beta2",
+      messagePath: "v1beta2"
     },
-    testnet: { id: "testnet-1", name: "Akash Testnet", messagePath: "v1beta2" },
+    testnet: { id: "testnet-1", name: "Akash Testnet", messagePath: "v1beta2" }
   };
 }
 
@@ -28,37 +28,32 @@ export async function get(chain: any, signer: any, endPoint: string) {
           Certificate.fromPartial({
             owner,
             cert,
-            pubkey,
+            pubkey
           } as any)
         ).finish();
-        var encoded = Buffer.from(buf);
+        const encoded = Buffer.from(buf);
         return encoded.toString("base64");
       },
       fromAmino: ({ owner, cert, pubkey }: any) => {
         return Certificate.fromPartial({
           owner,
           cert,
-          pubkey,
+          pubkey
         } as any);
-      },
-    },
+      }
+    }
   } as any);
 
-  const myRegistry = new Registry([
-    ...defaultRegistryTypes,
-    ...getAkashTypeRegistry(),
-  ]);
+  const myRegistry = new Registry([...defaultRegistryTypes, ...getAkashTypeRegistry()]);
 
   return await SigningStargateClient.connectWithSigner(endPoint, signer, {
     bip44: {
-      coinType: "118",
+      coinType: "118"
     },
     registry: myRegistry,
-    aminoTypes: customAminoTypes,
+    aminoTypes: customAminoTypes
   } as any);
 }
 function bufferToHex(buffer: any) {
-  return [...new Uint8Array(buffer)]
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
+  return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, "0")).join("");
 }

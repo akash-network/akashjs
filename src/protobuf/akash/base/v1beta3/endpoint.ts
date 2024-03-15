@@ -20,7 +20,7 @@ export enum Endpoint_Kind {
   RANDOM_PORT = 1,
   /** LEASED_IP - Describes an endpoint that becomes a leased IP */
   LEASED_IP = 2,
-  UNRECOGNIZED = -1,
+  UNRECOGNIZED = -1
 }
 
 export function endpoint_KindFromJSON(object: any): Endpoint_Kind {
@@ -62,10 +62,7 @@ function createBaseEndpoint(): Endpoint {
 export const Endpoint = {
   $type: "akash.base.v1beta3.Endpoint" as const,
 
-  encode(
-    message: Endpoint,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Endpoint, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.kind !== 0) {
       writer.uint32(8).int32(message.kind);
     }
@@ -100,18 +97,14 @@ export const Endpoint = {
     return {
       $type: Endpoint.$type,
       kind: isSet(object.kind) ? endpoint_KindFromJSON(object.kind) : 0,
-      sequenceNumber: isSet(object.sequenceNumber)
-        ? Number(object.sequenceNumber)
-        : 0,
+      sequenceNumber: isSet(object.sequenceNumber) ? Number(object.sequenceNumber) : 0
     };
   },
 
   toJSON(message: Endpoint): unknown {
     const obj: any = {};
-    message.kind !== undefined &&
-      (obj.kind = endpoint_KindToJSON(message.kind));
-    message.sequenceNumber !== undefined &&
-      (obj.sequenceNumber = Math.round(message.sequenceNumber));
+    message.kind !== undefined && (obj.kind = endpoint_KindToJSON(message.kind));
+    message.sequenceNumber !== undefined && (obj.sequenceNumber = Math.round(message.sequenceNumber));
     return obj;
   },
 
@@ -120,39 +113,29 @@ export const Endpoint = {
     message.kind = object.kind ?? 0;
     message.sequenceNumber = object.sequenceNumber ?? 0;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(Endpoint.$type, Endpoint);
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
-  : Partial<T>;
+    ? string | number | Long
+    : T extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : T extends ReadonlyArray<infer U>
+        ? ReadonlyArray<DeepPartial<U>>
+        : T extends {}
+          ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+          : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<Exclude<keyof I, KeysOfUnion<P> | "$type">, never>;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

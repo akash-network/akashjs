@@ -78,7 +78,7 @@ export enum Group_State {
   insufficient_funds = 3,
   /** closed - GroupClosed denotes state for group closed */
   closed = 4,
-  UNRECOGNIZED = -1,
+  UNRECOGNIZED = -1
 }
 
 export function group_StateFromJSON(object: any): Group_State {
@@ -138,10 +138,7 @@ function createBaseMsgCloseGroup(): MsgCloseGroup {
 export const MsgCloseGroup = {
   $type: "akash.deployment.v1beta1.MsgCloseGroup" as const,
 
-  encode(
-    message: MsgCloseGroup,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgCloseGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== undefined) {
       GroupID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -169,27 +166,21 @@ export const MsgCloseGroup = {
   fromJSON(object: any): MsgCloseGroup {
     return {
       $type: MsgCloseGroup.$type,
-      id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined,
+      id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined
     };
   },
 
   toJSON(message: MsgCloseGroup): unknown {
     const obj: any = {};
-    message.id !== undefined &&
-      (obj.id = message.id ? GroupID.toJSON(message.id) : undefined);
+    message.id !== undefined && (obj.id = message.id ? GroupID.toJSON(message.id) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCloseGroup>, I>>(
-    object: I
-  ): MsgCloseGroup {
+  fromPartial<I extends Exact<DeepPartial<MsgCloseGroup>, I>>(object: I): MsgCloseGroup {
     const message = createBaseMsgCloseGroup();
-    message.id =
-      object.id !== undefined && object.id !== null
-        ? GroupID.fromPartial(object.id)
-        : undefined;
+    message.id = object.id !== undefined && object.id !== null ? GroupID.fromPartial(object.id) : undefined;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgCloseGroup.$type, MsgCloseGroup);
@@ -201,17 +192,11 @@ function createBaseMsgCloseGroupResponse(): MsgCloseGroupResponse {
 export const MsgCloseGroupResponse = {
   $type: "akash.deployment.v1beta1.MsgCloseGroupResponse" as const,
 
-  encode(
-    _: MsgCloseGroupResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgCloseGroupResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgCloseGroupResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCloseGroupResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCloseGroupResponse();
@@ -228,7 +213,7 @@ export const MsgCloseGroupResponse = {
 
   fromJSON(_: any): MsgCloseGroupResponse {
     return {
-      $type: MsgCloseGroupResponse.$type,
+      $type: MsgCloseGroupResponse.$type
     };
   },
 
@@ -237,12 +222,10 @@ export const MsgCloseGroupResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCloseGroupResponse>, I>>(
-    _: I
-  ): MsgCloseGroupResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCloseGroupResponse>, I>>(_: I): MsgCloseGroupResponse {
     const message = createBaseMsgCloseGroupResponse();
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgCloseGroupResponse.$type, MsgCloseGroupResponse);
@@ -254,10 +237,7 @@ function createBaseMsgPauseGroup(): MsgPauseGroup {
 export const MsgPauseGroup = {
   $type: "akash.deployment.v1beta1.MsgPauseGroup" as const,
 
-  encode(
-    message: MsgPauseGroup,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgPauseGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== undefined) {
       GroupID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -285,27 +265,21 @@ export const MsgPauseGroup = {
   fromJSON(object: any): MsgPauseGroup {
     return {
       $type: MsgPauseGroup.$type,
-      id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined,
+      id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined
     };
   },
 
   toJSON(message: MsgPauseGroup): unknown {
     const obj: any = {};
-    message.id !== undefined &&
-      (obj.id = message.id ? GroupID.toJSON(message.id) : undefined);
+    message.id !== undefined && (obj.id = message.id ? GroupID.toJSON(message.id) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgPauseGroup>, I>>(
-    object: I
-  ): MsgPauseGroup {
+  fromPartial<I extends Exact<DeepPartial<MsgPauseGroup>, I>>(object: I): MsgPauseGroup {
     const message = createBaseMsgPauseGroup();
-    message.id =
-      object.id !== undefined && object.id !== null
-        ? GroupID.fromPartial(object.id)
-        : undefined;
+    message.id = object.id !== undefined && object.id !== null ? GroupID.fromPartial(object.id) : undefined;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgPauseGroup.$type, MsgPauseGroup);
@@ -317,17 +291,11 @@ function createBaseMsgPauseGroupResponse(): MsgPauseGroupResponse {
 export const MsgPauseGroupResponse = {
   $type: "akash.deployment.v1beta1.MsgPauseGroupResponse" as const,
 
-  encode(
-    _: MsgPauseGroupResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgPauseGroupResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgPauseGroupResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgPauseGroupResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgPauseGroupResponse();
@@ -344,7 +312,7 @@ export const MsgPauseGroupResponse = {
 
   fromJSON(_: any): MsgPauseGroupResponse {
     return {
-      $type: MsgPauseGroupResponse.$type,
+      $type: MsgPauseGroupResponse.$type
     };
   },
 
@@ -353,12 +321,10 @@ export const MsgPauseGroupResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgPauseGroupResponse>, I>>(
-    _: I
-  ): MsgPauseGroupResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgPauseGroupResponse>, I>>(_: I): MsgPauseGroupResponse {
     const message = createBaseMsgPauseGroupResponse();
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgPauseGroupResponse.$type, MsgPauseGroupResponse);
@@ -370,10 +336,7 @@ function createBaseMsgStartGroup(): MsgStartGroup {
 export const MsgStartGroup = {
   $type: "akash.deployment.v1beta1.MsgStartGroup" as const,
 
-  encode(
-    message: MsgStartGroup,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgStartGroup, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== undefined) {
       GroupID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
@@ -401,27 +364,21 @@ export const MsgStartGroup = {
   fromJSON(object: any): MsgStartGroup {
     return {
       $type: MsgStartGroup.$type,
-      id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined,
+      id: isSet(object.id) ? GroupID.fromJSON(object.id) : undefined
     };
   },
 
   toJSON(message: MsgStartGroup): unknown {
     const obj: any = {};
-    message.id !== undefined &&
-      (obj.id = message.id ? GroupID.toJSON(message.id) : undefined);
+    message.id !== undefined && (obj.id = message.id ? GroupID.toJSON(message.id) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgStartGroup>, I>>(
-    object: I
-  ): MsgStartGroup {
+  fromPartial<I extends Exact<DeepPartial<MsgStartGroup>, I>>(object: I): MsgStartGroup {
     const message = createBaseMsgStartGroup();
-    message.id =
-      object.id !== undefined && object.id !== null
-        ? GroupID.fromPartial(object.id)
-        : undefined;
+    message.id = object.id !== undefined && object.id !== null ? GroupID.fromPartial(object.id) : undefined;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgStartGroup.$type, MsgStartGroup);
@@ -433,17 +390,11 @@ function createBaseMsgStartGroupResponse(): MsgStartGroupResponse {
 export const MsgStartGroupResponse = {
   $type: "akash.deployment.v1beta1.MsgStartGroupResponse" as const,
 
-  encode(
-    _: MsgStartGroupResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgStartGroupResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgStartGroupResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgStartGroupResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgStartGroupResponse();
@@ -460,7 +411,7 @@ export const MsgStartGroupResponse = {
 
   fromJSON(_: any): MsgStartGroupResponse {
     return {
-      $type: MsgStartGroupResponse.$type,
+      $type: MsgStartGroupResponse.$type
     };
   },
 
@@ -469,12 +420,10 @@ export const MsgStartGroupResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgStartGroupResponse>, I>>(
-    _: I
-  ): MsgStartGroupResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgStartGroupResponse>, I>>(_: I): MsgStartGroupResponse {
     const message = createBaseMsgStartGroupResponse();
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgStartGroupResponse.$type, MsgStartGroupResponse);
@@ -484,17 +433,14 @@ function createBaseGroupID(): GroupID {
     $type: "akash.deployment.v1beta1.GroupID",
     owner: "",
     dseq: Long.UZERO,
-    gseq: 0,
+    gseq: 0
   };
 }
 
 export const GroupID = {
   $type: "akash.deployment.v1beta1.GroupID" as const,
 
-  encode(
-    message: GroupID,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GroupID, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -536,15 +482,14 @@ export const GroupID = {
       $type: GroupID.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       dseq: isSet(object.dseq) ? Long.fromValue(object.dseq) : Long.UZERO,
-      gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
+      gseq: isSet(object.gseq) ? Number(object.gseq) : 0
     };
   },
 
   toJSON(message: GroupID): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined &&
-      (obj.dseq = (message.dseq || Long.UZERO).toString());
+    message.dseq !== undefined && (obj.dseq = (message.dseq || Long.UZERO).toString());
     message.gseq !== undefined && (obj.gseq = Math.round(message.gseq));
     return obj;
   },
@@ -552,13 +497,10 @@ export const GroupID = {
   fromPartial<I extends Exact<DeepPartial<GroupID>, I>>(object: I): GroupID {
     const message = createBaseGroupID();
     message.owner = object.owner ?? "";
-    message.dseq =
-      object.dseq !== undefined && object.dseq !== null
-        ? Long.fromValue(object.dseq)
-        : Long.UZERO;
+    message.dseq = object.dseq !== undefined && object.dseq !== null ? Long.fromValue(object.dseq) : Long.UZERO;
     message.gseq = object.gseq ?? 0;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(GroupID.$type, GroupID);
@@ -568,25 +510,19 @@ function createBaseGroupSpec(): GroupSpec {
     $type: "akash.deployment.v1beta1.GroupSpec",
     name: "",
     requirements: undefined,
-    resources: [],
+    resources: []
   };
 }
 
 export const GroupSpec = {
   $type: "akash.deployment.v1beta1.GroupSpec" as const,
 
-  encode(
-    message: GroupSpec,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GroupSpec, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
     if (message.requirements !== undefined) {
-      PlacementRequirements.encode(
-        message.requirements,
-        writer.uint32(18).fork()
-      ).ldelim();
+      PlacementRequirements.encode(message.requirements, writer.uint32(18).fork()).ldelim();
     }
     for (const v of message.resources) {
       Resource.encode(v!, writer.uint32(26).fork()).ldelim();
@@ -605,10 +541,7 @@ export const GroupSpec = {
           message.name = reader.string();
           break;
         case 2:
-          message.requirements = PlacementRequirements.decode(
-            reader,
-            reader.uint32()
-          );
+          message.requirements = PlacementRequirements.decode(reader, reader.uint32());
           break;
         case 3:
           message.resources.push(Resource.decode(reader, reader.uint32()));
@@ -625,45 +558,31 @@ export const GroupSpec = {
     return {
       $type: GroupSpec.$type,
       name: isSet(object.name) ? String(object.name) : "",
-      requirements: isSet(object.requirements)
-        ? PlacementRequirements.fromJSON(object.requirements)
-        : undefined,
-      resources: Array.isArray(object?.resources)
-        ? object.resources.map((e: any) => Resource.fromJSON(e))
-        : [],
+      requirements: isSet(object.requirements) ? PlacementRequirements.fromJSON(object.requirements) : undefined,
+      resources: Array.isArray(object?.resources) ? object.resources.map((e: any) => Resource.fromJSON(e)) : []
     };
   },
 
   toJSON(message: GroupSpec): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
-    message.requirements !== undefined &&
-      (obj.requirements = message.requirements
-        ? PlacementRequirements.toJSON(message.requirements)
-        : undefined);
+    message.requirements !== undefined && (obj.requirements = message.requirements ? PlacementRequirements.toJSON(message.requirements) : undefined);
     if (message.resources) {
-      obj.resources = message.resources.map((e) =>
-        e ? Resource.toJSON(e) : undefined
-      );
+      obj.resources = message.resources.map(e => (e ? Resource.toJSON(e) : undefined));
     } else {
       obj.resources = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GroupSpec>, I>>(
-    object: I
-  ): GroupSpec {
+  fromPartial<I extends Exact<DeepPartial<GroupSpec>, I>>(object: I): GroupSpec {
     const message = createBaseGroupSpec();
     message.name = object.name ?? "";
     message.requirements =
-      object.requirements !== undefined && object.requirements !== null
-        ? PlacementRequirements.fromPartial(object.requirements)
-        : undefined;
-    message.resources =
-      object.resources?.map((e) => Resource.fromPartial(e)) || [];
+      object.requirements !== undefined && object.requirements !== null ? PlacementRequirements.fromPartial(object.requirements) : undefined;
+    message.resources = object.resources?.map(e => Resource.fromPartial(e)) || [];
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(GroupSpec.$type, GroupSpec);
@@ -674,7 +593,7 @@ function createBaseGroup(): Group {
     groupId: undefined,
     state: 0,
     groupSpec: undefined,
-    createdAt: Long.ZERO,
+    createdAt: Long.ZERO
   };
 }
 
@@ -727,53 +646,30 @@ export const Group = {
   fromJSON(object: any): Group {
     return {
       $type: Group.$type,
-      groupId: isSet(object.groupId)
-        ? GroupID.fromJSON(object.groupId)
-        : undefined,
+      groupId: isSet(object.groupId) ? GroupID.fromJSON(object.groupId) : undefined,
       state: isSet(object.state) ? group_StateFromJSON(object.state) : 0,
-      groupSpec: isSet(object.groupSpec)
-        ? GroupSpec.fromJSON(object.groupSpec)
-        : undefined,
-      createdAt: isSet(object.createdAt)
-        ? Long.fromValue(object.createdAt)
-        : Long.ZERO,
+      groupSpec: isSet(object.groupSpec) ? GroupSpec.fromJSON(object.groupSpec) : undefined,
+      createdAt: isSet(object.createdAt) ? Long.fromValue(object.createdAt) : Long.ZERO
     };
   },
 
   toJSON(message: Group): unknown {
     const obj: any = {};
-    message.groupId !== undefined &&
-      (obj.groupId = message.groupId
-        ? GroupID.toJSON(message.groupId)
-        : undefined);
-    message.state !== undefined &&
-      (obj.state = group_StateToJSON(message.state));
-    message.groupSpec !== undefined &&
-      (obj.groupSpec = message.groupSpec
-        ? GroupSpec.toJSON(message.groupSpec)
-        : undefined);
-    message.createdAt !== undefined &&
-      (obj.createdAt = (message.createdAt || Long.ZERO).toString());
+    message.groupId !== undefined && (obj.groupId = message.groupId ? GroupID.toJSON(message.groupId) : undefined);
+    message.state !== undefined && (obj.state = group_StateToJSON(message.state));
+    message.groupSpec !== undefined && (obj.groupSpec = message.groupSpec ? GroupSpec.toJSON(message.groupSpec) : undefined);
+    message.createdAt !== undefined && (obj.createdAt = (message.createdAt || Long.ZERO).toString());
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<Group>, I>>(object: I): Group {
     const message = createBaseGroup();
-    message.groupId =
-      object.groupId !== undefined && object.groupId !== null
-        ? GroupID.fromPartial(object.groupId)
-        : undefined;
+    message.groupId = object.groupId !== undefined && object.groupId !== null ? GroupID.fromPartial(object.groupId) : undefined;
     message.state = object.state ?? 0;
-    message.groupSpec =
-      object.groupSpec !== undefined && object.groupSpec !== null
-        ? GroupSpec.fromPartial(object.groupSpec)
-        : undefined;
-    message.createdAt =
-      object.createdAt !== undefined && object.createdAt !== null
-        ? Long.fromValue(object.createdAt)
-        : Long.ZERO;
+    message.groupSpec = object.groupSpec !== undefined && object.groupSpec !== null ? GroupSpec.fromPartial(object.groupSpec) : undefined;
+    message.createdAt = object.createdAt !== undefined && object.createdAt !== null ? Long.fromValue(object.createdAt) : Long.ZERO;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(Group.$type, Group);
@@ -783,22 +679,16 @@ function createBaseResource(): Resource {
     $type: "akash.deployment.v1beta1.Resource",
     resources: undefined,
     count: 0,
-    price: undefined,
+    price: undefined
   };
 }
 
 export const Resource = {
   $type: "akash.deployment.v1beta1.Resource" as const,
 
-  encode(
-    message: Resource,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Resource, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.resources !== undefined) {
-      ResourceUnits.encode(
-        message.resources,
-        writer.uint32(10).fork()
-      ).ldelim();
+      ResourceUnits.encode(message.resources, writer.uint32(10).fork()).ldelim();
     }
     if (message.count !== 0) {
       writer.uint32(16).uint32(message.count);
@@ -836,71 +726,49 @@ export const Resource = {
   fromJSON(object: any): Resource {
     return {
       $type: Resource.$type,
-      resources: isSet(object.resources)
-        ? ResourceUnits.fromJSON(object.resources)
-        : undefined,
+      resources: isSet(object.resources) ? ResourceUnits.fromJSON(object.resources) : undefined,
       count: isSet(object.count) ? Number(object.count) : 0,
-      price: isSet(object.price) ? Coin.fromJSON(object.price) : undefined,
+      price: isSet(object.price) ? Coin.fromJSON(object.price) : undefined
     };
   },
 
   toJSON(message: Resource): unknown {
     const obj: any = {};
-    message.resources !== undefined &&
-      (obj.resources = message.resources
-        ? ResourceUnits.toJSON(message.resources)
-        : undefined);
+    message.resources !== undefined && (obj.resources = message.resources ? ResourceUnits.toJSON(message.resources) : undefined);
     message.count !== undefined && (obj.count = Math.round(message.count));
-    message.price !== undefined &&
-      (obj.price = message.price ? Coin.toJSON(message.price) : undefined);
+    message.price !== undefined && (obj.price = message.price ? Coin.toJSON(message.price) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<Resource>, I>>(object: I): Resource {
     const message = createBaseResource();
-    message.resources =
-      object.resources !== undefined && object.resources !== null
-        ? ResourceUnits.fromPartial(object.resources)
-        : undefined;
+    message.resources = object.resources !== undefined && object.resources !== null ? ResourceUnits.fromPartial(object.resources) : undefined;
     message.count = object.count ?? 0;
-    message.price =
-      object.price !== undefined && object.price !== null
-        ? Coin.fromPartial(object.price)
-        : undefined;
+    message.price = object.price !== undefined && object.price !== null ? Coin.fromPartial(object.price) : undefined;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(Resource.$type, Resource);
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
-  : Partial<T>;
+    ? string | number | Long
+    : T extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : T extends ReadonlyArray<infer U>
+        ? ReadonlyArray<DeepPartial<U>>
+        : T extends {}
+          ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+          : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<Exclude<keyof I, KeysOfUnion<P> | "$type">, never>;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

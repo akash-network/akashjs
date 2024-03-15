@@ -17,17 +17,14 @@ function createBaseGenesisState(): GenesisState {
   return {
     $type: "akash.escrow.v1beta1.GenesisState",
     accounts: [],
-    payments: [],
+    payments: []
   };
 }
 
 export const GenesisState = {
   $type: "akash.escrow.v1beta1.GenesisState" as const,
 
-  encode(
-    message: GenesisState,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GenesisState, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.accounts) {
       Account.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -61,76 +58,54 @@ export const GenesisState = {
   fromJSON(object: any): GenesisState {
     return {
       $type: GenesisState.$type,
-      accounts: Array.isArray(object?.accounts)
-        ? object.accounts.map((e: any) => Account.fromJSON(e))
-        : [],
-      payments: Array.isArray(object?.payments)
-        ? object.payments.map((e: any) => Payment.fromJSON(e))
-        : [],
+      accounts: Array.isArray(object?.accounts) ? object.accounts.map((e: any) => Account.fromJSON(e)) : [],
+      payments: Array.isArray(object?.payments) ? object.payments.map((e: any) => Payment.fromJSON(e)) : []
     };
   },
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {};
     if (message.accounts) {
-      obj.accounts = message.accounts.map((e) =>
-        e ? Account.toJSON(e) : undefined
-      );
+      obj.accounts = message.accounts.map(e => (e ? Account.toJSON(e) : undefined));
     } else {
       obj.accounts = [];
     }
     if (message.payments) {
-      obj.payments = message.payments.map((e) =>
-        e ? Payment.toJSON(e) : undefined
-      );
+      obj.payments = message.payments.map(e => (e ? Payment.toJSON(e) : undefined));
     } else {
       obj.payments = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(
-    object: I
-  ): GenesisState {
+  fromPartial<I extends Exact<DeepPartial<GenesisState>, I>>(object: I): GenesisState {
     const message = createBaseGenesisState();
-    message.accounts =
-      object.accounts?.map((e) => Account.fromPartial(e)) || [];
-    message.payments =
-      object.payments?.map((e) => Payment.fromPartial(e)) || [];
+    message.accounts = object.accounts?.map(e => Account.fromPartial(e)) || [];
+    message.payments = object.payments?.map(e => Payment.fromPartial(e)) || [];
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(GenesisState.$type, GenesisState);
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
-  : Partial<T>;
+    ? string | number | Long
+    : T extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : T extends ReadonlyArray<infer U>
+        ? ReadonlyArray<DeepPartial<U>>
+        : T extends {}
+          ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+          : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<Exclude<keyof I, KeysOfUnion<P> | "$type">, never>;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

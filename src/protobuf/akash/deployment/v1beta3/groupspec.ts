@@ -20,25 +20,19 @@ function createBaseGroupSpec(): GroupSpec {
     $type: "akash.deployment.v1beta3.GroupSpec",
     name: "",
     requirements: undefined,
-    resources: [],
+    resources: []
   };
 }
 
 export const GroupSpec = {
   $type: "akash.deployment.v1beta3.GroupSpec" as const,
 
-  encode(
-    message: GroupSpec,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GroupSpec, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
     if (message.requirements !== undefined) {
-      PlacementRequirements.encode(
-        message.requirements,
-        writer.uint32(18).fork()
-      ).ldelim();
+      PlacementRequirements.encode(message.requirements, writer.uint32(18).fork()).ldelim();
     }
     for (const v of message.resources) {
       ResourceUnit.encode(v!, writer.uint32(26).fork()).ldelim();
@@ -57,10 +51,7 @@ export const GroupSpec = {
           message.name = reader.string();
           break;
         case 2:
-          message.requirements = PlacementRequirements.decode(
-            reader,
-            reader.uint32()
-          );
+          message.requirements = PlacementRequirements.decode(reader, reader.uint32());
           break;
         case 3:
           message.resources.push(ResourceUnit.decode(reader, reader.uint32()));
@@ -77,77 +68,53 @@ export const GroupSpec = {
     return {
       $type: GroupSpec.$type,
       name: isSet(object.name) ? String(object.name) : "",
-      requirements: isSet(object.requirements)
-        ? PlacementRequirements.fromJSON(object.requirements)
-        : undefined,
-      resources: Array.isArray(object?.resources)
-        ? object.resources.map((e: any) => ResourceUnit.fromJSON(e))
-        : [],
+      requirements: isSet(object.requirements) ? PlacementRequirements.fromJSON(object.requirements) : undefined,
+      resources: Array.isArray(object?.resources) ? object.resources.map((e: any) => ResourceUnit.fromJSON(e)) : []
     };
   },
 
   toJSON(message: GroupSpec): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
-    message.requirements !== undefined &&
-      (obj.requirements = message.requirements
-        ? PlacementRequirements.toJSON(message.requirements)
-        : undefined);
+    message.requirements !== undefined && (obj.requirements = message.requirements ? PlacementRequirements.toJSON(message.requirements) : undefined);
     if (message.resources) {
-      obj.resources = message.resources.map((e) =>
-        e ? ResourceUnit.toJSON(e) : undefined
-      );
+      obj.resources = message.resources.map(e => (e ? ResourceUnit.toJSON(e) : undefined));
     } else {
       obj.resources = [];
     }
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<GroupSpec>, I>>(
-    object: I
-  ): GroupSpec {
+  fromPartial<I extends Exact<DeepPartial<GroupSpec>, I>>(object: I): GroupSpec {
     const message = createBaseGroupSpec();
     message.name = object.name ?? "";
     message.requirements =
-      object.requirements !== undefined && object.requirements !== null
-        ? PlacementRequirements.fromPartial(object.requirements)
-        : undefined;
-    message.resources =
-      object.resources?.map((e) => ResourceUnit.fromPartial(e)) || [];
+      object.requirements !== undefined && object.requirements !== null ? PlacementRequirements.fromPartial(object.requirements) : undefined;
+    message.resources = object.resources?.map(e => ResourceUnit.fromPartial(e)) || [];
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(GroupSpec.$type, GroupSpec);
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
-  : Partial<T>;
+    ? string | number | Long
+    : T extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : T extends ReadonlyArray<infer U>
+        ? ReadonlyArray<DeepPartial<U>>
+        : T extends {}
+          ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+          : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<Exclude<keyof I, KeysOfUnion<P> | "$type">, never>;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

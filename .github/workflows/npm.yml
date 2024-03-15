@@ -1,8 +1,12 @@
 name: Release from Master on Push
+
 on:
   push:
     branches:
       - main
+env:
+  HUSKY: 0
+
 jobs:
   tag:
     runs-on: ubuntu-latest

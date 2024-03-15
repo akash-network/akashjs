@@ -29,7 +29,7 @@ export enum Deployment_State {
   active = 1,
   /** closed - DeploymentClosed denotes state for deployment closed */
   closed = 2,
-  UNRECOGNIZED = -1,
+  UNRECOGNIZED = -1
 }
 
 export function deployment_StateFromJSON(object: any): Deployment_State {
@@ -76,17 +76,14 @@ function createBaseDeploymentID(): DeploymentID {
   return {
     $type: "akash.deployment.v1beta3.DeploymentID",
     owner: "",
-    dseq: Long.UZERO,
+    dseq: Long.UZERO
   };
 }
 
 export const DeploymentID = {
   $type: "akash.deployment.v1beta3.DeploymentID" as const,
 
-  encode(
-    message: DeploymentID,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: DeploymentID, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -121,29 +118,23 @@ export const DeploymentID = {
     return {
       $type: DeploymentID.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
-      dseq: isSet(object.dseq) ? Long.fromValue(object.dseq) : Long.UZERO,
+      dseq: isSet(object.dseq) ? Long.fromValue(object.dseq) : Long.UZERO
     };
   },
 
   toJSON(message: DeploymentID): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined &&
-      (obj.dseq = (message.dseq || Long.UZERO).toString());
+    message.dseq !== undefined && (obj.dseq = (message.dseq || Long.UZERO).toString());
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<DeploymentID>, I>>(
-    object: I
-  ): DeploymentID {
+  fromPartial<I extends Exact<DeepPartial<DeploymentID>, I>>(object: I): DeploymentID {
     const message = createBaseDeploymentID();
     message.owner = object.owner ?? "";
-    message.dseq =
-      object.dseq !== undefined && object.dseq !== null
-        ? Long.fromValue(object.dseq)
-        : Long.UZERO;
+    message.dseq = object.dseq !== undefined && object.dseq !== null ? Long.fromValue(object.dseq) : Long.UZERO;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(DeploymentID.$type, DeploymentID);
@@ -154,22 +145,16 @@ function createBaseDeployment(): Deployment {
     deploymentId: undefined,
     state: 0,
     version: new Uint8Array(),
-    createdAt: Long.ZERO,
+    createdAt: Long.ZERO
   };
 }
 
 export const Deployment = {
   $type: "akash.deployment.v1beta3.Deployment" as const,
 
-  encode(
-    message: Deployment,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Deployment, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.deploymentId !== undefined) {
-      DeploymentID.encode(
-        message.deploymentId,
-        writer.uint32(10).fork()
-      ).ldelim();
+      DeploymentID.encode(message.deploymentId, writer.uint32(10).fork()).ldelim();
     }
     if (message.state !== 0) {
       writer.uint32(16).int32(message.state);
@@ -213,52 +198,30 @@ export const Deployment = {
   fromJSON(object: any): Deployment {
     return {
       $type: Deployment.$type,
-      deploymentId: isSet(object.deploymentId)
-        ? DeploymentID.fromJSON(object.deploymentId)
-        : undefined,
+      deploymentId: isSet(object.deploymentId) ? DeploymentID.fromJSON(object.deploymentId) : undefined,
       state: isSet(object.state) ? deployment_StateFromJSON(object.state) : 0,
-      version: isSet(object.version)
-        ? bytesFromBase64(object.version)
-        : new Uint8Array(),
-      createdAt: isSet(object.createdAt)
-        ? Long.fromValue(object.createdAt)
-        : Long.ZERO,
+      version: isSet(object.version) ? bytesFromBase64(object.version) : new Uint8Array(),
+      createdAt: isSet(object.createdAt) ? Long.fromValue(object.createdAt) : Long.ZERO
     };
   },
 
   toJSON(message: Deployment): unknown {
     const obj: any = {};
-    message.deploymentId !== undefined &&
-      (obj.deploymentId = message.deploymentId
-        ? DeploymentID.toJSON(message.deploymentId)
-        : undefined);
-    message.state !== undefined &&
-      (obj.state = deployment_StateToJSON(message.state));
-    message.version !== undefined &&
-      (obj.version = base64FromBytes(
-        message.version !== undefined ? message.version : new Uint8Array()
-      ));
-    message.createdAt !== undefined &&
-      (obj.createdAt = (message.createdAt || Long.ZERO).toString());
+    message.deploymentId !== undefined && (obj.deploymentId = message.deploymentId ? DeploymentID.toJSON(message.deploymentId) : undefined);
+    message.state !== undefined && (obj.state = deployment_StateToJSON(message.state));
+    message.version !== undefined && (obj.version = base64FromBytes(message.version !== undefined ? message.version : new Uint8Array()));
+    message.createdAt !== undefined && (obj.createdAt = (message.createdAt || Long.ZERO).toString());
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<Deployment>, I>>(
-    object: I
-  ): Deployment {
+  fromPartial<I extends Exact<DeepPartial<Deployment>, I>>(object: I): Deployment {
     const message = createBaseDeployment();
-    message.deploymentId =
-      object.deploymentId !== undefined && object.deploymentId !== null
-        ? DeploymentID.fromPartial(object.deploymentId)
-        : undefined;
+    message.deploymentId = object.deploymentId !== undefined && object.deploymentId !== null ? DeploymentID.fromPartial(object.deploymentId) : undefined;
     message.state = object.state ?? 0;
     message.version = object.version ?? new Uint8Array();
-    message.createdAt =
-      object.createdAt !== undefined && object.createdAt !== null
-        ? Long.fromValue(object.createdAt)
-        : Long.ZERO;
+    message.createdAt = object.createdAt !== undefined && object.createdAt !== null ? Long.fromValue(object.createdAt) : Long.ZERO;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(Deployment.$type, Deployment);
@@ -268,17 +231,14 @@ function createBaseDeploymentFilters(): DeploymentFilters {
     $type: "akash.deployment.v1beta3.DeploymentFilters",
     owner: "",
     dseq: Long.UZERO,
-    state: "",
+    state: ""
   };
 }
 
 export const DeploymentFilters = {
   $type: "akash.deployment.v1beta3.DeploymentFilters" as const,
 
-  encode(
-    message: DeploymentFilters,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: DeploymentFilters, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -320,31 +280,25 @@ export const DeploymentFilters = {
       $type: DeploymentFilters.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       dseq: isSet(object.dseq) ? Long.fromValue(object.dseq) : Long.UZERO,
-      state: isSet(object.state) ? String(object.state) : "",
+      state: isSet(object.state) ? String(object.state) : ""
     };
   },
 
   toJSON(message: DeploymentFilters): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined &&
-      (obj.dseq = (message.dseq || Long.UZERO).toString());
+    message.dseq !== undefined && (obj.dseq = (message.dseq || Long.UZERO).toString());
     message.state !== undefined && (obj.state = message.state);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<DeploymentFilters>, I>>(
-    object: I
-  ): DeploymentFilters {
+  fromPartial<I extends Exact<DeepPartial<DeploymentFilters>, I>>(object: I): DeploymentFilters {
     const message = createBaseDeploymentFilters();
     message.owner = object.owner ?? "";
-    message.dseq =
-      object.dseq !== undefined && object.dseq !== null
-        ? Long.fromValue(object.dseq)
-        : Long.UZERO;
+    message.dseq = object.dseq !== undefined && object.dseq !== null ? Long.fromValue(object.dseq) : Long.UZERO;
     message.state = object.state ?? "";
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(DeploymentFilters.$type, DeploymentFilters);
@@ -360,9 +314,7 @@ var globalThis: any = (() => {
   throw "Unable to locate global object";
 })();
 
-const atob: (b64: string) => string =
-  globalThis.atob ||
-  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
+const atob: (b64: string) => string = globalThis.atob || (b64 => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
   const bin = atob(b64);
   const arr = new Uint8Array(bin.length);
@@ -372,45 +324,33 @@ function bytesFromBase64(b64: string): Uint8Array {
   return arr;
 }
 
-const btoa: (bin: string) => string =
-  globalThis.btoa ||
-  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
+const btoa: (bin: string) => string = globalThis.btoa || (bin => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
   const bin: string[] = [];
-  arr.forEach((byte) => {
+  arr.forEach(byte => {
     bin.push(String.fromCharCode(byte));
   });
   return btoa(bin.join(""));
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
-  : Partial<T>;
+    ? string | number | Long
+    : T extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : T extends ReadonlyArray<infer U>
+        ? ReadonlyArray<DeepPartial<U>>
+        : T extends {}
+          ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+          : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<Exclude<keyof I, KeysOfUnion<P> | "$type">, never>;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

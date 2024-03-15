@@ -1,6 +1,6 @@
 import tap from "tap";
 
-import { SDL } from '../src/sdl';
+import { SDL } from "../src/sdl";
 
 const testSDL = `version: '2.0'
 services:
@@ -49,56 +49,54 @@ deployment:
 
 const testManifest = [
   {
-    "Name": "akash",
-    "Services": [
+    Name: "akash",
+    Services: [
       {
-        "Name": "tetris",
-        "Image": "bsord/tetris",
-        "Command": null,
-        "Args": null,
-        "Env": null,
-        "Resources": {
-          "cpu": {
-            "units": {
-              "val": "1000"
+        Name: "tetris",
+        Image: "bsord/tetris",
+        Command: null,
+        Args: null,
+        Env: null,
+        Resources: {
+          cpu: {
+            units: {
+              val: "1000"
             }
           },
-          "memory": {
-            "size": {
-              "val": "536870912"
+          memory: {
+            size: {
+              val: "536870912"
             }
           },
-          "storage": [
+          storage: [
             {
-              "name": "default",
-              "size": {
-                "val": "536870912"
+              name: "default",
+              size: {
+                val: "536870912"
               }
             }
           ],
-          "endpoints": null
+          endpoints: null
         },
-        "Count": 1,
-        "Expose": [
+        Count: 1,
+        Expose: [
           {
-            "Port": 80,
-            "ExternalPort": 80,
-            "Proto": "TCP",
-            "Service": "",
-            "Global": true,
-            "Hosts": null,
-            "HTTPOptions": {
-              "MaxBodySize": 104857600,
-              "ReadTimeout": 50,
-              "SendTimeout": 100,
-              "NextTries": 24,
-              "NextTimeout": 48,
-              "NextCases": [
-                "500"
-              ]
+            Port: 80,
+            ExternalPort: 80,
+            Proto: "TCP",
+            Service: "",
+            Global: true,
+            Hosts: null,
+            HTTPOptions: {
+              MaxBodySize: 104857600,
+              ReadTimeout: 50,
+              SendTimeout: 100,
+              NextTries: 24,
+              NextTimeout: 48,
+              NextCases: ["500"]
             },
-            "IP": "",
-            "EndpointSequenceNumber": 0
+            IP: "",
+            EndpointSequenceNumber: 0
           }
         ]
       }
@@ -106,7 +104,7 @@ const testManifest = [
   }
 ];
 
-tap.test("SDL: Manifest w/ HTTP options", async (t) => {
+tap.test("SDL: Manifest w/ HTTP options", async t => {
   t.plan(1);
 
   const sdl = SDL.fromString(testSDL);

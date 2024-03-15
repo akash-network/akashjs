@@ -1,17 +1,9 @@
-import {
-  MessageType,
-  messageTypeRegistry,
-  UnknownMessage,
-} from "../protobuf/typeRegistry";
+import { MessageType, messageTypeRegistry, UnknownMessage } from "../protobuf/typeRegistry";
 
-export const getAkashTypeRegistry: () => [
-  string,
-  MessageType<UnknownMessage>
-][] = () =>
-    Array.from(messageTypeRegistry).map(([path, type]) => [`/${path}`, type]);
+export const getAkashTypeRegistry: () => [string, MessageType<UnknownMessage>][] = () =>
+  Array.from(messageTypeRegistry).map(([path, type]) => [`/${path}`, type]);
 
-export const getTypeUrl: (type: MessageType) => string = (type) =>
-  `/${type.$type}`;
+export const getTypeUrl: (type: MessageType) => string = type => `/${type.$type}`;
 
 /* TODO: this should be generated from the proto files */
 export enum messages {
@@ -24,5 +16,5 @@ export enum messages {
   MsgCloseGroup = "/akash.deployment.v1beta3.MsgCloseGroup",
   MsgPauseGroup = "/akash.deployment.v1beta3.MsgPauseGroup",
   MsgStartGroup = "/akash.deployment.v1beta3.MsgStartGroup",
-  MsgCreateLease = "/akash.market.v1beta4.MsgCreateLease",
+  MsgCreateLease = "/akash.market.v1beta4.MsgCreateLease"
 }
