@@ -5,24 +5,40 @@
   "repository": {
     "url": "https://github.com/ovrclk/akashjs"
   },
+  "license": "Apache-2.0",
+  "author": "",
   "main": "build/index.js",
-  "types": "build/",
-  "engines": {
-    "node": ">18.0.0"
+  "browser": {
+    "fs": false,
+    "os": false,
+    "path": false
   },
+  "types": "build/",
+  "files": [
+    "umd/",
+    "build/**/*.d.ts",
+    "build/**/*.js"
+  ],
   "scripts": {
     "build": "rimraf build && npm run build:tsc && npm run build:build",
+    "build:build": "webpack",
     "build:production": "NODE_ENV=production npm run build:tsc && npm run build:build",
     "build:tsc": "rimraf build && tsc",
     "dev:watch": "tsc -- --watch",
-    "build:build": "webpack",
+    "format": "prettier --write './**/*.{js,ts,json}' --config ./.prettierrc",
+    "lint": "eslint . --ext .js,.ts,.json",
+    "lint:fix": "npm run lint -- --fix",
+    "prepare": "husky",
+    "prepublishOnly": "npm run build:production",
     "test": "npm run test:unit",
     "test:unit": "tap --ts tests/test_*.ts",
-    "test:unit-snapshot": "tap --ts --snapshot tests/test_*.ts",
-    "prepublishOnly": "npm run build:production"
+    "test:unit-snapshot": "tap --ts --snapshot tests/test_*.ts"
   },
-  "author": "",
-  "license": "Apache-2.0",
+  "lint-staged": {
+    "*.{js,ts}": [
+      "npm run format"
+    ]
+  },
   "dependencies": {
     "@cosmjs/launchpad": "^0.27.0",
     "@cosmjs/proto-signing": "^0.28.11",
@@ -49,7 +65,11 @@
     "@types/node-fetch": "2",
     "@types/sinon": "^10.0.11",
     "@types/tap": "^15.0.5",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "node-polyfill-webpack-plugin": "^1.1.4",
+    "prettier": "^3.2.5",
     "rimraf": "^5.0.1",
     "sinon": "^13.0.1",
     "tap": "^15.1.6",
@@ -60,14 +80,7 @@
     "webpack": "^5.41.1",
     "webpack-cli": "^4.7.2"
   },
-  "browser": {
-    "fs": false,
-    "os": false,
-    "path": false
-  },
-  "files": [
-    "umd/",
-    "build/**/*.d.ts",
-    "build/**/*.js"
-  ]
+  "engines": {
+    "node": ">18.0.0"
+  }
 }

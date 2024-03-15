@@ -28,7 +28,7 @@ export enum Certificate_State {
   valid = 1,
   /** revoked - CertificateRevoked denotes state for deployment closed */
   revoked = 2,
-  UNRECOGNIZED = -1,
+  UNRECOGNIZED = -1
 }
 
 export function certificate_StateFromJSON(object: any): Certificate_State {
@@ -102,10 +102,7 @@ function createBaseCertificateID(): CertificateID {
 export const CertificateID = {
   $type: "akash.cert.v1beta3.CertificateID" as const,
 
-  encode(
-    message: CertificateID,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: CertificateID, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -140,7 +137,7 @@ export const CertificateID = {
     return {
       $type: CertificateID.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
-      serial: isSet(object.serial) ? String(object.serial) : "",
+      serial: isSet(object.serial) ? String(object.serial) : ""
     };
   },
 
@@ -151,14 +148,12 @@ export const CertificateID = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<CertificateID>, I>>(
-    object: I
-  ): CertificateID {
+  fromPartial<I extends Exact<DeepPartial<CertificateID>, I>>(object: I): CertificateID {
     const message = createBaseCertificateID();
     message.owner = object.owner ?? "";
     message.serial = object.serial ?? "";
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(CertificateID.$type, CertificateID);
@@ -168,17 +163,14 @@ function createBaseCertificate(): Certificate {
     $type: "akash.cert.v1beta3.Certificate",
     state: 0,
     cert: new Uint8Array(),
-    pubkey: new Uint8Array(),
+    pubkey: new Uint8Array()
   };
 }
 
 export const Certificate = {
   $type: "akash.cert.v1beta3.Certificate" as const,
 
-  encode(
-    message: Certificate,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Certificate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.state !== 0) {
       writer.uint32(16).int32(message.state);
     }
@@ -219,39 +211,26 @@ export const Certificate = {
     return {
       $type: Certificate.$type,
       state: isSet(object.state) ? certificate_StateFromJSON(object.state) : 0,
-      cert: isSet(object.cert)
-        ? bytesFromBase64(object.cert)
-        : new Uint8Array(),
-      pubkey: isSet(object.pubkey)
-        ? bytesFromBase64(object.pubkey)
-        : new Uint8Array(),
+      cert: isSet(object.cert) ? bytesFromBase64(object.cert) : new Uint8Array(),
+      pubkey: isSet(object.pubkey) ? bytesFromBase64(object.pubkey) : new Uint8Array()
     };
   },
 
   toJSON(message: Certificate): unknown {
     const obj: any = {};
-    message.state !== undefined &&
-      (obj.state = certificate_StateToJSON(message.state));
-    message.cert !== undefined &&
-      (obj.cert = base64FromBytes(
-        message.cert !== undefined ? message.cert : new Uint8Array()
-      ));
-    message.pubkey !== undefined &&
-      (obj.pubkey = base64FromBytes(
-        message.pubkey !== undefined ? message.pubkey : new Uint8Array()
-      ));
+    message.state !== undefined && (obj.state = certificate_StateToJSON(message.state));
+    message.cert !== undefined && (obj.cert = base64FromBytes(message.cert !== undefined ? message.cert : new Uint8Array()));
+    message.pubkey !== undefined && (obj.pubkey = base64FromBytes(message.pubkey !== undefined ? message.pubkey : new Uint8Array()));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<Certificate>, I>>(
-    object: I
-  ): Certificate {
+  fromPartial<I extends Exact<DeepPartial<Certificate>, I>>(object: I): Certificate {
     const message = createBaseCertificate();
     message.state = object.state ?? 0;
     message.cert = object.cert ?? new Uint8Array();
     message.pubkey = object.pubkey ?? new Uint8Array();
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(Certificate.$type, Certificate);
@@ -261,17 +240,14 @@ function createBaseCertificateFilter(): CertificateFilter {
     $type: "akash.cert.v1beta3.CertificateFilter",
     owner: "",
     serial: "",
-    state: "",
+    state: ""
   };
 }
 
 export const CertificateFilter = {
   $type: "akash.cert.v1beta3.CertificateFilter" as const,
 
-  encode(
-    message: CertificateFilter,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: CertificateFilter, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -313,7 +289,7 @@ export const CertificateFilter = {
       $type: CertificateFilter.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
       serial: isSet(object.serial) ? String(object.serial) : "",
-      state: isSet(object.state) ? String(object.state) : "",
+      state: isSet(object.state) ? String(object.state) : ""
     };
   },
 
@@ -325,15 +301,13 @@ export const CertificateFilter = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<CertificateFilter>, I>>(
-    object: I
-  ): CertificateFilter {
+  fromPartial<I extends Exact<DeepPartial<CertificateFilter>, I>>(object: I): CertificateFilter {
     const message = createBaseCertificateFilter();
     message.owner = object.owner ?? "";
     message.serial = object.serial ?? "";
     message.state = object.state ?? "";
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(CertificateFilter.$type, CertificateFilter);
@@ -343,17 +317,14 @@ function createBaseMsgCreateCertificate(): MsgCreateCertificate {
     $type: "akash.cert.v1beta3.MsgCreateCertificate",
     owner: "",
     cert: new Uint8Array(),
-    pubkey: new Uint8Array(),
+    pubkey: new Uint8Array()
   };
 }
 
 export const MsgCreateCertificate = {
   $type: "akash.cert.v1beta3.MsgCreateCertificate" as const,
 
-  encode(
-    message: MsgCreateCertificate,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgCreateCertificate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -366,10 +337,7 @@ export const MsgCreateCertificate = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgCreateCertificate {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateCertificate {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateCertificate();
@@ -397,38 +365,26 @@ export const MsgCreateCertificate = {
     return {
       $type: MsgCreateCertificate.$type,
       owner: isSet(object.owner) ? String(object.owner) : "",
-      cert: isSet(object.cert)
-        ? bytesFromBase64(object.cert)
-        : new Uint8Array(),
-      pubkey: isSet(object.pubkey)
-        ? bytesFromBase64(object.pubkey)
-        : new Uint8Array(),
+      cert: isSet(object.cert) ? bytesFromBase64(object.cert) : new Uint8Array(),
+      pubkey: isSet(object.pubkey) ? bytesFromBase64(object.pubkey) : new Uint8Array()
     };
   },
 
   toJSON(message: MsgCreateCertificate): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.cert !== undefined &&
-      (obj.cert = base64FromBytes(
-        message.cert !== undefined ? message.cert : new Uint8Array()
-      ));
-    message.pubkey !== undefined &&
-      (obj.pubkey = base64FromBytes(
-        message.pubkey !== undefined ? message.pubkey : new Uint8Array()
-      ));
+    message.cert !== undefined && (obj.cert = base64FromBytes(message.cert !== undefined ? message.cert : new Uint8Array()));
+    message.pubkey !== undefined && (obj.pubkey = base64FromBytes(message.pubkey !== undefined ? message.pubkey : new Uint8Array()));
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateCertificate>, I>>(
-    object: I
-  ): MsgCreateCertificate {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateCertificate>, I>>(object: I): MsgCreateCertificate {
     const message = createBaseMsgCreateCertificate();
     message.owner = object.owner ?? "";
     message.cert = object.cert ?? new Uint8Array();
     message.pubkey = object.pubkey ?? new Uint8Array();
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgCreateCertificate.$type, MsgCreateCertificate);
@@ -440,17 +396,11 @@ function createBaseMsgCreateCertificateResponse(): MsgCreateCertificateResponse 
 export const MsgCreateCertificateResponse = {
   $type: "akash.cert.v1beta3.MsgCreateCertificateResponse" as const,
 
-  encode(
-    _: MsgCreateCertificateResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgCreateCertificateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgCreateCertificateResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateCertificateResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateCertificateResponse();
@@ -467,7 +417,7 @@ export const MsgCreateCertificateResponse = {
 
   fromJSON(_: any): MsgCreateCertificateResponse {
     return {
-      $type: MsgCreateCertificateResponse.$type,
+      $type: MsgCreateCertificateResponse.$type
     };
   },
 
@@ -476,18 +426,13 @@ export const MsgCreateCertificateResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateCertificateResponse>, I>>(
-    _: I
-  ): MsgCreateCertificateResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateCertificateResponse>, I>>(_: I): MsgCreateCertificateResponse {
     const message = createBaseMsgCreateCertificateResponse();
     return message;
-  },
+  }
 };
 
-messageTypeRegistry.set(
-  MsgCreateCertificateResponse.$type,
-  MsgCreateCertificateResponse
-);
+messageTypeRegistry.set(MsgCreateCertificateResponse.$type, MsgCreateCertificateResponse);
 
 function createBaseMsgRevokeCertificate(): MsgRevokeCertificate {
   return { $type: "akash.cert.v1beta3.MsgRevokeCertificate", id: undefined };
@@ -496,20 +441,14 @@ function createBaseMsgRevokeCertificate(): MsgRevokeCertificate {
 export const MsgRevokeCertificate = {
   $type: "akash.cert.v1beta3.MsgRevokeCertificate" as const,
 
-  encode(
-    message: MsgRevokeCertificate,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgRevokeCertificate, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== undefined) {
       CertificateID.encode(message.id, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgRevokeCertificate {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRevokeCertificate {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRevokeCertificate();
@@ -530,27 +469,21 @@ export const MsgRevokeCertificate = {
   fromJSON(object: any): MsgRevokeCertificate {
     return {
       $type: MsgRevokeCertificate.$type,
-      id: isSet(object.id) ? CertificateID.fromJSON(object.id) : undefined,
+      id: isSet(object.id) ? CertificateID.fromJSON(object.id) : undefined
     };
   },
 
   toJSON(message: MsgRevokeCertificate): unknown {
     const obj: any = {};
-    message.id !== undefined &&
-      (obj.id = message.id ? CertificateID.toJSON(message.id) : undefined);
+    message.id !== undefined && (obj.id = message.id ? CertificateID.toJSON(message.id) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgRevokeCertificate>, I>>(
-    object: I
-  ): MsgRevokeCertificate {
+  fromPartial<I extends Exact<DeepPartial<MsgRevokeCertificate>, I>>(object: I): MsgRevokeCertificate {
     const message = createBaseMsgRevokeCertificate();
-    message.id =
-      object.id !== undefined && object.id !== null
-        ? CertificateID.fromPartial(object.id)
-        : undefined;
+    message.id = object.id !== undefined && object.id !== null ? CertificateID.fromPartial(object.id) : undefined;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgRevokeCertificate.$type, MsgRevokeCertificate);
@@ -562,17 +495,11 @@ function createBaseMsgRevokeCertificateResponse(): MsgRevokeCertificateResponse 
 export const MsgRevokeCertificateResponse = {
   $type: "akash.cert.v1beta3.MsgRevokeCertificateResponse" as const,
 
-  encode(
-    _: MsgRevokeCertificateResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgRevokeCertificateResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgRevokeCertificateResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgRevokeCertificateResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgRevokeCertificateResponse();
@@ -589,7 +516,7 @@ export const MsgRevokeCertificateResponse = {
 
   fromJSON(_: any): MsgRevokeCertificateResponse {
     return {
-      $type: MsgRevokeCertificateResponse.$type,
+      $type: MsgRevokeCertificateResponse.$type
     };
   },
 
@@ -598,29 +525,20 @@ export const MsgRevokeCertificateResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgRevokeCertificateResponse>, I>>(
-    _: I
-  ): MsgRevokeCertificateResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgRevokeCertificateResponse>, I>>(_: I): MsgRevokeCertificateResponse {
     const message = createBaseMsgRevokeCertificateResponse();
     return message;
-  },
+  }
 };
 
-messageTypeRegistry.set(
-  MsgRevokeCertificateResponse.$type,
-  MsgRevokeCertificateResponse
-);
+messageTypeRegistry.set(MsgRevokeCertificateResponse.$type, MsgRevokeCertificateResponse);
 
 /** Msg defines the provider Msg service */
 export interface Msg {
   /** CreateCertificate defines a method to create new certificate given proper inputs. */
-  CreateCertificate(
-    request: MsgCreateCertificate
-  ): Promise<MsgCreateCertificateResponse>;
+  CreateCertificate(request: MsgCreateCertificate): Promise<MsgCreateCertificateResponse>;
   /** RevokeCertificate defines a method to revoke the certificate */
-  RevokeCertificate(
-    request: MsgRevokeCertificate
-  ): Promise<MsgRevokeCertificateResponse>;
+  RevokeCertificate(request: MsgRevokeCertificate): Promise<MsgRevokeCertificateResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -630,41 +548,21 @@ export class MsgClientImpl implements Msg {
     this.CreateCertificate = this.CreateCertificate.bind(this);
     this.RevokeCertificate = this.RevokeCertificate.bind(this);
   }
-  CreateCertificate(
-    request: MsgCreateCertificate
-  ): Promise<MsgCreateCertificateResponse> {
+  CreateCertificate(request: MsgCreateCertificate): Promise<MsgCreateCertificateResponse> {
     const data = MsgCreateCertificate.encode(request).finish();
-    const promise = this.rpc.request(
-      "akash.cert.v1beta3.Msg",
-      "CreateCertificate",
-      data
-    );
-    return promise.then((data) =>
-      MsgCreateCertificateResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("akash.cert.v1beta3.Msg", "CreateCertificate", data);
+    return promise.then(data => MsgCreateCertificateResponse.decode(new _m0.Reader(data)));
   }
 
-  RevokeCertificate(
-    request: MsgRevokeCertificate
-  ): Promise<MsgRevokeCertificateResponse> {
+  RevokeCertificate(request: MsgRevokeCertificate): Promise<MsgRevokeCertificateResponse> {
     const data = MsgRevokeCertificate.encode(request).finish();
-    const promise = this.rpc.request(
-      "akash.cert.v1beta3.Msg",
-      "RevokeCertificate",
-      data
-    );
-    return promise.then((data) =>
-      MsgRevokeCertificateResponse.decode(new _m0.Reader(data))
-    );
+    const promise = this.rpc.request("akash.cert.v1beta3.Msg", "RevokeCertificate", data);
+    return promise.then(data => MsgRevokeCertificateResponse.decode(new _m0.Reader(data)));
   }
 }
 
 interface Rpc {
-  request(
-    service: string,
-    method: string,
-    data: Uint8Array
-  ): Promise<Uint8Array>;
+  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
 }
 
 declare var self: any | undefined;
@@ -678,9 +576,7 @@ var globalThis: any = (() => {
   throw "Unable to locate global object";
 })();
 
-const atob: (b64: string) => string =
-  globalThis.atob ||
-  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
+const atob: (b64: string) => string = globalThis.atob || (b64 => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
   const bin = atob(b64);
   const arr = new Uint8Array(bin.length);
@@ -690,45 +586,33 @@ function bytesFromBase64(b64: string): Uint8Array {
   return arr;
 }
 
-const btoa: (bin: string) => string =
-  globalThis.btoa ||
-  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
+const btoa: (bin: string) => string = globalThis.btoa || (bin => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
   const bin: string[] = [];
-  arr.forEach((byte) => {
+  arr.forEach(byte => {
     bin.push(String.fromCharCode(byte));
   });
   return btoa(bin.join(""));
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
-  : Partial<T>;
+    ? string | number | Long
+    : T extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : T extends ReadonlyArray<infer U>
+        ? ReadonlyArray<DeepPartial<U>>
+        : T extends {}
+          ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+          : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<Exclude<keyof I, KeysOfUnion<P> | "$type">, never>;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

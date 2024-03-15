@@ -57,19 +57,14 @@
             "proto": "TCP",
             "service": "",
             "global": true,
-            "hosts": [
-              "ahostname.com"
-            ],
+            "hosts": ["ahostname.com"],
             "httpOptions": {
               "maxBodySize": 1048576,
               "readTimeout": 60000,
               "sendTimeout": 60000,
               "nextTries": 3,
               "nextTimeout": 0,
-              "nextCases": [
-                "error",
-                "timeout"
-              ]
+              "nextCases": ["error", "timeout"]
             },
             "ip": "",
             "endpointSequenceNumber": 0
@@ -87,10 +82,7 @@
               "sendTimeout": 60000,
               "nextTries": 3,
               "nextTimeout": 0,
-              "nextCases": [
-                "error",
-                "timeout"
-              ]
+              "nextCases": ["error", "timeout"]
             },
             "ip": "",
             "endpointSequenceNumber": 0

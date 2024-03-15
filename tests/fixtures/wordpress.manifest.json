@@ -7,12 +7,7 @@
         "image": "mariadb:10.6.4",
         "command": null,
         "args": null,
-        "env": [
-          "MYSQL_RANDOM_ROOT_PASSWORD=1",
-          "MYSQL_DATABASE=wordpress",
-          "MYSQL_USER=wordpress",
-          "MYSQL_PASSWORD=testpass4you"
-        ],
+        "env": ["MYSQL_RANDOM_ROOT_PASSWORD=1", "MYSQL_DATABASE=wordpress", "MYSQL_USER=wordpress", "MYSQL_PASSWORD=testpass4you"],
         "resources": {
           "id": 1,
           "cpu": {
@@ -71,10 +66,7 @@
               "sendTimeout": 60000,
               "nextTries": 3,
               "nextTimeout": 0,
-              "nextCases": [
-                "error",
-                "timeout"
-              ]
+              "nextCases": ["error", "timeout"]
             },
             "ip": "",
             "endpointSequenceNumber": 0
@@ -92,10 +84,7 @@
               "sendTimeout": 60000,
               "nextTries": 3,
               "nextTimeout": 0,
-              "nextCases": [
-                "error",
-                "timeout"
-              ]
+              "nextCases": ["error", "timeout"]
             },
             "ip": "",
             "endpointSequenceNumber": 0
@@ -116,12 +105,7 @@
         "image": "wordpress",
         "command": null,
         "args": null,
-        "env": [
-          "WORDPRESS_DB_HOST=db",
-          "WORDPRESS_DB_USER=wordpress",
-          "WORDPRESS_DB_PASSWORD=testpass4you",
-          "WORDPRESS_DB_NAME=wordpress"
-        ],
+        "env": ["WORDPRESS_DB_HOST=db", "WORDPRESS_DB_USER=wordpress", "WORDPRESS_DB_PASSWORD=testpass4you", "WORDPRESS_DB_NAME=wordpress"],
         "resources": {
           "id": 2,
           "cpu": {
@@ -184,10 +168,7 @@
               "sendTimeout": 60000,
               "nextTries": 3,
               "nextTimeout": 0,
-              "nextCases": [
-                "error",
-                "timeout"
-              ]
+              "nextCases": ["error", "timeout"]
             },
             "ip": "",
             "endpointSequenceNumber": 0

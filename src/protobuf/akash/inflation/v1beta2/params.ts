@@ -27,17 +27,14 @@ function createBaseParams(): Params {
     $type: "akash.inflation.v1beta2.Params",
     inflationDecayFactor: "",
     initialInflation: "",
-    variance: "",
+    variance: ""
   };
 }
 
 export const Params = {
   $type: "akash.inflation.v1beta2.Params" as const,
 
-  encode(
-    message: Params,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Params, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.inflationDecayFactor !== "") {
       writer.uint32(10).string(message.inflationDecayFactor);
     }
@@ -77,22 +74,16 @@ export const Params = {
   fromJSON(object: any): Params {
     return {
       $type: Params.$type,
-      inflationDecayFactor: isSet(object.inflationDecayFactor)
-        ? String(object.inflationDecayFactor)
-        : "",
-      initialInflation: isSet(object.initialInflation)
-        ? String(object.initialInflation)
-        : "",
-      variance: isSet(object.variance) ? String(object.variance) : "",
+      inflationDecayFactor: isSet(object.inflationDecayFactor) ? String(object.inflationDecayFactor) : "",
+      initialInflation: isSet(object.initialInflation) ? String(object.initialInflation) : "",
+      variance: isSet(object.variance) ? String(object.variance) : ""
     };
   },
 
   toJSON(message: Params): unknown {
     const obj: any = {};
-    message.inflationDecayFactor !== undefined &&
-      (obj.inflationDecayFactor = message.inflationDecayFactor);
-    message.initialInflation !== undefined &&
-      (obj.initialInflation = message.initialInflation);
+    message.inflationDecayFactor !== undefined && (obj.inflationDecayFactor = message.inflationDecayFactor);
+    message.initialInflation !== undefined && (obj.initialInflation = message.initialInflation);
     message.variance !== undefined && (obj.variance = message.variance);
     return obj;
   },
@@ -103,39 +94,29 @@ export const Params = {
     message.initialInflation = object.initialInflation ?? "";
     message.variance = object.variance ?? "";
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(Params.$type, Params);
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
-  : Partial<T>;
+    ? string | number | Long
+    : T extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : T extends ReadonlyArray<infer U>
+        ? ReadonlyArray<DeepPartial<U>>
+        : T extends {}
+          ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+          : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<Exclude<keyof I, KeysOfUnion<P> | "$type">, never>;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

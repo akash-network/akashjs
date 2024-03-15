@@ -28,7 +28,7 @@ export enum Group_State {
   insufficient_funds = 3,
   /** closed - GroupClosed denotes state for group closed */
   closed = 4,
-  UNRECOGNIZED = -1,
+  UNRECOGNIZED = -1
 }
 
 export function group_StateFromJSON(object: any): Group_State {
@@ -79,7 +79,7 @@ function createBaseGroup(): Group {
     groupId: undefined,
     state: 0,
     groupSpec: undefined,
-    createdAt: Long.ZERO,
+    createdAt: Long.ZERO
   };
 }
 
@@ -132,85 +132,52 @@ export const Group = {
   fromJSON(object: any): Group {
     return {
       $type: Group.$type,
-      groupId: isSet(object.groupId)
-        ? GroupID.fromJSON(object.groupId)
-        : undefined,
+      groupId: isSet(object.groupId) ? GroupID.fromJSON(object.groupId) : undefined,
       state: isSet(object.state) ? group_StateFromJSON(object.state) : 0,
-      groupSpec: isSet(object.groupSpec)
-        ? GroupSpec.fromJSON(object.groupSpec)
-        : undefined,
-      createdAt: isSet(object.createdAt)
-        ? Long.fromValue(object.createdAt)
-        : Long.ZERO,
+      groupSpec: isSet(object.groupSpec) ? GroupSpec.fromJSON(object.groupSpec) : undefined,
+      createdAt: isSet(object.createdAt) ? Long.fromValue(object.createdAt) : Long.ZERO
     };
   },
 
   toJSON(message: Group): unknown {
     const obj: any = {};
-    message.groupId !== undefined &&
-      (obj.groupId = message.groupId
-        ? GroupID.toJSON(message.groupId)
-        : undefined);
-    message.state !== undefined &&
-      (obj.state = group_StateToJSON(message.state));
-    message.groupSpec !== undefined &&
-      (obj.groupSpec = message.groupSpec
-        ? GroupSpec.toJSON(message.groupSpec)
-        : undefined);
-    message.createdAt !== undefined &&
-      (obj.createdAt = (message.createdAt || Long.ZERO).toString());
+    message.groupId !== undefined && (obj.groupId = message.groupId ? GroupID.toJSON(message.groupId) : undefined);
+    message.state !== undefined && (obj.state = group_StateToJSON(message.state));
+    message.groupSpec !== undefined && (obj.groupSpec = message.groupSpec ? GroupSpec.toJSON(message.groupSpec) : undefined);
+    message.createdAt !== undefined && (obj.createdAt = (message.createdAt || Long.ZERO).toString());
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<Group>, I>>(object: I): Group {
     const message = createBaseGroup();
-    message.groupId =
-      object.groupId !== undefined && object.groupId !== null
-        ? GroupID.fromPartial(object.groupId)
-        : undefined;
+    message.groupId = object.groupId !== undefined && object.groupId !== null ? GroupID.fromPartial(object.groupId) : undefined;
     message.state = object.state ?? 0;
-    message.groupSpec =
-      object.groupSpec !== undefined && object.groupSpec !== null
-        ? GroupSpec.fromPartial(object.groupSpec)
-        : undefined;
-    message.createdAt =
-      object.createdAt !== undefined && object.createdAt !== null
-        ? Long.fromValue(object.createdAt)
-        : Long.ZERO;
+    message.groupSpec = object.groupSpec !== undefined && object.groupSpec !== null ? GroupSpec.fromPartial(object.groupSpec) : undefined;
+    message.createdAt = object.createdAt !== undefined && object.createdAt !== null ? Long.fromValue(object.createdAt) : Long.ZERO;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(Group.$type, Group);
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
-  : Partial<T>;
+    ? string | number | Long
+    : T extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : T extends ReadonlyArray<infer U>
+        ? ReadonlyArray<DeepPartial<U>>
+        : T extends {}
+          ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+          : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<Exclude<keyof I, KeysOfUnion<P> | "$type">, never>;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

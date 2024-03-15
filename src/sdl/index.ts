@@ -471,7 +471,7 @@ export class SDL {
     const deployment = this.data.deployment[name];
     const profile = this.data.profiles.compute[deployment[placement].profile];
 
-    let manifestService: v2ManifestService = {
+    const manifestService: v2ManifestService = {
       Name: name,
       Image: service.image,
       Command: service.command || null,
@@ -630,7 +630,7 @@ export class SDL {
   groupResourceUnits(resource: v2ComputeResources | undefined, asString: boolean) {
     if (!resource) return {};
 
-    let units = {
+    const units = {
       endpoints: null
     } as any;
 
@@ -757,7 +757,7 @@ export class SDL {
     const yamlJson = this.data;
     const ipEndpointNames = this.computeEndpointSequenceNumbers(yamlJson);
 
-    let groups = {} as any;
+    const groups = {} as any;
 
     Object.keys(yamlJson.services).forEach(svcName => {
       const svc = yamlJson.services[svcName];
@@ -807,7 +807,7 @@ export class SDL {
           count: svcdepl.count
         };
 
-        let endpoints = [] as any[];
+        const endpoints = [] as any[];
         svc?.expose?.forEach(expose => {
           expose?.to
             ?.filter(to => to.global)

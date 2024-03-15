@@ -55,25 +55,16 @@ export const CPU = {
   fromJSON(object: any): CPU {
     return {
       $type: CPU.$type,
-      units: isSet(object.units)
-        ? ResourceValue.fromJSON(object.units)
-        : undefined,
-      attributes: Array.isArray(object?.attributes)
-        ? object.attributes.map((e: any) => Attribute.fromJSON(e))
-        : [],
+      units: isSet(object.units) ? ResourceValue.fromJSON(object.units) : undefined,
+      attributes: Array.isArray(object?.attributes) ? object.attributes.map((e: any) => Attribute.fromJSON(e)) : []
     };
   },
 
   toJSON(message: CPU): unknown {
     const obj: any = {};
-    message.units !== undefined &&
-      (obj.units = message.units
-        ? ResourceValue.toJSON(message.units)
-        : undefined);
+    message.units !== undefined && (obj.units = message.units ? ResourceValue.toJSON(message.units) : undefined);
     if (message.attributes) {
-      obj.attributes = message.attributes.map((e) =>
-        e ? Attribute.toJSON(e) : undefined
-      );
+      obj.attributes = message.attributes.map(e => (e ? Attribute.toJSON(e) : undefined));
     } else {
       obj.attributes = [];
     }
@@ -82,46 +73,32 @@ export const CPU = {
 
   fromPartial<I extends Exact<DeepPartial<CPU>, I>>(object: I): CPU {
     const message = createBaseCPU();
-    message.units =
-      object.units !== undefined && object.units !== null
-        ? ResourceValue.fromPartial(object.units)
-        : undefined;
-    message.attributes =
-      object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
+    message.units = object.units !== undefined && object.units !== null ? ResourceValue.fromPartial(object.units) : undefined;
+    message.attributes = object.attributes?.map(e => Attribute.fromPartial(e)) || [];
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(CPU.$type, CPU);
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
-  : Partial<T>;
+    ? string | number | Long
+    : T extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : T extends ReadonlyArray<infer U>
+        ? ReadonlyArray<DeepPartial<U>>
+        : T extends {}
+          ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+          : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<Exclude<keyof I, KeysOfUnion<P> | "$type">, never>;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

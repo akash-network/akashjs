@@ -66,7 +66,7 @@ export enum Bid_State {
   lost = 3,
   /** closed - BidClosed denotes state for bid closed */
   closed = 4,
-  UNRECOGNIZED = -1,
+  UNRECOGNIZED = -1
 }
 
 export function bid_StateFromJSON(object: any): Bid_State {
@@ -128,17 +128,14 @@ function createBaseMsgCreateBid(): MsgCreateBid {
     order: undefined,
     provider: "",
     price: undefined,
-    deposit: undefined,
+    deposit: undefined
   };
 }
 
 export const MsgCreateBid = {
   $type: "akash.market.v1beta3.MsgCreateBid" as const,
 
-  encode(
-    message: MsgCreateBid,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgCreateBid, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.order !== undefined) {
       OrderID.encode(message.order, writer.uint32(10).fork()).ldelim();
     }
@@ -187,45 +184,27 @@ export const MsgCreateBid = {
       order: isSet(object.order) ? OrderID.fromJSON(object.order) : undefined,
       provider: isSet(object.provider) ? String(object.provider) : "",
       price: isSet(object.price) ? DecCoin.fromJSON(object.price) : undefined,
-      deposit: isSet(object.deposit)
-        ? Coin.fromJSON(object.deposit)
-        : undefined,
+      deposit: isSet(object.deposit) ? Coin.fromJSON(object.deposit) : undefined
     };
   },
 
   toJSON(message: MsgCreateBid): unknown {
     const obj: any = {};
-    message.order !== undefined &&
-      (obj.order = message.order ? OrderID.toJSON(message.order) : undefined);
+    message.order !== undefined && (obj.order = message.order ? OrderID.toJSON(message.order) : undefined);
     message.provider !== undefined && (obj.provider = message.provider);
-    message.price !== undefined &&
-      (obj.price = message.price ? DecCoin.toJSON(message.price) : undefined);
-    message.deposit !== undefined &&
-      (obj.deposit = message.deposit
-        ? Coin.toJSON(message.deposit)
-        : undefined);
+    message.price !== undefined && (obj.price = message.price ? DecCoin.toJSON(message.price) : undefined);
+    message.deposit !== undefined && (obj.deposit = message.deposit ? Coin.toJSON(message.deposit) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateBid>, I>>(
-    object: I
-  ): MsgCreateBid {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateBid>, I>>(object: I): MsgCreateBid {
     const message = createBaseMsgCreateBid();
-    message.order =
-      object.order !== undefined && object.order !== null
-        ? OrderID.fromPartial(object.order)
-        : undefined;
+    message.order = object.order !== undefined && object.order !== null ? OrderID.fromPartial(object.order) : undefined;
     message.provider = object.provider ?? "";
-    message.price =
-      object.price !== undefined && object.price !== null
-        ? DecCoin.fromPartial(object.price)
-        : undefined;
-    message.deposit =
-      object.deposit !== undefined && object.deposit !== null
-        ? Coin.fromPartial(object.deposit)
-        : undefined;
+    message.price = object.price !== undefined && object.price !== null ? DecCoin.fromPartial(object.price) : undefined;
+    message.deposit = object.deposit !== undefined && object.deposit !== null ? Coin.fromPartial(object.deposit) : undefined;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgCreateBid.$type, MsgCreateBid);
@@ -237,17 +216,11 @@ function createBaseMsgCreateBidResponse(): MsgCreateBidResponse {
 export const MsgCreateBidResponse = {
   $type: "akash.market.v1beta3.MsgCreateBidResponse" as const,
 
-  encode(
-    _: MsgCreateBidResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgCreateBidResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MsgCreateBidResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreateBidResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMsgCreateBidResponse();
@@ -264,7 +237,7 @@ export const MsgCreateBidResponse = {
 
   fromJSON(_: any): MsgCreateBidResponse {
     return {
-      $type: MsgCreateBidResponse.$type,
+      $type: MsgCreateBidResponse.$type
     };
   },
 
@@ -273,12 +246,10 @@ export const MsgCreateBidResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCreateBidResponse>, I>>(
-    _: I
-  ): MsgCreateBidResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCreateBidResponse>, I>>(_: I): MsgCreateBidResponse {
     const message = createBaseMsgCreateBidResponse();
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgCreateBidResponse.$type, MsgCreateBidResponse);
@@ -290,10 +261,7 @@ function createBaseMsgCloseBid(): MsgCloseBid {
 export const MsgCloseBid = {
   $type: "akash.market.v1beta3.MsgCloseBid" as const,
 
-  encode(
-    message: MsgCloseBid,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MsgCloseBid, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.bidId !== undefined) {
       BidID.encode(message.bidId, writer.uint32(10).fork()).ldelim();
     }
@@ -321,27 +289,21 @@ export const MsgCloseBid = {
   fromJSON(object: any): MsgCloseBid {
     return {
       $type: MsgCloseBid.$type,
-      bidId: isSet(object.bidId) ? BidID.fromJSON(object.bidId) : undefined,
+      bidId: isSet(object.bidId) ? BidID.fromJSON(object.bidId) : undefined
     };
   },
 
   toJSON(message: MsgCloseBid): unknown {
     const obj: any = {};
-    message.bidId !== undefined &&
-      (obj.bidId = message.bidId ? BidID.toJSON(message.bidId) : undefined);
+    message.bidId !== undefined && (obj.bidId = message.bidId ? BidID.toJSON(message.bidId) : undefined);
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCloseBid>, I>>(
-    object: I
-  ): MsgCloseBid {
+  fromPartial<I extends Exact<DeepPartial<MsgCloseBid>, I>>(object: I): MsgCloseBid {
     const message = createBaseMsgCloseBid();
-    message.bidId =
-      object.bidId !== undefined && object.bidId !== null
-        ? BidID.fromPartial(object.bidId)
-        : undefined;
+    message.bidId = object.bidId !== undefined && object.bidId !== null ? BidID.fromPartial(object.bidId) : undefined;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgCloseBid.$type, MsgCloseBid);
@@ -353,10 +315,7 @@ function createBaseMsgCloseBidResponse(): MsgCloseBidResponse {
 export const MsgCloseBidResponse = {
   $type: "akash.market.v1beta3.MsgCloseBidResponse" as const,
 
-  encode(
-    _: MsgCloseBidResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(_: MsgCloseBidResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     return writer;
   },
 
@@ -377,7 +336,7 @@ export const MsgCloseBidResponse = {
 
   fromJSON(_: any): MsgCloseBidResponse {
     return {
-      $type: MsgCloseBidResponse.$type,
+      $type: MsgCloseBidResponse.$type
     };
   },
 
@@ -386,12 +345,10 @@ export const MsgCloseBidResponse = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<MsgCloseBidResponse>, I>>(
-    _: I
-  ): MsgCloseBidResponse {
+  fromPartial<I extends Exact<DeepPartial<MsgCloseBidResponse>, I>>(_: I): MsgCloseBidResponse {
     const message = createBaseMsgCloseBidResponse();
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(MsgCloseBidResponse.$type, MsgCloseBidResponse);
@@ -403,7 +360,7 @@ function createBaseBidID(): BidID {
     dseq: Long.UZERO,
     gseq: 0,
     oseq: 0,
-    provider: "",
+    provider: ""
   };
 }
 
@@ -466,15 +423,14 @@ export const BidID = {
       dseq: isSet(object.dseq) ? Long.fromValue(object.dseq) : Long.UZERO,
       gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
       oseq: isSet(object.oseq) ? Number(object.oseq) : 0,
-      provider: isSet(object.provider) ? String(object.provider) : "",
+      provider: isSet(object.provider) ? String(object.provider) : ""
     };
   },
 
   toJSON(message: BidID): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined &&
-      (obj.dseq = (message.dseq || Long.UZERO).toString());
+    message.dseq !== undefined && (obj.dseq = (message.dseq || Long.UZERO).toString());
     message.gseq !== undefined && (obj.gseq = Math.round(message.gseq));
     message.oseq !== undefined && (obj.oseq = Math.round(message.oseq));
     message.provider !== undefined && (obj.provider = message.provider);
@@ -484,15 +440,12 @@ export const BidID = {
   fromPartial<I extends Exact<DeepPartial<BidID>, I>>(object: I): BidID {
     const message = createBaseBidID();
     message.owner = object.owner ?? "";
-    message.dseq =
-      object.dseq !== undefined && object.dseq !== null
-        ? Long.fromValue(object.dseq)
-        : Long.UZERO;
+    message.dseq = object.dseq !== undefined && object.dseq !== null ? Long.fromValue(object.dseq) : Long.UZERO;
     message.gseq = object.gseq ?? 0;
     message.oseq = object.oseq ?? 0;
     message.provider = object.provider ?? "";
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(BidID.$type, BidID);
@@ -503,7 +456,7 @@ function createBaseBid(): Bid {
     bidId: undefined,
     state: 0,
     price: undefined,
-    createdAt: Long.ZERO,
+    createdAt: Long.ZERO
   };
 }
 
@@ -559,41 +512,27 @@ export const Bid = {
       bidId: isSet(object.bidId) ? BidID.fromJSON(object.bidId) : undefined,
       state: isSet(object.state) ? bid_StateFromJSON(object.state) : 0,
       price: isSet(object.price) ? DecCoin.fromJSON(object.price) : undefined,
-      createdAt: isSet(object.createdAt)
-        ? Long.fromValue(object.createdAt)
-        : Long.ZERO,
+      createdAt: isSet(object.createdAt) ? Long.fromValue(object.createdAt) : Long.ZERO
     };
   },
 
   toJSON(message: Bid): unknown {
     const obj: any = {};
-    message.bidId !== undefined &&
-      (obj.bidId = message.bidId ? BidID.toJSON(message.bidId) : undefined);
+    message.bidId !== undefined && (obj.bidId = message.bidId ? BidID.toJSON(message.bidId) : undefined);
     message.state !== undefined && (obj.state = bid_StateToJSON(message.state));
-    message.price !== undefined &&
-      (obj.price = message.price ? DecCoin.toJSON(message.price) : undefined);
-    message.createdAt !== undefined &&
-      (obj.createdAt = (message.createdAt || Long.ZERO).toString());
+    message.price !== undefined && (obj.price = message.price ? DecCoin.toJSON(message.price) : undefined);
+    message.createdAt !== undefined && (obj.createdAt = (message.createdAt || Long.ZERO).toString());
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<Bid>, I>>(object: I): Bid {
     const message = createBaseBid();
-    message.bidId =
-      object.bidId !== undefined && object.bidId !== null
-        ? BidID.fromPartial(object.bidId)
-        : undefined;
+    message.bidId = object.bidId !== undefined && object.bidId !== null ? BidID.fromPartial(object.bidId) : undefined;
     message.state = object.state ?? 0;
-    message.price =
-      object.price !== undefined && object.price !== null
-        ? DecCoin.fromPartial(object.price)
-        : undefined;
-    message.createdAt =
-      object.createdAt !== undefined && object.createdAt !== null
-        ? Long.fromValue(object.createdAt)
-        : Long.ZERO;
+    message.price = object.price !== undefined && object.price !== null ? DecCoin.fromPartial(object.price) : undefined;
+    message.createdAt = object.createdAt !== undefined && object.createdAt !== null ? Long.fromValue(object.createdAt) : Long.ZERO;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(Bid.$type, Bid);
@@ -606,17 +545,14 @@ function createBaseBidFilters(): BidFilters {
     gseq: 0,
     oseq: 0,
     provider: "",
-    state: "",
+    state: ""
   };
 }
 
 export const BidFilters = {
   $type: "akash.market.v1beta3.BidFilters" as const,
 
-  encode(
-    message: BidFilters,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: BidFilters, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.owner !== "") {
       writer.uint32(10).string(message.owner);
     }
@@ -679,15 +615,14 @@ export const BidFilters = {
       gseq: isSet(object.gseq) ? Number(object.gseq) : 0,
       oseq: isSet(object.oseq) ? Number(object.oseq) : 0,
       provider: isSet(object.provider) ? String(object.provider) : "",
-      state: isSet(object.state) ? String(object.state) : "",
+      state: isSet(object.state) ? String(object.state) : ""
     };
   },
 
   toJSON(message: BidFilters): unknown {
     const obj: any = {};
     message.owner !== undefined && (obj.owner = message.owner);
-    message.dseq !== undefined &&
-      (obj.dseq = (message.dseq || Long.UZERO).toString());
+    message.dseq !== undefined && (obj.dseq = (message.dseq || Long.UZERO).toString());
     message.gseq !== undefined && (obj.gseq = Math.round(message.gseq));
     message.oseq !== undefined && (obj.oseq = Math.round(message.oseq));
     message.provider !== undefined && (obj.provider = message.provider);
@@ -695,53 +630,38 @@ export const BidFilters = {
     return obj;
   },
 
-  fromPartial<I extends Exact<DeepPartial<BidFilters>, I>>(
-    object: I
-  ): BidFilters {
+  fromPartial<I extends Exact<DeepPartial<BidFilters>, I>>(object: I): BidFilters {
     const message = createBaseBidFilters();
     message.owner = object.owner ?? "";
-    message.dseq =
-      object.dseq !== undefined && object.dseq !== null
-        ? Long.fromValue(object.dseq)
-        : Long.UZERO;
+    message.dseq = object.dseq !== undefined && object.dseq !== null ? Long.fromValue(object.dseq) : Long.UZERO;
     message.gseq = object.gseq ?? 0;
     message.oseq = object.oseq ?? 0;
     message.provider = object.provider ?? "";
     message.state = object.state ?? "";
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(BidFilters.$type, BidFilters);
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
-  : Partial<T>;
+    ? string | number | Long
+    : T extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : T extends ReadonlyArray<infer U>
+        ? ReadonlyArray<DeepPartial<U>>
+        : T extends {}
+          ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+          : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<Exclude<keyof I, KeysOfUnion<P> | "$type">, never>;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;

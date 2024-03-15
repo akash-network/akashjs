@@ -11,5 +11,5 @@ export async function setPassword() {}
 
 export default {
   getPassword,
-  setPassword,
+  setPassword
 };

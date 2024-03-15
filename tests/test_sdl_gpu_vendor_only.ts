@@ -1,6 +1,6 @@
 import tap from "tap";
 
-import { SDL } from '../src/sdl';
+import { SDL } from "../src/sdl";
 
 const testSDL = `version: "2.0"
 services:
@@ -54,19 +54,19 @@ deployment:
       count: 2
 `;
 
-tap.test("SDL: GPU Manifest", async (t) => {
+tap.test("SDL: GPU Manifest", async t => {
   t.plan(1);
 
-  const sdl = SDL.fromString(testSDL, 'beta3');
+  const sdl = SDL.fromString(testSDL, "beta3");
   const result = sdl.manifest();
 
   t.matchSnapshot(result, "Manifest matches expected result");
 });
 
-tap.test("SDL: GPU Version", async (t) => {
+tap.test("SDL: GPU Version", async t => {
   t.plan(1);
 
-  const sdl = SDL.fromString(testSDL, 'beta3');
+  const sdl = SDL.fromString(testSDL, "beta3");
   const result = await sdl.manifestVersion();
 
   t.matchSnapshot(result, "Manifest version matches expected result");

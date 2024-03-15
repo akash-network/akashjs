@@ -20,22 +20,16 @@ function createBaseResource(): Resource {
     $type: "akash.deployment.v1beta2.Resource",
     resources: undefined,
     count: 0,
-    price: undefined,
+    price: undefined
   };
 }
 
 export const Resource = {
   $type: "akash.deployment.v1beta2.Resource" as const,
 
-  encode(
-    message: Resource,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Resource, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.resources !== undefined) {
-      ResourceUnits.encode(
-        message.resources,
-        writer.uint32(10).fork()
-      ).ldelim();
+      ResourceUnits.encode(message.resources, writer.uint32(10).fork()).ldelim();
     }
     if (message.count !== 0) {
       writer.uint32(16).uint32(message.count);
@@ -73,71 +67,49 @@ export const Resource = {
   fromJSON(object: any): Resource {
     return {
       $type: Resource.$type,
-      resources: isSet(object.resources)
-        ? ResourceUnits.fromJSON(object.resources)
-        : undefined,
+      resources: isSet(object.resources) ? ResourceUnits.fromJSON(object.resources) : undefined,
       count: isSet(object.count) ? Number(object.count) : 0,
-      price: isSet(object.price) ? DecCoin.fromJSON(object.price) : undefined,
+      price: isSet(object.price) ? DecCoin.fromJSON(object.price) : undefined
     };
   },
 
   toJSON(message: Resource): unknown {
     const obj: any = {};
-    message.resources !== undefined &&
-      (obj.resources = message.resources
-        ? ResourceUnits.toJSON(message.resources)
-        : undefined);
+    message.resources !== undefined && (obj.resources = message.resources ? ResourceUnits.toJSON(message.resources) : undefined);
     message.count !== undefined && (obj.count = Math.round(message.count));
-    message.price !== undefined &&
-      (obj.price = message.price ? DecCoin.toJSON(message.price) : undefined);
+    message.price !== undefined && (obj.price = message.price ? DecCoin.toJSON(message.price) : undefined);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<Resource>, I>>(object: I): Resource {
     const message = createBaseResource();
-    message.resources =
-      object.resources !== undefined && object.resources !== null
-        ? ResourceUnits.fromPartial(object.resources)
-        : undefined;
+    message.resources = object.resources !== undefined && object.resources !== null ? ResourceUnits.fromPartial(object.resources) : undefined;
     message.count = object.count ?? 0;
-    message.price =
-      object.price !== undefined && object.price !== null
-        ? DecCoin.fromPartial(object.price)
-        : undefined;
+    message.price = object.price !== undefined && object.price !== null ? DecCoin.fromPartial(object.price) : undefined;
     return message;
-  },
+  }
 };
 
 messageTypeRegistry.set(Resource.$type, Resource);
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin
   ? T
   : T extends Long
-  ? string | number | Long
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
-  : Partial<T>;
+    ? string | number | Long
+    : T extends Array<infer U>
+      ? Array<DeepPartial<U>>
+      : T extends ReadonlyArray<infer U>
+        ? ReadonlyArray<DeepPartial<U>>
+        : T extends {}
+          ? { [K in Exclude<keyof T, "$type">]?: DeepPartial<T[K]> }
+          : Partial<T>;
 
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin
   ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<
-        Exclude<keyof I, KeysOfUnion<P> | "$type">,
-        never
-      >;
+  : P & { [K in keyof P]: Exact<P[K], I[K]> } & Record<Exclude<keyof I, KeysOfUnion<P> | "$type">, never>;
 
 if (_m0.util.Long !== Long) {
   _m0.util.Long = Long as any;
