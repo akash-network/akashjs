@@ -5,5 +5,5 @@ export * as wallet from "./wallet";
 export * as network from "./network";
 export * as rpc from "./rpc";
 
-export * as protoclient from "./pbclient";
+export * as protoclient from "./pbclient/pbclient";
 export * as sdl from "./sdl";
