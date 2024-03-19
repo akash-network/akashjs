@@ -13,3 +13,14 @@ tap.test("SDL: Persistent Storage Manifest", async t => {
 
   t.matchSnapshot(result, "Manifest matches expected result");
 });
+
+tap.test("SDL: Persistent Storage with class 'ram' must have 'persistent' set to false", async t => {
+  t.plan(1);
+
+  const invalidSDL = fs.readFileSync("./tests/fixtures/persistent_storage_invalid.sdl.yml", "utf8");
+
+  t.throws(() => {
+    const sdl = SDL.fromString(invalidSDL, "beta2");
+    sdl.manifest();
+  }, "Storage attribute 'ram' must have 'persistent' set to 'false' or not defined for service grafana");
+});

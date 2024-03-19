@@ -155,6 +155,11 @@ Array [
               "name": "wordpress-db",
               "readOnly": false,
             },
+            Object {
+              "mount": "/dev/shm",
+              "name": "shm",
+              "readOnly": false,
+            },
           ],
         },
         "Resources": Object {
@@ -190,6 +195,18 @@ Array [
               "name": "wordpress-db",
               "size": Object {
                 "val": 8589934592,
+              },
+            },
+            Object {
+              "attributes": Array [
+                Object {
+                  "key": "class",
+                  "value": "ram",
+                },
+              ],
+              "name": "shm",
+              "size": Object {
+                "val": 1073741824,
               },
             },
           ],
