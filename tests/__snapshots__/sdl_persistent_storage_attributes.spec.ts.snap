@@ -1,34 +1,28 @@
-/* IMPORTANT
- * This snapshot file is auto-generated, but designed for humans.
- * It should be checked into source control and tracked carefully.
- * Re-generate by setting TAP_SNAPSHOT=1 and running tests.
- * Make sure to inspect the output below.  Do not ignore changes!
- */
-'use strict'
-exports[`tests/test_sdl_persistent_storage_attributes.ts TAP SDL: Persistent Storage Manifest > Manifest matches expected result 1`] = `
-Array [
-  Object {
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test sdl persistent storage SDL: Persistent Storage Manifest: SDL: Persistent Storage Manifest 1`] = `
+[
+  {
     "Name": "akash",
-    "Services": Array [
-      Object {
+    "Services": [
+      {
         "Args": null,
         "Command": null,
         "Count": 1,
-        "Env": Array [
+        "Env": [
           "WORDPRESS_DB_HOST=db",
           "WORDPRESS_DB_USER=wordpress",
           "WORDPRESS_DB_PASSWORD=testpass4you",
           "WORDPRESS_DB_NAME=wordpress",
         ],
-        "Expose": Array [
-          Object {
+        "Expose": [
+          {
             "EndpointSequenceNumber": 0,
             "ExternalPort": 0,
             "Global": true,
-            "Hosts": null,
-            "HTTPOptions": Object {
+            "HTTPOptions": {
               "MaxBodySize": 104857600,
-              "NextCases": Array [
+              "NextCases": [
                 "error",
                 "timeout",
               ],
@@ -37,6 +31,7 @@ Array [
               "ReadTimeout": 60000,
               "SendTimeout": 60000,
             },
+            "Hosts": null,
             "IP": "",
             "Port": 80,
             "Proto": "TCP",
@@ -45,72 +40,71 @@ Array [
         ],
         "Image": "wordpress",
         "Name": "wordpress",
-        "params": Object {
-          "Storage": Array [
-            Object {
+        "Resources": {
+          "cpu": {
+            "units": {
+              "val": "4000",
+            },
+          },
+          "endpoints": null,
+          "memory": {
+            "size": {
+              "val": 4294967296,
+            },
+          },
+          "storage": [
+            {
+              "name": "default",
+              "size": {
+                "val": 4294967296,
+              },
+            },
+            {
+              "attributes": [
+                {
+                  "key": "class",
+                  "value": "beta3",
+                },
+                {
+                  "key": "persistent",
+                  "value": "true",
+                },
+              ],
+              "name": "wordpress-data",
+              "size": {
+                "val": 34359738368,
+              },
+            },
+          ],
+        },
+        "params": {
+          "Storage": [
+            {
               "mount": "/var/www/html",
               "name": "wordpress-data",
               "readOnly": false,
             },
           ],
         },
-        "Resources": Object {
-          "cpu": Object {
-            "units": Object {
-              "val": "4000",
-            },
-          },
-          "endpoints": null,
-          "memory": Object {
-            "size": Object {
-              "val": 4294967296,
-            },
-          },
-          "storage": Array [
-            Object {
-              "name": "default",
-              "size": Object {
-                "val": 4294967296,
-              },
-            },
-            Object {
-              "attributes": Array [
-                Object {
-                  "key": "class",
-                  "value": "beta3",
-                },
-                Object {
-                  "key": "persistent",
-                  "value": "true",
-                },
-              ],
-              "name": "wordpress-data",
-              "size": Object {
-                "val": 34359738368,
-              },
-            },
-          ],
-        },
       },
-      Object {
+      {
         "Args": null,
         "Command": null,
         "Count": 1,
-        "Env": Array [
+        "Env": [
           "MYSQL_RANDOM_ROOT_PASSWORD=1",
           "MYSQL_DATABASE=wordpress",
           "MYSQL_USER=wordpress",
           "MYSQL_PASSWORD=testpass4you",
         ],
-        "Expose": Array [
-          Object {
+        "Expose": [
+          {
             "EndpointSequenceNumber": 0,
             "ExternalPort": 0,
             "Global": false,
-            "Hosts": null,
-            "HTTPOptions": Object {
+            "HTTPOptions": {
               "MaxBodySize": 1048576,
-              "NextCases": Array [
+              "NextCases": [
                 "error",
                 "timeout",
               ],
@@ -119,19 +113,19 @@ Array [
               "ReadTimeout": 60000,
               "SendTimeout": 60000,
             },
+            "Hosts": null,
             "IP": "",
             "Port": 3306,
             "Proto": "TCP",
             "Service": "wordpress",
           },
-          Object {
+          {
             "EndpointSequenceNumber": 0,
             "ExternalPort": 0,
             "Global": false,
-            "Hosts": null,
-            "HTTPOptions": Object {
+            "HTTPOptions": {
               "MaxBodySize": 1048576,
-              "NextCases": Array [
+              "NextCases": [
                 "error",
                 "timeout",
               ],
@@ -140,6 +134,7 @@ Array [
               "ReadTimeout": 60000,
               "SendTimeout": 60000,
             },
+            "Hosts": null,
             "IP": "",
             "Port": 33060,
             "Proto": "TCP",
@@ -148,49 +143,66 @@ Array [
         ],
         "Image": "mariadb:10.6.4",
         "Name": "db",
-        "params": Object {
-          "Storage": Array [
-            Object {
-              "mount": "/var/lib/mysql",
-              "name": "wordpress-db",
-              "readOnly": false,
-            },
-          ],
-        },
-        "Resources": Object {
-          "cpu": Object {
-            "units": Object {
+        "Resources": {
+          "cpu": {
+            "units": {
               "val": "1000",
             },
           },
           "endpoints": null,
-          "memory": Object {
-            "size": Object {
+          "memory": {
+            "size": {
               "val": 1073741824,
             },
           },
-          "storage": Array [
-            Object {
+          "storage": [
+            {
               "name": "default",
-              "size": Object {
+              "size": {
                 "val": 1073741824,
               },
             },
-            Object {
-              "attributes": Array [
-                Object {
+            {
+              "attributes": [
+                {
                   "key": "class",
                   "value": "beta3",
                 },
-                Object {
+                {
                   "key": "persistent",
                   "value": "true",
                 },
               ],
               "name": "wordpress-db",
-              "size": Object {
+              "size": {
                 "val": 8589934592,
               },
+            },
+            {
+              "attributes": [
+                {
+                  "key": "class",
+                  "value": "ram",
+                },
+              ],
+              "name": "shm",
+              "size": {
+                "val": 1073741824,
+              },
+            },
+          ],
+        },
+        "params": {
+          "Storage": [
+            {
+              "mount": "/var/lib/mysql",
+              "name": "wordpress-db",
+              "readOnly": false,
+            },
+            {
+              "mount": "/dev/shm",
+              "name": "shm",
+              "readOnly": false,
             },
           ],
         },
@@ -198,4 +210,4 @@ Array [
     ],
   },
 ]
-`
+`;

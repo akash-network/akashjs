@@ -45,6 +45,8 @@ services:
         wordpress-db:
           mount: /var/lib/mysql
           readOnly: false
+        shm:
+          mount: /dev/shm
 profiles:
   compute:
     wordpress:
@@ -73,6 +75,10 @@ profiles:
             attributes:
               persistent: true
               class: beta3
+          - name: shm
+            size: 1Gi
+            attributes:
+              class: ram
   placement:
     akash:
       #######################################################

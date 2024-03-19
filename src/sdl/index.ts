@@ -38,7 +38,7 @@ const Endpoint_RANDOM_PORT = 1;
 const Endpoint_LEASED_IP = 2;
 
 function isArray<T>(obj: any): obj is Array<T> {
-  return obj && obj.map !== undefined;
+  return Array.isArray(obj);
 }
 
 function isString(str: any): str is string {
@@ -71,6 +71,8 @@ export class SDL {
       if (version === "beta3") {
         SDL.validateGPU(name, profile.resources.gpu);
       }
+
+      SDL.validateStorage(name, profile.resources.storage);
     }
 
     return data;
@@ -102,6 +104,28 @@ export class SDL {
 
     if (units > 0 && gpu.attributes?.vendor?.nvidia === undefined) {
       throw Error("GPU must specify models if units is not 0");
+    }
+  }
+
+  static validateStorage(name: string, storage?: v2ResourceStorage | v2ResourceStorageArray) {
+    if (!storage) {
+      throw new Error("Storage is required for service " + name);
+    }
+
+    const storages = isArray(storage) ? storage : [storage];
+
+    for (const storage of storages) {
+      if (typeof storage.size === "undefined") {
+        throw new Error("Storage size is required for service " + name);
+      }
+
+      if (!!storage.attributes) {
+        for (const [key, value] of Object.entries(storage.attributes)) {
+          if (key === "class" && value === "ram" && storage.attributes.persistent === true) {
+            throw new Error("Storage attribute 'ram' must have 'persistent' set to 'false' or not defined for service " + name);
+          }
+        }
+      }
     }
   }
 
