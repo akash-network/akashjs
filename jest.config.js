@@ -12,7 +12,7 @@ module.exports = {
     {
       displayName: "unit",
       ...common,
-      testMatch: ["<rootDir>/src/**/*.spec.ts"],
+      testMatch: ["<rootDir>/src/**/*.spec.ts", "<rootDir>/tests/**/*.spec.ts"],
       setupFilesAfterEnv: ["./test/setup-unit-tests.ts"]
     }
   ]

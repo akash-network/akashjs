@@ -38,7 +38,7 @@ const Endpoint_RANDOM_PORT = 1;
 const Endpoint_LEASED_IP = 2;
 
 function isArray<T>(obj: any): obj is Array<T> {
-  return obj && obj.map !== undefined;
+  return Array.isArray(obj);
 }
 
 function isString(str: any): str is string {
@@ -107,7 +107,7 @@ export class SDL {
     }
   }
 
-  static validateStorage(name: string, storage: v2ResourceStorage | v2ResourceStorageArray | undefined) {
+  static validateStorage(name: string, storage?: v2ResourceStorage | v2ResourceStorageArray) {
     if (!storage) {
       throw new Error("Storage is required for service " + name);
     }
