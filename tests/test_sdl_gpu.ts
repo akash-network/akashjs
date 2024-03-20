@@ -22,5 +22,5 @@ tap.test("SDL: GPU Version", async t => {
   const sdl = SDL.fromString(testSDL, "beta3");
   const result = await sdl.manifestVersion();
 
-  t.matchSnapshot(result, "GPU must specify a vendor if units is not 0");
+  t.matchSnapshot(result, "Manifest version matches expected result");
 });
