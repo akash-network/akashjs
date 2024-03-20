@@ -5,7 +5,7 @@
  * Make sure to inspect the output below.  Do not ignore changes!
  */
 'use strict'
-exports[`tests/test_sdl_gpu.ts TAP SDL: GPU Version > Manifest version matches expected result 1`] = `
+exports[`tests/test_sdl_gpu.ts TAP SDL: GPU Version > GPU must specify a vendor if units is not 0 1`] = `
 Uint8Array [
   137,
   34,

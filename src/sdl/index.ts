@@ -90,22 +90,18 @@ export class SDL {
       }
 
       if (units > 0 && gpu.attributes === undefined) {
-        throw new Error("GPU must not have attributes if units is 0");
+        throw new Error("GPU must have attributes if units is not 0");
       }
 
       if (units > 0 && gpu.attributes?.vendor === undefined) {
         throw new Error("GPU must specify a vendor if units is not 0");
       }
 
-      if (units > 0 && !GPU_SUPPORTED_VENDORS.some(vendor => !(vendor in (gpu.attributes?.vendor || {})))) {
+      if (units > 0 && !GPU_SUPPORTED_VENDORS.some(vendor => vendor in (gpu.attributes?.vendor || {}))) {
         throw new Error(`GPU must be one of the supported vendors (${GPU_SUPPORTED_VENDORS.join(",")}).`);
       }
 
       const vendor: string = Object.keys(gpu.attributes?.vendor || {})[0];
-
-      if (units > 0 && gpu.attributes?.vendor[vendor] === undefined) {
-        throw new Error("GPU must specify models if units is not 0");
-      }
 
       if (units > 0 && !!gpu.attributes?.vendor[vendor] && !Array.isArray(gpu.attributes.vendor[vendor])) {
         throw new Error(`GPU configuration must be an array of GPU models with optional ram.`);

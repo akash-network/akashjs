@@ -7,7 +7,7 @@ const testSDL = fs.readFileSync("./tests/fixtures/gpu_basic.sdl.yml", "utf8");
 
 const expectedManifest = JSON.parse(fs.readFileSync("./tests/fixtures/gpu_basic.manifest.json", "utf8"));
 
-tap.test("SDL: GPU Manifest", async t => {
+tap.test("SDL: GPU Manifest", t => {
   t.plan(1);
 
   const sdl = SDL.fromString(testSDL, "beta3");
@@ -22,5 +22,5 @@ tap.test("SDL: GPU Version", async t => {
   const sdl = SDL.fromString(testSDL, "beta3");
   const result = await sdl.manifestVersion();
 
-  t.matchSnapshot(result, "Manifest version matches expected result");
+  t.matchSnapshot(result, "GPU must specify a vendor if units is not 0");
 });
