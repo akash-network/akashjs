@@ -85,7 +85,7 @@ export class SDL {
 
       const units = parseInt(gpu.units.toString());
 
-      if (units == 0 && gpu.attributes !== undefined) {
+      if (units === 0 && gpu.attributes !== undefined) {
         throw new Error("GPU must not have attributes if units is 0");
       }
 
