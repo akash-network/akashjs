@@ -36,6 +36,7 @@ import crypto from "node:crypto";
 const Endpoint_SHARED_HTTP = 0;
 const Endpoint_RANDOM_PORT = 1;
 const Endpoint_LEASED_IP = 2;
+export const GPU_SUPPORTED_VENDORS = ["nvidia", "amd"];
 
 function isArray<T>(obj: any): obj is Array<T> {
   return Array.isArray(obj);
@@ -68,10 +69,7 @@ export class SDL {
     const data = YAML.load(yaml) as v3Sdl;
 
     for (const [name, profile] of Object.entries(data.profiles.compute)) {
-      if (version === "beta3") {
-        SDL.validateGPU(name, profile.resources.gpu);
-      }
-
+      SDL.validateGPU(name, profile.resources.gpu);
       SDL.validateStorage(name, profile.resources.storage);
     }
 
@@ -79,31 +77,39 @@ export class SDL {
   }
 
   static validateGPU(name: string, gpu: v3ResourceGPU | undefined) {
-    if (!gpu) {
-      throw new Error("GPU resource is required for profile " + name);
-    }
+    if (gpu) {
+      if (typeof gpu.units === "undefined") {
+        console.log(JSON.stringify(gpu, null, 2));
+        throw new Error("GPU units must be specified for profile " + name);
+      }
 
-    if (typeof gpu.units === "undefined") {
-      console.log(JSON.stringify(gpu, null, 2));
-      throw new Error("GPU units must be specified for profile " + name);
-    }
+      const units = parseInt(gpu.units.toString());
 
-    const units = parseInt(gpu.units.toString());
+      if (units == 0 && gpu.attributes !== undefined) {
+        throw new Error("GPU must not have attributes if units is 0");
+      }
 
-    if (units == 0 && gpu.attributes !== undefined) {
-      throw new Error("GPU must not have attributes if units is 0");
-    }
+      if (units > 0 && gpu.attributes === undefined) {
+        throw new Error("GPU must not have attributes if units is 0");
+      }
 
-    if (units > 0 && gpu.attributes === undefined) {
-      throw new Error("GPU must not have attributes if units is 0");
-    }
+      if (units > 0 && gpu.attributes?.vendor === undefined) {
+        throw new Error("GPU must specify a vendor if units is not 0");
+      }
 
-    if (units > 0 && gpu.attributes?.vendor === undefined) {
-      throw new Error("GPU must specify a vendor if units is not 0");
-    }
+      if (units > 0 && !GPU_SUPPORTED_VENDORS.some(vendor => !(vendor in (gpu.attributes?.vendor || {})))) {
+        throw new Error(`GPU must be one of the supported vendors (${GPU_SUPPORTED_VENDORS.join(",")}).`);
+      }
 
-    if (units > 0 && gpu.attributes?.vendor?.nvidia === undefined) {
-      throw Error("GPU must specify models if units is not 0");
+      const vendor: string = Object.keys(gpu.attributes?.vendor || {})[0];
+
+      if (units > 0 && gpu.attributes?.vendor[vendor] === undefined) {
+        throw new Error("GPU must specify models if units is not 0");
+      }
+
+      if (units > 0 && !!gpu.attributes?.vendor[vendor] && !Array.isArray(gpu.attributes.vendor[vendor])) {
+        throw new Error(`GPU configuration must be an array of GPU models with optional ram.`);
+      }
     }
   }
 
