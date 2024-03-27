@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test GPU with interface SDL: GPU Version with ram & interface (snapshot): Manifest version matches expected result 1`] = `
+Uint8Array [
+  125,
+  11,
+  116,
+  78,
+  176,
+  241,
+  237,
+  29,
+  110,
+  140,
+  117,
+  18,
+  95,
+  222,
+  143,
+  33,
+  226,
+  12,
+  115,
+  209,
+  33,
+  103,
+  233,
+  49,
+  164,
+  163,
+  133,
+  82,
+  130,
+  5,
+  142,
+  99,
+]
+`;
