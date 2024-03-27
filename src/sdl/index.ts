@@ -629,10 +629,22 @@ export class SDL {
   transformGpuAttributes(attributes: v3GPUAttributes): Array<{ key: string; value: string }> {
     return Object.entries(attributes.vendor).flatMap(([vendor, models]) =>
       models
-        ? models.map(model => ({
-            key: `vendor/${vendor}/model/${model.model}${model.ram ? `/ram/${model.ram}` : ""}`,
-            value: "true"
-          }))
+        ? models.map(model => {
+            let key = `vendor/${vendor}/model/${model.model}`;
+
+            if (model.ram) {
+              key += `/ram/${model.ram}`;
+            }
+
+            if (model.interface) {
+              key += `/interface/${model.interface}`;
+            }
+
+            return {
+              key: key,
+              value: "true"
+            };
+          })
         : [
             {
               key: `vendor/${vendor}/model/*`,
