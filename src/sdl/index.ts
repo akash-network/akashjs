@@ -37,6 +37,7 @@ const Endpoint_SHARED_HTTP = 0;
 const Endpoint_RANDOM_PORT = 1;
 const Endpoint_LEASED_IP = 2;
 export const GPU_SUPPORTED_VENDORS = ["nvidia", "amd"];
+export const GPU_SUPPORTED_INTERFACES = ["pcie", "sxm"];
 
 function isArray<T>(obj: any): obj is Array<T> {
   return Array.isArray(obj);
@@ -105,6 +106,13 @@ export class SDL {
 
       if (units > 0 && !!gpu.attributes?.vendor[vendor] && !Array.isArray(gpu.attributes.vendor[vendor])) {
         throw new Error(`GPU configuration must be an array of GPU models with optional ram.`);
+      }
+
+      if (
+        units > 0 &&
+        Object.values(gpu.attributes?.vendor || {}).some(models => models?.some(model => model.interface && !GPU_SUPPORTED_INTERFACES.includes(model.interface)))
+      ) {
+        throw new Error(`GPU interface must be one of the supported interfaces (${GPU_SUPPORTED_INTERFACES.join(",")}).`);
       }
     }
   }
