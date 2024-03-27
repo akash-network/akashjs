@@ -17,20 +17,20 @@
           },
           "memory": {
             "size": {
-              "val": "134217728"
+              "val": 134217728
             }
           },
           "storage": [
             {
               "name": "default",
               "size": {
-                "val": "1073741824"
+                "val": 1073741824
               }
             }
           ],
           "gpu": {
             "units": {
-              "val": "1"
+              "val": 1
             },
             "attributes": [
               {
