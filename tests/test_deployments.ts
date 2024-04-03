@@ -9,7 +9,7 @@ import {
   QueryDeploymentResponse,
   QueryDeploymentsRequest,
   QueryDeploymentsResponse
-} from "../src/protobuf/akash/deployment/v1beta3/query";
+} from "@akashnetwork/akash-api/akash/deployment/v1beta3/query";
 
 tap.test("Deployments: query deployment list with owner filter", async t => {
   t.plan(1);

@@ -58,7 +58,6 @@ Object {
                 },
               ],
               "signedBy": Object {
-                "allOf": Array [],
                 "anyOf": Array [
                   "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
                 ],
@@ -73,7 +72,6 @@ Object {
                 },
                 "resource": Object {
                   "cpu": Object {
-                    "attributes": Array [],
                     "units": Object {
                       "val": "MTAwMA==",
                     },
@@ -81,25 +79,21 @@ Object {
                   "endpoints": Array [
                     Object {
                       "kind": "RANDOM_PORT",
-                      "sequenceNumber": 0,
                     },
                   ],
                   "gpu": Object {
-                    "attributes": Array [],
                     "units": Object {
                       "val": "MA==",
                     },
                   },
                   "id": 1,
                   "memory": Object {
-                    "attributes": Array [],
                     "quantity": Object {
                       "val": "NTM2ODcwOTEy",
                     },
                   },
                   "storage": Array [
                     Object {
-                      "attributes": Array [],
                       "name": "default",
                       "quantity": Object {
                         "val": "MTA3Mzc0MTgyNA==",
@@ -164,7 +158,6 @@ Object {
                 },
               ],
               "signedBy": Object {
-                "allOf": Array [],
                 "anyOf": Array [
                   "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
                 ],
@@ -179,7 +172,6 @@ Object {
                 },
                 "resource": Object {
                   "cpu": Object {
-                    "attributes": Array [],
                     "units": Object {
                       "val": "MTAwMA==",
                     },
@@ -187,25 +179,21 @@ Object {
                   "endpoints": Array [
                     Object {
                       "kind": "RANDOM_PORT",
-                      "sequenceNumber": 0,
                     },
                   ],
                   "gpu": Object {
-                    "attributes": Array [],
                     "units": Object {
                       "val": "MA==",
                     },
                   },
                   "id": 1,
                   "memory": Object {
-                    "attributes": Array [],
                     "quantity": Object {
                       "val": "NTM2ODcwOTEy",
                     },
                   },
                   "storage": Array [
                     Object {
-                      "attributes": Array [],
                       "name": "default",
                       "quantity": Object {
                         "val": "MTA3Mzc0MTgyNA==",
@@ -270,7 +258,6 @@ Object {
                 },
               ],
               "signedBy": Object {
-                "allOf": Array [],
                 "anyOf": Array [
                   "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
                 ],
@@ -285,7 +272,6 @@ Object {
                 },
                 "resource": Object {
                   "cpu": Object {
-                    "attributes": Array [],
                     "units": Object {
                       "val": "MTAwMA==",
                     },
@@ -293,25 +279,21 @@ Object {
                   "endpoints": Array [
                     Object {
                       "kind": "RANDOM_PORT",
-                      "sequenceNumber": 0,
                     },
                   ],
                   "gpu": Object {
-                    "attributes": Array [],
                     "units": Object {
                       "val": "MA==",
                     },
                   },
                   "id": 1,
                   "memory": Object {
-                    "attributes": Array [],
                     "quantity": Object {
                       "val": "NTM2ODcwOTEy",
                     },
                   },
                   "storage": Array [
                     Object {
-                      "attributes": Array [],
                       "name": "default",
                       "quantity": Object {
                         "val": "MTA3Mzc0MTgyNA==",
@@ -376,7 +358,6 @@ Object {
                 },
               ],
               "signedBy": Object {
-                "allOf": Array [],
                 "anyOf": Array [
                   "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
                 ],
@@ -391,7 +372,6 @@ Object {
                 },
                 "resource": Object {
                   "cpu": Object {
-                    "attributes": Array [],
                     "units": Object {
                       "val": "MTAw",
                     },
@@ -399,25 +379,21 @@ Object {
                   "endpoints": Array [
                     Object {
                       "kind": "RANDOM_PORT",
-                      "sequenceNumber": 0,
                     },
                   ],
                   "gpu": Object {
-                    "attributes": Array [],
                     "units": Object {
                       "val": "MA==",
                     },
                   },
                   "id": 1,
                   "memory": Object {
-                    "attributes": Array [],
                     "quantity": Object {
                       "val": "NTM2ODcwOTEy",
                     },
                   },
                   "storage": Array [
                     Object {
-                      "attributes": Array [],
                       "name": "default",
                       "quantity": Object {
                         "val": "NTM2ODcwOTEy",
@@ -482,7 +458,6 @@ Object {
                 },
               ],
               "signedBy": Object {
-                "allOf": Array [],
                 "anyOf": Array [
                   "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
                 ],
@@ -497,7 +472,6 @@ Object {
                 },
                 "resource": Object {
                   "cpu": Object {
-                    "attributes": Array [],
                     "units": Object {
                       "val": "MTAw",
                     },
@@ -505,25 +479,21 @@ Object {
                   "endpoints": Array [
                     Object {
                       "kind": "RANDOM_PORT",
-                      "sequenceNumber": 0,
                     },
                   ],
                   "gpu": Object {
-                    "attributes": Array [],
                     "units": Object {
                       "val": "MA==",
                     },
                   },
                   "id": 1,
                   "memory": Object {
-                    "attributes": Array [],
                     "quantity": Object {
                       "val": "MjY4NDM1NDU2",
                     },
                   },
                   "storage": Array [
                     Object {
-                      "attributes": Array [],
                       "name": "default",
                       "quantity": Object {
                         "val": "NTM2ODcwOTEy",
@@ -588,7 +558,6 @@ Object {
                 },
               ],
               "signedBy": Object {
-                "allOf": Array [],
                 "anyOf": Array [
                   "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
                 ],
@@ -603,7 +572,6 @@ Object {
                 },
                 "resource": Object {
                   "cpu": Object {
-                    "attributes": Array [],
                     "units": Object {
                       "val": "MTAw",
                     },
@@ -611,25 +579,21 @@ Object {
                   "endpoints": Array [
                     Object {
                       "kind": "RANDOM_PORT",
-                      "sequenceNumber": 0,
                     },
                   ],
                   "gpu": Object {
-                    "attributes": Array [],
                     "units": Object {
                       "val": "MA==",
                     },
                   },
                   "id": 1,
                   "memory": Object {
-                    "attributes": Array [],
                     "quantity": Object {
                       "val": "NTM2ODcwOTEy",
                     },
                   },
                   "storage": Array [
                     Object {
-                      "attributes": Array [],
                       "name": "default",
                       "quantity": Object {
                         "val": "NTM2ODcwOTEy",
@@ -646,7 +610,6 @@ Object {
     },
   ],
   "pagination": Object {
-    "nextKey": "",
     "total": "6",
   },
 }
@@ -703,7 +666,6 @@ Object {
             },
           ],
           "signedBy": Object {
-            "allOf": Array [],
             "anyOf": Array [
               "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
             ],
@@ -718,7 +680,6 @@ Object {
             },
             "resource": Object {
               "cpu": Object {
-                "attributes": Array [],
                 "units": Object {
                   "val": "MTAwMA==",
                 },
@@ -726,25 +687,21 @@ Object {
               "endpoints": Array [
                 Object {
                   "kind": "RANDOM_PORT",
-                  "sequenceNumber": 0,
                 },
               ],
               "gpu": Object {
-                "attributes": Array [],
                 "units": Object {
                   "val": "MA==",
                 },
               },
               "id": 1,
               "memory": Object {
-                "attributes": Array [],
                 "quantity": Object {
                   "val": "NTM2ODcwOTEy",
                 },
               },
               "storage": Array [
                 Object {
-                  "attributes": Array [],
                   "name": "default",
                   "quantity": Object {
                     "val": "MTA3Mzc0MTgyNA==",

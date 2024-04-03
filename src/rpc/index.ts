@@ -2,7 +2,6 @@ import { Tendermint34Client } from "@cosmjs/tendermint-rpc";
 import { createProtobufRpcClient, GasPrice, QueryClient, SigningStargateClient, SigningStargateClientOptions } from "@cosmjs/stargate";
 import { getAkashTypeRegistry } from "../stargate";
 import { OfflineSigner, Registry } from "@cosmjs/proto-signing";
-import { Decimal } from "cosmwasm";
 
 export async function getRpc(endpoint: string) {
   return getQueryClient(endpoint);
