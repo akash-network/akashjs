@@ -1,4 +1,4 @@
-import { MessageType, messageTypeRegistry, UnknownMessage } from "../protobuf/typeRegistry";
+import { MessageType, messageTypeRegistry, UnknownMessage } from "@akashnetwork/akash-api/typeRegistry";
 
 export const getAkashTypeRegistry: () => [string, MessageType<UnknownMessage>][] = () =>
   Array.from(messageTypeRegistry).map(([path, type]) => [`/${path}`, type]);

@@ -1,6 +1,6 @@
 {
   "name": "@akashnetwork/akashjs",
-  "version": "0.5.11",
+  "version": "0.5.12",
   "description": "Akash Network JS SDK",
   "repository": {
     "url": "https://github.com/ovrclk/akashjs"
@@ -43,6 +43,7 @@
     ]
   },
   "dependencies": {
+    "@akashnetwork/akash-api": "^1.0.2",
     "@cosmjs/launchpad": "^0.27.0",
     "@cosmjs/proto-signing": "^0.28.11",
     "@cosmjs/stargate": "^0.28.0",
@@ -83,7 +84,7 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "ts-proto": "^1.104.0",
-    "typescript": "^4.3.4",
+    "typescript": "^4.7.4",
     "webpack": "^5.41.1",
     "webpack-cli": "^4.7.2"
   },
