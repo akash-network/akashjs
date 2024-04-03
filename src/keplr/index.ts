@@ -2,7 +2,7 @@ import { getAkashTypeRegistry } from "../stargate";
 import { defaultRegistryTypes, SigningStargateClient } from "@cosmjs/stargate";
 import { Registry } from "@cosmjs/proto-signing";
 import { AminoTypes } from "@cosmjs/stargate";
-import { Certificate } from "../protobuf/akash/cert/v1beta2/cert";
+import { Certificate } from "@akashnetwork/akash-api/akash/cert/v1beta2";
 
 export function getChains() {
   return {

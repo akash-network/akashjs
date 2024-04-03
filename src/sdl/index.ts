@@ -110,7 +110,9 @@ export class SDL {
 
       if (
         units > 0 &&
-        Object.values(gpu.attributes?.vendor || {}).some(models => models?.some(model => model.interface && !GPU_SUPPORTED_INTERFACES.includes(model.interface)))
+        Object.values(gpu.attributes?.vendor || {}).some(models =>
+          models?.some(model => model.interface && !GPU_SUPPORTED_INTERFACES.includes(model.interface))
+        )
       ) {
         throw new Error(`GPU interface must be one of the supported interfaces (${GPU_SUPPORTED_INTERFACES.join(",")}).`);
       }

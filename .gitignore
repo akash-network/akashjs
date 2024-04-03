@@ -20,4 +20,5 @@ yarn-error.log
 
 # Tests artifacts
 .coverage/
+coverage/
 

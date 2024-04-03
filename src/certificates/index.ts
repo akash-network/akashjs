@@ -3,9 +3,9 @@ import { SigningStargateClient } from "@cosmjs/stargate";
 import { messages as stargateMessages } from "../stargate";
 import { createStarGateMessage } from "../pbclient/pbclient";
 
-import { QueryCertificatesRequest, QueryCertificatesResponse } from "../protobuf/akash/cert/v1beta3/query";
-import { CertificateFilter } from "../protobuf/akash/cert/v1beta1/cert";
+import { QueryCertificatesRequest, QueryCertificatesResponse, CertificateFilter } from "@akashnetwork/akash-api/akash/cert/v1beta3";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const JsonRPC = require("simple-jsonrpc-js");
 
 import { toBase64 } from "pvutils";
