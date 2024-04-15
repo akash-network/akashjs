@@ -1,0 +1,19 @@
+name: Commit Lint
+
+on:
+  - workflow_call
+
+env:
+  HUSKY: 0
+
+jobs:
+  commit-lint:
+    name: Validate PR commits with commitlint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate PR commits with commitlint
+        uses: wagoid/commitlint-github-action@v6
+

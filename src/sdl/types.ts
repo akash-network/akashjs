@@ -54,7 +54,7 @@ export type v3ServiceExposeHttpOptions = {
   nextCases: string[];
 };
 
-export type ResourceUnits = {};
+export type ResourceUnits = Record<string, any>;
 
 export type v2ServiceExpose = {
   Port: number;

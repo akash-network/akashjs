@@ -1,0 +1,47 @@
+name: Release from Master on Push
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  HUSKY: 0
+
+jobs:
+  commit-lint:
+    name: Commit Lint
+    uses: ./.github/workflows/commit-lint-reusable.yml
+    secrets: inherit
+
+  lint:
+    name: Lint and report coverage
+    uses: ./.github/workflows/code-style-reusable.yml
+    secrets: inherit
+
+  test:
+    name: Run tests
+    uses: ./.github/workflows/test-reusable.yml
+    secrets: inherit
+
+  release:
+    name: Build and release npm package
+    needs: [commit-lint, lint, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js and Cache Dependencies
+        uses: ./.github/actions/setup-node
+
+      - name: Release npm package
+        uses: cycjimmy/semantic-release-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+

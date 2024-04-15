@@ -109,6 +109,29 @@ const signedMessage = await client.signAndBroadcast(
 
 Additional examples can be found in the [examples directory]( https://github.com/ovrclk/akashjs/tree/main/)
 
-## contributing
+## Contribution Guidelines
 
-This repository uses node 16, and yarn 1.2+, webpack 5 for umd bundling and is written in typescript. PRs are welcome.
+### Project Stack
+
+This repository is primarily written in TypeScript and uses Node.js version 18. We use Webpack 5 for UMD bundling. These tools ensure that our development environment is consistent and our builds are stable.
+
+### Automated CI Checks and Releases
+
+Our project enforces high standards of code quality and consistency to ensure that all contributions adhere to our guidelines and maintain a high level of reliability. Here's what you should be aware of when contributing to our repository:
+
+- **Code Linting**: We use ESLint to analyze the code for potential errors and coding style issues. This ensures that all contributions maintain a consistent style and follow best practices.
+
+- **Code Formatting**: Prettier is configured to format code automatically. This helps keep our codebase clean and readable without requiring manual adjustments for styling.
+
+- **Commit Linting**: All commit messages must adhere to the Conventional Commits specification. This is enforced through automated linting of commits, helping us keep our project history clear and easy to navigate. See [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for more information. [commitizen](https://commitizen-tools.github.io/commitizen/) is a great tool to get started with.
+
+- **Automated Testing**: Upon creating a pull request, automated tests are run to verify that the new code does not break any existing functionality and meets all testing standards.
+
+- **Semantic Release**: When changes are merged into the `main` branch, a semantic release process is triggered. This process automatically determines version numbers and generates changelogs based on the commit messages, streamlining the release process and ensuring consistent versioning.
+
+- **Continuous Integration**: Our CI workflows are designed to validate pull requests and manage releases. They perform multiple checks including commit validation, linting, and testing code coverage before merging changes.
+
+### Contributing
+
+PRs are welcome! By adhering to these guidelines and leveraging our automated systems, we can maintain a high-quality codebase and streamline our development processes. We appreciate your contributions to making this project even better!
+

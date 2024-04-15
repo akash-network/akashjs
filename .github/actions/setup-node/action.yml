@@ -1,0 +1,35 @@
+name: 'Setup Node.js and Cache Dependencies'
+description: 'Checks out code, sets up Node.js, installs dependencies, and handles caching'
+
+inputs:
+  node-version:
+    description: 'Node.js version to setup'
+    required: true
+    default: '18.0.0'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Restore node_modules cache
+      id: deps-cache
+      uses: martijnhols/actions-cache/restore@v3
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-build-ts-deps-cache-${{ hashFiles('ts/package-lock.json') }}
+
+    - name: Install dependencies
+      if: steps.deps-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: npm install
+
+    - name: Cache node modules
+      if: steps.deps-cache.outputs.cache-hit != 'true'
+      uses: martijnhols/actions-cache/save@v3
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-build-ts-deps-cache-${{ hashFiles('ts/package-lock.json') }}

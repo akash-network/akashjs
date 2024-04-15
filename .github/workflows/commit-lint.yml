@@ -1,0 +1,14 @@
+name: Commit Lint
+
+on:
+  - pull_request
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  commit-lint:
+    name: Commit Lint
+    uses: ./.github/workflows/commit-lint-reusable.yml
+    secrets: inherit
