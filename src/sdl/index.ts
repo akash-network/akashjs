@@ -59,12 +59,12 @@ export class SDL {
   }
 
   static fromString(yaml: string, version: NetworkVersion = "beta2") {
-    const data = SDL.validate(yaml, version) as v2Sdl;
+    const data = SDL.validate(yaml) as v2Sdl;
 
     return new SDL(data, version);
   }
 
-  static validate(yaml: string, version: NetworkVersion) {
+  static validate(yaml: string) {
     // TODO: this should really be cast to unknown, then assigned
     // to v2 or v3 SDL only after being validated
     const data = YAML.load(yaml) as v3Sdl;
@@ -131,7 +131,7 @@ export class SDL {
         throw new Error("Storage size is required for service " + name);
       }
 
-      if (!!storage.attributes) {
+      if (storage.attributes) {
         for (const [key, value] of Object.entries(storage.attributes)) {
           if (key === "class" && value === "ram" && storage.attributes.persistent === true) {
             throw new Error("Storage attribute 'ram' must have 'persistent' set to 'false' or not defined for service " + name);
@@ -181,7 +181,7 @@ export class SDL {
   deploymentsByPlacement(placement: string) {
     const deployments = this.data ? this.data.deployment : [];
 
-    return Object.entries(deployments as object).filter(([name, deployment]) => deployment.hasOwnProperty(placement));
+    return Object.entries(deployments as object).filter(({ 1: deployment }) => Object.prototype.hasOwnProperty.call(deployment, placement));
   }
 
   resourceUnit(val: string, asString: boolean) {
@@ -801,7 +801,6 @@ export class SDL {
   }
 
   v2Groups() {
-    const sdl = this;
     const yamlJson = this.data;
     const ipEndpointNames = this.computeEndpointSequenceNumbers(yamlJson);
 
@@ -863,7 +862,7 @@ export class SDL {
               const exposeSpec = {
                 port: expose.port,
                 externalPort: expose.as || 0,
-                proto: sdl.parseServiceProto(expose.proto),
+                proto: this.parseServiceProto(expose.proto),
                 global: !!to.global
               };
 
@@ -875,7 +874,7 @@ export class SDL {
                 });
               }
 
-              const kind = sdl.exposeShouldBeIngress(exposeSpec) ? Endpoint_SHARED_HTTP : Endpoint_RANDOM_PORT;
+              const kind = this.exposeShouldBeIngress(exposeSpec) ? Endpoint_SHARED_HTTP : Endpoint_RANDOM_PORT;
 
               endpoints.push({ kind: kind, sequence_number: 0 });
             });

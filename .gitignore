@@ -7,6 +7,7 @@ umd/
 
 # Coverage directory
 .nyc_output/
+coverage
 
 # Log files
 yarn-error.log

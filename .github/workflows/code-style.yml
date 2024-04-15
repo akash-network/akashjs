@@ -1,0 +1,14 @@
+name: Code Style
+
+on:
+  - pull_request
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  code-style:
+    name: Code Style
+    uses: ./.github/workflows/code-style-reusable.yml
+    secrets: inherit

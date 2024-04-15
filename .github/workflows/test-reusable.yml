@@ -1,0 +1,31 @@
+name: Test
+
+on:
+  - workflow_call
+
+env:
+  HUSKY: 0
+
+jobs:
+  test:
+    name: Test and report coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js and Cache Dependencies
+        uses: ./.github/actions/setup-node
+
+      - name: Install dependencies
+        if: steps.deps-cache.outputs.cache-hit != 'true'
+        run: npm install
+
+      - name: Test
+        run: npm run test:cov
+
+      - name: Upload Test Coverage
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./ts/coverage
+          token: ${{ secrets.CODECOV_TOKEN }}

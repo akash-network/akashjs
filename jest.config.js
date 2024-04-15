@@ -7,7 +7,7 @@ const common = {
 };
 
 module.exports = {
-  collectCoverageFrom: ["./src/**/*.{js,ts}"],
+  collectCoverageFrom: ["./src/**/*.{js,ts}", "!./src/protobuf/**/*"],
   projects: [
     {
       displayName: "unit",

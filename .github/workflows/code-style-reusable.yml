@@ -1,0 +1,21 @@
+name: Code Style
+
+on:
+  - workflow_call
+
+env:
+  HUSKY: 0
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js and Cache Dependencies
+        uses: ./.github/actions/setup-node
+
+      - name: Lint
+        run: npm run lint

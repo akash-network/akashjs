@@ -1,0 +1,31 @@
+{
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md"
+      }
+    ],
+    [
+      "@semantic-release/npm",
+      {
+        "tarballDir": "package"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": "package/*.tgz"
+      }
+    ],
+    "@semantic-release/git"
+  ],
+  "branches": [
+    {
+      "name": "main"
+    }
+  ],
+  "preset": "conventionalcommits"
+}

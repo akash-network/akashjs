@@ -54,6 +54,3 @@ export async function get(chain: any, signer: any, endPoint: string) {
     aminoTypes: customAminoTypes
   } as any);
 }
-function bufferToHex(buffer: any) {
-  return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, "0")).join("");
-}
