@@ -1,8 +1,13 @@
 import { getAkashTypeRegistry } from "../stargate";
 import { defaultRegistryTypes, SigningStargateClient } from "@cosmjs/stargate";
-import { Registry } from "@cosmjs/proto-signing";
+import { OfflineDirectSigner, OfflineSigner, Registry } from "@cosmjs/proto-signing";
 import { AminoTypes } from "@cosmjs/stargate";
 import { Certificate } from "@akashnetwork/akash-api/akash/cert/v1beta2";
+import { MsgCreateCertificate } from "../protobuf/akash/cert/v1beta1/cert";
+
+interface Chain {
+  id: string;
+}
 
 export function getChains() {
   return {
@@ -15,42 +20,37 @@ export function getChains() {
   };
 }
 
-export function getSigner(chain: any) {
-  return (window as any).getOfflineSignerAuto(chain.id);
+export function getSigner(chain: Chain) {
+  return window.getOfflineSignerAuto(chain.id);
 }
 
-export async function get(chain: any, signer: any, endPoint: string) {
-  const customAminoTypes: any = new AminoTypes({
+export async function get(chain: Chain, signer: OfflineSigner | OfflineDirectSigner, endPoint: string) {
+  const customAminoTypes = new AminoTypes({
     "/akash.cert.v1beta2.MsgCreateCertificate": {
       aminoType: "cert/cert-create-certificate",
-      toAmino: ({ owner, cert, pubkey }: any) => {
-        const buf: any = Certificate.encode(
+      toAmino: ({ cert, pubkey }: MsgCreateCertificate) => {
+        const buf = Certificate.encode(
           Certificate.fromPartial({
-            owner,
             cert,
             pubkey
-          } as any)
+          })
         ).finish();
         const encoded = Buffer.from(buf);
         return encoded.toString("base64");
       },
-      fromAmino: ({ owner, cert, pubkey }: any) => {
+      fromAmino: ({ cert, pubkey }: MsgCreateCertificate) => {
         return Certificate.fromPartial({
-          owner,
           cert,
           pubkey
-        } as any);
+        });
       }
     }
-  } as any);
+  });
 
   const myRegistry = new Registry([...defaultRegistryTypes, ...getAkashTypeRegistry()]);
 
   return await SigningStargateClient.connectWithSigner(endPoint, signer, {
-    bip44: {
-      coinType: "118"
-    },
     registry: myRegistry,
     aminoTypes: customAminoTypes
-  } as any);
+  });
 }
