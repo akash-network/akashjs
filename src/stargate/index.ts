@@ -6,7 +6,7 @@ export const getAkashTypeRegistry: () => [string, MessageType<UnknownMessage>][]
 export const getTypeUrl: (type: MessageType) => string = type => `/${type.$type}`;
 
 /* TODO: this should be generated from the proto files */
-export enum messages {
+export enum Message {
   MsgCreateCertificate = "/akash.cert.v1beta3.MsgCreateCertificate",
   MsgRevokeCertificate = "/akash.cert.v1beta3.MsgRevokeCertificate",
   MsgCreateDeployment = "/akash.deployment.v1beta3.MsgCreateDeployment",

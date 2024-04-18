@@ -1,6 +1,6 @@
 import { create as create509, pems } from "./generate509";
 import { SigningStargateClient } from "@cosmjs/stargate";
-import { messages as stargateMessages } from "../stargate";
+import { Message as stargateMessages } from "../stargate";
 import { createStarGateMessage } from "../pbclient/pbclient";
 
 import { QueryCertificatesRequest, QueryCertificatesResponse, CertificateFilter } from "@akashnetwork/akash-api/akash/cert/v1beta3";
@@ -34,7 +34,7 @@ export async function createCertificate(bech32Address: string) {
 export async function revokeCertificate(owner: string, serial: string, client: SigningStargateClient) {
   const message = createStarGateMessage(stargateMessages.MsgRevokeCertificate, {
     id: {
-      owner: owner,
+      owner,
       serial
     }
   });
