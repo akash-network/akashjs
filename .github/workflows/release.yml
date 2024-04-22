@@ -18,19 +18,19 @@ jobs:
     uses: ./.github/workflows/commit-lint-reusable.yml
     secrets: inherit
 
-  lint:
-    name: Lint and report coverage
+  code-style:
+    name: Code Style
     uses: ./.github/workflows/code-style-reusable.yml
     secrets: inherit
 
   test:
-    name: Run tests
+    name: Run tests and report coverage
     uses: ./.github/workflows/test-reusable.yml
     secrets: inherit
 
   release:
     name: Build and release npm package
-    needs: [commit-lint, lint, test]
+    needs: [commit-lint, code-style, test]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -38,6 +38,9 @@ jobs:
 
       - name: Setup Node.js and Cache Dependencies
         uses: ./.github/actions/setup-node
+
+      - name: Build
+        run: npm run build
 
       - name: Release npm package
         uses: cycjimmy/semantic-release-action@v4
