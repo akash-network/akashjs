@@ -32,6 +32,11 @@ jobs:
     name: Build and release npm package
     needs: [commit-lint, code-style, test]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -43,8 +48,8 @@ jobs:
         run: npm run build
 
       - name: Release npm package
-        uses: cycjimmy/semantic-release-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npx semantic-release
 
