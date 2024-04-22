@@ -131,6 +131,12 @@ Our project enforces high standards of code quality and consistency to ensure th
 
 - **Continuous Integration**: Our CI workflows are designed to validate pull requests and manage releases. They perform multiple checks including commit validation, linting, and testing code coverage before merging changes.
 
+To better follow the above guidelines, we recommend using git hooks that would run the necessary checks before pushing your code. To do so after dependencies are installed, run the following command:
+
+```bash
+npm run setup-git-hooks
+```
+
 ### Contributing
 
 PRs are welcome! By adhering to these guidelines and leveraging our automated systems, we can maintain a high-quality codebase and streamline our development processes. We appreciate your contributions to making this project even better!
