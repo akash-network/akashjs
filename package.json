@@ -99,7 +99,6 @@
     "format": "prettier --write './**/*.{js,ts,json}' --config ./.prettierrc",
     "lint": "eslint . --ext .js,.ts,.json -c .eslintrc.json",
     "lint:fix": "npm run lint -- --fix",
-    "prepare": "husky",
     "prepublishOnly": "npm run build:production",
     "test": "npm run test:unit",
     "test:cov": "jest --selectProjects unit functional --coverage",
