@@ -44,9 +44,6 @@ jobs:
       - name: Setup Node.js and Cache Dependencies
         uses: ./.github/actions/setup-node
 
-      - name: Build
-        run: npm run build
-
       - name: Release npm package
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
