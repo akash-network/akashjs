@@ -100,6 +100,7 @@
     "lint": "eslint . --ext .js,.ts,.json -c .eslintrc.json",
     "lint:fix": "npm run lint -- --fix",
     "prepublishOnly": "npm run build:production",
+    "setup-git-hooks": "husky",
     "test": "npm run test:unit",
     "test:cov": "jest --selectProjects unit functional --coverage",
     "test:unit": "tap --ts tests/test_*.ts && jest --selectProjects unit",
