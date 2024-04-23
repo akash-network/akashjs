@@ -27,7 +27,8 @@ import {
   v3ComputeResources,
   v2ServiceParams,
   v3DeploymentGroup,
-  v3ManifestServiceParams
+  v3ManifestServiceParams,
+  v2StorageAttributes
 } from "./types";
 import { convertCpuResourceString, convertResourceString } from "./sizes";
 import { default as stableStringify } from "json-stable-stringify";
@@ -234,7 +235,7 @@ export class SDL {
         ? {
             name: storage.name || "default",
             [key]: this.resourceUnit(storage.size, asString),
-            attributes: this.serviceResourceAttributes(storage.attributes)
+            attributes: this.serviceResourceStorageAttributes(storage.attributes)
           }
         : {
             name: storage.name || "default",
@@ -250,6 +251,20 @@ export class SDL {
         .sort()
         .map(key => ({ key, value: attributes[key].toString() }))
     );
+  }
+
+  serviceResourceStorageAttributes(attributes?: v2StorageAttributes) {
+    if (!attributes) return undefined;
+
+    const pairs = Object.keys(attributes).map(key => ({ key, value: attributes[key].toString() }));
+
+    if (attributes.class === "ram" && !attributes.persistent) {
+      pairs.push({ key: "persistent", value: "false" });
+    }
+
+    pairs.sort((a, b) => a.key.localeCompare(b.key));
+
+    return pairs;
   }
 
   serviceResourceGpu(resource: v3ResourceGPU | undefined, asString: boolean) {
@@ -625,14 +640,7 @@ export class SDL {
       quantity: {
         val: this.resourceValue(convertResourceString(storage.size), asString)
       },
-      attributes:
-        storage.attributes &&
-        Object.entries(storage.attributes)
-          .sort(([k0], [k1]) => k0.localeCompare(k1))
-          .map(([key, value]) => ({
-            key: key,
-            value: value.toString()
-          }))
+      attributes: this.serviceResourceStorageAttributes(storage.attributes)
     }));
   }
 
