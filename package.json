@@ -76,12 +76,6 @@
       "npm run test",
       "npm run lint:fix",
       "npm run format"
-    ],
-    "package.json": [
-      "sort-json package.json"
-    ],
-    "tsconfig.json": [
-      "sort-json tsconfig.json"
     ]
   },
   "main": "build/index.js",
