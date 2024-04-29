@@ -1,3 +1,10 @@
+## [0.6.1](https://github.com/akash-network/akashjs/compare/v0.6.0...v0.6.1) (2024-04-29)
+
+
+### Bug Fixes
+
+* add required persistent attribute when using ram class storage ([edd205b](https://github.com/akash-network/akashjs/commit/edd205be195cee317b4cdf2aab4ec6a5d3b28c02))
+
 ## [0.6.0](https://github.com/akash-network/akashjs/compare/v0.5.11...v0.6.0) (2024-04-22)
 
 
