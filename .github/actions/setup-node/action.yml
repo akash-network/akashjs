@@ -20,7 +20,7 @@ runs:
       uses: martijnhols/actions-cache/restore@v3
       with:
         path: node_modules
-        key: ${{ runner.os }}-build-ts-deps-cache-${{ hashFiles('ts/package-lock.json') }}
+        key: ${{ runner.os }}-build-ts-deps-cache-${{ hashFiles('package-lock.json') }}
 
     - name: Install dependencies
       if: steps.deps-cache.outputs.cache-hit != 'true'
@@ -32,4 +32,4 @@ runs:
       uses: martijnhols/actions-cache/save@v3
       with:
         path: node_modules
-        key: ${{ runner.os }}-build-ts-deps-cache-${{ hashFiles('ts/package-lock.json') }}
+        key: ${{ runner.os }}-build-ts-deps-cache-${{ hashFiles('package-lock.json') }}
