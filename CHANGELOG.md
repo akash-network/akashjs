@@ -1,3 +1,10 @@
+## [0.6.2](https://github.com/akash-network/akashjs/compare/v0.6.1...v0.6.2) (2024-05-02)
+
+
+### Bug Fixes
+
+* patch to add credentials null to fix live deployments ([#84](https://github.com/akash-network/akashjs/issues/84)) ([51a325e](https://github.com/akash-network/akashjs/commit/51a325ebd8bcc60e613d81a626f90eb9364b50a3))
+
 ## [0.6.1](https://github.com/akash-network/akashjs/compare/v0.6.0...v0.6.1) (2024-04-29)
 
 
