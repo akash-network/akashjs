@@ -34,6 +34,7 @@ export type v3ManifestService = {
   count: number;
   expose: v3ServiceExpose[];
   params: v3ManifestServiceParams | null;
+  credentials: v2ServiceImageCredentials | null;
 };
 
 export type v2ServiceExposeHttpOptions = {
@@ -149,6 +150,13 @@ export type v2ServiceParams = {
   storage?: Record<string, v2ServiceStorageParams>;
 };
 
+export type v2ServiceImageCredentials = {
+  host: string;
+  email: string;
+  username: string;
+  password: string;
+};
+
 export type v2Service = {
   image: string;
   command: string[] | null;
@@ -157,6 +165,7 @@ export type v2Service = {
   expose: v2Expose[];
   dependencies?: v2Dependency[];
   params?: v2ServiceParams;
+  credentials?: v2ServiceImageCredentials;
 };
 
 export type v2ServiceDeployment = {

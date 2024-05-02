@@ -554,7 +554,8 @@ export class SDL {
       resources: this.serviceResourcesBeta3(id, profile as v3ProfileCompute, service, asString),
       count: deployment[placement].count,
       expose: this.v3ManifestExpose(service),
-      params: this.v3ManifestServiceParams(service.params)
+      params: this.v3ManifestServiceParams(service.params),
+      credentials: null
     };
   }
 
