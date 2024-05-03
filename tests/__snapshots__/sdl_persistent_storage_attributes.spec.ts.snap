@@ -194,6 +194,22 @@ exports[`test sdl persistent storage SDL: Persistent Storage Manifest: SDL: Pers
                 "val": 1073741824,
               },
             },
+            {
+              "attributes": [
+                {
+                  "key": "class",
+                  "value": "ram",
+                },
+                {
+                  "key": "persistent",
+                  "value": "false",
+                },
+              ],
+              "name": "shm2",
+              "size": {
+                "val": 1073741824,
+              },
+            },
           ],
         },
         "params": {

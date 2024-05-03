@@ -258,7 +258,7 @@ export class SDL {
 
     const pairs = Object.keys(attributes).map(key => ({ key, value: attributes[key].toString() }));
 
-    if (attributes.class === "ram" && !attributes.persistent) {
+    if (attributes.class === "ram" && !("persistent" in attributes)) {
       pairs.push({ key: "persistent", value: "false" });
     }
 

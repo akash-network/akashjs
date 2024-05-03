@@ -79,6 +79,11 @@ profiles:
             size: 1Gi
             attributes:
               class: ram
+          - name: shm2
+            size: 1Gi
+            attributes:
+              class: ram
+              persistent: false
   placement:
     akash:
       #######################################################
