@@ -136,6 +136,10 @@ export class SDL {
     }
   }
 
+  private readonly ENDPOINT_NAME_VALIDATION_REGEX = /^[a-z]+[-_\da-z]+$/;
+
+  private readonly ENDPOINT_KIND_IP = "ip";
+
   constructor(
     public readonly data: v2Sdl,
     public readonly version: NetworkVersion = "beta2",
@@ -156,6 +160,7 @@ export class SDL {
     });
 
     this.validateDenom();
+    this.validateEndpoints();
   }
 
   private validateDenom() {
@@ -166,6 +171,19 @@ export class SDL {
     const invalidDenom = denoms.find(denom => denom !== "uakt" && denom !== usdcDenom);
 
     CustomValidationError.assert(!invalidDenom, `Invalid denom: "${invalidDenom}". Only uakt and ${usdcDenom} are supported.`);
+  }
+
+  private validateEndpoints() {
+    if (!this.data.endpoints) {
+      return;
+    }
+
+    Object.keys(this.data.endpoints).forEach(endpointName => {
+      const endpoint = this.data.endpoints[endpointName];
+      CustomValidationError.assert(this.ENDPOINT_NAME_VALIDATION_REGEX.test(endpointName), `Endpoint named "${endpointName}" is not a valid name.`);
+      CustomValidationError.assert(!!endpoint.kind, `Endpoint named "${endpointName}" has no kind.`);
+      CustomValidationError.assert(endpoint.kind === this.ENDPOINT_KIND_IP, `Endpoint named "${endpointName}" has an unknown kind "${endpoint.kind}".`);
+    });
   }
 
   services() {
