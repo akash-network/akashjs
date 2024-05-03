@@ -33,6 +33,9 @@ import {
 import { convertCpuResourceString, convertResourceString } from "./sizes";
 import { default as stableStringify } from "json-stable-stringify";
 import crypto from "node:crypto";
+import { MAINNET_ID, USDC_IBC_DENOMS } from "../config/network";
+import { NetworkId } from "../types/network";
+import { CustomValidationError } from "../error/CustomValidationError";
 
 const Endpoint_SHARED_HTTP = 0;
 const Endpoint_RANDOM_PORT = 1;
@@ -51,28 +54,20 @@ function isString(str: any): str is string {
 type NetworkVersion = "beta2" | "beta3";
 
 export class SDL {
-  data: v2Sdl;
-  version: NetworkVersion;
-
-  constructor(data: v2Sdl, version: NetworkVersion = "beta2") {
-    this.data = data;
-    this.version = version;
-  }
-
-  static fromString(yaml: string, version: NetworkVersion = "beta2") {
-    const data = SDL.validate(yaml) as v2Sdl;
-
-    return new SDL(data, version);
+  static fromString(yaml: string, version: NetworkVersion = "beta2", networkId: NetworkId = MAINNET_ID) {
+    const data = YAML.load(yaml) as v3Sdl;
+    return new SDL(data, version, networkId);
   }
 
   static validate(yaml: string) {
+    console.warn("SDL.validate is deprecated. Use SDL.constructor directly.");
     // TODO: this should really be cast to unknown, then assigned
     // to v2 or v3 SDL only after being validated
     const data = YAML.load(yaml) as v3Sdl;
 
     for (const [name, profile] of Object.entries(data.profiles.compute)) {
-      SDL.validateGPU(name, profile.resources.gpu);
-      SDL.validateStorage(name, profile.resources.storage);
+      this.validateGPU(name, profile.resources.gpu);
+      this.validateStorage(name, profile.resources.storage);
     }
 
     return data;
@@ -81,7 +76,6 @@ export class SDL {
   static validateGPU(name: string, gpu: v3ResourceGPU | undefined) {
     if (gpu) {
       if (typeof gpu.units === "undefined") {
-        console.log(JSON.stringify(gpu, null, 2));
         throw new Error("GPU units must be specified for profile " + name);
       }
 
@@ -140,6 +134,38 @@ export class SDL {
         }
       }
     }
+  }
+
+  constructor(
+    public readonly data: v2Sdl,
+    public readonly version: NetworkVersion = "beta2",
+    private readonly networkId: NetworkId = MAINNET_ID
+  ) {
+    this.validate();
+  }
+
+  private validate() {
+    // TODO: this should really be cast to unknown, then assigned
+    // to v2 or v3 SDL only after being validated
+    const v3data = this.data as v3Sdl;
+    Object.entries(v3data.profiles.compute).forEach(([name, { resources }]) => {
+      if ("gpu" in resources) {
+        SDL.validateGPU(name, resources.gpu);
+      }
+      SDL.validateStorage(name, resources.storage);
+    });
+
+    this.validateDenom();
+  }
+
+  private validateDenom() {
+    const usdcDenom = USDC_IBC_DENOMS[this.networkId];
+    const denoms = this.groups()
+      .flatMap(g => g.resources)
+      .map(resource => resource.price.denom);
+    const invalidDenom = denoms.find(denom => denom !== "uakt" && denom !== usdcDenom);
+
+    CustomValidationError.assert(!invalidDenom, `Invalid denom: "${invalidDenom}". Only uakt and ${usdcDenom} are supported.`);
   }
 
   services() {

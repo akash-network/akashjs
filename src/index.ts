@@ -7,3 +7,4 @@ export * as rpc from "./rpc";
 
 export * as protoclient from "./pbclient/pbclient";
 export * as sdl from "./sdl";
+export * from "./error";
