@@ -1,6 +1,6 @@
 {
   "extends": ["@commitlint/config-conventional"],
   "rules": {
-    "scope-enum": [2, "always", ["certificates", "network", "wallet", "api", "stargate"]]
+    "scope-enum": [2, "always", ["certificates", "network", "wallet", "api", "stargate", "sdl"]]
   }
 }
