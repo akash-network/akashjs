@@ -1,3 +1,10 @@
+## [0.6.3](https://github.com/akash-network/akashjs/compare/v0.6.2...v0.6.3) (2024-05-03)
+
+
+### Bug Fixes
+
+* prevent duplicate persistent attribute when using ram storage ([6a821ef](https://github.com/akash-network/akashjs/commit/6a821efde40540fb33e9ec54073c82012d14f168))
+
 ## [0.6.2](https://github.com/akash-network/akashjs/compare/v0.6.1...v0.6.2) (2024-05-02)
 
 
