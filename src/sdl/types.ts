@@ -152,7 +152,7 @@ export type v2ServiceParams = {
 
 export type v2ServiceImageCredentials = {
   host: string;
-  email: string;
+  email?: string;
   username: string;
   password: string;
 };
