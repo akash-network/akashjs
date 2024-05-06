@@ -1,6 +1,6 @@
 import { Message } from "../stargate";
 import { AminoMsg } from "cosmwasm";
-import { MsgCreateCertificate, MsgRevokeCertificate } from "../protobuf/akash/cert/v1beta3/cert";
+import { MsgCreateCertificate, MsgRevokeCertificate } from "@akashnetwork/akash-api/akash/cert/v1beta3";
 
 const FEE = {
   amount: [
@@ -22,7 +22,9 @@ export function createAminoMessage(message: Message, messageBody: AminoMsg) {
 type WithoutType<T> = Omit<T, "$type">;
 type MessageTypes = {
   [Message.MsgCreateCertificate]: WithoutType<MsgCreateCertificate>;
-  [Message.MsgRevokeCertificate]: Omit<WithoutType<MsgRevokeCertificate>, "id"> & { id: WithoutType<MsgRevokeCertificate["id"]> };
+  [Message.MsgRevokeCertificate]: Omit<WithoutType<MsgRevokeCertificate>, "id"> & {
+    id: WithoutType<MsgRevokeCertificate["id"]>;
+  };
 };
 
 export function createStarGateMessage<T extends keyof MessageTypes>(message: T, messageBody: MessageTypes[T]) {
