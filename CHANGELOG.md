@@ -1,3 +1,10 @@
+## [0.7.0](https://github.com/akash-network/akashjs/compare/v0.6.3...v0.7.0) (2024-05-07)
+
+
+### Features
+
+* **api:** use deprecated generated code from akash-api ([b95352f](https://github.com/akash-network/akashjs/commit/b95352fae17646548b896a1d6cbc27edf14463bc)), closes [akash-network/support#184](https://github.com/akash-network/support/issues/184)
+
 ## [0.6.3](https://github.com/akash-network/akashjs/compare/v0.6.2...v0.6.3) (2024-05-03)
 
 
