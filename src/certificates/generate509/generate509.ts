@@ -1,6 +1,6 @@
 import { arrayBufferToString, toBase64 } from "pvutils";
 
-import asn1js from "asn1js";
+import * as asn1js from "asn1js";
 
 global.crypto = require("node:crypto");
 
@@ -23,7 +23,7 @@ export interface pems {
   privateKey: string;
 }
 
-export async function create(address: string) {
+export async function create(address: string): Promise<pems> {
   // get crypto handler
   const crypto = getCrypto();
 
@@ -41,13 +41,11 @@ export async function create(address: string) {
   const spki = await crypto.exportKey("spki", keyPair.privateKey);
   const pkcs8 = await crypto.exportKey("pkcs8", keyPair.privateKey);
 
-  const pems = {
+  return {
     csr: `-----BEGIN CERTIFICATE-----\n${formatPEM(toBase64(arrayBufferToString(certBER)))}\n-----END CERTIFICATE-----`,
     privateKey: `-----BEGIN PRIVATE KEY-----\n${formatPEM(toBase64(arrayBufferToString(pkcs8)))}\n-----END PRIVATE KEY-----`,
     publicKey: `-----BEGIN EC PUBLIC KEY-----\n${formatPEM(toBase64(arrayBufferToString(spki)))}\n-----END EC PUBLIC KEY-----`
   };
-
-  return pems;
 }
 
 async function createCSR(keyPair: { privateKey: string; publicKey: string }, hashAlg: string, { commonName }: { commonName: string }) {
