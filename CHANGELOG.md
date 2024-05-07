@@ -1,3 +1,10 @@
+## [0.7.1](https://github.com/akash-network/akashjs/compare/v0.7.0...v0.7.1) (2024-05-07)
+
+
+### Bug Fixes
+
+* **certificates:** properly import lib ([5bb78af](https://github.com/akash-network/akashjs/commit/5bb78af350f4f609424506e9b5fbe0f8a958d85b)), closes [akash-network/akashjs#76](https://github.com/akash-network/akashjs/issues/76)
+
 ## [0.7.0](https://github.com/akash-network/akashjs/compare/v0.6.3...v0.7.0) (2024-05-07)
 
 

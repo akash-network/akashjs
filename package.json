@@ -103,5 +103,5 @@
     "test:unit:watch": "jest --selectProjects unit --watch"
   },
   "types": "build/",
-  "version": "0.7.0"
+  "version": "0.7.1"
 }
