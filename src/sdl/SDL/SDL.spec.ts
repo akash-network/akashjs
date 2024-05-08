@@ -1,11 +1,11 @@
+import { faker } from "@faker-js/faker";
 import template from "lodash/template";
+import omit from "lodash/omit";
 
 import { readYml } from "../../../test/read-yml";
+import { SdlValidationError } from "../../error";
 import { SDL } from "./SDL";
-import { CustomValidationError } from "../../error";
-import { faker } from "@faker-js/faker";
 import { v2ServiceImageCredentials } from "../types";
-import { omit } from "lodash";
 
 const createYML = template(readYml("sdl-hello-world-basic-with-creds"));
 
@@ -58,7 +58,7 @@ describe("SDL", () => {
 
         expect(() => {
           SDL.fromString(yml, "beta3", "sandbox");
-        }).toThrowError(new CustomValidationError(`service "web" credentials missing "${field}"`));
+        }).toThrowError(new SdlValidationError(`service "web" credentials missing "${field}"`));
       });
 
       it.each(fields)('should throw an error when credentials "%s" is empty', field => {
@@ -69,7 +69,7 @@ describe("SDL", () => {
 
         expect(() => {
           SDL.fromString(yml, "beta3", "sandbox");
-        }).toThrowError(new CustomValidationError(`service "web" credentials missing "${field}"`));
+        }).toThrowError(new SdlValidationError(`service "web" credentials missing "${field}"`));
       });
 
       it.each(fields)('should throw an error when credentials "%s" contains spaces only', field => {
@@ -80,7 +80,7 @@ describe("SDL", () => {
 
         expect(() => {
           SDL.fromString(yml, "beta3", "sandbox");
-        }).toThrowError(new CustomValidationError(`service "web" credentials missing "${field}"`));
+        }).toThrowError(new SdlValidationError(`service "web" credentials missing "${field}"`));
       });
     });
   });
