@@ -1,12 +1,12 @@
-export class CustomValidationError extends Error {
+export class ValidationError extends Error {
   static assert(condition: unknown, message: string): asserts condition {
     if (!condition) {
-      throw new CustomValidationError(message);
+      throw new ValidationError(message);
     }
   }
 
   constructor(message: string) {
     super(message);
-    this.name = "CustomValidationError";
+    this.name = "SdlValidationError";
   }
 }

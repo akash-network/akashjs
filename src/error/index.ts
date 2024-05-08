@@ -1,1 +1,2 @@
-export * from "./CustomValidationError";
+export * from "./SdlValidationError";
+export * from "./ValidationError";

@@ -36,7 +36,7 @@ import { default as stableStringify } from "json-stable-stringify";
 import crypto from "node:crypto";
 import { MAINNET_ID, USDC_IBC_DENOMS } from "../config/network";
 import { NetworkId } from "../types/network";
-import { CustomValidationError } from "../error";
+import { SdlValidationError } from "../error";
 
 const Endpoint_SHARED_HTTP = 0;
 const Endpoint_RANDOM_PORT = 1;
@@ -182,7 +182,7 @@ export class SDL {
       .map(resource => resource.price.denom);
     const invalidDenom = denoms.find(denom => denom !== "uakt" && denom !== usdcDenom);
 
-    CustomValidationError.assert(!invalidDenom, `Invalid denom: "${invalidDenom}". Only uakt and ${usdcDenom} are supported.`);
+    SdlValidationError.assert(!invalidDenom, `Invalid denom: "${invalidDenom}". Only uakt and ${usdcDenom} are supported.`);
   }
 
   private validateEndpoints() {
@@ -192,9 +192,9 @@ export class SDL {
 
     Object.keys(this.data.endpoints).forEach(endpointName => {
       const endpoint = this.data.endpoints[endpointName];
-      CustomValidationError.assert(this.ENDPOINT_NAME_VALIDATION_REGEX.test(endpointName), `Endpoint named "${endpointName}" is not a valid name.`);
-      CustomValidationError.assert(!!endpoint.kind, `Endpoint named "${endpointName}" has no kind.`);
-      CustomValidationError.assert(endpoint.kind === this.ENDPOINT_KIND_IP, `Endpoint named "${endpointName}" has an unknown kind "${endpoint.kind}".`);
+      SdlValidationError.assert(this.ENDPOINT_NAME_VALIDATION_REGEX.test(endpointName), `Endpoint named "${endpointName}" is not a valid name.`);
+      SdlValidationError.assert(!!endpoint.kind, `Endpoint named "${endpointName}" has no kind.`);
+      SdlValidationError.assert(endpoint.kind === this.ENDPOINT_KIND_IP, `Endpoint named "${endpointName}" has an unknown kind "${endpoint.kind}".`);
     });
   }
 
@@ -204,29 +204,26 @@ export class SDL {
     if (credentials) {
       const credentialsKeys: (keyof v2ServiceImageCredentials)[] = ["host", "username", "password"];
       credentialsKeys.forEach(key => {
-        CustomValidationError.assert(credentials[key]?.trim().length, `service "${serviceName}" credentials missing "${key}"`);
+        SdlValidationError.assert(credentials[key]?.trim().length, `service "${serviceName}" credentials missing "${key}"`);
       });
     }
   }
 
   private validateDeploymentWithRelations(serviceName: string) {
     const deployment = this.data.deployment[serviceName];
-    CustomValidationError.assert(deployment, `Service "${serviceName}" is not defined in the "deployment" section.`);
+    SdlValidationError.assert(deployment, `Service "${serviceName}" is not defined in the "deployment" section.`);
 
     Object.keys(this.data.deployment[serviceName]).forEach(deploymentName => {
       const serviceDeployment = this.data.deployment[serviceName][deploymentName];
       const compute = this.data.profiles.compute[serviceDeployment.profile];
       const infra = this.data.profiles.placement[deploymentName];
 
-      CustomValidationError.assert(infra, `The placement "${deploymentName}" is not defined in the "placement" section.`);
-      CustomValidationError.assert(
+      SdlValidationError.assert(infra, `The placement "${deploymentName}" is not defined in the "placement" section.`);
+      SdlValidationError.assert(
         infra.pricing[serviceDeployment.profile],
         `The pricing for the "${serviceDeployment.profile}" profile is not defined in the "${deploymentName}" "placement" definition.`
       );
-      CustomValidationError.assert(
-        compute,
-        `The compute requirements for the "${serviceDeployment.profile}" profile are not defined in the "compute" section.`
-      );
+      SdlValidationError.assert(compute, `The compute requirements for the "${serviceDeployment.profile}" profile are not defined in the "compute" section.`);
     });
   }
 
@@ -236,19 +233,17 @@ export class SDL {
 
       expose.to?.forEach(to => {
         if (to.ip?.length > 0) {
-          CustomValidationError.assert(to.global, `Error on "${serviceName}", if an IP is declared, the directive must be declared as global.`);
+          SdlValidationError.assert(to.global, `Error on "${serviceName}", if an IP is declared, the directive must be declared as global.`);
 
           if (!this.data.endpoints?.[to.ip]) {
-            throw new CustomValidationError(
-              `Unknown endpoint "${to.ip}" in service "${serviceName}". Add to the list of endpoints in the "endpoints" section.`
-            );
+            throw new SdlValidationError(`Unknown endpoint "${to.ip}" in service "${serviceName}". Add to the list of endpoints in the "endpoints" section.`);
           }
 
           this.endpointsUsed.add(to.ip);
 
           const portKey = `${to.ip}-${expose.as}-${proto}`;
           const otherServiceName = this.portsUsed.get(portKey);
-          CustomValidationError.assert(
+          SdlValidationError.assert(
             !this.portsUsed.has(portKey),
             `IP endpoint ${to.ip} port: ${expose.port} protocol: ${proto} specified by service ${serviceName} already in use by ${otherServiceName}`
           );
