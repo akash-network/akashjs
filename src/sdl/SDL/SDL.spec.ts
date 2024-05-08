@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 import template from "lodash/template";
 import omit from "lodash/omit";
 
-import { readYml } from "../../../test/read-yml";
+import { readYml, toYmlFragment } from "../../../test/yml";
 import { SdlValidationError } from "../../error";
 import { SDL } from "./SDL";
 import { v2ServiceImageCredentials } from "../types";
@@ -18,7 +18,7 @@ describe("SDL", () => {
         password: faker.internet.password()
       };
       const yml = createYML({
-        credentials: createCreds(credentials)
+        credentials: toYmlFragment({ credentials }, { nestingLevel: 2 })
       });
       const sdl = SDL.fromString(yml, "beta3", "sandbox");
 
@@ -53,7 +53,7 @@ describe("SDL", () => {
 
       it.each(fields)('should throw an error when credentials are missing "%s"', field => {
         const yml = createYML({
-          credentials: createCreds(omit(credentials, field))
+          credentials: toYmlFragment({ credentials: omit(credentials, field) }, { nestingLevel: 2 })
         });
 
         expect(() => {
@@ -64,7 +64,7 @@ describe("SDL", () => {
       it.each(fields)('should throw an error when credentials "%s" is empty', field => {
         credentials[field] = "";
         const yml = createYML({
-          credentials: createCreds(omit(credentials, field))
+          credentials: toYmlFragment({ credentials: omit(credentials, field) }, { nestingLevel: 2 })
         });
 
         expect(() => {
@@ -75,7 +75,7 @@ describe("SDL", () => {
       it.each(fields)('should throw an error when credentials "%s" contains spaces only', field => {
         credentials[field] = "   ";
         const yml = createYML({
-          credentials: createCreds(omit(credentials, field))
+          credentials: toYmlFragment({ credentials: omit(credentials, field) }, { nestingLevel: 2 })
         });
 
         expect(() => {
@@ -85,25 +85,3 @@ describe("SDL", () => {
     });
   });
 });
-
-function createCreds({ host, username, password }: { host?: string; username?: string; password?: string }) {
-  let creds = "";
-
-  if (host) {
-    creds += `      host: "${host}"\n`;
-  }
-
-  if (username) {
-    creds += `      username: "${username}"\n`;
-  }
-
-  if (password) {
-    creds += `      password: "${password}"\n`;
-  }
-
-  if (creds) {
-    creds = `    credentials:\n${creds}`;
-  }
-
-  return creds;
-}
