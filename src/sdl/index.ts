@@ -28,7 +28,8 @@ import {
   v2ServiceParams,
   v3DeploymentGroup,
   v3ManifestServiceParams,
-  v2StorageAttributes
+  v2StorageAttributes,
+  v2ServiceImageCredentials
 } from "./types";
 import { convertCpuResourceString, convertResourceString } from "./sizes";
 import { default as stableStringify } from "json-stable-stringify";
@@ -168,6 +169,7 @@ export class SDL {
     Object.keys(this.data.services).forEach(serviceName => {
       this.validateDeploymentWithRelations(serviceName);
       this.validateLeaseIP(serviceName);
+      this.validateCredentials(serviceName);
     });
 
     this.validateDenom();
@@ -194,6 +196,17 @@ export class SDL {
       CustomValidationError.assert(!!endpoint.kind, `Endpoint named "${endpointName}" has no kind.`);
       CustomValidationError.assert(endpoint.kind === this.ENDPOINT_KIND_IP, `Endpoint named "${endpointName}" has an unknown kind "${endpoint.kind}".`);
     });
+  }
+
+  private validateCredentials(serviceName: string) {
+    const { credentials } = this.data.services[serviceName];
+
+    if (credentials) {
+      const credentialsKeys: (keyof v2ServiceImageCredentials)[] = ["host", "username", "password"];
+      credentialsKeys.forEach(key => {
+        CustomValidationError.assert(credentials[key]?.trim().length, `service "${serviceName}" credentials missing "${key}"`);
+      });
+    }
   }
 
   private validateDeploymentWithRelations(serviceName: string) {
@@ -658,7 +671,7 @@ export class SDL {
       count: deployment[placement].count,
       expose: this.v3ManifestExpose(service),
       params: this.v3ManifestServiceParams(service.params),
-      credentials: null
+      credentials: service.credentials || null
     };
   }
 
