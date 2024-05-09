@@ -8,6 +8,7 @@ services:
         as: 80
         to:
           - global: true
+            ${endpointRef}
 ${credentials}
 
 profiles:
@@ -33,3 +34,5 @@ deployment:
     dcloud:
       profile: web
       count: 1
+
+${endpoints}

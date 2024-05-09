@@ -37,6 +37,107 @@ describe("SDL", () => {
     });
   });
 
+  describe("endpoints", () => {
+    it("should resolve with valid endpoints", () => {
+      const endpointName = faker.lorem.word();
+      const endpoint = {
+        [endpointName]: {
+          kind: "ip"
+        }
+      };
+      const yml = readBasicSdl({ endpoint });
+      const sdl = SDL.fromString(yml, "beta3", "sandbox");
+
+      expect(sdl.manifest()).toMatchObject([
+        {
+          services: [
+            {
+              resources: {
+                endpoints: {
+                  1: {
+                    kind: 2,
+                    sequence_number: 1
+                  }
+                }
+              },
+              expose: [
+                {
+                  ip: endpointName,
+                  endpointSequenceNumber: 1
+                }
+              ]
+            }
+          ]
+        }
+      ]);
+      expect(sdl.groups()).toMatchObject([
+        {
+          resources: [
+            {
+              resource: {
+                endpoints: {
+                  1: {
+                    kind: 2,
+                    sequence_number: 1
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ]);
+    });
+
+    it("should throw provided an invalid endpoint name", () => {
+      const endpointName = faker.number.int().toString();
+      const endpoint = {
+        [endpointName]: {
+          kind: "ip"
+        }
+      };
+      const yml = readBasicSdl({ endpoint });
+
+      expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrowError(new SdlValidationError(`Endpoint named "${endpointName}" is not a valid name.`));
+    });
+
+    it("should throw provided no endpoint kind", () => {
+      const endpointName = faker.lorem.word();
+      const endpoint = {
+        [endpointName]: {}
+      };
+      const yml = readBasicSdl({ endpoint });
+
+      expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrowError(new SdlValidationError(`Endpoint named "${endpointName}" has no kind.`));
+    });
+
+    it("should throw provided invalid endpoint kind", () => {
+      const endpointName = faker.lorem.word();
+      const endpointKind = faker.lorem.word();
+      const endpoint = {
+        [endpointName]: {
+          kind: endpointKind
+        }
+      };
+      const yml = readBasicSdl({ endpoint });
+
+      expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrowError(
+        new SdlValidationError(`Endpoint named "${endpointName}" has an unknown kind "${endpointKind}".`)
+      );
+    });
+
+    it("should throw when endpoint is unused", () => {
+      const endpointName = faker.lorem.word();
+      const endpoint = {
+        [endpointName]: {
+          kind: "ip"
+        }
+      };
+      const yml = readBasicSdl({ endpoint, endpointRef: undefined });
+
+      expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrowError(new SdlValidationError(`Endpoint ${endpointName} declared but never used.`));
+    });
+  });
+
   describe("service image credentials", () => {
     it("should resolve a service with valid credentials", () => {
       const credentials = {

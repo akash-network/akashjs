@@ -66,7 +66,7 @@ export class SDL {
     // to v2 or v3 SDL only after being validated
     const data = YAML.load(yaml) as v3Sdl;
 
-    for (const [name, profile] of Object.entries(data.profiles.compute)) {
+    for (const [name, profile] of Object.entries(data.profiles.compute || {})) {
       this.validateGPU(name, profile.resources.gpu);
       this.validateStorage(name, profile.resources.storage);
     }
@@ -157,7 +157,7 @@ export class SDL {
     // TODO: this should really be cast to unknown, then assigned
     // to v2 or v3 SDL only after being validated
     const v3data = this.data as v3Sdl;
-    Object.entries(v3data.profiles.compute).forEach(([name, { resources }]) => {
+    Object.entries(v3data.profiles.compute || {}).forEach(([name, { resources }]) => {
       if ("gpu" in resources) {
         SDL.validateGPU(name, resources.gpu);
       }
@@ -173,6 +173,7 @@ export class SDL {
     });
 
     this.validateDenom();
+    this.validateEndpointsUtility();
   }
 
   private validateDenom() {
@@ -215,12 +216,12 @@ export class SDL {
 
     Object.keys(this.data.deployment[serviceName]).forEach(deploymentName => {
       const serviceDeployment = this.data.deployment[serviceName][deploymentName];
-      const compute = this.data.profiles.compute[serviceDeployment.profile];
-      const infra = this.data.profiles.placement[deploymentName];
+      const compute = this.data.profiles.compute?.[serviceDeployment.profile];
+      const infra = this.data.profiles.placement?.[deploymentName];
 
       SdlValidationError.assert(infra, `The placement "${deploymentName}" is not defined in the "placement" section.`);
       SdlValidationError.assert(
-        infra.pricing[serviceDeployment.profile],
+        infra.pricing?.[serviceDeployment.profile],
         `The pricing for the "${serviceDeployment.profile}" profile is not defined in the "${deploymentName}" "placement" definition.`
       );
       SdlValidationError.assert(compute, `The compute requirements for the "${serviceDeployment.profile}" profile are not defined in the "compute" section.`);
@@ -251,6 +252,14 @@ export class SDL {
         }
       });
     });
+  }
+
+  private validateEndpointsUtility() {
+    if (this.data.endpoints) {
+      Object.keys(this.data.endpoints).forEach(endpoint => {
+        SdlValidationError.assert(this.endpointsUsed.has(endpoint), `Endpoint ${endpoint} declared but never used.`);
+      });
+    }
   }
 
   services() {
@@ -849,7 +858,7 @@ export class SDL {
         const pricing = infra.pricing[svcdepl.profile];
         const price = {
           ...pricing,
-          amount: pricing.amount.toString()
+          amount: pricing.amount?.toString()
         };
 
         let group = groups.get(placementName);
