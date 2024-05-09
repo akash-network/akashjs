@@ -13,11 +13,11 @@ export const readYml = (name: string): string => {
 };
 
 type YmlInputObject = {
-  [key: string]: string | number | boolean | null | YmlInputObject;
+  [key: string]: string | number | boolean | null | YmlInputObject | YmlInputObject[];
 };
 
 export const toYmlFragment = (object: YmlInputObject, options?: { nestingLevel: number }): string => {
-  const yamlString = dump(object);
+  const yamlString = dump(object, { forceQuotes: true, quotingType: '"' });
 
   if (!options) {
     return yamlString;
@@ -37,15 +37,23 @@ interface BasicSdlTemplateVariables {
     username?: string;
     password?: string;
   };
+  endpoint?: Record<string, { kind?: string | "ip" }>;
+  endpointRef?: { ip: string };
 }
 
 const readBasicSdlTemplate = memoize(() => template(readYml("sdl-basic")));
 
 export const readBasicSdl = (variables: BasicSdlTemplateVariables = {}): string => {
   const createYML = readBasicSdlTemplate();
-  const ymlVars: Record<keyof BasicSdlTemplateVariables, string> = {
+  const endpointName = Object.keys(variables.endpoint || {})[0];
+  const ymlVars: Record<keyof Omit<BasicSdlTemplateVariables, "endpoint"> | "endpoints" | "endpointRef", string> = {
     denom: variables.denom || faker.helpers.arrayElement([AKT_DENOM, USDC_IBC_DENOMS[SANDBOX_ID]]),
-    credentials: variables.credentials ? toYmlFragment(pick(variables, "credentials"), { nestingLevel: 2 }) : ""
+    credentials: variables.credentials ? toYmlFragment(pick(variables, "credentials"), { nestingLevel: 2 }) : "",
+    endpoints: variables.endpoint ? toYmlFragment({ endpoints: variables.endpoint }) : "",
+    endpointRef:
+      ("endpointRef" in variables && toYmlFragment(pick(variables, "endpointRef"), { nestingLevel: 3 })) ||
+      (endpointName && toYmlFragment({ ip: endpointName })) ||
+      ""
   };
 
   return createYML(ymlVars);
