@@ -9,3 +9,5 @@ export const USDC_IBC_DENOMS: Record<NetworkId, string> = {
   [SANDBOX_ID]: "ibc/12C6A0C374171B595A0A9E18B83FA09D295FB1F2D8C6DAA3AC28683471752D84",
   [TESTNET_ID]: ""
 };
+
+export const AKT_DENOM = "uakt";

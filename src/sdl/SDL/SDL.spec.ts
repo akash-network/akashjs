@@ -1,15 +1,42 @@
 import { faker } from "@faker-js/faker";
-import template from "lodash/template";
-import omit from "lodash/omit";
 
-import { readYml, toYmlFragment } from "../../../test/yml";
+import { readBasicSdl } from "../../../test/yml";
 import { SdlValidationError } from "../../error";
 import { SDL } from "./SDL";
 import { v2ServiceImageCredentials } from "../types";
-
-const createYML = template(readYml("sdl-hello-world-basic-with-creds"));
+import { omit } from "lodash";
+import { AKT_DENOM, SANDBOX_ID, USDC_IBC_DENOMS } from "../../config/network";
 
 describe("SDL", () => {
+  describe("profiles placement pricing denomination", () => {
+    it.each([AKT_DENOM, USDC_IBC_DENOMS[SANDBOX_ID]])('should resolve a group with a valid "%s" denomination', denom => {
+      const yml = readBasicSdl({ denom });
+      const sdl = SDL.fromString(yml, "beta3", "sandbox");
+
+      expect(sdl.groups()).toMatchObject([
+        {
+          resources: [
+            {
+              price: {
+                denom: denom,
+                amount: "1000"
+              }
+            }
+          ]
+        }
+      ]);
+    });
+
+    it("should throw an error when denomination is invalid", () => {
+      const denom = "usdt";
+      const yml = readBasicSdl({ denom });
+
+      expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrow(
+        new SdlValidationError(`Invalid denom: "${denom}". Only uakt and ${USDC_IBC_DENOMS[SANDBOX_ID]} are supported.`)
+      );
+    });
+  });
+
   describe("service image credentials", () => {
     it("should resolve a service with valid credentials", () => {
       const credentials = {
@@ -17,19 +44,21 @@ describe("SDL", () => {
         username: faker.internet.userName(),
         password: faker.internet.password()
       };
-      const yml = createYML({
-        credentials: toYmlFragment({ credentials }, { nestingLevel: 2 })
-      });
-      const sdl = SDL.fromString(yml, "beta3", "sandbox");
+      const sdl = SDL.fromString(readBasicSdl({ credentials }), "beta3", "sandbox");
 
-      expect(sdl.manifest()).toMatchObject([{ services: [{ credentials }] }]);
+      expect(sdl.manifest()).toMatchObject([
+        {
+          services: [
+            {
+              credentials
+            }
+          ]
+        }
+      ]);
     });
 
     it("should resolve a service without credentials", () => {
-      const yml = createYML({
-        credentials: ""
-      });
-      const sdl = SDL.fromString(yml, "beta3", "sandbox");
+      const sdl = SDL.fromString(readBasicSdl(), "beta3", "sandbox");
       const group = sdl.manifest()[0];
 
       if (!("services" in group)) {
@@ -52,34 +81,24 @@ describe("SDL", () => {
       });
 
       it.each(fields)('should throw an error when credentials are missing "%s"', field => {
-        const yml = createYML({
-          credentials: toYmlFragment({ credentials: omit(credentials, field) }, { nestingLevel: 2 })
-        });
-
         expect(() => {
-          SDL.fromString(yml, "beta3", "sandbox");
+          SDL.fromString(readBasicSdl({ credentials: omit(credentials, field) }), "beta3", "sandbox");
         }).toThrowError(new SdlValidationError(`service "web" credentials missing "${field}"`));
       });
 
       it.each(fields)('should throw an error when credentials "%s" is empty', field => {
         credentials[field] = "";
-        const yml = createYML({
-          credentials: toYmlFragment({ credentials: omit(credentials, field) }, { nestingLevel: 2 })
-        });
 
         expect(() => {
-          SDL.fromString(yml, "beta3", "sandbox");
+          SDL.fromString(readBasicSdl({ credentials }), "beta3", "sandbox");
         }).toThrowError(new SdlValidationError(`service "web" credentials missing "${field}"`));
       });
 
       it.each(fields)('should throw an error when credentials "%s" contains spaces only', field => {
         credentials[field] = "   ";
-        const yml = createYML({
-          credentials: toYmlFragment({ credentials: omit(credentials, field) }, { nestingLevel: 2 })
-        });
 
         expect(() => {
-          SDL.fromString(yml, "beta3", "sandbox");
+          SDL.fromString(readBasicSdl({ credentials }), "beta3", "sandbox");
         }).toThrowError(new SdlValidationError(`service "web" credentials missing "${field}"`));
       });
     });

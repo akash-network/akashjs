@@ -34,7 +34,7 @@ import {
 import { convertCpuResourceString, convertResourceString } from "./../sizes";
 import { default as stableStringify } from "json-stable-stringify";
 import crypto from "node:crypto";
-import { MAINNET_ID, USDC_IBC_DENOMS } from "../../config/network";
+import { AKT_DENOM, MAINNET_ID, USDC_IBC_DENOMS } from "../../config/network";
 import { NetworkId } from "../../types/network";
 import { SdlValidationError } from "../../error";
 
@@ -180,7 +180,7 @@ export class SDL {
     const denoms = this.groups()
       .flatMap(g => g.resources)
       .map(resource => resource.price.denom);
-    const invalidDenom = denoms.find(denom => denom !== "uakt" && denom !== usdcDenom);
+    const invalidDenom = denoms.find(denom => denom !== AKT_DENOM && denom !== usdcDenom);
 
     SdlValidationError.assert(!invalidDenom, `Invalid denom: "${invalidDenom}". Only uakt and ${usdcDenom} are supported.`);
   }
