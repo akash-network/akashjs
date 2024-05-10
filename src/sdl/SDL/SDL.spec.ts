@@ -169,7 +169,7 @@ describe("SDL", () => {
       expect(group.services[0].credentials).toBeNull();
     });
 
-    describe("should throw an error when credentials are invalid", () => {
+    describe("invalid credentials errors", () => {
       const fields: (keyof v2ServiceImageCredentials)[] = ["host", "username", "password"];
       let credentials: v2ServiceImageCredentials;
 
