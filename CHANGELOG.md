@@ -1,3 +1,13 @@
+## [0.8.0](https://github.com/akash-network/akashjs/compare/v0.7.1...v0.8.0) (2024-05-10)
+
+
+### Features
+
+* **api:** move deployment relations and ip lease validation from cloudmos ([a7eb767](https://github.com/akash-network/akashjs/commit/a7eb7672a04225201cc71b2ca4256a15fb28448e)), closes [akash-network/cloudmos#133](https://github.com/akash-network/cloudmos/issues/133)
+* **sdl:** implement service image credentials ([06a73e8](https://github.com/akash-network/akashjs/commit/06a73e8fa507c5d005a5b92cbc77e29e5ed69967)), closes [akash-network/cloudmos#168](https://github.com/akash-network/cloudmos/issues/168)
+* **sdl:** move denom validation from cloudmos to sdl ([#133](https://github.com/akash-network/akashjs/issues/133)) ([1b5362f](https://github.com/akash-network/akashjs/commit/1b5362f2e3b3067b2fbe3a9bf1d8119a01461de1))
+* **sdl:** move endpoint validation from cloudmos ([#133](https://github.com/akash-network/akashjs/issues/133)) ([0b770ec](https://github.com/akash-network/akashjs/commit/0b770ece33d5ea6e12acef3b9e1e3b60457ae305))
+
 ## [0.7.1](https://github.com/akash-network/akashjs/compare/v0.7.0...v0.7.1) (2024-05-07)
 
 
