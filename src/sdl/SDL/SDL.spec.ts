@@ -1,10 +1,10 @@
 import { faker } from "@faker-js/faker";
 
-import { readBasicSdl } from "../../../test/yml";
+import { createGroupsWith, createManifestWith, readBasicSdl } from "../../../test/templates";
 import { SdlValidationError } from "../../error";
 import { SDL } from "./SDL";
 import { v2ServiceImageCredentials } from "../types";
-import { omit } from "lodash";
+import omit from "lodash/omit";
 import { AKT_DENOM, SANDBOX_ID, USDC_IBC_DENOMS } from "../../config/network";
 
 describe("SDL", () => {
@@ -13,18 +13,21 @@ describe("SDL", () => {
       const yml = readBasicSdl({ denom });
       const sdl = SDL.fromString(yml, "beta3", "sandbox");
 
-      expect(sdl.groups()).toMatchObject([
-        {
-          resources: [
-            {
-              price: {
-                denom: denom,
-                amount: "1000"
+      expect(sdl.manifest()).toMatchObject(createManifestWith());
+      expect(sdl.groups()).toMatchObject(
+        createGroupsWith([
+          {
+            resources: [
+              {
+                price: {
+                  denom: denom,
+                  amount: "1000"
+                }
               }
-            }
-          ]
-        }
-      ]);
+            ]
+          }
+        ])
+      );
     });
 
     it("should throw an error when denomination is invalid", () => {
@@ -39,53 +42,57 @@ describe("SDL", () => {
 
   describe("endpoints", () => {
     it("should resolve with valid endpoints", () => {
-      const endpointName = faker.lorem.word();
+      const endpointName = faker.lorem.word({ length: { min: 3, max: 10 } });
       const endpoint = {
         [endpointName]: {
           kind: "ip"
         }
       };
-      const yml = readBasicSdl({ endpoint });
+      const yml = readBasicSdl({ endpoint, denom: "uakt" });
       const sdl = SDL.fromString(yml, "beta3", "sandbox");
 
-      expect(sdl.manifest()).toMatchObject([
-        {
-          services: [
-            {
-              resources: {
-                endpoints: {
-                  1: {
-                    kind: 2,
-                    sequence_number: 1
+      expect(sdl.manifest()).toMatchObject(
+        createManifestWith([
+          {
+            services: [
+              {
+                resources: {
+                  endpoints: {
+                    1: {
+                      kind: 2,
+                      sequence_number: 1
+                    }
                   }
-                }
-              },
-              expose: [
-                {
-                  ip: endpointName,
-                  endpointSequenceNumber: 1
-                }
-              ]
-            }
-          ]
-        }
-      ]);
-      expect(sdl.groups()).toMatchObject([
-        {
-          resources: [
-            {
-              resource: {
-                endpoints: {
-                  1: {
-                    kind: 2,
-                    sequence_number: 1
+                },
+                expose: [
+                  {
+                    ip: endpointName,
+                    endpointSequenceNumber: 1
+                  }
+                ]
+              }
+            ]
+          }
+        ])
+      );
+      expect(sdl.groups()).toMatchObject(
+        createGroupsWith([
+          {
+            resources: [
+              {
+                resource: {
+                  endpoints: {
+                    1: {
+                      kind: 2,
+                      sequence_number: 1
+                    }
                   }
                 }
               }
-            }
-          ]
-        }
-      ]);
+            ]
+          }
+        ])
+      );
     });
 
     it("should throw provided an invalid endpoint name", () => {
@@ -101,7 +108,7 @@ describe("SDL", () => {
     });
 
     it("should throw provided no endpoint kind", () => {
-      const endpointName = faker.lorem.word();
+      const endpointName = faker.lorem.word({ length: { min: 3, max: 10 } });
       const endpoint = {
         [endpointName]: {}
       };
@@ -111,7 +118,7 @@ describe("SDL", () => {
     });
 
     it("should throw provided invalid endpoint kind", () => {
-      const endpointName = faker.lorem.word();
+      const endpointName = faker.lorem.word({ length: { min: 3, max: 10 } });
       const endpointKind = faker.lorem.word();
       const endpoint = {
         [endpointName]: {
@@ -126,7 +133,7 @@ describe("SDL", () => {
     });
 
     it("should throw when endpoint is unused", () => {
-      const endpointName = faker.lorem.word();
+      const endpointName = faker.lorem.word({ length: { min: 3, max: 10 } });
       const endpoint = {
         [endpointName]: {
           kind: "ip"
@@ -145,28 +152,37 @@ describe("SDL", () => {
         username: faker.internet.userName(),
         password: faker.internet.password()
       };
-      const sdl = SDL.fromString(readBasicSdl({ credentials }), "beta3", "sandbox");
+      const sdl = SDL.fromString(readBasicSdl({ credentials, denom: "uakt" }), "beta3", "sandbox");
 
-      expect(sdl.manifest()).toMatchObject([
-        {
-          services: [
-            {
-              credentials
-            }
-          ]
-        }
-      ]);
+      expect(sdl.manifest()).toMatchObject(
+        createManifestWith([
+          {
+            services: [
+              {
+                credentials
+              }
+            ]
+          }
+        ])
+      );
+      expect(sdl.groups()).toMatchObject(createGroupsWith());
     });
 
     it("should resolve a service without credentials", () => {
-      const sdl = SDL.fromString(readBasicSdl(), "beta3", "sandbox");
-      const group = sdl.manifest()[0];
+      const sdl = SDL.fromString(readBasicSdl({ denom: "uakt" }), "beta3", "sandbox");
 
-      if (!("services" in group)) {
-        throw new Error("No services found in group");
-      }
-
-      expect(group.services[0].credentials).toBeNull();
+      expect(sdl.manifest()).toMatchObject(
+        createManifestWith([
+          {
+            services: [
+              {
+                credentials: null
+              }
+            ]
+          }
+        ])
+      );
+      expect(sdl.groups()).toMatchObject(createGroupsWith());
     });
 
     describe("invalid credentials errors", () => {

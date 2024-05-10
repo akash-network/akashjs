@@ -1,0 +1,68 @@
+[
+  {
+    "name": "dcloud",
+    "services": [
+      {
+        "name": "web",
+        "image": "akashlytics/hello-akash-world:0.2.0",
+        "command": null,
+        "args": null,
+        "env": null,
+        "resources": {
+          "id": 1,
+          "cpu": {
+            "units": {
+              "val": "500"
+            }
+          },
+          "memory": {
+            "size": {
+              "val": 536870912
+            }
+          },
+          "storage": [
+            {
+              "name": "default",
+              "size": {
+                "val": 536870912
+              }
+            }
+          ],
+          "endpoints": [
+            {
+              "sequence_number": 0
+            }
+          ],
+          "gpu": {
+            "units": {
+              "val": 0
+            }
+          }
+        },
+        "count": 1,
+        "expose": [
+          {
+            "port": 3000,
+            "externalPort": 80,
+            "proto": "TCP",
+            "service": "",
+            "global": true,
+            "hosts": null,
+            "httpOptions": {
+              "maxBodySize": 1048576,
+              "readTimeout": 60000,
+              "sendTimeout": 60000,
+              "nextTries": 3,
+              "nextTimeout": 0,
+              "nextCases": ["error", "timeout"]
+            },
+            "ip": "",
+            "endpointSequenceNumber": 0
+          }
+        ],
+        "params": null,
+        "credentials": null
+      }
+    ]
+  }
+]

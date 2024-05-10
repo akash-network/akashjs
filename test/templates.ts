@@ -4,9 +4,13 @@ import { dump } from "js-yaml";
 import { faker } from "@faker-js/faker";
 import template from "lodash/template";
 import memoize from "lodash/memoize";
+import pick from "lodash/pick";
+
 import { AKT_DENOM } from "../src/config/network";
 import { SANDBOX_ID, USDC_IBC_DENOMS } from "../src/config/network";
-import { pick } from "lodash";
+import groupsBasicSnapshot from "./fixtures/groups-basic-snapshot.json";
+import manifestBasicSnapshot from "./fixtures/manifest-basic-snapshot.json";
+import { merge } from "lodash";
 
 export const readYml = (name: string): string => {
   return fs.readFileSync(path.resolve(__dirname, `./fixtures/${name}.yml`), "utf-8");
@@ -58,3 +62,11 @@ export const readBasicSdl = (variables: BasicSdlTemplateVariables = {}): string 
 
   return createYML(ymlVars);
 };
+
+const jsonTemplate =
+  <T extends Record<string, any>>(template: T) =>
+  (variables: Record<string, any> = {}) =>
+    merge({}, template, variables);
+
+export const createManifestWith = jsonTemplate(manifestBasicSnapshot);
+export const createGroupsWith = jsonTemplate(groupsBasicSnapshot);
