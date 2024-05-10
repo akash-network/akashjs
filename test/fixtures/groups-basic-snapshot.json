@@ -1,0 +1,78 @@
+[
+  {
+    "name": "dcloud",
+    "resources": [
+      {
+        "resource": {
+          "endpoints": [
+            {
+              "sequence_number": 0
+            }
+          ],
+          "cpu": {
+            "units": {
+              "val": {
+                "0": 53,
+                "1": 48,
+                "2": 48
+              }
+            }
+          },
+          "memory": {
+            "quantity": {
+              "val": {
+                "0": 53,
+                "1": 51,
+                "2": 54,
+                "3": 56,
+                "4": 55,
+                "5": 48,
+                "6": 57,
+                "7": 49,
+                "8": 50
+              }
+            }
+          },
+          "storage": [
+            {
+              "name": "default",
+              "quantity": {
+                "val": {
+                  "0": 53,
+                  "1": 51,
+                  "2": 54,
+                  "3": 56,
+                  "4": 55,
+                  "5": 48,
+                  "6": 57,
+                  "7": 49,
+                  "8": 50
+                }
+              }
+            }
+          ],
+          "gpu": {
+            "units": {
+              "val": {
+                "0": 48
+              }
+            }
+          },
+          "id": 1
+        },
+        "price": {
+          "denom": "uakt",
+          "amount": "1000"
+        },
+        "count": 1
+      }
+    ],
+    "requirements": {
+      "attributes": [],
+      "signedBy": {
+        "allOf": [],
+        "anyOf": []
+      }
+    }
+  }
+]
