@@ -17,10 +17,10 @@ describe("CertificateManager", () => {
       now.setMilliseconds(0);
       const inOneYear = getTime1yearFrom(now);
       const pem = certificateManager.generatePEM(address);
-      const meta = certificateManager.parsePem(pem.certKey);
+      const meta = certificateManager.parsePem(pem.cert);
 
       expect(pem).toMatchObject({
-        certKey: expect.stringMatching(/^-----BEGIN CERTIFICATE-----[\s\S]*-----END CERTIFICATE-----\r\n$/),
+        cert: expect.stringMatching(/^-----BEGIN CERTIFICATE-----[\s\S]*-----END CERTIFICATE-----\r\n$/),
         publicKey: expect.stringMatching(/^-----BEGIN EC PUBLIC KEY-----[\s\S]*-----END EC PUBLIC KEY-----\r\n$/),
         privateKey: expect.stringMatching(/^-----BEGIN PRIVATE KEY-----[\s\S]*-----END PRIVATE KEY-----\r\n$/)
       });
@@ -40,10 +40,10 @@ describe("CertificateManager", () => {
       validFrom: inOneMonth,
       validTo: inTwoMonths
     });
-    const meta = certificateManager.parsePem(pem.certKey);
+    const meta = certificateManager.parsePem(pem.cert);
 
     expect(pem).toMatchObject({
-      certKey: expect.stringMatching(/^-----BEGIN CERTIFICATE-----[\s\S]*-----END CERTIFICATE-----\r\n$/),
+      cert: expect.stringMatching(/^-----BEGIN CERTIFICATE-----[\s\S]*-----END CERTIFICATE-----\r\n$/),
       publicKey: expect.stringMatching(/^-----BEGIN EC PUBLIC KEY-----[\s\S]*-----END EC PUBLIC KEY-----\r\n$/),
       privateKey: expect.stringMatching(/^-----BEGIN PRIVATE KEY-----[\s\S]*-----END PRIVATE KEY-----\r\n$/)
     });
@@ -56,7 +56,7 @@ describe("CertificateManager", () => {
 
   describe("prototype.parsePem", () => {
     it("should extract certificate data", () => {
-      const cert = certificateManager.parsePem(certificateManager.generatePEM(address).certKey);
+      const cert = certificateManager.parsePem(certificateManager.generatePEM(address).cert);
 
       expect(cert).toMatchObject({
         hSerial: expect.any(String),

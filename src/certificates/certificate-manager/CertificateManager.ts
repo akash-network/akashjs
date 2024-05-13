@@ -3,7 +3,7 @@
 import rs from "jsrsasign";
 
 export interface CertificatePem {
-  certKey: string;
+  cert: string;
   publicKey: string;
   privateKey: string;
 }
@@ -67,10 +67,10 @@ export class CertificateManager {
       cakey: prvKeyObj
     });
     const publicKey: string = rs.KEYUTIL.getPEM(pubKeyObj, "PKCS8PUB").replaceAll("PUBLIC KEY", "EC PUBLIC KEY");
-    const certKey: string = cert.getPEM();
+    const certPEM: string = cert.getPEM();
 
     return {
-      certKey,
+      cert: certPEM,
       publicKey,
       privateKey: rs.KEYUTIL.getPEM(prvKeyObj, "PKCS8PRV")
     };
