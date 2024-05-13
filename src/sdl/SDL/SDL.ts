@@ -664,6 +664,11 @@ export class SDL {
     const service = this.data.services[name];
     const deployment = this.data.deployment[name];
     const profile = this.data.profiles.compute[deployment[placement].profile];
+    const credentials = service.credentials || null;
+
+    if (credentials && !credentials.email) {
+      credentials.email = "";
+    }
 
     return {
       name: name,
@@ -675,7 +680,7 @@ export class SDL {
       count: deployment[placement].count,
       expose: this.v3ManifestExpose(service),
       params: this.v3ManifestServiceParams(service.params),
-      credentials: service.credentials || null
+      credentials
     };
   }
 
