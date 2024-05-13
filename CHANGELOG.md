@@ -1,3 +1,15 @@
+## [0.9.0](https://github.com/akash-network/akashjs/compare/v0.8.1...v0.9.0) (2024-05-13)
+
+
+### Features
+
+* **certificates:** implement certificate manager ([1da68e8](https://github.com/akash-network/akashjs/commit/1da68e87782ccd368ee2ef5fef546a576fa47dbb)), closes [akash-network/akashjs#76](https://github.com/akash-network/akashjs/issues/76)
+
+
+### Bug Fixes
+
+* **certificates:** adjust cert fields names ([21699d8](https://github.com/akash-network/akashjs/commit/21699d8122996ea75f12d18d7c78276a3abcb595)), closes [akash-network/akashjs#76](https://github.com/akash-network/akashjs/issues/76)
+
 ## [0.8.1](https://github.com/akash-network/akashjs/compare/v0.8.0...v0.8.1) (2024-05-13)
 
 
