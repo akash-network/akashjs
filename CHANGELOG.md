@@ -1,3 +1,10 @@
+## [0.8.1](https://github.com/akash-network/akashjs/compare/v0.8.0...v0.8.1) (2024-05-13)
+
+
+### Bug Fixes
+
+* **sdl:** fallback credentials email to an empty string ([4657dc5](https://github.com/akash-network/akashjs/commit/4657dc571f7164328c96d0092a7e93ec41fbc56a)), closes [akash-network/cloudmos#133](https://github.com/akash-network/cloudmos/issues/133)
+
 ## [0.8.0](https://github.com/akash-network/akashjs/compare/v0.7.1...v0.8.0) (2024-05-10)
 
 
