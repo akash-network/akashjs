@@ -18,6 +18,7 @@
     "cosmwasm": "^1.1.1",
     "js-yaml": "^4.1.0",
     "json-stable-stringify": "^1.0.2",
+    "jsrsasign": "^11.1.0",
     "keytar": "^7.7.0",
     "node-fetch": "2",
     "pkijs": "^3.0.0",

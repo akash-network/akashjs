@@ -1,22 +1,38 @@
-import { create as create509, pems } from "./generate509";
 import { SigningStargateClient } from "@cosmjs/stargate";
+import { DeliverTxResponse } from "@cosmjs/stargate/build/stargateclient";
+import { toBase64 } from "pvutils";
+import { CertificateFilter, QueryCertificatesRequest, QueryCertificatesResponse } from "@akashnetwork/akash-api/akash/cert/v1beta3";
+
+import type { pems } from "./generate509";
 import { Message as stargateMessages } from "../stargate";
 import { createStarGateMessage } from "../pbclient/pbclient";
-
-import { QueryCertificatesRequest, QueryCertificatesResponse, CertificateFilter } from "@akashnetwork/akash-api/akash/cert/v1beta3";
+import type { CertificatePem } from "./certificate-manager/CertificateManager";
+import { certificateManager } from "./certificate-manager";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const JsonRPC = require("simple-jsonrpc-js");
-
-import { toBase64 } from "pvutils";
 
 const jrpc = JsonRPC.connect_xhr("https://bridge.testnet.akash.network/akashnetwork");
 
 export type { pems };
 
-export async function broadcastCertificate({ csr, publicKey }: pems, owner: string, client: SigningStargateClient) {
-  const encodedCsr = base64ToUInt(toBase64(csr));
-  const encdodedPublicKey = base64ToUInt(toBase64(publicKey));
+export async function broadcastCertificate(
+  pem: Pick<CertificatePem, "certKey" | "publicKey">,
+  owner: string,
+  client: SigningStargateClient
+): Promise<DeliverTxResponse>;
+export async function broadcastCertificate(pem: pems, owner: string, client: SigningStargateClient): Promise<DeliverTxResponse>;
+export async function broadcastCertificate(
+  pem: Pick<CertificatePem, "certKey" | "publicKey"> | pems,
+  owner: string,
+  client: SigningStargateClient
+): Promise<DeliverTxResponse> {
+  if ("csr" in pem) {
+    console.warn("The `csr` field is deprecated. Use `certKey` instead.");
+  }
+  const certKey = "certKey" in pem ? pem.certKey : pem.csr;
+  const encodedCsr = base64ToUInt(toBase64(certKey));
+  const encdodedPublicKey = base64ToUInt(toBase64(pem.publicKey));
   const message = createStarGateMessage(stargateMessages.MsgCreateCertificate, {
     owner: owner,
     cert: encodedCsr,
@@ -27,8 +43,17 @@ export async function broadcastCertificate({ csr, publicKey }: pems, owner: stri
 }
 
 export async function createCertificate(bech32Address: string) {
-  const certificate = create509(bech32Address);
-  return certificate;
+  const pem = certificateManager.generatePEM(bech32Address);
+
+  return {
+    get csr() {
+      console.warn("The `csr` field is deprecated. Use `certKey` instead.");
+      return pem.certKey;
+    },
+    certKey: pem.certKey,
+    publicKey: pem.publicKey,
+    privateKey: pem.privateKey
+  };
 }
 
 export async function revokeCertificate(owner: string, serial: string, client: SigningStargateClient) {
