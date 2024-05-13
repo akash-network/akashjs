@@ -159,7 +159,10 @@ describe("SDL", () => {
           {
             services: [
               {
-                credentials
+                credentials: {
+                  ...credentials,
+                  email: ""
+                }
               }
             ]
           }
