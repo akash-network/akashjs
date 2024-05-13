@@ -17,20 +17,20 @@ const jrpc = JsonRPC.connect_xhr("https://bridge.testnet.akash.network/akashnetw
 export type { pems };
 
 export async function broadcastCertificate(
-  pem: Pick<CertificatePem, "certKey" | "publicKey">,
+  pem: Pick<CertificatePem, "cert" | "publicKey">,
   owner: string,
   client: SigningStargateClient
 ): Promise<DeliverTxResponse>;
 export async function broadcastCertificate(pem: pems, owner: string, client: SigningStargateClient): Promise<DeliverTxResponse>;
 export async function broadcastCertificate(
-  pem: Pick<CertificatePem, "certKey" | "publicKey"> | pems,
+  pem: Pick<CertificatePem, "cert" | "publicKey"> | pems,
   owner: string,
   client: SigningStargateClient
 ): Promise<DeliverTxResponse> {
   if ("csr" in pem) {
-    console.warn("The `csr` field is deprecated. Use `certKey` instead.");
+    console.warn("The `csr` field is deprecated. Use `cert` instead.");
   }
-  const certKey = "certKey" in pem ? pem.certKey : pem.csr;
+  const certKey = "cert" in pem ? pem.cert : pem.csr;
   const encodedCsr = base64ToUInt(toBase64(certKey));
   const encdodedPublicKey = base64ToUInt(toBase64(pem.publicKey));
   const message = createStarGateMessage(stargateMessages.MsgCreateCertificate, {
@@ -46,13 +46,11 @@ export async function createCertificate(bech32Address: string) {
   const pem = certificateManager.generatePEM(bech32Address);
 
   return {
+    ...pem,
     get csr() {
-      console.warn("The `csr` field is deprecated. Use `certKey` instead.");
-      return pem.certKey;
-    },
-    certKey: pem.certKey,
-    publicKey: pem.publicKey,
-    privateKey: pem.privateKey
+      console.warn("The `csr` field is deprecated. Use `cert` instead.");
+      return pem.cert;
+    }
   };
 }
 
