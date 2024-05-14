@@ -1,3 +1,10 @@
+## [0.9.1](https://github.com/akash-network/akashjs/compare/v0.9.0...v0.9.1) (2024-05-14)
+
+
+### Bug Fixes
+
+* **api:** rollback deprecated protobuf generated code ([4d2479d](https://github.com/akash-network/akashjs/commit/4d2479d3695e858deff48675a6faec6208474632)), closes [akash-network/cloudmos#184](https://github.com/akash-network/cloudmos/issues/184)
+
 ## [0.9.0](https://github.com/akash-network/akashjs/compare/v0.8.1...v0.9.0) (2024-05-13)
 
 
