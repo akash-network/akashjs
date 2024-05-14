@@ -1,38 +1,36 @@
 import { faker } from "@faker-js/faker";
-
-import { createGroupsWith, createManifestWith, readBasicSdl } from "../../../test/templates";
-import { SdlValidationError } from "../../error";
-import { SDL } from "./SDL";
-import { v2ServiceImageCredentials } from "../types";
 import omit from "lodash/omit";
+
+import { createGroups, createManifest, createSdlYml } from "../../../test/templates";
 import { AKT_DENOM, SANDBOX_ID, USDC_IBC_DENOMS } from "../../config/network";
+import { SdlValidationError } from "../../error";
+import { v2ServiceImageCredentials } from "../types";
+import { SDL } from "./SDL";
 
 describe("SDL", () => {
   describe("profiles placement pricing denomination", () => {
     it.each([AKT_DENOM, USDC_IBC_DENOMS[SANDBOX_ID]])('should resolve a group with a valid "%s" denomination', denom => {
-      const yml = readBasicSdl({ denom });
-      const sdl = SDL.fromString(yml, "beta3", "sandbox");
+      const sdl = SDL.fromString(
+        createSdlYml({
+          "profiles.placement.dcloud.pricing.web.denom": { $set: denom }
+        }),
+        "beta3",
+        "sandbox"
+      );
 
-      expect(sdl.manifest()).toMatchObject(createManifestWith());
+      expect(sdl.manifest()).toMatchObject(createManifest());
       expect(sdl.groups()).toMatchObject(
-        createGroupsWith([
-          {
-            resources: [
-              {
-                price: {
-                  denom: denom,
-                  amount: "1000"
-                }
-              }
-            ]
-          }
-        ])
+        createGroups({
+          "0.resources.0.price.denom": { $set: denom }
+        })
       );
     });
 
     it("should throw an error when denomination is invalid", () => {
       const denom = "usdt";
-      const yml = readBasicSdl({ denom });
+      const yml = createSdlYml({
+        "profiles.placement.dcloud.pricing.web.denom": { $set: denom }
+      });
 
       expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrow(
         new SdlValidationError(`Invalid denom: "${denom}". Only uakt and ${USDC_IBC_DENOMS[SANDBOX_ID]} are supported.`)
@@ -48,50 +46,41 @@ describe("SDL", () => {
           kind: "ip"
         }
       };
-      const yml = readBasicSdl({ endpoint, denom: "uakt" });
+      const yml = createSdlYml({
+        endpoints: { $set: endpoint },
+        "services.web.expose.0.to.0.ip": { $set: endpointName }
+      });
       const sdl = SDL.fromString(yml, "beta3", "sandbox");
 
       expect(sdl.manifest()).toMatchObject(
-        createManifestWith([
-          {
-            services: [
+        createManifest({
+          "0.services.0.resources.endpoints.1": {
+            $set: {
+              kind: 2,
+              sequence_number: 1
+            }
+          },
+          "0.services.0.expose": {
+            $set: [
               {
-                resources: {
-                  endpoints: {
-                    1: {
-                      kind: 2,
-                      sequence_number: 1
-                    }
-                  }
-                },
-                expose: [
-                  {
-                    ip: endpointName,
-                    endpointSequenceNumber: 1
-                  }
-                ]
+                ip: endpointName,
+                endpointSequenceNumber: 1
               }
             ]
           }
-        ])
+        })
       );
       expect(sdl.groups()).toMatchObject(
-        createGroupsWith([
-          {
-            resources: [
+        createGroups({
+          "0.resources.0.resource.endpoints": {
+            $push: [
               {
-                resource: {
-                  endpoints: {
-                    1: {
-                      kind: 2,
-                      sequence_number: 1
-                    }
-                  }
-                }
+                kind: 2,
+                sequence_number: 1
               }
             ]
           }
-        ])
+        })
       );
     });
 
@@ -102,7 +91,9 @@ describe("SDL", () => {
           kind: "ip"
         }
       };
-      const yml = readBasicSdl({ endpoint });
+      const yml = createSdlYml({
+        endpoints: { $set: endpoint }
+      });
 
       expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrowError(new SdlValidationError(`Endpoint named "${endpointName}" is not a valid name.`));
     });
@@ -112,7 +103,9 @@ describe("SDL", () => {
       const endpoint = {
         [endpointName]: {}
       };
-      const yml = readBasicSdl({ endpoint });
+      const yml = createSdlYml({
+        endpoints: { $set: endpoint }
+      });
 
       expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrowError(new SdlValidationError(`Endpoint named "${endpointName}" has no kind.`));
     });
@@ -125,7 +118,9 @@ describe("SDL", () => {
           kind: endpointKind
         }
       };
-      const yml = readBasicSdl({ endpoint });
+      const yml = createSdlYml({
+        endpoints: { $set: endpoint }
+      });
 
       expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrowError(
         new SdlValidationError(`Endpoint named "${endpointName}" has an unknown kind "${endpointKind}".`)
@@ -139,7 +134,9 @@ describe("SDL", () => {
           kind: "ip"
         }
       };
-      const yml = readBasicSdl({ endpoint, endpointRef: undefined });
+      const yml = createSdlYml({
+        endpoints: { $set: endpoint }
+      });
 
       expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrowError(new SdlValidationError(`Endpoint ${endpointName} declared but never used.`));
     });
@@ -152,40 +149,35 @@ describe("SDL", () => {
         username: faker.internet.userName(),
         password: faker.internet.password()
       };
-      const sdl = SDL.fromString(readBasicSdl({ credentials, denom: "uakt" }), "beta3", "sandbox");
+      const yml = createSdlYml({
+        "services.web.credentials": { $set: credentials }
+      });
+      const sdl = SDL.fromString(yml, "beta3", "sandbox");
 
       expect(sdl.manifest()).toMatchObject(
-        createManifestWith([
-          {
-            services: [
-              {
-                credentials: {
-                  ...credentials,
-                  email: ""
-                }
-              }
-            ]
+        createManifest({
+          "0.services.0.credentials": {
+            $set: {
+              ...credentials,
+              email: ""
+            }
           }
-        ])
+        })
       );
-      expect(sdl.groups()).toMatchObject(createGroupsWith());
+      expect(sdl.groups()).toMatchObject(createGroups());
     });
 
     it("should resolve a service without credentials", () => {
-      const sdl = SDL.fromString(readBasicSdl({ denom: "uakt" }), "beta3", "sandbox");
+      const sdl = SDL.fromString(createSdlYml({}), "beta3", "sandbox");
 
       expect(sdl.manifest()).toMatchObject(
-        createManifestWith([
-          {
-            services: [
-              {
-                credentials: null
-              }
-            ]
+        createManifest({
+          "0.services.0.credentials": {
+            $set: null
           }
-        ])
+        })
       );
-      expect(sdl.groups()).toMatchObject(createGroupsWith());
+      expect(sdl.groups()).toMatchObject(createGroups());
     });
 
     describe("invalid credentials errors", () => {
@@ -201,24 +193,34 @@ describe("SDL", () => {
       });
 
       it.each(fields)('should throw an error when credentials are missing "%s"', field => {
+        const yml = createSdlYml({
+          "services.web.credentials": { $set: omit(credentials, field) }
+        });
+
         expect(() => {
-          SDL.fromString(readBasicSdl({ credentials: omit(credentials, field) }), "beta3", "sandbox");
+          SDL.fromString(yml, "beta3", "sandbox");
         }).toThrowError(new SdlValidationError(`service "web" credentials missing "${field}"`));
       });
 
       it.each(fields)('should throw an error when credentials "%s" is empty', field => {
         credentials[field] = "";
+        const yml = createSdlYml({
+          "services.web.credentials": { $set: credentials }
+        });
 
         expect(() => {
-          SDL.fromString(readBasicSdl({ credentials }), "beta3", "sandbox");
+          SDL.fromString(yml, "beta3", "sandbox");
         }).toThrowError(new SdlValidationError(`service "web" credentials missing "${field}"`));
       });
 
       it.each(fields)('should throw an error when credentials "%s" contains spaces only', field => {
         credentials[field] = "   ";
+        const yml = createSdlYml({
+          "services.web.credentials": { $set: credentials }
+        });
 
         expect(() => {
-          SDL.fromString(readBasicSdl({ credentials }), "beta3", "sandbox");
+          SDL.fromString(yml, "beta3", "sandbox");
         }).toThrowError(new SdlValidationError(`service "web" credentials missing "${field}"`));
       });
     });
