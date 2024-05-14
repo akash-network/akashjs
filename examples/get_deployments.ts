@@ -1,4 +1,4 @@
-import { QueryDeploymentsResponse, QueryDeploymentsRequest, QueryClientImpl } from "@akashnetwork/akashjs/build/protobuf/akash/deployment/v1beta3/query";
+import { QueryDeploymentsResponse, QueryDeploymentsRequest, QueryClientImpl } from "@akashnetwork/akash-api/akash/deployment/v1beta3";
 import { getRpc } from "@akashnetwork/akashjs/build/rpc";
 
 async function main() {

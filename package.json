@@ -1,12 +1,52 @@
 {
+  "name": "@akashnetwork/akashjs",
+  "version": "0.9.1",
+  "description": "Akash Network JS SDK",
+  "repository": {
+    "url": "https://github.com/akash-network/akashjs"
+  },
+  "license": "Apache-2.0",
   "author": "",
+  "main": "build/index.js",
   "browser": {
     "fs": false,
     "os": false,
     "path": false
   },
+  "types": "build/",
+  "files": [
+    "umd/",
+    "build/**/*.d.ts",
+    "build/**/*.js"
+  ],
+  "scripts": {
+    "build": "rimraf build && npm run build:tsc && npm run build:build",
+    "build:build": "webpack",
+    "build:production": "NODE_ENV=production npm run build:tsc && npm run build:build",
+    "build:tsc": "rimraf build && tsc",
+    "commitlint": "commitlint --edit",
+    "dev:watch": "tsc -- --watch",
+    "format": "prettier --write './**/*.{js,ts,json}' --config ./.prettierrc",
+    "lint": "eslint . --ext .js,.ts,.json -c .eslintrc.json",
+    "lint:fix": "npm run lint -- --fix",
+    "prepublishOnly": "npm run build:production",
+    "setup-git-hooks": "husky",
+    "test": "npm run test:unit",
+    "test:cov": "jest --selectProjects unit functional --coverage",
+    "test:unit": "tap --ts tests/test_*.ts && jest --selectProjects unit",
+    "test:unit-snapshot": "tap --ts --snapshot tests/test_*.ts",
+    "test:unit:cov": "jest --selectProjects unit --coverage",
+    "test:unit:watch": "jest --selectProjects unit --watch"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "npm run test",
+      "npm run lint:fix",
+      "npm run format"
+    ]
+  },
   "dependencies": {
-    "@akashnetwork/akash-api": "^1.3.0",
+    "@akashnetwork/akash-api": "^1.4.0",
     "@cosmjs/launchpad": "^0.27.0",
     "@cosmjs/proto-signing": "^0.28.11",
     "@cosmjs/stargate": "^0.28.0",
@@ -27,7 +67,6 @@
     "simple-jsonrpc-js": "^1.2.0",
     "sort-json": "^2.0.1"
   },
-  "description": "Akash Network JS SDK",
   "devDependencies": {
     "@commitlint/cli": "^19.2.2",
     "@commitlint/config-conventional": "^19.2.2",
@@ -64,50 +103,12 @@
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
     "ts-proto": "^1.104.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^4.7.4",
     "webpack": "^5.41.1",
     "webpack-cli": "^4.7.2"
   },
   "engines": {
     "node": ">18.0.0"
-  },
-  "files": [
-    "umd/",
-    "build/**/*.d.ts",
-    "build/**/*.js"
-  ],
-  "license": "Apache-2.0",
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "npm run test",
-      "npm run lint:fix",
-      "npm run format"
-    ]
-  },
-  "main": "build/index.js",
-  "name": "@akashnetwork/akashjs",
-  "repository": {
-    "url": "https://github.com/akash-network/akashjs"
-  },
-  "scripts": {
-    "build": "rimraf build && npm run build:tsc && npm run build:build",
-    "build:build": "webpack",
-    "build:production": "NODE_ENV=production npm run build:tsc && npm run build:build",
-    "build:tsc": "rimraf build && tsc",
-    "commitlint": "commitlint --edit",
-    "dev:watch": "tsc -- --watch",
-    "format": "prettier --write './**/*.{js,ts,json}' --config ./.prettierrc",
-    "lint": "eslint . --ext .js,.ts,.json -c .eslintrc.json",
-    "lint:fix": "npm run lint -- --fix",
-    "prepublishOnly": "npm run build:production",
-    "setup-git-hooks": "husky",
-    "test": "npm run test:unit",
-    "test:cov": "jest --selectProjects unit functional --coverage",
-    "test:unit": "tap --ts tests/test_*.ts && jest --selectProjects unit",
-    "test:unit-snapshot": "tap --ts --snapshot tests/test_*.ts",
-    "test:unit:cov": "jest --selectProjects unit --coverage",
-    "test:unit:watch": "jest --selectProjects unit --watch"
-  },
-  "types": "build/",
-  "version": "0.9.1"
+  }
 }

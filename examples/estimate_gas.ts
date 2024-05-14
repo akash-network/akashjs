@@ -1,9 +1,7 @@
 import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
 import { SigningStargateClient } from "@cosmjs/stargate";
-
-// import the required message type from akashjs
-import { getAkashTypeRegistry, getTypeUrl } from "@akashnetwork/akashjs/build/stargate/index";
-import { MsgCloseDeployment } from "@akashnetwork/akashjs/build/protobuf/akash/deployment/v1beta3/deploymentmsg";
+import { MsgCloseDeployment } from "@akashnetwork/akash-api/akash/deployment/v1beta3";
+import { getAkashTypeRegistry, getTypeUrl } from "@akashnetwork/akashjs/build/stargate";
 
 async function main() {
   const mnemonic = "your wallet mnemonic";
