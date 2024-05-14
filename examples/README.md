@@ -274,3 +274,12 @@ When sending transactions, it can be useful to get an estimate of the gas requir
 
     console.log(gas);
 ```
+
+## Running an example
+
+To run an example, you need to make the required changes to the code and use typescript compiler. You can use the following command to run the example. E.g. to run the `create_deployment.ts` example:
+
+```bash
+cd examples
+ts-node -r tsconfig-paths/register create_deployment.ts
+```

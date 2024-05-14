@@ -1,25 +1,24 @@
 import fs from "fs";
+import path from "path";
 import https from "https";
-
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { DirectSecp256k1HdWallet, Registry } from "cosmwasm";
-
-// these imports should point to @akashnetwork/akashjs node module in your project
-import * as cert from "../build/certificates";
-import { getRpc } from "../build/rpc";
-import { SDL } from "../build/sdl";
-import { getAkashTypeRegistry } from "../build/stargate";
-import { QueryBidsRequest, QueryClientImpl as QueryMarketClient } from "../build/protobuf/akash/market/v1beta4/query";
-import { QueryClientImpl as QueryProviderClient, QueryProviderRequest } from "../build/protobuf/akash/provider/v1beta3/query";
-import { MsgCreateDeployment } from "../build/protobuf/akash/deployment/v1beta3/deploymentmsg";
-import { MsgCreateLease } from "../build/protobuf/akash/market/v1beta4/lease";
-import { BidID } from "../build/protobuf/akash/market/v1beta4/bid";
+import { MsgCreateDeployment } from "@akashnetwork/akash-api/akash/deployment/v1beta3";
+import { QueryClientImpl as QueryProviderClient, QueryProviderRequest } from "@akashnetwork/akash-api/akash/provider/v1beta3";
+import { QueryBidsRequest, QueryClientImpl as QueryMarketClient, MsgCreateLease, BidID } from "@akashnetwork/akash-api/akash/market/v1beta4";
+import * as cert from "@akashnetwork/akashjs/build/certificates";
+import { getRpc } from "@akashnetwork/akashjs/build/rpc";
+import { SDL } from "@akashnetwork/akashjs/build/sdl";
+import { getAkashTypeRegistry } from "@akashnetwork/akashjs/build/stargate";
+import { CertificatePem } from "@akashnetwork/akashjs/build/certificates/certificate-manager/CertificateManager";
+import { certificateManager } from "@akashnetwork/akashjs/build/certificates/certificate-manager";
 
 // update this with your wallet mnemonic
-const rpcEndpoint = "https://rpc.akashnet.net:443";
-const mnemonic = fs.readFileSync("./fixtures/mnemonic.txt", "utf8").trim();
-const rawSDL = fs.readFileSync("./fixtures/example.sdl.yaml", "utf8");
-const certificatePath = "./fixtures/cert.json";
+const rpcEndpoint = "https://rpc.sandbox-01.aksh.pw";
+// const rpcEndpoint = "https://rpc.akashnet.net:443";
+const mnemonic = fs.readFileSync(path.resolve(__dirname, "./fixtures/mnemonic.txt"), "utf8").trim();
+const rawSDL = fs.readFileSync(path.resolve(__dirname, "./fixtures/example.sdl.yaml"), "utf8");
+const certificatePath = path.resolve(__dirname, "./fixtures/cert.json");
 
 type Deployment = {
   id: {
@@ -36,12 +35,6 @@ type Lease = {
     gseq: number;
     oseq: number;
   };
-};
-
-type Certificate = {
-  csr: string;
-  privateKey: string;
-  publicKey: string;
 };
 
 // you can set this to a specific deployment sequence number to skip the deployment creation
@@ -67,12 +60,12 @@ async function loadPrerequisites() {
 }
 
 // saves the certificate into the fixtures folder
-function saveCertificate(certificate: { privateKey: string; publicKey: string; csr: string }) {
+function saveCertificate(certificate: CertificatePem) {
   const json = JSON.stringify(certificate);
   fs.writeFileSync(certificatePath, json);
 }
 
-function loadCertificate(path: string): { csr: string; privateKey: string; publicKey: string } {
+function loadCertificate(path: string): CertificatePem {
   const json = fs.readFileSync(path, "utf8");
 
   try {
@@ -91,7 +84,7 @@ async function loadOrCreateCertificate(wallet: DirectSecp256k1HdWallet, client: 
   }
 
   // if not, create a new one
-  const certificate = await cert.createCertificate(accounts[0].address);
+  const certificate = certificateManager.generatePEM(accounts[0].address);
   const result = await cert.broadcastCertificate(certificate, accounts[0].address, client);
 
   if (result.code !== undefined && result.code === 0) {
@@ -104,7 +97,12 @@ async function loadOrCreateCertificate(wallet: DirectSecp256k1HdWallet, client: 
 }
 
 async function walletFromMnemonic(mnemonic: string) {
-  return DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: "akash" });
+  try {
+    return await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: "akash" });
+  } catch (error) {
+    console.error('Could not create wallet from mnemonic, have you updated "examples/fixtures/mnemonic.txt?"');
+    throw error;
+  }
 }
 
 async function createDeployment(sdl: SDL, wallet: DirectSecp256k1HdWallet, client: SigningStargateClient) {
@@ -243,7 +241,7 @@ async function createLease(deployment: Deployment, wallet: DirectSecp256k1HdWall
   throw new Error(`Could not create lease: ${tx.rawLog} `);
 }
 
-async function queryLeaseStatus(lease: Lease, providerUri: string, certificate: Certificate) {
+async function queryLeaseStatus(lease: Lease, providerUri: string, certificate: CertificatePem) {
   const id = lease.id;
 
   if (id === undefined) {
@@ -253,7 +251,7 @@ async function queryLeaseStatus(lease: Lease, providerUri: string, certificate: 
   const leasePath = `/lease/${id.dseq}/${id.gseq}/${id.oseq}/status`;
 
   const agent = new https.Agent({
-    cert: certificate.csr,
+    cert: certificate.cert,
     key: certificate.privateKey,
     rejectUnauthorized: false
   });
@@ -290,7 +288,7 @@ async function queryLeaseStatus(lease: Lease, providerUri: string, certificate: 
   });
 }
 
-async function sendManifest(sdl: SDL, lease: Lease, wallet: DirectSecp256k1HdWallet, certificate: { csr: string; privateKey: string; publicKey: string }) {
+async function sendManifest(sdl: SDL, lease: Lease, wallet: DirectSecp256k1HdWallet, certificate: { cert: string; privateKey: string; publicKey: string }) {
   if (lease.id === undefined) {
     throw new Error("Lease ID is undefined");
   }
@@ -314,7 +312,7 @@ async function sendManifest(sdl: SDL, lease: Lease, wallet: DirectSecp256k1HdWal
 
   const uri = new URL(providerInfo.hostUri);
   const agent = new https.Agent({
-    cert: certificate.csr,
+    cert: certificate.cert,
     key: certificate.privateKey,
     rejectUnauthorized: false
   });
