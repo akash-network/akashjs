@@ -1,3 +1,10 @@
+## [0.9.2](https://github.com/akash-network/akashjs/compare/v0.9.1...v0.9.2) (2024-05-15)
+
+
+### Bug Fixes
+
+* **certificates:** add deprecated types ([a4a632f](https://github.com/akash-network/akashjs/commit/a4a632ff075dd37a1067d3633ded331b79c59f45)), closes [akash-network/akashjs#76](https://github.com/akash-network/akashjs/issues/76)
+
 ## [0.9.1](https://github.com/akash-network/akashjs/compare/v0.9.0...v0.9.1) (2024-05-14)
 
 
