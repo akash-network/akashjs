@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import omit from "lodash/omit";
 
-import { createGroups, createManifest, createSdlYml } from "../../../test/templates";
+import { createGroups, createManifest, createSdlJson, createSdlYml } from "../../../test/templates";
 import { AKT_DENOM, SANDBOX_ID, USDC_IBC_DENOMS } from "../../config/network";
 import { SdlValidationError } from "../../error";
 import { v2ServiceImageCredentials } from "../types";
@@ -223,6 +223,187 @@ describe("SDL", () => {
           SDL.fromString(yml, "beta3", "sandbox");
         }).toThrowError(new SdlValidationError(`service "web" credentials missing "${field}"`));
       });
+    });
+  });
+
+  describe("deployment validation", () => {
+    it("should throw an error when a service is not defined in deployment", () => {
+      const yml = createSdlYml({
+        deployment: { $unset: ["web"] }
+      });
+
+      expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrowError(new SdlValidationError('Service "web" is not defined in the "deployment" section.'));
+    });
+
+    it("should throw an error when deployment is not defined in profile placement", () => {
+      const yml = createSdlYml({
+        "profiles.placement": { $unset: ["dcloud"] }
+      });
+
+      expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrowError(
+        new SdlValidationError('The placement "dcloud" is not defined in the "placement" section.')
+      );
+    });
+
+    it("should throw an error when service compute requirements are not defined", () => {
+      const yml = createSdlYml({
+        "profiles.compute": { $unset: ["web"] }
+      });
+
+      expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrowError(
+        new SdlValidationError('The compute requirements for the "web" profile are not defined in the "compute" section.')
+      );
+    });
+  });
+
+  describe("storage validation", () => {
+    it("should throw an error when a service references a non-existing volume", () => {
+      const yml = createSdlYml({
+        "services.web.params": { $set: { storage: { data: { mount: "/mnt/data", readOnly: false } } } }
+      });
+
+      expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrowError(
+        new SdlValidationError('Service "web" references to non-existing compute volume names "data".')
+      );
+    });
+
+    it("should throw an error when a service volume mount is a non-absolute path", () => {
+      const yml = createSdlYml({
+        "services.web.params": { $set: { storage: { data: { mount: "./mnt/data", readOnly: false } } } },
+        "profiles.compute.web.resources.storage": { $set: { name: "data", size: "1Gi" } }
+      });
+
+      expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrowError(
+        new SdlValidationError('Invalid value for "service.web.params.data.mount" parameter. expected absolute path.')
+      );
+    });
+
+    it("should throw an error when multiple ephemeral storages are provided", () => {
+      const yml = createSdlYml({
+        "services.web.params": {
+          $set: {
+            storage: {
+              data: {},
+              db: {}
+            }
+          }
+        },
+        "profiles.compute.web.resources.storage": {
+          $set: [
+            { name: "data", size: "1Gi" },
+            { name: "db", size: "1Gi" }
+          ]
+        }
+      });
+
+      expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrowError(new SdlValidationError("Multiple root ephemeral storages are not allowed"));
+    });
+
+    it("should throw an error when mount is used by multiple volumes", () => {
+      const yml = createSdlYml({
+        "services.web.params": { $set: { storage: { data: { mount: "/", readOnly: false }, db: { mount: "/", readOnly: false } } } },
+        "profiles.compute.web.resources.storage": {
+          $set: [
+            { name: "data", size: "1Gi" },
+            { name: "db", size: "1Gi" }
+          ]
+        }
+      });
+
+      expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrowError(new SdlValidationError('Mount / already in use by volume "data".'));
+    });
+
+    it("should require a service storage mount if volume is persistent", () => {
+      const yml = createSdlYml({
+        "services.web.params": {
+          $set: { storage: { data: { readOnly: false } } }
+        },
+        "profiles.compute.web.resources.storage": { $set: { name: "data", size: "1Gi", attributes: { persistent: true } } }
+      });
+
+      expect(() => SDL.fromString(yml, "beta3", "sandbox")).toThrowError(
+        new SdlValidationError("compute.storage.data has persistent=true which requires service.web.params.storage.data to have mount.")
+      );
+    });
+
+    it("should throw an error when ram storage is defined as persistent", () => {
+      const yml = createSdlJson({
+        "profiles.compute.web.resources.storage": { $set: { name: "data", size: "1Gi", attributes: { class: "ram", persistent: true } } }
+      });
+      expect(() => new SDL(yml, "beta3", "sandbox")).toThrowError(
+        new SdlValidationError(`Storage attribute "ram" must have "persistent" set to "false" or not defined for service "web".`)
+      );
+    });
+
+    it("should throw an error if storage size in not defined", () => {
+      const yml = createSdlJson({
+        "profiles.compute.web.resources.storage": { $set: { name: "data" } }
+      });
+      expect(() => new SDL(yml, "beta3", "sandbox")).toThrowError(new SdlValidationError('Storage size is required for service "web".'));
+    });
+  });
+
+  describe("gpu validation", () => {
+    it("should throw an error when gpu units is not defined", () => {
+      const sdlJson = createSdlJson({
+        "profiles.compute.web.resources.gpu": { $set: {} }
+      });
+
+      expect(() => new SDL(sdlJson, "beta3", "sandbox")).toThrowError(new SdlValidationError('GPU units must be specified for profile "web".'));
+    });
+
+    it("should throw an error when gpu units > 0 and attributes is not defined", () => {
+      const sdlJson = createSdlJson({
+        "profiles.compute.web.resources.gpu": { $set: { units: 1 } }
+      });
+
+      expect(() => new SDL(sdlJson, "beta3", "sandbox")).toThrowError(new SdlValidationError("GPU must have attributes if units is not 0"));
+    });
+
+    it("should throw an error when gpu units is 0 and attributes is defined", () => {
+      const sdlJson = createSdlJson({
+        "profiles.compute.web.resources.gpu": { $set: { units: 0, attributes: {} } }
+      });
+
+      expect(() => new SDL(sdlJson, "beta3", "sandbox")).toThrowError(new SdlValidationError("GPU must not have attributes if units is 0"));
+    });
+
+    it("should throw an error when gpu units > 0 and attributes vendor is not supported", () => {
+      const sdlJson = createSdlJson({
+        "profiles.compute.web.resources.gpu": {
+          $set: {
+            units: 1,
+            attributes: {
+              vendor: {
+                nvidia: { model: "rtxa6000" }
+              }
+            }
+          }
+        }
+      });
+
+      expect(() => new SDL(sdlJson, "beta3", "sandbox")).toThrowError(
+        new SdlValidationError("GPU configuration must be an array of GPU models with optional ram.")
+      );
+    });
+
+    it("should throw an error when gpu units > 0 and attributes vendor is not supported", () => {
+      const sdlJson = createSdlJson({
+        "profiles.compute.web.resources.gpu": {
+          $set: {
+            units: 1,
+            attributes: {
+              vendor: {
+                nvidia: [{ model: "rtxa6000", interface: "foo" }]
+              }
+            }
+          }
+        }
+      });
+
+      expect(() => new SDL(sdlJson, "beta3", "sandbox")).toThrowError(
+        new SdlValidationError("GPU interface must be one of the supported interfaces (pcie,sxm).")
+      );
     });
   });
 });
