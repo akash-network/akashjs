@@ -5,11 +5,16 @@ import dot from "dot-object";
 import groupsBasic from "./fixtures/groups-basic-snapshot.json";
 import manifestBasic from "./fixtures/manifest-basic-snapshot.json";
 import sdlBasic from "./fixtures/sdl-basic.json";
+import { v2Sdl } from "../src/sdl/types";
 
 type AnySpec = Spec<object, CustomCommands<object>>;
 
+export const createSdlJson = ($spec: AnySpec = {}): v2Sdl => {
+  return update(sdlBasic, dot.object($spec)) as unknown as v2Sdl;
+};
+
 export const createSdlYml = ($spec: AnySpec = {}): string => {
-  return dump(update(sdlBasic, dot.object($spec)), { forceQuotes: true, quotingType: '"' });
+  return dump(createSdlJson($spec), { forceQuotes: true, quotingType: '"' });
 };
 
 export const createManifest = ($spec: AnySpec = {}) => {

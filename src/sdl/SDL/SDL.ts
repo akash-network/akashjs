@@ -1,4 +1,7 @@
 import YAML from "js-yaml";
+import castArray from "lodash/castArray";
+import mapKeys from "lodash/mapKeys";
+
 import {
   v2Manifest,
   v3Manifest,
@@ -30,8 +33,8 @@ import {
   v3ManifestServiceParams,
   v2StorageAttributes,
   v2ServiceImageCredentials
-} from "./../types";
-import { convertCpuResourceString, convertResourceString } from "./../sizes";
+} from "../types";
+import { convertCpuResourceString, convertResourceString } from "../sizes";
 import { default as stableStringify } from "json-stable-stringify";
 import crypto from "node:crypto";
 import { AKT_DENOM, MAINNET_ID, USDC_IBC_DENOMS } from "../../config/network";
@@ -138,6 +141,7 @@ export class SDL {
   }
 
   private readonly ENDPOINT_NAME_VALIDATION_REGEX = /^[a-z]+[-_\da-z]+$/;
+  private readonly ABSOLUTE_PATH_REGEX = /^(\/|([a-zA-Z]:)?([\\/]))/;
 
   private readonly ENDPOINT_KIND_IP = "ip";
 
@@ -156,14 +160,6 @@ export class SDL {
   private validate() {
     // TODO: this should really be cast to unknown, then assigned
     // to v2 or v3 SDL only after being validated
-    const v3data = this.data as v3Sdl;
-    Object.entries(v3data.profiles.compute || {}).forEach(([name, { resources }]) => {
-      if ("gpu" in resources) {
-        SDL.validateGPU(name, resources.gpu);
-      }
-      SDL.validateStorage(name, resources.storage);
-    });
-
     this.validateEndpoints();
 
     Object.keys(this.data.services).forEach(serviceName => {
@@ -190,9 +186,8 @@ export class SDL {
     if (!this.data.endpoints) {
       return;
     }
-
     Object.keys(this.data.endpoints).forEach(endpointName => {
-      const endpoint = this.data.endpoints[endpointName];
+      const endpoint = this.data.endpoints[endpointName] || {};
       SdlValidationError.assert(this.ENDPOINT_NAME_VALIDATION_REGEX.test(endpointName), `Endpoint named "${endpointName}" is not a valid name.`);
       SdlValidationError.assert(!!endpoint.kind, `Endpoint named "${endpointName}" has no kind.`);
       SdlValidationError.assert(endpoint.kind === this.ENDPOINT_KIND_IP, `Endpoint named "${endpointName}" has an unknown kind "${endpoint.kind}".`);
@@ -215,17 +210,129 @@ export class SDL {
     SdlValidationError.assert(deployment, `Service "${serviceName}" is not defined in the "deployment" section.`);
 
     Object.keys(this.data.deployment[serviceName]).forEach(deploymentName => {
-      const serviceDeployment = this.data.deployment[serviceName][deploymentName];
-      const compute = this.data.profiles.compute?.[serviceDeployment.profile];
-      const infra = this.data.profiles.placement?.[deploymentName];
-
-      SdlValidationError.assert(infra, `The placement "${deploymentName}" is not defined in the "placement" section.`);
-      SdlValidationError.assert(
-        infra.pricing?.[serviceDeployment.profile],
-        `The pricing for the "${serviceDeployment.profile}" profile is not defined in the "${deploymentName}" "placement" definition.`
-      );
-      SdlValidationError.assert(compute, `The compute requirements for the "${serviceDeployment.profile}" profile are not defined in the "compute" section.`);
+      this.validateDeploymentRelations(serviceName, deploymentName);
+      this.validateServiceStorages(serviceName, deploymentName);
+      this.validateStorages(serviceName, deploymentName);
+      this.validateGPU(serviceName, deploymentName);
     });
+  }
+
+  private validateDeploymentRelations(serviceName: string, deploymentName: string) {
+    const serviceDeployment = this.data.deployment[serviceName][deploymentName];
+    const compute = this.data.profiles.compute?.[serviceDeployment.profile];
+    const infra = this.data.profiles.placement?.[deploymentName];
+
+    SdlValidationError.assert(infra, `The placement "${deploymentName}" is not defined in the "placement" section.`);
+    SdlValidationError.assert(
+      infra.pricing?.[serviceDeployment.profile],
+      `The pricing for the "${serviceDeployment.profile}" profile is not defined in the "${deploymentName}" "placement" definition.`
+    );
+    SdlValidationError.assert(compute, `The compute requirements for the "${serviceDeployment.profile}" profile are not defined in the "compute" section.`);
+  }
+
+  private validateServiceStorages(serviceName: string, deploymentName: string) {
+    const service = this.data.services[serviceName];
+    const mounts: Record<string, string> = {};
+    const serviceDeployment = this.data.deployment[serviceName][deploymentName];
+    const compute = this.data.profiles.compute[serviceDeployment.profile];
+    const storages = castArray(compute.resources.storage);
+
+    if (!service.params?.storage) {
+      return;
+    }
+
+    mapKeys(service.params.storage, (storage, storageName) => {
+      const storageNameExists = storages.some(({ name }) => name === storageName);
+      SdlValidationError.assert(storage, `Storage "${storageName}" is not configured.`);
+      SdlValidationError.assert(storageNameExists, `Service "${serviceName}" references to non-existing compute volume names "${storageName}".`);
+
+      SdlValidationError.assert(
+        !("mount" in storage) || this.ABSOLUTE_PATH_REGEX.test(storage.mount),
+        `Invalid value for "service.${serviceName}.params.${storageName}.mount" parameter. expected absolute path.`
+      );
+
+      const mount = storage?.mount;
+      const volumeName = mounts[mount];
+
+      SdlValidationError.assert(!volumeName || mount, "Multiple root ephemeral storages are not allowed");
+      SdlValidationError.assert(!volumeName || !mount, `Mount ${mount} already in use by volume "${volumeName}".`);
+
+      mounts[mount] = storageName;
+    });
+  }
+
+  private validateStorages(serviceName: string, deploymentName: string) {
+    const service = this.data.services[serviceName];
+    const serviceDeployment = this.data.deployment[serviceName][deploymentName];
+    const compute = this.data.profiles.compute[serviceDeployment.profile];
+    const storages = castArray(compute.resources.storage);
+
+    storages.forEach(storage => {
+      const isRam = storage.attributes?.class === "ram";
+      const persistent = this.stringToBoolean(storage.attributes?.persistent || false);
+
+      SdlValidationError.assert(storage.size, `Storage size is required for service "${serviceName}".`);
+      SdlValidationError.assert(
+        !isRam || !persistent,
+        `Storage attribute "ram" must have "persistent" set to "false" or not defined for service "${serviceName}".`
+      );
+
+      const mount = service.params?.storage?.[storage.name]?.mount;
+      SdlValidationError.assert(
+        !persistent || mount,
+        `compute.storage.${storage.name} has persistent=true which requires service.${serviceName}.params.storage.${storage.name} to have mount.`
+      );
+    });
+  }
+
+  private stringToBoolean(str: string | boolean) {
+    if (typeof str === "boolean") {
+      return str;
+    }
+
+    switch (str.toLowerCase()) {
+      case "false":
+      case "no":
+      case "0":
+      case "":
+        return false;
+      default:
+        return true;
+    }
+  }
+
+  private validateGPU(serviceName: string, deploymentName: string) {
+    const deployment = this.data.deployment[serviceName];
+    const compute = this.data.profiles.compute[deployment[deploymentName].profile];
+    const gpu = (compute.resources as v3ComputeResources).gpu;
+
+    if (!gpu) {
+      return;
+    }
+    const hasUnits = gpu.units !== 0;
+    const hasAttributes = typeof gpu.attributes !== "undefined";
+    const hasVendor = hasAttributes && typeof gpu.attributes?.vendor !== "undefined";
+
+    SdlValidationError.assert(typeof gpu.units === "number", `GPU units must be specified for profile "${serviceName}".`);
+    SdlValidationError.assert(hasUnits || !hasAttributes, "GPU must not have attributes if units is 0");
+    SdlValidationError.assert(!hasUnits || hasAttributes, "GPU must have attributes if units is not 0");
+    SdlValidationError.assert(!hasUnits || hasVendor, "GPU must specify a vendor if units is not 0");
+    const hasUnsupportedVendor = hasVendor && GPU_SUPPORTED_VENDORS.some(vendor => vendor in (gpu.attributes?.vendor || {}));
+    SdlValidationError.assert(!hasUnits || hasUnsupportedVendor, `GPU must be one of the supported vendors (${GPU_SUPPORTED_VENDORS.join(",")}).`);
+
+    const vendor: string = Object.keys(gpu.attributes?.vendor || {})[0];
+
+    SdlValidationError.assert(
+      !hasUnits || !gpu.attributes?.vendor[vendor] || Array.isArray(gpu.attributes.vendor[vendor]),
+      `GPU configuration must be an array of GPU models with optional ram.`
+    );
+    SdlValidationError.assert(
+      !hasUnits ||
+        !Object.values(gpu.attributes?.vendor || {}).some(models =>
+          models?.some(model => model.interface && !GPU_SUPPORTED_INTERFACES.includes(model.interface))
+        ),
+      `GPU interface must be one of the supported interfaces (${GPU_SUPPORTED_INTERFACES.join(",")}).`
+    );
   }
 
   private validateLeaseIP(serviceName: string) {
@@ -235,10 +342,10 @@ export class SDL {
       expose.to?.forEach(to => {
         if (to.ip?.length > 0) {
           SdlValidationError.assert(to.global, `Error on "${serviceName}", if an IP is declared, the directive must be declared as global.`);
-
-          if (!this.data.endpoints?.[to.ip]) {
-            throw new SdlValidationError(`Unknown endpoint "${to.ip}" in service "${serviceName}". Add to the list of endpoints in the "endpoints" section.`);
-          }
+          SdlValidationError.assert(
+            this.data.endpoints?.[to.ip],
+            `Unknown endpoint "${to.ip}" in service "${serviceName}". Add to the list of endpoints in the "endpoints" section.`
+          );
 
           this.endpointsUsed.add(to.ip);
 
@@ -630,8 +737,8 @@ export class SDL {
         if (!params?.storage) throw new Error("Storage is undefined");
         return {
           name: name,
-          mount: params.storage[name].mount,
-          readOnly: params.storage[name].readOnly || false
+          mount: params.storage[name]?.mount,
+          readOnly: params.storage[name]?.readOnly || false
         };
       })
     };
