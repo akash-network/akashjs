@@ -1,3 +1,10 @@
+## [0.10.0](https://github.com/akash-network/akashjs/compare/v0.9.2...v0.10.0) (2024-05-17)
+
+
+### Features
+
+* **sdl:** add storage and gpu validation ([b125da7](https://github.com/akash-network/akashjs/commit/b125da727a437aff7118d7c9683673384e2738da)), closes [akash-network/cloudmos#133](https://github.com/akash-network/cloudmos/issues/133)
+
 ## [0.9.2](https://github.com/akash-network/akashjs/compare/v0.9.1...v0.9.2) (2024-05-15)
 
 
