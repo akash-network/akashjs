@@ -22,7 +22,7 @@ or use the umd bundle the object returned is `Window.akjs`
 ```html
 <script
   type="text/javascript"
-  src="https://unpkg.com/@akashnetwork/akashjs@0.0.6/umd/akashjs.js"
+  src="https://unpkg.com/@akashnetwork/akashjs@0.10.0/umd/akashjs.js"
 ></script>
 ```
 ## stargate
