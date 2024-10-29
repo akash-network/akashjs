@@ -12,7 +12,11 @@
   <button id="getCerts">Get Certs</button>
 
   <script type="text/javascript">
-    console.log(akjs);
+    import pino from 'pino';
+
+    const logger = pino();
+
+    logger.info(akjs);
 
     const fn = async () => {
       const certs = await akjs.certificate.createCertificate("akash12345");
@@ -27,7 +31,7 @@
       document.querySelector("#privateKey").value = certs.privateKey;
 
       window.addEventListener("DOMContentLoaded", async (event) => {
-        console.log("DOM fully loaded and parsed");
+        logger.info("DOM fully loaded and parsed");
         chain = akjs.keplr.getChains().testnet;
         signer = await akjs.keplr.getSigner(chain);
         client = await akjs.keplr.get(chain, signer);
@@ -45,7 +49,7 @@
               client
             );
           } catch (error) {
-            console.log(`Akash Transport : ${error.message}`);
+            logger.info(`Akash Transport : ${error.message}`);
           }
         });
 
@@ -58,7 +62,7 @@
             })
           );
 
-          console.log(certs);
+          logger.info(certs);
         });
     };
 

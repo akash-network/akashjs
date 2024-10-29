@@ -2,6 +2,9 @@ import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { MsgCloseDeployment } from "@akashnetwork/akash-api/akash/deployment/v1beta3";
 import { getAkashTypeRegistry, getTypeUrl } from "@akashnetwork/akashjs/build/stargate";
+import pino from "pino";
+
+const logger = pino();
 
 async function main() {
   const mnemonic = "your wallet mnemonic";
@@ -35,7 +38,7 @@ async function main() {
 
   const gas = await client.simulate(account.address, [msgAny], "take down deployment");
 
-  console.log(gas);
+  logger.info(gas);
 }
 
 main();

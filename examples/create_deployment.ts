@@ -12,6 +12,9 @@ import { SDL } from "@akashnetwork/akashjs/build/sdl";
 import { getAkashTypeRegistry } from "@akashnetwork/akashjs/build/stargate";
 import { CertificatePem } from "@akashnetwork/akashjs/build/certificates/certificate-manager/CertificateManager";
 import { certificateManager } from "@akashnetwork/akashjs/build/certificates/certificate-manager";
+import pino from "pino";
+
+const logger = pino();
 
 // update this with your wallet mnemonic
 const rpcEndpoint = "https://rpc.sandbox-01.aksh.pw";
@@ -100,7 +103,7 @@ async function walletFromMnemonic(mnemonic: string) {
   try {
     return await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: "akash" });
   } catch (error) {
-    console.error('Could not create wallet from mnemonic, have you updated "examples/fixtures/mnemonic.txt?"');
+    logger.error('Could not create wallet from mnemonic, have you updated "examples/fixtures/mnemonic.txt?"');
     throw error;
   }
 }
@@ -111,7 +114,7 @@ async function createDeployment(sdl: SDL, wallet: DirectSecp256k1HdWallet, clien
   const accounts = await wallet.getAccounts();
 
   if (dseq != 0) {
-    console.log("Skipping deployment creation...");
+    logger.info("Skipping deployment creation...");
     return {
       id: {
         owner: accounts[0].address,
@@ -179,12 +182,12 @@ async function fetchBid(dseq: number, owner: string) {
   const timeout = 1000 * 60 * 5;
 
   while (Date.now() - startTime < timeout) {
-    console.log("Fetching bids...");
+    logger.info("Fetching bids...");
     await new Promise(resolve => setTimeout(resolve, 5000));
     const bids = await client.Bids(request);
 
     if (bids.bids.length > 0 && bids.bids[0].bid !== undefined) {
-      console.log("Bid fetched!");
+      logger.info("Bid fetched!");
       return bids.bids[0].bid;
     }
 
@@ -335,7 +338,7 @@ async function sendManifest(sdl: SDL, lease: Lease, wallet: DirectSecp256k1HdWal
         res.on("error", reject);
 
         res.on("data", chunk => {
-          console.log("Response:", chunk.toString());
+          logger.info("Response:", chunk.toString());
         });
 
         if (res.statusCode !== 200) {
@@ -355,7 +358,7 @@ async function sendManifest(sdl: SDL, lease: Lease, wallet: DirectSecp256k1HdWal
   const timeout = 1000 * 60 * 10;
 
   while (Date.now() - startTime < timeout) {
-    console.log("Waiting for deployment to start...");
+    logger.info("Waiting for deployment to start...");
     const status = await queryLeaseStatus(lease, providerInfo.hostUri, certificate).catch(err => {
       if (err.includes("Could not query lease status: 404")) {
         return undefined;
@@ -367,7 +370,7 @@ async function sendManifest(sdl: SDL, lease: Lease, wallet: DirectSecp256k1HdWal
     if (status) {
       for (const [name, service] of Object.entries(status.services)) {
         if (service.uris) {
-          console.log(`Service ${name} is available at:`, service.uris[0]);
+          logger.info(`Service ${name} is available at:`, service.uris[0]);
           return;
         }
       }
@@ -383,14 +386,14 @@ async function sendManifest(sdl: SDL, lease: Lease, wallet: DirectSecp256k1HdWal
 async function deploy() {
   const { wallet, client, certificate, sdl } = await loadPrerequisites();
 
-  console.log("Creating deployment...");
+  logger.info("Creating deployment...");
   const deployment = await createDeployment(sdl, wallet, client);
 
-  console.log("Creating lease...");
+  logger.info("Creating lease...");
   const lease = await createLease(deployment, wallet, client);
 
-  console.log("Sending manifest...");
+  logger.info("Sending manifest...");
   return await sendManifest(sdl, lease, wallet, certificate);
 }
 
-deploy().catch(console.error);
+deploy().catch(logger.error);
