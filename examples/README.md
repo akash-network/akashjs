@@ -283,3 +283,13 @@ To run an example, you need to make the required changes to the code and use typ
 cd examples
 ts-node -r tsconfig-paths/register create_deployment.ts
 ```
+
+## Running Integration Tests
+
+To verify the functionality of the examples, integration tests have been added. You can run these tests using the following command:
+
+```bash
+npm test
+```
+
+The integration tests will execute each example and verify their output to ensure they are valid and functional.
