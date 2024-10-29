@@ -1,5 +1,8 @@
 import { QueryDeploymentsResponse, QueryDeploymentsRequest, QueryClientImpl } from "@akashnetwork/akash-api/akash/deployment/v1beta3";
 import { getRpc } from "@akashnetwork/akashjs/build/rpc";
+import pino from "pino";
+
+const logger = pino();
 
 async function main() {
   const request = QueryDeploymentsRequest.fromJSON({
@@ -12,7 +15,7 @@ async function main() {
   const response = await client.Deployments(request);
   const data = QueryDeploymentsResponse.toJSON(response);
 
-  console.log(data);
+  logger.info(data);
 }
 
 main();

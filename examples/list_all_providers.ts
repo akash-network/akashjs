@@ -1,5 +1,8 @@
 import { QueryClientImpl, QueryProvidersRequest, QueryProvidersResponse } from "@akashnetwork/akash-api/akash/provider/v1beta3";
 import { getRpc } from "@akashnetwork/akashjs/build/rpc";
+import pino from "pino";
+
+const logger = pino();
 
 async function main() {
   const client = new QueryClientImpl(await getRpc("http://your.rpc.node"));
@@ -13,7 +16,7 @@ async function main() {
   const providersResponse = await client.Providers(providersRequest);
   const data = QueryProvidersResponse.toJSON(providersResponse);
 
-  console.log(data);
+  logger.info(data);
 }
 
 main();
