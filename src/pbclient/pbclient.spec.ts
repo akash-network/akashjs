@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 
 import { createAminoMessage } from "./pbclient";
 import { Message } from "../stargate";
-import { AminoMsg } from "cosmwasm";
+import { AminoMsg } from "@cosmjs/amino";
 
 describe("createAminoMessage", () => {
   it("creates an amino message", () => {

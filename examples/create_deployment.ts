@@ -2,7 +2,6 @@ import fs from "fs";
 import path from "path";
 import https from "https";
 import { SigningStargateClient } from "@cosmjs/stargate";
-import { DirectSecp256k1HdWallet, Registry } from "cosmwasm";
 import { MsgCreateDeployment } from "@akashnetwork/akash-api/akash/deployment/v1beta3";
 import { QueryClientImpl as QueryProviderClient, QueryProviderRequest } from "@akashnetwork/akash-api/akash/provider/v1beta3";
 import { QueryBidsRequest, QueryClientImpl as QueryMarketClient, MsgCreateLease, BidID } from "@akashnetwork/akash-api/akash/market/v1beta4";
@@ -12,6 +11,7 @@ import { SDL } from "@akashnetwork/akashjs/build/sdl";
 import { getAkashTypeRegistry } from "@akashnetwork/akashjs/build/stargate";
 import { CertificatePem } from "@akashnetwork/akashjs/build/certificates/certificate-manager/CertificateManager";
 import { certificateManager } from "@akashnetwork/akashjs/build/certificates/certificate-manager";
+import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
 
 // update this with your wallet mnemonic
 const rpcEndpoint = "https://rpc.sandbox-01.aksh.pw";
