@@ -1,5 +1,5 @@
 import { Message } from "../stargate";
-import { AminoMsg } from "cosmwasm";
+import { AminoMsg } from "@cosmjs/amino";
 import { MsgCreateCertificate, MsgRevokeCertificate } from "@akashnetwork/akash-api/akash/cert/v1beta3";
 
 const FEE = {
