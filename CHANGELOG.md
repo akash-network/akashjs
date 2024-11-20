@@ -1,3 +1,10 @@
+## [0.10.1](https://github.com/akash-network/akashjs/compare/v0.10.0...v0.10.1) (2024-11-20)
+
+
+### Bug Fixes
+
+* update cosmjs deps ([2cc50f0](https://github.com/akash-network/akashjs/commit/2cc50f093b9dd8bffef1081df2d02f9e82c2aa7a)), closes [#105](https://github.com/akash-network/akashjs/issues/105)
+
 ## [0.10.0](https://github.com/akash-network/akashjs/compare/v0.9.2...v0.10.0) (2024-05-17)
 
 
