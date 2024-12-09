@@ -4,20 +4,20 @@
 
 Connect and communicate with the Akash Network. Pure JS library can be used in browser for unsigned transactions, and with node.js for full compatibility.
 
-# compatibility
+## Compatibility
 
 Compatible with modern browsers, nodejs 14+ and Webpack 5
 
-# getting started
+## Installation
 
-install from `npm` or `yarn`
+Install from `npm` or `yarn`:
 
 ```bash
 npm i @akashnetwork/akashjs
 yarn add @akashnetwork/akashjs
 ```
 
-or use the umd bundle the object returned is `Window.akjs`
+Or use the UMD bundle (the object returned is `Window.akjs`):
 
 ```html
 <script
@@ -25,21 +25,78 @@ or use the umd bundle the object returned is `Window.akjs`
   src="https://unpkg.com/@akashnetwork/akashjs@0.10.0/umd/akashjs.js"
 ></script>
 ```
-## stargate
 
-While `akashjs` manages much under the hood, more control is available through all of the exported types, clients and protocols.
+## Key Features
 
-Import the registry for signing and broadcasting signed transactions, this is needed if you plan to use [Stargate](https://www.npmjs.com/package/@cosmjs/stargate)
+### Certificate Management
+
+Generate, broadcast and manage certificates for the Akash Network:
+
+```typescript
+import { certificate } from "@akashnetwork/akashjs";
+
+// Generate a new certificate
+const cert = await certificate.createCertificate("akash1...");
+
+// Broadcast the certificate
+await certificate.broadcastCertificate(cert, "akash1...", client);
+
+// Revoke a certificate
+await certificate.revokeCertificate("akash1...", "serial123", client);
+
+// Query certificates
+const certs = await certificate.queryCertificates({
+  owner: "akash1..."
+});
+```
+
+### Network Interaction
+
+Connect to and interact with the Akash Network:
+
+```typescript
+import { network, rpc } from "@akashnetwork/akashjs";
+
+// Get sorted RPC endpoints for mainnet
+const endpoints = await network.getEndpointsSorted("mainnet", "rpc");
+
+// Get network metadata
+const metadata = await network.getMetadata("mainnet");
+```
+
+### Wallet Integration
+
+Integrate with Keplr wallet and handle transactions:
+
+```typescript
+import { keplr, wallet } from "@akashnetwork/akashjs";
+
+// Get chains configuration
+const chains = keplr.getChains();
+
+// Get signer for a chain
+const signer = keplr.getSigner(chains.mainnet);
+
+// Connect to a chain
+const client = await keplr.get(chains.mainnet, signer, endpoint);
+```
+
+### Stargate Client
+
+For more control over transactions, use the Stargate client integration:
 
 ```typescript
 import { stargate as akashStargate } from "@akashnetwork/akashjs";
-import { Registry } from "@cosmjs/proto-signing";
+import { Registry, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
+import { SigningStargateClient } from "@cosmjs/stargate";
 
+// Setup registry
 const myRegistry = new Registry([
   ...defaultRegistryTypes,
   ...akashStargate.registry,
 ]);
 
+// Create client
 const client = await SigningStargateClient.connectWithSigner(
   `http://rpcUrl/`,
   offlineSigner,
@@ -49,16 +106,18 @@ const client = await SigningStargateClient.connectWithSigner(
 );
 ```
 
-You can use the signer to create and sign requests. Below is an example of sending a deployment take-down message.
+### Transaction Example
 
-```ts
+Here's an example of sending a deployment take-down message:
+
+```typescript
 const mnemonic = "your wallet mnemonic";
 const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: "akash" });
 
-// get first account
+// Get first account
 const [account] = await wallet.getAccounts();
 
-// Use the encode method for the message to wrap the data
+// Create the message
 const message = MsgCloseDeployment.fromPartial({
     id: {
         dseq: "555555",
@@ -66,27 +125,21 @@ const message = MsgCloseDeployment.fromPartial({
     }
 });
 
-// Set the appropriate typeUrl and attach the encoded message as the value
+// Set the message type and value
 const msgAny = {
     typeUrl: getTypeUrl(MsgCloseDeployment),
     value: message
 };
 
-// You can use your own RPC node, or get a list of public nodes from akashjs
-const rpcEndpoint = "http://my.rpc.node";
-
-const myRegistry = new Registry(
-    getAkashTypeRegistry()
-);
-
+// Setup client with registry
+const myRegistry = new Registry(getAkashTypeRegistry());
 const client = await SigningStargateClient.connectWithSigner(
     rpcEndpoint,
     wallet,
-    {
-        registry: myRegistry
-    }
+    { registry: myRegistry }
 );
 
+// Define transaction fee
 const fee = {
     amount: [
         {
@@ -97,7 +150,8 @@ const fee = {
     gas: "800000",
 };
 
-const signedMessage = await client.signAndBroadcast(
+// Sign and broadcast
+const result = await client.signAndBroadcast(
     account.address,
     [msgAny],
     fee,
@@ -105,11 +159,11 @@ const signedMessage = await client.signAndBroadcast(
 );
 ```
 
-## examples
+## Examples
 
-Additional examples can be found in the [examples directory]( https://github.com/ovrclk/akashjs/tree/main/)
+Additional examples can be found in the [examples directory](https://github.com/ovrclk/akashjs/tree/main/)
 
-## Contribution Guidelines
+## Contributing
 
 ### Project Stack
 
@@ -117,27 +171,20 @@ This repository is primarily written in TypeScript and uses Node.js version 18. 
 
 ### Automated CI Checks and Releases
 
-Our project enforces high standards of code quality and consistency to ensure that all contributions adhere to our guidelines and maintain a high level of reliability. Here's what you should be aware of when contributing to our repository:
+Our project enforces high standards of code quality and consistency through:
 
-- **Code Linting**: We use ESLint to analyze the code for potential errors and coding style issues. This ensures that all contributions maintain a consistent style and follow best practices.
+- **Code Linting**: ESLint analyzes code for potential errors and style issues
+- **Code Formatting**: Prettier ensures consistent code formatting
+- **Commit Linting**: Commits must follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification
+- **Automated Testing**: Tests run automatically on pull requests
+- **Semantic Release**: Automated versioning based on commit messages
+- **Continuous Integration**: Validates PRs and manages releases
 
-- **Code Formatting**: Prettier is configured to format code automatically. This helps keep our codebase clean and readable without requiring manual adjustments for styling.
-
-- **Commit Linting**: All commit messages must adhere to the Conventional Commits specification. This is enforced through automated linting of commits, helping us keep our project history clear and easy to navigate. See [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for more information. [commitizen](https://commitizen-tools.github.io/commitizen/) is a great tool to get started with.
-
-- **Automated Testing**: Upon creating a pull request, automated tests are run to verify that the new code does not break any existing functionality and meets all testing standards.
-
-- **Semantic Release**: When changes are merged into the `main` branch, a semantic release process is triggered. This process automatically determines version numbers and generates changelogs based on the commit messages, streamlining the release process and ensuring consistent versioning.
-
-- **Continuous Integration**: Our CI workflows are designed to validate pull requests and manage releases. They perform multiple checks including commit validation, linting, and testing code coverage before merging changes.
-
-To better follow the above guidelines, we recommend using git hooks that would run the necessary checks before pushing your code. To do so after dependencies are installed, run the following command:
+To enable git hooks for local development:
 
 ```bash
 npm run setup-git-hooks
 ```
 
-### Contributing
-
-PRs are welcome! By adhering to these guidelines and leveraging our automated systems, we can maintain a high-quality codebase and streamline our development processes. We appreciate your contributions to making this project even better!
+PRs are welcome! By adhering to these guidelines and leveraging our automated systems, we can maintain a high-quality codebase and streamline our development processes.
 
