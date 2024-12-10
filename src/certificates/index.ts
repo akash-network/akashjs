@@ -16,16 +16,21 @@ const jrpc = JsonRPC.connect_xhr("https://bridge.testnet.akash.network/akashnetw
 
 export type { pems };
 
+/**
+ * Deprecated type for CertificatePem with an additional `csr` field.
+ * @deprecated Use `CertificatePem` with `cert` instead of `csr`.
+ */
 export type CertificatePemDeprecated = CertificatePem & {
   csr: string;
 };
 
-export async function broadcastCertificate(
-  pem: Pick<CertificatePem, "cert" | "publicKey">,
-  owner: string,
-  client: SigningStargateClient
-): Promise<DeliverTxResponse>;
-export async function broadcastCertificate(pem: pems, owner: string, client: SigningStargateClient): Promise<DeliverTxResponse>;
+/**
+ * Broadcasts a certificate to the blockchain.
+ * @param pem - The certificate PEM object.
+ * @param owner - The owner of the certificate.
+ * @param client - The Stargate client used for signing and broadcasting.
+ * @returns A promise that resolves to the transaction response.
+ */
 export async function broadcastCertificate(
   pem: Pick<CertificatePem, "cert" | "publicKey"> | pems,
   owner: string,
@@ -46,6 +51,11 @@ export async function broadcastCertificate(
   return await client.signAndBroadcast(owner, [message.message], message.fee);
 }
 
+/**
+ * Creates a new certificate for a given Bech32 address.
+ * @param bech32Address - The Bech32 address for which to create the certificate.
+ * @returns A promise that resolves to the deprecated certificate PEM object.
+ */
 export async function createCertificate(bech32Address: string): Promise<CertificatePemDeprecated> {
   const pem = certificateManager.generatePEM(bech32Address);
 
@@ -58,6 +68,13 @@ export async function createCertificate(bech32Address: string): Promise<Certific
   };
 }
 
+/**
+ * Revokes a certificate on the blockchain.
+ * @param owner - The owner of the certificate.
+ * @param serial - The serial number of the certificate to revoke.
+ * @param client - The Stargate client used for signing and broadcasting.
+ * @returns A promise that resolves to the transaction response.
+ */
 export async function revokeCertificate(owner: string, serial: string, client: SigningStargateClient) {
   const message = createStarGateMessage(stargateMessages.MsgRevokeCertificate, {
     id: {
@@ -69,6 +86,11 @@ export async function revokeCertificate(owner: string, serial: string, client: S
   return await client.signAndBroadcast(owner, [message.message], message.fee);
 }
 
+/**
+ * Queries certificates based on a filter.
+ * @param filter - The filter criteria for querying certificates.
+ * @returns A promise that resolves to the query response.
+ */
 export async function queryCertificates(filter: CertificateFilter) {
   const txBodyBytes = QueryCertificatesRequest.encode(
     QueryCertificatesRequest.fromJSON({
@@ -90,6 +112,11 @@ export async function queryCertificates(filter: CertificateFilter) {
   );
 }
 
+/**
+ * Converts a base64 string to a Uint8Array.
+ * @param base64 - The base64 encoded string.
+ * @returns A Uint8Array representation of the base64 string.
+ */
 function base64ToUInt(base64: string) {
   if (typeof window !== "undefined") {
     const binary_string = window.atob(base64);
@@ -104,6 +131,11 @@ function base64ToUInt(base64: string) {
   return Buffer.from(base64, "base64");
 }
 
+/**
+ * Converts a Uint8Array buffer to a hexadecimal string.
+ * @param buffer - The buffer to convert.
+ * @returns A hexadecimal string representation of the buffer.
+ */
 function bufferToHex(buffer: Uint8Array) {
   return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, "0")).join("");
 }
