@@ -1,5 +1,9 @@
-import { arrayBufferToString, toBase64 } from "pvutils";
+/**
+ * @module generate509
+ * Provides functionality to generate X.509 certificates for client authentication
+ */
 
+import { arrayBufferToString, toBase64 } from "pvutils";
 import * as asn1js from "asn1js";
 
 global.crypto = require("node:crypto");
@@ -12,17 +16,29 @@ const {
   BasicConstraints,
   Extension,
   ExtKeyUsage
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
 } = require("pkijs/build");
+
 const HASH_ALG = "SHA-256";
 const SIGN_ALG = "ECDSA";
 
+/**
+ * Interface representing the PEM-formatted certificate components
+ * @interface
+ */
 export interface pems {
+  /** The Certificate Signing Request (CSR) in PEM format */
   csr: string;
+  /** The public key in PEM format */
   publicKey: string;
+  /** The private key in PEM format */
   privateKey: string;
 }
 
+/**
+ * Creates a new X.509 certificate for the given address
+ * @param {string} address - The address to create the certificate for
+ * @returns {Promise<pems>} Object containing the PEM-formatted certificate components
+ */
 export async function create(address: string): Promise<pems> {
   // get crypto handler
   const crypto = getCrypto();
@@ -48,7 +64,22 @@ export async function create(address: string): Promise<pems> {
   };
 }
 
-async function createCSR(keyPair: { privateKey: string; publicKey: string }, hashAlg: string, { commonName }: { commonName: string }) {
+/**
+ * Creates a Certificate Signing Request (CSR) with the given parameters
+ * @param {Object} keyPair - The public/private key pair
+ * @param {string} keyPair.privateKey - The private key
+ * @param {string} keyPair.publicKey - The public key
+ * @param {string} hashAlg - The hashing algorithm to use
+ * @param {Object} params - Certificate parameters
+ * @param {string} params.commonName - The common name for the certificate
+ * @returns {Promise<Certificate>} The generated certificate
+ * @private
+ */
+async function createCSR(
+  keyPair: { privateKey: string; publicKey: string },
+  hashAlg: string,
+  { commonName }: { commonName: string }
+) {
   const cert = new Certificate();
   cert.version = 2;
 
@@ -130,12 +161,28 @@ async function createCSR(keyPair: { privateKey: string; publicKey: string }, has
   return cert;
 }
 
-// add line break every 64th character
+/**
+ * Formats a PEM string by adding line breaks every 64 characters
+ * @param {string} pemString - The PEM string to format
+ * @returns {string} The formatted PEM string
+ * @private
+ */
 function formatPEM(pemString: string) {
   return pemString.replace(/(.{64})/g, "$1\n");
 }
 
-function setValidityPeriod(cert: { notBefore: { value: Date }; notAfter: { value: Date } }, startDate: Date, durationInDays: number) {
+/**
+ * Sets the validity period for a certificate
+ * @param {Object} cert - The certificate object
+ * @param {Date} startDate - The start date of the validity period
+ * @param {number} durationInDays - The duration in days for which the certificate should be valid
+ * @private
+ */
+function setValidityPeriod(
+  cert: { notBefore: { value: Date }; notAfter: { value: Date } },
+  startDate: Date,
+  durationInDays: number
+) {
   // Normalize to midnight
   const start = new Date(startDate);
   start.setHours(0);
