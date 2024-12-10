@@ -1,11 +1,21 @@
+/**
+ * Network functionality for interacting with Akash networks
+ * @module network
+ */
+
 import fetch from "node-fetch";
 import { performance } from "perf_hooks";
 import { awaitAll, filter, map, prop, sortBy } from "../util";
 
+/** Network type identifier */
 type NETWORK_TYPE = "mainnet" | "testnet" | "edgenet";
 
+/** Network endpoint type */
 type ENDPOINT_TYPE = "rpc" | "rest";
 
+/**
+ * Network metadata interface
+ */
 interface INetworkMetadata {
   chain_name: string;
   status: string;
@@ -45,7 +55,11 @@ interface INetworkMetadata {
   };
 }
 
-// TODO: this should probably be cached to avoid pulling for every request
+/**
+ * Gets metadata for a specific network
+ * @param {NETWORK_TYPE} network - The network to get metadata for
+ * @returns {Promise<INetworkMetadata>} The network metadata
+ */
 export async function getMetadata(network: NETWORK_TYPE): Promise<INetworkMetadata> {
   return fetch(`https://raw.githubusercontent.com/ovrclk/net/master/${network}/meta.json`).then(res => res.json());
 }
