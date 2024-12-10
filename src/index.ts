@@ -1,3 +1,8 @@
+/**
+ * Main exports for the Akash JS
+ * @module akashjs
+ */
+
 export * as certificate from "./certificates";
 export * as stargate from "./stargate";
 export * as keplr from "./keplr";

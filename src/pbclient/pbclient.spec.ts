@@ -5,6 +5,9 @@ import { Message } from "../stargate";
 import { AminoMsg } from "@cosmjs/amino";
 
 describe("createAminoMessage", () => {
+  /**
+   * Test to ensure createAminoMessage function creates an Amino message correctly.
+   */
   it("creates an amino message", () => {
     const message = faker.helpers.arrayElement(Object.values(Message));
     const messageBody: AminoMsg = {
