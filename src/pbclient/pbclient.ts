@@ -12,6 +12,13 @@ const FEE = {
   gas: "100000"
 };
 
+/**
+ * Creates an Amino message object.
+ * 
+ * @param {Message} message - The type of the message.
+ * @param {AminoMsg} messageBody - The body of the message.
+ * @returns {object} The Amino message object.
+ */
 export function createAminoMessage(message: Message, messageBody: AminoMsg) {
   return {
     typeUrl: message,
@@ -27,6 +34,14 @@ type MessageTypes = {
   };
 };
 
+/**
+ * Creates a Stargate message object with a fee.
+ * 
+ * @template T
+ * @param {T} message - The type of the message.
+ * @param {MessageTypes[T]} messageBody - The body of the message.
+ * @returns {object} The Stargate message object with a fee.
+ */
 export function createStarGateMessage<T extends keyof MessageTypes>(message: T, messageBody: MessageTypes[T]) {
   return {
     message: {
