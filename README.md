@@ -4,6 +4,17 @@
 
 Connect and communicate with the Akash Network. Pure JS library can be used in browser for unsigned transactions, and with node.js for full compatibility.
 
+## Packages
+
+This repository is the home of `akashjs`, a library designed to facilitate interaction with the Akash Network. However, for full functionality, users will need to integrate several additional libraries. The Akash Network is built using the Cosmos SDK and utilizes the Stargate client for transaction signing and broadcasting. These packages are specifically tailored to enhance interaction with the Akash Network.
+
+| Package | Description |
+| ------- | ----------- |
+| [@akashnetwork/akashjs](src) | Main library for interacting with the Akash Network |
+| [@akashnetwork/akash-api](https://github.com/akash-network/akash-api/tree/main/ts) | Akash API generated from [Akash API](https://github.com/akash-network/akash-api) for interacting with the Akash Network. Documentation is available for [node](https://github.com/akash-network/akash-api/blob/main/docs/proto/node.md) and [provider](https://github.com/akash-network/akash-api/blob/main/docs/proto/provider.md) |
+| [@cosmjs/stargate](https://github.com/cosmos/cosmjs/tree/main/packages/stargate) | A client library for the Cosmos SDK 0.40+ (Stargate) |
+| [@cosmjs/proto-signing](https://github.com/cosmos/cosmjs/tree/main/packages/proto-signing) | A library for signing and broadcasting transactions using the Cosmos SDK |
+
 ## Compatibility
 
 Compatible with modern browsers, nodejs 14+ and Webpack 5
@@ -25,18 +36,6 @@ Or use the UMD bundle (the object returned is `Window.akjs`):
   src="https://unpkg.com/@akashnetwork/akashjs@0.10.0/umd/akashjs.js"
 ></script>
 ```
-
-## Packages
-
-This repository is the home of `akashjs`, a library designed to facilitate interaction with the Akash Network. However, for full functionality, users will need to integrate several additional libraries. The Akash Network is built using the Cosmos SDK and utilizes the Stargate client for transaction signing and broadcasting. These packages are specifically tailored to enhance interaction with the Akash Network.
-
-| Package | Description |
-| ------- | ----------- |
-| [@akashnetwork/akashjs](src) | Main library for interacting with the Akash Network |
-| [@akashnetwork/akash-api](https://github.com/akash-network/akash-api/tree/main/ts) | Akash API generated from [Akash API](https://github.com/akash-network/akash-api) for interacting with the Akash Network. Documentation is available for [node](https://github.com/akash-network/akash-api/blob/main/docs/proto/node.md) and [provider](https://github.com/akash-network/akash-api/blob/main/docs/proto/provider.md) |
-| [@cosmjs/stargate](https://github.com/cosmos/cosmjs/tree/main/packages/stargate) | A client library for the Cosmos SDK 0.40+ (Stargate) |
-| [@cosmjs/proto-signing](https://github.com/cosmos/cosmjs/tree/main/packages/proto-signing) | A library for signing and broadcasting transactions using the Cosmos SDK |
-
 
 ## Key Features
 
@@ -186,18 +185,6 @@ This repository is primarily written in TypeScript and uses Node.js version 18. 
 1. **Prerequisites**
    - Node.js 18 or higher
    - npm or yarn
-   - Protocol Buffers Compiler (protoc) v3.15.0 or higher
-     - **Installation Instructions:**
-       - **macOS**: Use Homebrew to install protoc:
-         ```bash
-         brew install protobuf
-         ```
-       - **Linux**: Use your package manager, for example, on Ubuntu:
-         ```bash
-         sudo apt update
-         sudo apt install -y protobuf-compiler
-         ```
-       - **Windows**: Download the precompiled binaries from the [official releases page](https://github.com/protocolbuffers/protobuf/releases) and add the `bin` directory to your system's PATH.
    - Go 1.19 or higher (for akash-api dependency)
 
 2. **Installation**
@@ -212,54 +199,6 @@ npm install
 # Setup git hooks
 npm run setup-git-hooks
 ```
-
-## Protobuf Generation (Optional)
-
-Protobuf generation is only necessary when the protobuf definitions have changed. If you need to regenerate the protobuf files, follow these steps:
-
-1. **Clone the akash-api repository** (required for proto files):
-   ```bash
-   git clone https://github.com/akash-network/akash-api.git ../akash-api
-   ```
-
-2. **Install gogoproto**: Ensure that the `gogoproto` library is available in your environment.
-   ```bash
-   # Clone the gogoproto repository
-   git clone https://github.com/gogo/protobuf.git
-
-   # Ensure the path to gogo.proto is included in your proto path
-   export PROTO_PATH=./protobuf/protobuf
-   ```
-
-3. **Generate protobuf files**:
-   ```bash
-   # Use the following command to generate TypeScript definitions
-   protoc -I=$PROTO_PATH -I=./path/to/akash-api --ts_out=./src/protobuf akash/discovery/v1/client_info.proto
-   ```
-
-The protobuf generation script will:
-- Look for .proto files in the akash-api repository
-- Generate TypeScript definitions in `src/protobuf`
-- Use ts-proto for TypeScript code generation
-- Include necessary Cosmos SDK proto definitions
-
-If you encounter protobuf-related errors:
-- Ensure `protoc` is installed correctly
-- Verify the `akash-api` repository is at the correct path
-- Check `protoc` version compatibility
-- Look for detailed errors in `generate.log`
-
-### Troubleshooting
-
-If you encounter the error `Import "gogoproto/gogo.proto" was not found or had errors`, follow these steps:
-
-1. **Ensure `gogoproto` is cloned**: Make sure the `gogoproto` repository is cloned and accessible.
-2. **Update the Protobuf Generation Script**: Modify your script to include the path to `gogoproto` using the `-I` flag.
-3. **Verify Paths**: Double-check that the paths to `gogo.proto` and other proto files are correct.
-4. **Check Dependencies**: Ensure all dependencies are installed and up-to-date.
-5. **Protoc Version**: Verify that your `protoc` version is compatible with the proto files.
-
-By following these instructions, you should be able to resolve the `gogoproto/gogo.proto` error and successfully generate your protobuf files when necessary.
 
 4. **Development Commands**
 ```bash
