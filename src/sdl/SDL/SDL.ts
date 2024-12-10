@@ -57,16 +57,54 @@ function isString(str: any): str is string {
 
 type NetworkVersion = "beta2" | "beta3";
 
+/**
+ * SDL (Stack Definition Language) parser and validator
+ * Handles parsing and validation of Akash deployment manifests
+ * 
+ * @example
+ * ```ts
+ * import { SDL } from './SDL';
+ * 
+ * const yaml = `
+ * version: "2.0"
+ * services:
+ *   web:
+ *     image: nginx
+ *     expose:
+ *       - port: 80
+ *         as: 80
+ *         to:
+ *           - global: true
+ * `;
+ * 
+ * // Parse SDL from YAML string
+ * const sdl = SDL.fromString(yaml);
+ * 
+ * // Get deployment manifest
+ * const manifest = sdl.manifest();
+ * 
+ * // Get deployment groups
+ * const groups = sdl.groups();
+ * ```
+ */
 export class SDL {
+  /**
+   * Creates an SDL instance from a YAML string
+   * @param yaml - The YAML string containing the SDL definition
+   * @param version - The SDL version (beta2 or beta3)
+   * @param networkId - The network ID to validate against
+   */
   static fromString(yaml: string, version: NetworkVersion = "beta2", networkId: NetworkId = MAINNET_ID) {
     const data = YAML.load(yaml) as v3Sdl;
     return new SDL(data, version, networkId);
   }
 
+  /**
+   * Validates SDL YAML string (deprecated)
+   * @deprecated Use SDL.constructor directly
+   */
   static validate(yaml: string) {
     console.warn("SDL.validate is deprecated. Use SDL.constructor directly.");
-    // TODO: this should really be cast to unknown, then assigned
-    // to v2 or v3 SDL only after being validated
     const data = YAML.load(yaml) as v3Sdl;
 
     for (const [name, profile] of Object.entries(data.profiles.compute || {})) {
@@ -77,6 +115,23 @@ export class SDL {
     return data;
   }
 
+  /**
+   * Validates the GPU configuration for a given service profile.
+   * 
+   * @param name - The name of the service profile.
+   * @param gpu - The GPU resource configuration.
+   * @throws Will throw an error if the GPU configuration is invalid.
+   * 
+   * @example
+   * ```ts
+   * SDL.validateGPU("web", {
+   *   units: "1",
+   *   attributes: {
+   *     vendor: { nvidia: [{ model: "RTX 3080", ram: "10GB", interface: "pcie" }] }
+   *   }
+   * });
+   * ```
+   */
   static validateGPU(name: string, gpu: v3ResourceGPU | undefined) {
     if (gpu) {
       if (typeof gpu.units === "undefined") {
@@ -118,6 +173,21 @@ export class SDL {
     }
   }
 
+  /**
+   * Validates the storage configuration for a given service.
+   * 
+   * @param name - The name of the service.
+   * @param storage - The storage resource configuration.
+   * @throws Will throw an error if the storage configuration is invalid.
+   * 
+   * @example
+   * ```ts
+   * SDL.validateStorage("web", {
+   *   size: "10Gi",
+   *   attributes: { class: "ssd" }
+   * });
+   * ```
+   */
   static validateStorage(name: string, storage?: v2ResourceStorage | v2ResourceStorageArray) {
     if (!storage) {
       throw new Error("Storage is required for service " + name);
@@ -579,6 +649,19 @@ export class SDL {
     };
   }
 
+  /**
+   * Parses the service protocol.
+   * 
+   * @param proto - The protocol string (e.g., "TCP", "UDP").
+   * @returns The parsed protocol.
+   * @throws Will throw an error if the protocol is unsupported.
+   * 
+   * @example
+   * ```ts
+   * const protocol = SDL.parseServiceProto("TCP");
+   * // protocol is "TCP"
+   * ```
+   */
   parseServiceProto(proto?: string) {
     const raw = proto?.toUpperCase();
     let result = "TCP";
@@ -814,6 +897,18 @@ export class SDL {
     return this.version === "beta2" ? this.v2Manifest(asString) : this.v3Manifest(asString);
   }
 
+  /**
+   * Computes the endpoint sequence numbers for the given SDL.
+   * 
+   * @param sdl - The SDL data.
+   * @returns An object mapping IPs to their sequence numbers.
+   * 
+   * @example
+   * ```ts
+   * const sequenceNumbers = sdl.computeEndpointSequenceNumbers(sdlData);
+   * // sequenceNumbers might be { "192.168.1.1": 1, "192.168.1.2": 2 }
+   * ```
+   */
   computeEndpointSequenceNumbers(sdl: v2Sdl) {
     return Object.fromEntries(
       Object.values(sdl.services).flatMap(service =>
@@ -1131,6 +1226,18 @@ export class SDL {
       .map(name => groups[name]);
   }
 
+  /**
+   * Escapes HTML characters in a string.
+   * 
+   * @param raw - The raw string to escape.
+   * @returns The escaped string.
+   * 
+   * @example
+   * ```ts
+   * const escaped = sdl.escapeHtml("<div>Hello</div>");
+   * // escaped is "\\u003cdiv\\u003eHello\\u003c/div\\u003e"
+   * ```
+   */
   escapeHtml(raw: string) {
     return raw.replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/&/g, "\\u0026");
   }
