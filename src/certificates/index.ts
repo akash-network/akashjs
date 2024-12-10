@@ -12,6 +12,10 @@ import { certificateManager } from "./certificate-manager";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const JsonRPC = require("simple-jsonrpc-js");
 
+/**
+ * Connects to a JSON-RPC server using XMLHttpRequest.
+ * @type {JsonRPC}
+ */
 const jrpc = JsonRPC.connect_xhr("https://bridge.testnet.akash.network/akashnetwork");
 
 export type { pems };
@@ -26,10 +30,10 @@ export type CertificatePemDeprecated = CertificatePem & {
 
 /**
  * Broadcasts a certificate to the blockchain.
- * @param pem - The certificate PEM object.
- * @param owner - The owner of the certificate.
- * @param client - The Stargate client used for signing and broadcasting.
- * @returns A promise that resolves to the transaction response.
+ * @param {Pick<CertificatePem, "cert" | "publicKey"> | pems} pem - The certificate PEM object.
+ * @param {string} owner - The owner of the certificate.
+ * @param {SigningStargateClient} client - The Stargate client used for signing and broadcasting.
+ * @returns {Promise<DeliverTxResponse>} A promise that resolves to the transaction response.
  */
 export async function broadcastCertificate(
   pem: Pick<CertificatePem, "cert" | "publicKey"> | pems,
@@ -53,8 +57,8 @@ export async function broadcastCertificate(
 
 /**
  * Creates a new certificate for a given Bech32 address.
- * @param bech32Address - The Bech32 address for which to create the certificate.
- * @returns A promise that resolves to the deprecated certificate PEM object.
+ * @param {string} bech32Address - The Bech32 address for which to create the certificate.
+ * @returns {Promise<CertificatePemDeprecated>} A promise that resolves to the deprecated certificate PEM object.
  */
 export async function createCertificate(bech32Address: string): Promise<CertificatePemDeprecated> {
   const pem = certificateManager.generatePEM(bech32Address);
@@ -70,10 +74,10 @@ export async function createCertificate(bech32Address: string): Promise<Certific
 
 /**
  * Revokes a certificate on the blockchain.
- * @param owner - The owner of the certificate.
- * @param serial - The serial number of the certificate to revoke.
- * @param client - The Stargate client used for signing and broadcasting.
- * @returns A promise that resolves to the transaction response.
+ * @param {string} owner - The owner of the certificate.
+ * @param {string} serial - The serial number of the certificate to revoke.
+ * @param {SigningStargateClient} client - The Stargate client used for signing and broadcasting.
+ * @returns {Promise<DeliverTxResponse>} A promise that resolves to the transaction response.
  */
 export async function revokeCertificate(owner: string, serial: string, client: SigningStargateClient) {
   const message = createStarGateMessage(stargateMessages.MsgRevokeCertificate, {
@@ -88,8 +92,8 @@ export async function revokeCertificate(owner: string, serial: string, client: S
 
 /**
  * Queries certificates based on a filter.
- * @param filter - The filter criteria for querying certificates.
- * @returns A promise that resolves to the query response.
+ * @param {CertificateFilter} filter - The filter criteria for querying certificates.
+ * @returns {Promise<QueryCertificatesResponse>} A promise that resolves to the query response.
  */
 export async function queryCertificates(filter: CertificateFilter) {
   const txBodyBytes = QueryCertificatesRequest.encode(
@@ -114,8 +118,8 @@ export async function queryCertificates(filter: CertificateFilter) {
 
 /**
  * Converts a base64 string to a Uint8Array.
- * @param base64 - The base64 encoded string.
- * @returns A Uint8Array representation of the base64 string.
+ * @param {string} base64 - The base64 encoded string.
+ * @returns {Uint8Array} A Uint8Array representation of the base64 string.
  */
 function base64ToUInt(base64: string) {
   if (typeof window !== "undefined") {
@@ -133,8 +137,8 @@ function base64ToUInt(base64: string) {
 
 /**
  * Converts a Uint8Array buffer to a hexadecimal string.
- * @param buffer - The buffer to convert.
- * @returns A hexadecimal string representation of the buffer.
+ * @param {Uint8Array} buffer - The buffer to convert.
+ * @returns {string} A hexadecimal string representation of the buffer.
  */
 function bufferToHex(buffer: Uint8Array) {
   return [...new Uint8Array(buffer)].map(b => b.toString(16).padStart(2, "0")).join("");
