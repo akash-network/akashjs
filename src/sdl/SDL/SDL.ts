@@ -89,10 +89,28 @@ type NetworkVersion = "beta2" | "beta3";
  */
 export class SDL {
   /**
-   * Creates an SDL instance from a YAML string
-   * @param yaml - The YAML string containing the SDL definition
-   * @param version - The SDL version (beta2 or beta3)
-   * @param networkId - The network ID to validate against
+   * Creates an SDL instance from a YAML string.
+   * 
+   * @param {string} yaml - The YAML string containing the SDL definition.
+   * @param {NetworkVersion} [version="beta2"] - The SDL version (beta2 or beta3).
+   * @param {NetworkId} [networkId=MAINNET_ID] - The network ID to validate against.
+   * @returns {SDL} An instance of the SDL class.
+   * 
+   * @example
+   * ```ts
+   * const yaml = `
+   * version: "2.0"
+   * services:
+   *   web:
+   *     image: nginx
+   *     expose:
+   *       - port: 80
+   *         as: 80
+   *         to:
+   *           - global: true
+   * `;
+   * const sdl = SDL.fromString(yaml);
+   * ```
    */
   static fromString(yaml: string, version: NetworkVersion = "beta2", networkId: NetworkId = MAINNET_ID) {
     const data = YAML.load(yaml) as v3Sdl;
@@ -118,18 +136,14 @@ export class SDL {
   /**
    * Validates the GPU configuration for a given service profile.
    * 
-   * @param name - The name of the service profile.
-   * @param gpu - The GPU resource configuration.
+   * @param {string} name - The name of the service profile.
+   * @param {v3ResourceGPU | undefined} gpu - The GPU resource configuration.
    * @throws Will throw an error if the GPU configuration is invalid.
    * 
    * @example
    * ```ts
-   * SDL.validateGPU("web", {
-   *   units: "1",
-   *   attributes: {
-   *     vendor: { nvidia: [{ model: "RTX 3080", ram: "10GB", interface: "pcie" }] }
-   *   }
-   * });
+   * const gpuConfig = { units: "1", attributes: { vendor: { nvidia: [{ model: "RTX 3080", ram: "10GB" }] } } };
+   * SDL.validateGPU("web", gpuConfig);
    * ```
    */
   static validateGPU(name: string, gpu: v3ResourceGPU | undefined) {
@@ -176,16 +190,14 @@ export class SDL {
   /**
    * Validates the storage configuration for a given service.
    * 
-   * @param name - The name of the service.
-   * @param storage - The storage resource configuration.
+   * @param {string} name - The name of the service.
+   * @param {v2ResourceStorage | v2ResourceStorageArray} [storage] - The storage resource configuration.
    * @throws Will throw an error if the storage configuration is invalid.
    * 
    * @example
    * ```ts
-   * SDL.validateStorage("web", {
-   *   size: "10Gi",
-   *   attributes: { class: "ssd" }
-   * });
+   * const storageConfig = { size: "10Gi", attributes: { class: "ssd" } };
+   * SDL.validateStorage("web", storageConfig);
    * ```
    */
   static validateStorage(name: string, storage?: v2ResourceStorage | v2ResourceStorageArray) {
