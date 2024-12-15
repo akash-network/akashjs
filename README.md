@@ -15,6 +15,10 @@ This repository is the home of `akashjs`, a library designed to facilitate inter
 | [@cosmjs/stargate](https://github.com/cosmos/cosmjs/tree/main/packages/stargate) | A client library for the Cosmos SDK 0.40+ (Stargate). |
 | [@cosmjs/proto-signing](https://github.com/cosmos/cosmjs/tree/main/packages/proto-signing) | A library for signing and broadcasting transactions using the Cosmos SDK. |
 
+### Documentation
+
+Documentation for the library is available [here](https://akash-network.github.io/akashjs).
+
 ## Compatibility
 
 Compatible with modern browsers, nodejs 14+ and Webpack 5
