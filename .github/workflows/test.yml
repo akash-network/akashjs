@@ -12,3 +12,21 @@ jobs:
     name: Test
     uses: ./.github/workflows/test-reusable.yml
     secrets: inherit
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run integration tests
+        run: npm test
