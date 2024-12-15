@@ -8,10 +8,17 @@ import { performance } from "perf_hooks";
 import { awaitAll, filter, map, prop, sortBy } from "../util";
 
 /** Network type identifier */
-export type NETWORK_TYPE = "mainnet" | "testnet" | "edgenet";
+export enum NETWORK_TYPE {
+  MAINNET = "mainnet",
+  TESTNET = "testnet",
+  EDGENET = "edgenet"
+}
 
 /** Network endpoint type */
-export type ENDPOINT_TYPE = "rpc" | "rest";
+export enum ENDPOINT_TYPE {
+  RPC = "rpc",
+  REST = "rest"
+}
 
 /**
  * Network metadata interface
@@ -73,39 +80,42 @@ export interface INetworkMetadata {
 }
 
 /**
- * Gets metadata for a specific network
- * @param {NETWORK_TYPE} network - The network to get metadata for
- * @returns {Promise<INetworkMetadata>} The network metadata
+ * Fetches metadata for a specified network.
+ * @param {NETWORK_TYPE} network - The network identifier for which to fetch metadata.
+ * @returns {Promise<INetworkMetadata>} A promise that resolves to the network metadata.
  * 
  * @example
- * import { getMetadata } from "@akashnetwork/akashjs/build/network";
- * async function exampleUsage() {
+ * import { NETWORK_TYPE, getMetadata } from "@akashnetwork/akashjs/build/network";
+ * 
+ * async function displayNetworkMetadata() {
  *   try {
- *     const metadata = await getMetadata("mainnet");
+ *     const metadata = await getMetadata(NETWORK_TYPE.MAINNET);
  *     console.log("Network Metadata:", metadata);
  *   } catch (error) {
  *     console.error("Error fetching network metadata:", error);
  *   }
  * }
  * 
- * exampleUsage();
+ * displayNetworkMetadata();
  */
 export async function getMetadata(network: NETWORK_TYPE): Promise<INetworkMetadata> {
-  return fetch(`https://raw.githubusercontent.com/ovrclk/net/master/${network}/meta.json`).then(res => res.json());
+  const response = await fetch(`https://raw.githubusercontent.com/ovrclk/net/master/${network}/meta.json`);
+  return response.json();
 }
 
 /**
- * Retrieves endpoints for a specific network and type
- * @param {NETWORK_TYPE} network - The network to get endpoints for
- * @param {ENDPOINT_TYPE} type - The type of endpoint to retrieve
- * @returns {Promise<{ address: string }[]>} A promise that resolves to an array of endpoint addresses
+ * Retrieves endpoints for a specific network and type.
+ * @param {NETWORK_TYPE} network - The network to get endpoints for.
+ * @param {ENDPOINT_TYPE} type - The type of endpoint to retrieve.
+ * @returns {Promise<Array<{ address: string }>>} A promise that resolves to an array of endpoint addresses.
  * 
  * @example
- * import { getEndpoints } from "@akashnetwork/akashjs/build/network";
+ * import { NETWORK_TYPE, ENDPOINT_TYPE, getEndpoints } from "@akashnetwork/akashjs/build/network";
+ * 
  * async function fetchEndpoints() {
  *   try {
- *     const endpoints = await getEndpoints("mainnet", "rpc");
- *     console.log(JSON.stringify(endpoints, null, 2));
+ *     const endpoints = await getEndpoints(NETWORK_TYPE.MAINNET, ENDPOINT_TYPE.REST);
+ *     console.log("Endpoints:", JSON.stringify(endpoints, null, 2));
  *   } catch (error) {
  *     console.error("Error fetching endpoints:", error);
  *   }
@@ -113,58 +123,60 @@ export async function getMetadata(network: NETWORK_TYPE): Promise<INetworkMetada
  * 
  * fetchEndpoints();
  */
-export function getEndpoints(network: NETWORK_TYPE, type: ENDPOINT_TYPE) {
+export function getEndpoints(network: NETWORK_TYPE, type: ENDPOINT_TYPE): Promise<Array<{ address: string }>> {
   return getMetadata(network).then(meta => meta.apis[type]);
 }
 
 /**
- * Retrieves and sorts endpoints by their health status
- * @param {NETWORK_TYPE} network - The network to get endpoints for
- * @param {ENDPOINT_TYPE} type - The type of endpoint to retrieve
-* @returns {Promise<{ address: string, responseTime: number | null }[]>} A promise that resolves to an array of endpoints sorted by response time
+ * Retrieves and sorts endpoints by their health status.
+ * @param {NETWORK_TYPE} network - The network to get endpoints for.
+ * @param {ENDPOINT_TYPE} type - The type of endpoint to retrieve.
+ * @returns {Promise<Array<{ address: string, responseTime: number | null }>>} A promise that resolves to an array of endpoints sorted by response time.
  * 
  * @example
- * import { getEndpointsSorted } from "@akashnetwork/akashjs/build/network";
- * async function exampleUsage() {
- *   try {
- *     const endpoints = await getEndpointsSorted("mainnet", "rpc");
- *     console.log(JSON.stringify(endpoints, null, 2));
- *   } catch (error) {
- *     console.error("Error fetching endpoints:", error);
- *   }
- * }
+ * import { NETWORK_TYPE, ENDPOINT_TYPE, getEndpointsSorted } from "@akashnetwork/akashjs/build/network";
  * 
- * exampleUsage();
+ * const displaySortedEndpoints = async () => {
+ *   try {
+ *     const endpoints = await getEndpointsSorted(NETWORK_TYPE.MAINNET, ENDPOINT_TYPE.RPC);
+ *     console.log("Sorted Endpoints:", JSON.stringify(endpoints, null, 2));
+ *   } catch (error) {
+ *     console.error("Error fetching sorted endpoints:", error);
+ *   }
+ * };
+ * 
+ * displaySortedEndpoints();
  */
-export function getEndpointsSorted(network: NETWORK_TYPE, type: ENDPOINT_TYPE) {
+export function getEndpointsSorted(network: NETWORK_TYPE, type: ENDPOINT_TYPE): Promise<Array<{ address: string, responseTime: number | null }>> {
   return getEndpoints(network, type)
-    .then(map(getEndpointHealthStatus(800)))
-    .then(awaitAll)
-    .then(filter(isNodeResponsive))
-    .then(sortBy(prop("responseTime")));
+    .then(endpoints => Promise.all(endpoints.map(getEndpointHealthStatus(800))))
+    .then(healthStatuses => healthStatuses.filter(isNodeResponsive))
+    .then(responsiveEndpoints => responsiveEndpoints.sort((a, b) => (a.responseTime ?? Infinity) - (b.responseTime ?? Infinity)));
 }
 
 /**
- * Checks if a node is responsive based on its response time
- * @param {{ responseTime: number | null }} endpoint - The endpoint to check
- * @returns {boolean} True if the node is responsive, false otherwise
+ * Checks if a node is responsive based on its response time.
+ * @param {{ responseTime: number | null }} endpoint - The endpoint to check.
+ * @returns {boolean} True if the node is responsive, false otherwise.
  */
-function isNodeResponsive(endpoint: { responseTime: number | null }) {
+function isNodeResponsive(endpoint: { responseTime: number | null }): boolean {
   return endpoint.responseTime !== null;
 }
 
 /**
- * Returns a function that checks the health status of an endpoint
- * @param {number} timeout - The timeout for the health check request
- * @returns {function({ address: string }): Promise<{ address: string, responseTime: number | null }>} A function that returns a promise resolving to the endpoint's health status
- *  
+ * Creates a function to check the health status of an endpoint.
+ * @param timeout - The timeout duration for the health check request in milliseconds.
+ * @returns A function that takes an endpoint object and returns a promise resolving to the endpoint's health status, including its address and response time.
+ * 
  * @example
- * async function checkEndpointHealth() {
+ * import { getEndpointHealthStatus, getEndpoints, NETWORK_TYPE, ENDPOINT_TYPE } from "@akashnetwork/akashjs/build/network";
+ * 
+ * const checkEndpointHealth = async () => {
  *   try {
- *     const endpoints = await getEndpoints("mainnet", "rpc");
+ *     const endpoints = await getEndpoints(NETWORK_TYPE.MAINNET, ENDPOINT_TYPE.RPC);
  *     const healthStatusPromises = endpoints.map(endpoint => getEndpointHealthStatus(800)(endpoint));
  *     const healthStatuses = await Promise.all(healthStatusPromises);
- *
+ * 
  *     console.log("Endpoint Health Statuses:");
  *     healthStatuses.forEach(status => {
  *       console.log(`Address: ${status.address}, Response Time: ${status.responseTime !== null ? status.responseTime + 'ms' : 'Unresponsive'}`);
@@ -172,14 +184,14 @@ function isNodeResponsive(endpoint: { responseTime: number | null }) {
  *   } catch (error) {
  *     console.error("Error checking endpoint health:", error);
  *   }
- * }
+ * };
  * checkEndpointHealth();
  */
 export function getEndpointHealthStatus(timeout: number) {
   return ({ address }: { address: string }) => {
     const startTime = performance.now();
 
-    return fetch(`${address}/node_info`, { timeout })
+    return fetch(`${address}/node_info`, { method: 'GET', timeout })
       .then(() => ({
         address,
         responseTime: Math.floor(performance.now() - startTime)
