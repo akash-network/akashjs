@@ -1,7 +1,7 @@
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { DeliverTxResponse } from "@cosmjs/stargate/build/stargateclient";
 import { toBase64 } from "pvutils";
-import { CertificateFilter, QueryCertificatesRequest, QueryCertificatesResponse } from "@akashnetwork/akash-api/akash/cert/v1beta3";
+import { CertificateFilter, QueryCertificatesRequest, QueryCertificatesResponse } from "@akashnetwork/akash-api/akash/cert/v1";
 
 import type { pems } from "./generate509";
 import { Message as stargateMessages } from "../stargate";

@@ -2,8 +2,7 @@ import { getAkashTypeRegistry } from "../stargate";
 import { defaultRegistryTypes, SigningStargateClient } from "@cosmjs/stargate";
 import { OfflineDirectSigner, OfflineSigner, Registry } from "@cosmjs/proto-signing";
 import { AminoTypes } from "@cosmjs/stargate";
-import { Certificate } from "@akashnetwork/akash-api/akash/cert/v1beta2";
-import { MsgCreateCertificate } from "@akashnetwork/akash-api/deprecated/akash/cert/v1beta1";
+import { Certificate, MsgCreateCertificate } from "@akashnetwork/akash-api/akash/cert/v1";
 
 /**
  * Represents a blockchain chain.
