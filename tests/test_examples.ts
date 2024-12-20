@@ -1,68 +1,77 @@
-import { exec } from 'child_process';
-import path from 'path';
+import tap from "tap";
+import { exec } from "child_process";
+import path from "path";
 
-describe('Example Tests', () => {
-  const examplesDir = path.resolve(__dirname, '../examples');
+const examplesDir = path.resolve(__dirname, "../examples");
 
-  const runExample = (exampleFile: string) => {
-    return new Promise((resolve, reject) => {
-      exec(`ts-node -r tsconfig-paths/register ${exampleFile}`, { cwd: examplesDir }, (error, stdout, stderr) => {
-        if (error) {
-          reject(stderr);
-        } else {
-          resolve(stdout);
-        }
-      });
+const runExample = (exampleFile: string) => {
+  return new Promise((resolve, reject) => {
+    exec(`ts-node -r tsconfig-paths/register ${exampleFile}`, { cwd: examplesDir }, (error, stdout, stderr) => {
+      if (error) {
+        reject(stderr);
+      } else {
+        resolve(stdout);
+      }
     });
-  };
-
-  it('should run create_deployment example without errors', async () => {
-    const output = await runExample('create_deployment.ts');
-    expect(output).toContain('Service tetris is available at:');
   });
+};
 
-  it('should run create_wallet example without errors', async () => {
-    const output = await runExample('create_wallet.ts');
-    expect(output).toContain('akash');
-  });
+tap.test("should run create_deployment example without errors", async t => {
+  t.plan(1);
+  const output = await runExample("create_deployment.ts");
+  t.has(output, "Service tetris is available at:");
+});
 
-  it('should run details_of_single_provider example without errors', async () => {
-    const output = await runExample('details_of_single_provider.ts');
-    expect(output).toContain('owner');
-  });
+tap.test("should run create_wallet example without errors", async t => {
+  t.plan(1);
+  const output = await runExample("create_wallet.ts");
+  t.has(output, "akash");
+});
 
-  it('should run estimate_gas example without errors', async () => {
-    const output = await runExample('estimate_gas.ts');
-    expect(output).toContain('gas');
-  });
+tap.test("should run details_of_single_provider example without errors", async t => {
+  t.plan(1);
+  const output = await runExample("details_of_single_provider.ts");
+  t.has(output, "owner");
+});
 
-  it('should run get_deployments example without errors', async () => {
-    const output = await runExample('get_deployments.ts');
-    expect(output).toContain('deployments');
-  });
+tap.test("should run estimate_gas example without errors", async t => {
+  t.plan(1);
+  const output = await runExample("estimate_gas.ts");
+  t.has(output, "gas");
+});
 
-  it('should run get_lease_status example without errors', async () => {
-    const output = await runExample('get_lease_status.ts');
-    expect(output).toContain('lease');
-  });
+tap.test("should run get_deployments example without errors", async t => {
+  t.plan(1);
+  const output = await runExample("get_deployments.ts");
+  t.has(output, "deployments");
+});
 
-  it('should run list_all_providers example without errors', async () => {
-    const output = await runExample('list_all_providers.ts');
-    expect(output).toContain('providers');
-  });
+tap.test("should run get_lease_status example without errors", async t => {
+  t.plan(1);
+  const output = await runExample("get_lease_status.ts");
+  t.has(output, "lease");
+});
 
-  it('should run signed_message example without errors', async () => {
-    const output = await runExample('signed_message.ts');
-    expect(output).toContain('test message');
-  });
+tap.test("should run list_all_providers example without errors", async t => {
+  t.plan(1);
+  const output = await runExample("list_all_providers.ts");
+  t.has(output, "providers");
+});
 
-  it('should run signed_msg_send example without errors', async () => {
-    const output = await runExample('signed_msg_send.ts');
-    expect(output).toContain('send funds with akashjs');
-  });
+tap.test("should run signed_message example without errors", async t => {
+  t.plan(1);
+  const output = await runExample("signed_message.ts");
+  t.has(output, "test message");
+});
 
-  it('should run take_down_deployment example without errors', async () => {
-    const output = await runExample('take_down_deployment.ts');
-    expect(output).toContain('take down deployment');
-  });
+tap.test("should run signed_msg_send example without errors", async t => {
+  t.plan(1);
+  const output = await runExample("signed_msg_send.ts");
+  t.has(output, "send funds with akashjs");
+});
+
+tap.test("should run take_down_deployment example without errors", async t => {
+  t.plan(1);
+  const output = await runExample("take_down_deployment.ts");
+  t.has(output, "take down deployment");
 });
