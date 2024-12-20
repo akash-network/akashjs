@@ -4,15 +4,19 @@ import { getRpc } from "@akashnetwork/akashjs/build/rpc";
 async function main() {
   const request = QueryDeploymentsRequest.fromJSON({
     filters: {
-      owner: "akashSomeOwnerAddress"
+      owner: "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk"
     }
   });
 
-  const client = new QueryClientImpl(await getRpc("http://your.rpc.node"));
-  const response = await client.Deployments(request);
-  const data = QueryDeploymentsResponse.toJSON(response);
+  const client = new QueryClientImpl(await getRpc("https://rpc.akashnet.net:443"));
 
-  console.log(data);
+  try {
+    const response = await client.Deployments(request);
+    const data = QueryDeploymentsResponse.toJSON(response);
+    console.log(data);
+  } catch (error) {
+    console.error("Error fetching deployments:", error);
+  }
 }
 
 main();
