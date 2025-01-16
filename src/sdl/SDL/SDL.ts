@@ -60,11 +60,11 @@ type NetworkVersion = "beta2" | "beta3";
 /**
  * SDL (Stack Definition Language) parser and validator
  * Handles parsing and validation of Akash deployment manifests
- * 
+ *
  * @example
  * ```ts
  * import { SDL } from './SDL';
- * 
+ *
  * const yaml = `
  * version: "2.0"
  * services:
@@ -76,13 +76,13 @@ type NetworkVersion = "beta2" | "beta3";
  *         to:
  *           - global: true
  * `;
- * 
+ *
  * // Parse SDL from YAML string
  * const sdl = SDL.fromString(yaml);
- * 
+ *
  * // Get deployment manifest
  * const manifest = sdl.manifest();
- * 
+ *
  * // Get deployment groups
  * const groups = sdl.groups();
  * ```
@@ -90,12 +90,12 @@ type NetworkVersion = "beta2" | "beta3";
 export class SDL {
   /**
    * Creates an SDL instance from a YAML string.
-   * 
+   *
    * @param {string} yaml - The YAML string containing the SDL definition.
    * @param {NetworkVersion} [version="beta2"] - The SDL version (beta2 or beta3).
    * @param {NetworkId} [networkId=MAINNET_ID] - The network ID to validate against.
    * @returns {SDL} An instance of the SDL class.
-   * 
+   *
    * @example
    * ```ts
    * const yaml = `
@@ -135,11 +135,11 @@ export class SDL {
 
   /**
    * Validates the GPU configuration for a given service profile.
-   * 
+   *
    * @param {string} name - The name of the service profile.
    * @param {v3ResourceGPU | undefined} gpu - The GPU resource configuration.
    * @throws Will throw an error if the GPU configuration is invalid.
-   * 
+   *
    * @example
    * ```ts
    * const gpuConfig = { units: "1", attributes: { vendor: { nvidia: [{ model: "RTX 3080", ram: "10GB" }] } } };
@@ -189,11 +189,11 @@ export class SDL {
 
   /**
    * Validates the storage configuration for a given service.
-   * 
+   *
    * @param {string} name - The name of the service.
    * @param {v2ResourceStorage | v2ResourceStorageArray} [storage] - The storage resource configuration.
    * @throws Will throw an error if the storage configuration is invalid.
-   * 
+   *
    * @example
    * ```ts
    * const storageConfig = { size: "10Gi", attributes: { class: "ssd" } };
@@ -663,11 +663,11 @@ export class SDL {
 
   /**
    * Parses the service protocol.
-   * 
+   *
    * @param proto - The protocol string (e.g., "TCP", "UDP").
    * @returns The parsed protocol.
    * @throws Will throw an error if the protocol is unsupported.
-   * 
+   *
    * @example
    * ```ts
    * const protocol = SDL.parseServiceProto("TCP");
@@ -911,10 +911,10 @@ export class SDL {
 
   /**
    * Computes the endpoint sequence numbers for the given SDL.
-   * 
+   *
    * @param sdl - The SDL data.
    * @returns An object mapping IPs to their sequence numbers.
-   * 
+   *
    * @example
    * ```ts
    * const sequenceNumbers = sdl.computeEndpointSequenceNumbers(sdlData);
@@ -1240,10 +1240,10 @@ export class SDL {
 
   /**
    * Escapes HTML characters in a string.
-   * 
+   *
    * @param raw - The raw string to escape.
    * @returns The escaped string.
-   * 
+   *
    * @example
    * ```ts
    * const escaped = sdl.escapeHtml("<div>Hello</div>");
