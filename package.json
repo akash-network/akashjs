@@ -36,7 +36,8 @@
     "test:unit": "tap --ts tests/test_*.ts && jest --selectProjects unit",
     "test:unit-snapshot": "tap --ts --snapshot tests/test_*.ts",
     "test:unit:cov": "jest --selectProjects unit --coverage",
-    "test:unit:watch": "jest --selectProjects unit --watch"
+    "test:unit:watch": "jest --selectProjects unit --watch",
+    "example": "cd examples && npm i && ts-node -r tsconfig-paths/register"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

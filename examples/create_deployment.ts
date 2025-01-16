@@ -13,10 +13,16 @@ import { CertificatePem } from "@akashnetwork/akashjs/build/certificates/certifi
 import { certificateManager } from "@akashnetwork/akashjs/build/certificates/certificate-manager";
 import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
 
-// update this with your wallet mnemonic
+// In case you want to test on a sandbox environment, uncomment the following line and comment the following line
 const rpcEndpoint = "https://rpc.sandbox-01.aksh.pw";
+
+// Update this with your RPC endpoint
 // const rpcEndpoint = "https://rpc.akashnet.net:443";
+
+// Update this with your wallet mnemonic
 const mnemonic = fs.readFileSync(path.resolve(__dirname, "./fixtures/mnemonic.txt"), "utf8").trim();
+
+// Update this with your SDL file
 const rawSDL = fs.readFileSync(path.resolve(__dirname, "./fixtures/example.sdl.yaml"), "utf8");
 const certificatePath = path.resolve(__dirname, "./fixtures/cert.json");
 

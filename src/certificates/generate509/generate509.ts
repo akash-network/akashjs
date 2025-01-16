@@ -16,6 +16,7 @@ const {
   BasicConstraints,
   Extension,
   ExtKeyUsage
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
 } = require("pkijs/build");
 
 const HASH_ALG = "SHA-256";
@@ -99,11 +100,7 @@ export async function create(address: string): Promise<pems> {
  *   console.log(cert); // Outputs the generated certificate
  * });
  */
-async function createCSR(
-  keyPair: { privateKey: string; publicKey: string },
-  hashAlg: string,
-  { commonName }: { commonName: string }
-) {
+async function createCSR(keyPair: { privateKey: string; publicKey: string }, hashAlg: string, { commonName }: { commonName: string }) {
   const cert = new Certificate();
   cert.version = 2; // Set certificate version to v3
 
@@ -220,11 +217,7 @@ function formatPEM(pemString: string) {
  * console.log(cert.notBefore.value); // Outputs the start date
  * console.log(cert.notAfter.value); // Outputs the end date
  */
-function setValidityPeriod(
-  cert: { notBefore: { value: Date }; notAfter: { value: Date } },
-  startDate: Date,
-  durationInDays: number
-) {
+function setValidityPeriod(cert: { notBefore: { value: Date }; notAfter: { value: Date } }, startDate: Date, durationInDays: number) {
   // Normalize start date to midnight
   const start = new Date(startDate);
   start.setHours(0);
