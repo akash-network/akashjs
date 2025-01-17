@@ -57,17 +57,18 @@
     "atob": "^2.1.2",
     "axios": "^0.24.0",
     "console-browserify": "^1.2.0",
+    "dotenv": "^16.4.7",
     "js-yaml": "^4.1.0",
     "json-stable-stringify": "^1.0.2",
     "jsrsasign": "^11.1.0",
     "keytar": "^7.7.0",
+    "lodash": "^4.17.21",
     "node-fetch": "2",
     "pkijs": "^3.0.0",
     "process": "^0.11.10",
     "pvutils": "^1.0.17",
     "simple-jsonrpc-js": "^1.2.0",
-    "sort-json": "^2.0.1",
-    "lodash": "^4.17.21"
+    "sort-json": "^2.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.2.2",

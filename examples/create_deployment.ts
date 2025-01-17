@@ -12,15 +12,21 @@ import { getAkashTypeRegistry } from "@akashnetwork/akashjs/build/stargate";
 import { CertificatePem } from "@akashnetwork/akashjs/build/certificates/certificate-manager/CertificateManager";
 import { certificateManager } from "@akashnetwork/akashjs/build/certificates/certificate-manager";
 import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
+import dotenv from "dotenv";
+
+dotenv.config({ path: "../.env" });
 
 // In case you want to test on a sandbox environment, uncomment the following line and comment the following line
-const rpcEndpoint = "https://rpc.sandbox-01.aksh.pw";
+// const rpcEndpoint = "https://rpc.sandbox-01.aksh.pw";
 
 // Update this with your RPC endpoint
-// const rpcEndpoint = "https://rpc.akashnet.net:443";
+const rpcEndpoint = "https://rpc.akashnet.net:443";
 
-// Update this with your wallet mnemonic
-const mnemonic = fs.readFileSync(path.resolve(__dirname, "./fixtures/mnemonic.txt"), "utf8").trim();
+// Update this environment variable with your wallet mnemonic
+const mnemonic = process.env.MNEMONIC || "";
+if (!mnemonic) {
+  throw new Error("MNEMONIC environment variable is not set. Please set the environment variable in the .env file. See .env.sample for more information.");
+}
 
 // Update this with your SDL file
 const rawSDL = fs.readFileSync(path.resolve(__dirname, "./fixtures/example.sdl.yaml"), "utf8");

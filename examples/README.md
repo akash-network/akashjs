@@ -2,6 +2,8 @@
 
 This directory contains several examples of how to interact with the Akash networking using AkashJS and CosmJS.
 
+## Setup
+
 You can integrate the following examples in either a nodejs environment with self managed keys/wallet or in the browser using wallet extensions.
 
 - [How to setup for node.js](#how-to-setup-for-nodejs)
@@ -10,6 +12,12 @@ You can integrate the following examples in either a nodejs environment with sel
 Once you have a wallet setup, you need to fund it with $AKT tokens to pay for transactions fees and deployments.
 
 - [Purchasing Akash Tokens](https://akash.network/docs/getting-started/token-and-wallets/#purchasing-akash-tokens)
+
+Environment variable setup:
+
+- Create an `.env` file at the root of the repo following the [.env.sample](../.env.sample)
+
+## Code examples
 
 Please follow the following examples to interact with the Akash Network:
 
@@ -34,6 +42,8 @@ To run an example, you need to make the required changes to the code and use typ
 
 ```bash
 npm run example create_deployment.ts
+// or other examples
+npm run example <name_of_the_example.ts>
 ```
 
 ## How to setup for nodejs
@@ -44,7 +54,27 @@ First you need a wallet. You can either [create one](#wallet-creation) with prog
 
 We strongly recommend to use [cosmos-kit](https://docs.cosmology.zone/cosmos-kit/get-started), which supports multiple wallet extensions and a lot of utility functions. Follow their get started guide to setup your React application to be able to interact with a wallet extension and broadcast transactions.
 
-###  Wallet Creation
+## Dependencies installation
+
+Install the following dependencies for general usage and signing transactions with an existing wallet
+
+```bash
+npm i @akashnetwork/akash-api @akashnetwork/akashjs @cosmjs/stargate @cosmjs/proto-signing
+```
+
+If you want to create wallets
+
+```bash
+npm i @cosmjs/launchpad
+```
+
+For [amino encoding](https://docs.cosmos.network/main/learn/advanced/encoding#encoding-1)
+
+```bash
+npm i @cosmjs/amino
+```
+
+### Wallet Creation
 
 The following code shows an example of the process for creating a new Akash wallet. The wallet can be used to access accounts which contain private/public key pairs and their associated addresses.
 
@@ -54,9 +84,7 @@ A new wallet can be initialized by calling `Secp256k1HdWallet.generate` from @co
 import { Secp256k1HdWallet } from "@cosmjs/launchpad";
 
 // the first parameter for generate is the size of the mnemonic, default is 12
-const wallet = await Secp256k1HdWallet
-	.generate(undefined, { prefix: "akash" });
-
+const wallet = await Secp256k1HdWallet.generate(undefined, { prefix: "akash" });
 ```
 
 After the wallet is created, specific private/public key pairs are available via `getAccounts`.
@@ -64,8 +92,7 @@ After the wallet is created, specific private/public key pairs are available via
 ```ts
 import { Secp256k1HdWallet } from "@cosmjs/launchpad";
 
-const wallet = await Secp256k1HdWallet
-	.generate(undefined, { prefix: "akash" });
+const wallet = await Secp256k1HdWallet.generate(undefined, { prefix: "akash" });
 
 // gets the first account
 const [account] = await wallet.getAccounts();
@@ -76,8 +103,7 @@ The account address, as well as its public key, are available as properties on t
 ```ts
 import { Secp256k1HdWallet } from "@cosmjs/launchpad";
 
-const wallet = await Secp256k1HdWallet
-	.generate(undefined, { prefix: "akash" });
+const wallet = await Secp256k1HdWallet.generate(undefined, { prefix: "akash" });
 
 const [account] = await wallet.getAccounts();
 
@@ -96,16 +122,12 @@ function getMessage(): StdSignDoc {
   // implements custom message
 }
 
-const wallet = await Secp256k1HdWallet
-    .generate(undefined, { prefix: "akash" });
+const wallet = await Secp256k1HdWallet.generate(undefined, { prefix: "akash" });
 
 const [account] = await wallet.getAccounts();
 const msg = getMessage(); // your custom message
 
-const signedMessage = await wallet.signAmino(
-    account.address,
-    msg
-);
+const signedMessage = await wallet.signAmino(account.address, msg);
 ```
 
 ## Signed Transactions
@@ -116,7 +138,6 @@ To create the message, the appropriate _type_ can be imported from `akashjs`.
 
 ```ts
 import { MsgCloseDeployment } from "@akashnetwork/akashjs/build/src/protobuf/akash/deployment/v1beta1/deployment";
-
 ```
 
 This type contains the methods needed to construct a message that can then be passed into a Stargate client to be signed and broadcast.
@@ -131,53 +152,42 @@ const [account] = await wallet.getAccounts();
 
 // Use the encode method for the message to wrap the data
 const message = MsgCloseDeployment.fromPartial({
-    id: {
-        dseq: "555555",
-        owner: account.address,
-    }
+  id: {
+    dseq: "555555",
+    owner: account.address
+  }
 });
 
 // Set the appropriate typeUrl and attach the encoded message as the value
 const msgAny = {
-    typeUrl: getTypeUrl(MsgCloseDeployment),
-    value: message
+  typeUrl: getTypeUrl(MsgCloseDeployment),
+  value: message
 };
 
 // You can use your own RPC node, or get a list of public nodes from akashjs
 const rpcEndpoint = "http://rpc.akashnet.net";
 
 // The akash types need to be registered with the client
-const myRegistry = new Registry(
-    getAkashTypeRegistry()
-);
+const myRegistry = new Registry(getAkashTypeRegistry());
 
 // Instantiate the signer client
-const client = await SigningStargateClient.connectWithSigner(
-    rpcEndpoint,
-    wallet,
-    {
-        registry: myRegistry
-    }
-);
+const client = await SigningStargateClient.connectWithSigner(rpcEndpoint, wallet, {
+  registry: myRegistry
+});
 
 // Create the fee object to pay for the transaction
 const fee = {
-    amount: [
-        {
-            denom: "uakt",
-            amount: "5000",
-        },
-    ],
-    gas: "800000",
+  amount: [
+    {
+      denom: "uakt",
+      amount: "5000"
+    }
+  ],
+  gas: "800000"
 };
 
 // Sign and broadcast the transaction
-const signedMessage = await client.signAndBroadcast(
-    account.address,
-    [msgAny],
-    fee,
-    "take down deployment"
-);
+const signedMessage = await client.signAndBroadcast(account.address, [msgAny], fee, "take down deployment");
 ```
 
 ## Signing MsgSend
@@ -197,48 +207,37 @@ const [account] = await wallet.getAccounts();
 // Setup a send message manually. See the appropriate repo (cosmjs in this case)
 // for the specific shape of the message.
 const message = {
-    fromAddress: account.address,
-    toAddress: "akash123...",
-    amount: coins(10, "akt"),
+  fromAddress: account.address,
+  toAddress: "akash123...",
+  amount: coins(10, "akt")
 };
 
 // Set the appropriate typeUrl and attach the encoded message as the value
 const msgAny = {
-    typeUrl: '/cosmos.bank.v1beta1.MsgSend',
-    value: message
+  typeUrl: "/cosmos.bank.v1beta1.MsgSend",
+  value: message
 };
 
 // You can use your own RPC node, or get a list of public nodes from akashjs
 const rpcEndpoint = "http://your.rpc.node";
 
-const myRegistry = new Registry(
-    defaultRegistryTypes
-);
+const myRegistry = new Registry(defaultRegistryTypes);
 
-const client = await SigningStargateClient.connectWithSigner(
-    rpcEndpoint,
-    wallet,
-    {
-        registry: myRegistry
-    }
-);
+const client = await SigningStargateClient.connectWithSigner(rpcEndpoint, wallet, {
+  registry: myRegistry
+});
 
 const fee = {
-    amount: [
-        {
-            denom: "uakt",
-            amount: "5000",
-        },
-    ],
-    gas: "800000",
+  amount: [
+    {
+      denom: "uakt",
+      amount: "5000"
+    }
+  ],
+  gas: "800000"
 };
 
-const msg = await client.sign(
-    account.address,
-    [msgAny],
-    fee,
-    "send some tokens"
-);
+const msg = await client.sign(account.address, [msgAny], fee, "send some tokens");
 ```
 
 ## Estimating Gas
@@ -246,48 +245,38 @@ const msg = await client.sign(
 When sending transactions, it can be useful to get an estimate of the gas required for a given message. This can be done using the `simulate` method of the signing client which will send the passed in message to an RPC node which will return the estimated gas for that transaction. Before is an example of doing this for the same transaction as shown above.
 
 ```ts
-    const mnemonic = "your wallet mnemonic";
-    const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: "akash" });
+const mnemonic = "your wallet mnemonic";
+const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: "akash" });
 
-    // get first account
-    const [account] = await wallet.getAccounts();
+// get first account
+const [account] = await wallet.getAccounts();
 
-    // Use the encode method for the message to wrap the data
-    const message = MsgCloseDeployment.fromPartial({
-        id: {
-            dseq: "555555",
-            owner: account.address,
-        }
-    });
+// Use the encode method for the message to wrap the data
+const message = MsgCloseDeployment.fromPartial({
+  id: {
+    dseq: "555555",
+    owner: account.address
+  }
+});
 
-    // Set the appropriate typeUrl and attach the encoded message as the value
-    const msgAny = {
-        typeUrl: getTypeUrl(MsgCloseDeployment),
-        value: message
-    };
+// Set the appropriate typeUrl and attach the encoded message as the value
+const msgAny = {
+  typeUrl: getTypeUrl(MsgCloseDeployment),
+  value: message
+};
 
-    // You can use your own RPC node, or get a list of public nodes from akashjs
-    const rpcEndpoint = "http://my.rpc.node";
+// You can use your own RPC node, or get a list of public nodes from akashjs
+const rpcEndpoint = "http://rpc.akashnet.net";
 
-    const myRegistry = new Registry(
-        getAkashTypeRegistry()
-    );
+const myRegistry = new Registry(getAkashTypeRegistry());
 
-    const client = await SigningStargateClient.connectWithSigner(
-        rpcEndpoint,
-        wallet,
-        {
-            registry: myRegistry
-        }
-    );
+const client = await SigningStargateClient.connectWithSigner(rpcEndpoint, wallet, {
+  registry: myRegistry
+});
 
-    const gas = await client.simulate(
-        account.address,
-        [msgAny],
-        "take down deployment"
-    );
+const gas = await client.simulate(account.address, [msgAny], "take down deployment");
 
-    console.log(gas);
+console.log(gas);
 ```
 
 ## Querying on chain data
@@ -297,17 +286,13 @@ Querying on-chain data can be done using the basic RPC capabilities build into `
 For example, to query the list of deployments, an RPC request can be created as such.
 
 ```ts
-import {
-    QueryDeploymentsResponse,
-    QueryDeploymentsRequest,
-    QueryClientImpl
-} from "@akashnetwork/akashjs/build/protobuf/akash/deployment/v1beta1/query";
-import { getRpc } from "@akashnetwork/akashjs/build/rpc"
+import { QueryDeploymentsResponse, QueryDeploymentsRequest, QueryClientImpl } from "@akashnetwork/akashjs/build/protobuf/akash/deployment/v1beta1/query";
+import { getRpc } from "@akashnetwork/akashjs/build/rpc";
 
 const request = QueryDeploymentsRequest.fromJSON({
-    filters: {
-        owner: "akashSomeOwnerAddress",
-    }
+  filters: {
+    owner: "akashSomeOwnerAddress"
+  }
 });
 ```
 

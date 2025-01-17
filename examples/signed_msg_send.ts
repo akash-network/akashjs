@@ -1,8 +1,14 @@
 import { coins, DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes, SigningStargateClient } from "@cosmjs/stargate";
+import dotenv from "dotenv";
+
+dotenv.config({ path: "../.env" });
 
 async function main() {
-  const mnemonic = "your wallet mnemonic";
+  const mnemonic = process.env.MNEMONIC || "";
+  if (!mnemonic) {
+    throw new Error("MNEMONIC environment variable is not set. Please set the environment variable in the .env file. See .env.sample for more information.");
+  }
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: "akash" });
 
   // get first account

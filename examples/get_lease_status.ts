@@ -2,7 +2,7 @@ import { QueryClientImpl, QueryLeaseRequest, QueryLeaseResponse } from "@akashne
 import { getRpc } from "@akashnetwork/akashjs/build/rpc";
 
 async function main() {
-  const client = new QueryClientImpl(await getRpc("http://your.rpc.node"));
+  const client = new QueryClientImpl(await getRpc("http://rpc.akashnet.net"));
 
   const getLeaseStatusRequest = QueryLeaseRequest.fromPartial({
     id: {
