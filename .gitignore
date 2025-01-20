@@ -23,3 +23,5 @@ yarn-error.log
 .coverage/
 coverage/
 
+.env
+cert.json

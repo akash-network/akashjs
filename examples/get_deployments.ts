@@ -8,7 +8,7 @@ async function main() {
     }
   });
 
-  const client = new QueryClientImpl(await getRpc("http://your.rpc.node"));
+  const client = new QueryClientImpl(await getRpc("http://rpc.akashnet.net"));
   const response = await client.Deployments(request);
   const data = QueryDeploymentsResponse.toJSON(response);
 

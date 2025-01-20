@@ -14,7 +14,7 @@ const FEE = {
 
 /**
  * Creates an Amino message object.
- * 
+ *
  * @param {Message} message - The type of the message.
  * @param {AminoMsg} messageBody - The body of the message.
  * @returns {object} The Amino message object.
@@ -36,7 +36,7 @@ type MessageTypes = {
 
 /**
  * Creates a Stargate message object with a fee.
- * 
+ *
  * @template T
  * @param {T} message - The type of the message.
  * @param {MessageTypes[T]} messageBody - The body of the message.

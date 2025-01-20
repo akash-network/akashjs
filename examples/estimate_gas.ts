@@ -2,9 +2,15 @@ import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { MsgCloseDeployment } from "@akashnetwork/akash-api/akash/deployment/v1beta3";
 import { getAkashTypeRegistry, getTypeUrl } from "@akashnetwork/akashjs/build/stargate";
+import dotenv from "dotenv";
+
+dotenv.config({ path: "../.env" });
 
 async function main() {
-  const mnemonic = "your wallet mnemonic";
+  const mnemonic = process.env.MNEMONIC || "";
+  if (!mnemonic) {
+    throw new Error("MNEMONIC environment variable is not set. Please set the environment variable in the .env file. See .env.sample for more information.");
+  }
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: "akash" });
 
   // get first account
@@ -25,7 +31,7 @@ async function main() {
   };
 
   // You can use your own RPC node, or get a list of public nodes from akashjs
-  const rpcEndpoint = "http://my.rpc.node";
+  const rpcEndpoint = "http://rpc.akashnet.net";
 
   const myRegistry = new Registry(getAkashTypeRegistry());
 
