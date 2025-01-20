@@ -1,3 +1,12 @@
+## [0.11.0](https://github.com/akash-network/akashjs/compare/v0.10.1...v0.11.0) (2025-01-20)
+
+
+### Features
+
+* Add JSDoc comments with examples to ValidationError and SdlValidationError classes ([c7788e5](https://github.com/akash-network/akashjs/commit/c7788e5e73b45e5b060ba07ed7260cc8995de037))
+* Add JSDoc comments with examples to ValidationError and SdlValidationError classes ([916cf7c](https://github.com/akash-network/akashjs/commit/916cf7ce7306cbab7fc854ffb24d595709ad45f9))
+* **examples:** improve documentation ([#117](https://github.com/akash-network/akashjs/issues/117)) ([16cb3c3](https://github.com/akash-network/akashjs/commit/16cb3c3d4b19da5377ddce27c682aced404c6112))
+
 ## [0.10.1](https://github.com/akash-network/akashjs/compare/v0.10.0...v0.10.1) (2024-11-20)
 
 
