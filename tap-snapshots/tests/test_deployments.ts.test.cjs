@@ -10,6 +10,106 @@ Object {
   "deployments": Array [
     Object {
       "deployment": Object {
+        "createdAt": "2541988",
+        "deploymentId": Object {
+          "dseq": "2528509",
+          "owner": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
+        },
+        "state": "active",
+        "version": "qFLm0mkB5KLnuGkXkSYKsuFaEFI3ZFbAs532dVZwP5I=",
+      },
+      "escrowAccount": Object {
+        "balance": Object {
+          "amount": "5000000.00000000000",
+          "denom": "uakt",
+        },
+        "depositor": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
+        "funds": Object {
+          "amount": "0.00000000000000000",
+          "denom": "uakt",
+        },
+        "id": Object {
+          "scope": "deployment",
+          "xid": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk/2528509",
+        },
+        "owner": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
+        "settledAt": "2541988",
+        "state": "open",
+        "transferred": Object {
+          "amount": "0.00000000000000000",
+          "denom": "uakt",
+        },
+      },
+      "groups": Array [
+        Object {
+          "createdAt": "2541988",
+          "groupId": Object {
+            "dseq": "2528509",
+            "gseq": 1,
+            "owner": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
+          },
+          "groupSpec": Object {
+            "name": "westcoast",
+            "requirements": Object {
+              "attributes": Array [
+                Object {
+                  "key": "host",
+                  "value": "akash",
+                },
+              ],
+              "signedBy": Object {
+                "anyOf": Array [
+                  "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
+                ],
+              },
+            },
+            "resources": Array [
+              Object {
+                "count": 1,
+                "price": Object {
+                  "amount": "1000.00000000000000",
+                  "denom": "uakt",
+                },
+                "resource": Object {
+                  "cpu": Object {
+                    "units": Object {
+                      "val": "MTAw",
+                    },
+                  },
+                  "endpoints": Array [
+                    Object {
+                      "kind": "RANDOM_PORT",
+                    },
+                  ],
+                  "gpu": Object {
+                    "units": Object {
+                      "val": "MA==",
+                    },
+                  },
+                  "id": 1,
+                  "memory": Object {
+                    "quantity": Object {
+                      "val": "NTM2ODcwOTEy",
+                    },
+                  },
+                  "storage": Array [
+                    Object {
+                      "name": "default",
+                      "quantity": Object {
+                        "val": "NTM2ODcwOTEy",
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+          "state": "open",
+        },
+      ],
+    },
+    Object {
+      "deployment": Object {
         "createdAt": "1027707",
         "deploymentId": Object {
           "dseq": "1027706",
@@ -505,106 +605,6 @@ Object {
             ],
           },
           "state": "closed",
-        },
-      ],
-    },
-    Object {
-      "deployment": Object {
-        "createdAt": "2541988",
-        "deploymentId": Object {
-          "dseq": "2528509",
-          "owner": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
-        },
-        "state": "active",
-        "version": "qFLm0mkB5KLnuGkXkSYKsuFaEFI3ZFbAs532dVZwP5I=",
-      },
-      "escrowAccount": Object {
-        "balance": Object {
-          "amount": "5000000.00000000000",
-          "denom": "uakt",
-        },
-        "depositor": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
-        "funds": Object {
-          "amount": "0.00000000000000000",
-          "denom": "uakt",
-        },
-        "id": Object {
-          "scope": "deployment",
-          "xid": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk/2528509",
-        },
-        "owner": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
-        "settledAt": "2541988",
-        "state": "open",
-        "transferred": Object {
-          "amount": "0.00000000000000000",
-          "denom": "uakt",
-        },
-      },
-      "groups": Array [
-        Object {
-          "createdAt": "2541988",
-          "groupId": Object {
-            "dseq": "2528509",
-            "gseq": 1,
-            "owner": "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
-          },
-          "groupSpec": Object {
-            "name": "westcoast",
-            "requirements": Object {
-              "attributes": Array [
-                Object {
-                  "key": "host",
-                  "value": "akash",
-                },
-              ],
-              "signedBy": Object {
-                "anyOf": Array [
-                  "akash1qqzwc5d7hynl67nsmn9jukvwqp3vzdl6j2t7lk",
-                ],
-              },
-            },
-            "resources": Array [
-              Object {
-                "count": 1,
-                "price": Object {
-                  "amount": "1000.00000000000000",
-                  "denom": "uakt",
-                },
-                "resource": Object {
-                  "cpu": Object {
-                    "units": Object {
-                      "val": "MTAw",
-                    },
-                  },
-                  "endpoints": Array [
-                    Object {
-                      "kind": "RANDOM_PORT",
-                    },
-                  ],
-                  "gpu": Object {
-                    "units": Object {
-                      "val": "MA==",
-                    },
-                  },
-                  "id": 1,
-                  "memory": Object {
-                    "quantity": Object {
-                      "val": "NTM2ODcwOTEy",
-                    },
-                  },
-                  "storage": Array [
-                    Object {
-                      "name": "default",
-                      "quantity": Object {
-                        "val": "NTM2ODcwOTEy",
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-          },
-          "state": "open",
         },
       ],
     },
