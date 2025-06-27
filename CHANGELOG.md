@@ -1,3 +1,10 @@
+## [0.11.1](https://github.com/akash-network/akashjs/compare/v0.11.0...v0.11.1) (2025-06-27)
+
+
+### Bug Fixes
+
+* updates deps ([e4c9e87](https://github.com/akash-network/akashjs/commit/e4c9e87ef28b61ab36b9c000f295a45894e53b37))
+
 ## [0.11.0](https://github.com/akash-network/akashjs/compare/v0.10.1...v0.11.0) (2025-01-20)
 
 
