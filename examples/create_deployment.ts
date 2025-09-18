@@ -13,6 +13,9 @@ import { CertificatePem } from "@akashnetwork/akashjs/build/certificates/certifi
 import { certificateManager } from "@akashnetwork/akashjs/build/certificates/certificate-manager";
 import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
 import dotenv from "dotenv";
+import * as dns from "dns";
+import { promisify } from "util";
+import * as tls from "tls";
 
 dotenv.config({ path: "../.env" });
 
@@ -326,8 +329,6 @@ async function sendManifest(sdl: SDL, lease: Lease, wallet: DirectSecp256k1HdWal
   
   // For MTLS, we need to avoid SNI by using IP address instead of hostname
   // This prevents Node.js from automatically setting SNI
-  const dns = require('dns');
-  const { promisify } = require('util');
   const lookup = promisify(dns.lookup);
   
   // Resolve hostname to IP to avoid SNI
@@ -335,7 +336,6 @@ async function sendManifest(sdl: SDL, lease: Lease, wallet: DirectSecp256k1HdWal
   
   await new Promise((resolve, reject) => {
     // Use raw TLS connection to avoid SNI
-    const tls = require('tls');
     
     const socket = tls.connect({
       host: ipAddress.address,
