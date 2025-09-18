@@ -147,7 +147,7 @@ async function createDeployment(sdl: SDL, wallet: DirectSecp256k1HdWallet, clien
     groups: groups,
     deposit: {
       denom: "uakt",
-      amount: "5000000"
+      amount: "500000"
     },
     version: await sdl.manifestVersion(),
     depositor: accounts[0].address
@@ -323,44 +323,67 @@ async function sendManifest(sdl: SDL, lease: Lease, wallet: DirectSecp256k1HdWal
   const path = `/deployment/${dseq}/manifest`;
 
   const uri = new URL(providerInfo.hostUri);
-  const agent = new https.Agent({
-    cert: certificate.cert,
-    key: certificate.privateKey,
-    rejectUnauthorized: false
-  });
-
+  
+  // For MTLS, we need to avoid SNI by using IP address instead of hostname
+  // This prevents Node.js from automatically setting SNI
+  const dns = require('dns');
+  const { promisify } = require('util');
+  const lookup = promisify(dns.lookup);
+  
+  // Resolve hostname to IP to avoid SNI
+  const ipAddress = await lookup(uri.hostname);
+  
   await new Promise((resolve, reject) => {
-    const req = https.request(
-      {
-        hostname: uri.hostname,
-        port: uri.port,
-        path: path,
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "Content-Length": manifest.length
-        },
-        agent: agent
-      },
-      res => {
-        res.on("error", reject);
+    // Use raw TLS connection to avoid SNI
+    const tls = require('tls');
+    
+    const socket = tls.connect({
+      host: ipAddress.address,
+      port: parseInt(uri.port),
+      cert: certificate.cert,
+      key: certificate.privateKey,
+      rejectUnauthorized: false,
+      // Explicitly disable SNI
+      servername: undefined,
+      checkServerIdentity: () => undefined
+    }, () => {
+      console.log("TLS connection established without SNI!");
+      
+      // Send HTTP request manually
+      const httpRequest = `PUT ${path} HTTP/1.1\r\n` +
+        `Host: ${uri.hostname}\r\n` +
+        `Content-Type: application/json\r\n` +
+        `Accept: application/json\r\n` +
+        `Content-Length: ${manifest.length}\r\n` +
+        `Connection: close\r\n\r\n` +
+        manifest;
+      
+      socket.write(httpRequest);
+    });
 
-        res.on("data", chunk => {
-          console.log("Response:", chunk.toString());
-        });
+    let responseData = '';
+    socket.on('data', (data: Buffer) => {
+      responseData += data.toString();
+    });
 
-        if (res.statusCode !== 200) {
-          return reject(`Could not send manifest: ${res.statusCode}`);
-        }
-
-        resolve("ok");
+    socket.on('end', () => {
+      console.log("Response:", responseData);
+      
+      // Parse HTTP response
+      const lines = responseData.split('\r\n');
+      const statusLine = lines[0];
+      const statusCode = parseInt(statusLine.split(' ')[1]);
+      
+      if (statusCode !== 200) {
+        return reject(`Could not send manifest: ${statusCode}`);
       }
-    );
+      
+      resolve("ok");
+    });
 
-    req.on("error", reject);
-    req.write(manifest);
-    req.end();
+    socket.on('error', (err: Error) => {
+      reject(err);
+    });
   });
 
   const startTime = Date.now();
