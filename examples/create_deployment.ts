@@ -150,7 +150,7 @@ async function createDeployment(sdl: SDL, wallet: DirectSecp256k1HdWallet, clien
     groups: groups,
     deposit: {
       denom: "uakt",
-      amount: "500000"
+      amount: "5000000"
     },
     version: await sdl.manifestVersion(),
     depositor: accounts[0].address
