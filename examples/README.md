@@ -303,3 +303,75 @@ const client = new QueryClientImpl(await getRpc("https://rpc.akashnet.net")); //
 const response = await client.Deployments(request);
 const data = QueryDeploymentsResponse.toJSON(response);
 ```
+
+## Communicating to provider
+
+To retrieve lease details (such as status, logs, events, shell access, or SDL updates), the client must establish an HTTPS connection to the corresponding Provider API. This connection requires the use of self-signed certificates and must be initiated with Server Name Indication (SNI) disabled.
+
+The Provider API responds with its own self-signed certificate, which the client must validate to ensure the authenticity of the provider’s identity before proceeding.
+
+Example:
+
+```ts
+/**
+ *  @param {LeaseID} id - created lease id on akash blockchain
+ *  @param {string} providerUri - provider host
+ *  @param {CertificatePem} - client certificates which must have the same owner as lease on akash blockchain
+ */
+async function queryLeaseStatus(id: LeaseID, providerUri: string, certificate: CertificatePem) {
+  if (id === undefined) {
+    throw new Error("Lease ID is undefined");
+  }
+
+  const leasePath = `/lease/${id.dseq}/${id.gseq}/${id.oseq}/status`;
+
+  const agent = new https.Agent({
+    cert: certificate.cert,
+    key: certificate.privateKey,
+    rejectUnauthorized: false, // provider API responds with self-signed certificate but it needs to be verified manually!
+    servername: "" // required to disable SNI, so the provider API will use mTLS authentication (e.i., self-signed certificates)
+  });
+
+  const uri = new URL(providerUri);
+
+  return new Promise<{ services: Record<string, { uris: string[] }> }>((resolve, reject) => {
+    const req = https.request(
+      {
+        hostname: uri.hostname,
+        port: uri.port,
+        path: leasePath,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        agent: agent
+      },
+      res => {
+        if (!(res.socket instanceof TLSSocket)) {
+          return reject(new Error('Insecure connection established with the provider'));
+        }
+
+        const serverCert = res.socket.getPeerX509Certificate();
+        // TODO: validate serverCert, ensure it's not expired and available on blockchain for this provider.
+        // Nodejs supports TLS session resumption, so the handshake phase is skipped for subsequent requests
+        // to improve performance. In this case `serverCert` is null because it's not requested.
+        // If you want to request certificate on every request, just recreate https.Agent on every request.
+        // To do it once, cache and reuse https.Agent per providerUri and certificate
+
+        if (res.statusCode !== 200) {
+          return reject(`Could not query lease status: ${res.statusCode}`);
+        }
+
+        let data = "";
+
+        res.on("data", chunk => (data += chunk));
+        res.on("end", () => resolve(JSON.parse(data)));
+      }
+    );
+
+    req.on("error", reject);
+    req.end();
+  });
+}
+```
