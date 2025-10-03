@@ -265,7 +265,8 @@ async function queryLeaseStatus(lease: Lease, providerUri: string, certificate: 
   const agent = new https.Agent({
     cert: certificate.cert,
     key: certificate.privateKey,
-    rejectUnauthorized: false
+    rejectUnauthorized: false, // provider API responds with self-signed certificate but it needs to be verified manually!
+    servername: "" // required to disable SNI, so the provider API will use mTLS authentication (e.i., self-signed certificates)
   });
 
   const uri = new URL(providerUri);
