@@ -181,7 +181,7 @@ const expectedVersion = new Uint8Array([
 tap.test("SDL mine: fromString", async t => {
   t.plan(2);
 
-  const sdl = SDL.fromString(testSDL);
+  const sdl = SDL.fromString(testSDL, "beta2");
 
   t.ok(sdl instanceof SDL, "Default SDL is not undefined");
   t.ok(sdl.data !== null, "SDL has data object");
@@ -190,7 +190,7 @@ tap.test("SDL mine: fromString", async t => {
 tap.test("SDL mine: Manifest", async t => {
   t.plan(1);
 
-  const sdl = SDL.fromString(testSDL);
+  const sdl = SDL.fromString(testSDL, "beta2");
   const result = sdl.manifest(true);
   const expected = expectedManifest;
 
@@ -200,7 +200,7 @@ tap.test("SDL mine: Manifest", async t => {
 tap.test("SDL mine: DeploymentGroups", async t => {
   t.plan(1);
 
-  const sdl = SDL.fromString(testSDL);
+  const sdl = SDL.fromString(testSDL, "beta2");
   const result = JSON.parse(JSON.stringify(sdl.groups()));
   const expected = expectedGroups;
 
@@ -210,7 +210,7 @@ tap.test("SDL mine: DeploymentGroups", async t => {
 tap.test("SDL mine: Version", async t => {
   t.plan(1);
 
-  const sdl = SDL.fromString(testSDL);
+  const sdl = SDL.fromString(testSDL, "beta2");
   const result = await sdl.manifestVersion();
   const expected = expectedVersion;
 

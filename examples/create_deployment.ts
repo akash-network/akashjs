@@ -1,10 +1,16 @@
+/**
+ * akashjs examples are working but deprecated.
+ * PLEASE switch to chain-sdk which provides more developer-friendly API with IDE autocomplete support:
+ * https://github.com/akash-network/chain-sdk/tree/main/ts
+ */
+
 import fs from "fs";
 import path from "path";
 import https from "https";
 import { SigningStargateClient } from "@cosmjs/stargate";
-import { MsgCreateDeployment } from "@akashnetwork/akash-api/akash/deployment/v1beta3";
-import { QueryClientImpl as QueryProviderClient, QueryProviderRequest } from "@akashnetwork/akash-api/akash/provider/v1beta3";
-import { QueryBidsRequest, QueryClientImpl as QueryMarketClient, MsgCreateLease, BidID } from "@akashnetwork/akash-api/akash/market/v1beta4";
+import { MsgCreateDeployment, QueryProviderRequest, QueryProviderResponse } from "@akashnetwork/chain-sdk/private-types/akash.v1beta4";
+import { BidID, Source } from "@akashnetwork/chain-sdk/private-types/akash.v1";
+import { QueryBidsRequest, MsgCreateLease, QueryBidsResponse } from "@akashnetwork/chain-sdk/private-types/akash.v1beta5";
 import * as cert from "@akashnetwork/akashjs/build/certificates";
 import { getRpc } from "@akashnetwork/akashjs/build/rpc";
 import { SDL } from "@akashnetwork/akashjs/build/sdl";
@@ -12,15 +18,14 @@ import { getAkashTypeRegistry } from "@akashnetwork/akashjs/build/stargate";
 import { CertificatePem } from "@akashnetwork/akashjs/build/certificates/certificate-manager/CertificateManager";
 import { certificateManager } from "@akashnetwork/akashjs/build/certificates/certificate-manager";
 import { DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
-import dotenv from "dotenv";
+import { createRpcRequest } from "./grpc_client";
+import { QueryInput } from "@akashnetwork/chain-sdk";
+import "./setup";
 
-dotenv.config({ path: "../.env" });
-
-// In case you want to test on a sandbox environment, uncomment the following line and comment the following line
-// const rpcEndpoint = "https://rpc.sandbox-01.aksh.pw";
-
-// Update this with your RPC endpoint
-const rpcEndpoint = "https://rpc.akashnet.net:443";
+const rpcEndpoint = process.env.RPC_ENDPOINT || "";
+if (!rpcEndpoint) {
+  throw new Error("RPC_ENDPOINT environment variable is not set. Please set the environment variable in the .env file. See .env.sample for more information.");
+}
 
 // Update this environment variable with your wallet mnemonic
 const mnemonic = process.env.MNEMONIC || "";
@@ -35,7 +40,7 @@ const certificatePath = path.resolve(__dirname, "./fixtures/cert.json");
 type Deployment = {
   id: {
     owner: string;
-    dseq: number;
+    dseq: number | string;
   };
 };
 
@@ -91,6 +96,7 @@ async function loadOrCreateCertificate(wallet: DirectSecp256k1HdWallet, client: 
   const accounts = await wallet.getAccounts();
   // check to see if we can load the certificate from the fixtures folder
 
+  console.log("Accounts:", accounts[0].address);
   if (fs.existsSync(certificatePath)) {
     return loadCertificate(certificatePath);
   }
@@ -142,15 +148,17 @@ async function createDeployment(sdl: SDL, wallet: DirectSecp256k1HdWallet, clien
   const deployment = {
     id: {
       owner: accounts[0].address,
-      dseq: blockheight
+      dseq: String(blockheight)
     },
     groups: groups,
     deposit: {
-      denom: "uakt",
-      amount: "5000000"
+      sources: [Source.balance],
+      amount: {
+        denom: "uakt",
+        amount: "5000000"
+      },
     },
-    version: await sdl.manifestVersion(),
-    depositor: accounts[0].address
+    hash: await sdl.manifestVersion(),
   };
 
   const fee = {
@@ -164,7 +172,7 @@ async function createDeployment(sdl: SDL, wallet: DirectSecp256k1HdWallet, clien
   };
 
   const msg = {
-    typeUrl: "/akash.deployment.v1beta3.MsgCreateDeployment",
+    typeUrl: `/${MsgCreateDeployment.$type}`,
     value: MsgCreateDeployment.fromPartial(deployment)
   };
 
@@ -177,23 +185,29 @@ async function createDeployment(sdl: SDL, wallet: DirectSecp256k1HdWallet, clien
   throw new Error(`Could not create deployment: ${tx.rawLog} `);
 }
 
-async function fetchBid(dseq: number, owner: string) {
+async function fetchBid(dseq: number | string, owner: string) {
   const rpc = await getRpc(rpcEndpoint);
-  const client = new QueryMarketClient(rpc);
-  const request = QueryBidsRequest.fromPartial({
+
+  const request: QueryInput<QueryBidsRequest> = {
     filters: {
       owner: owner,
       dseq: dseq
     }
-  });
+  };
 
   const startTime = Date.now();
   const timeout = 1000 * 60 * 5;
 
+  const getBids = createRpcRequest(rpc, {
+    methodName: "akash.market.v1beta5.Bids",
+    requestType: QueryBidsRequest,
+    responseType: QueryBidsResponse
+  });
+
   while (Date.now() - startTime < timeout) {
     console.log("Fetching bids...");
     await new Promise(resolve => setTimeout(resolve, 5000));
-    const bids = await client.Bids(request);
+    const bids = await getBids(request);
 
     if (bids.bids.length > 0 && bids.bids[0].bid !== undefined) {
       console.log("Bid fetched!");
@@ -213,12 +227,12 @@ async function createLease(deployment: Deployment, wallet: DirectSecp256k1HdWall
   const bid = await fetchBid(dseq, owner);
   const accounts = await wallet.getAccounts();
 
-  if (bid.bidId === undefined) {
+  if (bid.id === undefined) {
     throw new Error("Bid ID is undefined");
   }
 
   const lease = {
-    bidId: bid.bidId
+    bidId: bid.id
   };
 
   const fee = {
@@ -240,7 +254,7 @@ async function createLease(deployment: Deployment, wallet: DirectSecp256k1HdWall
 
   if (tx.code !== undefined && tx.code === 0) {
     return {
-      id: BidID.toJSON(bid.bidId) as {
+      id: BidID.toJSON(bid.id) as {
         owner: string;
         dseq: number;
         provider: string;
@@ -308,18 +322,21 @@ async function sendManifest(sdl: SDL, lease: Lease, wallet: DirectSecp256k1HdWal
 
   const { dseq, provider } = lease.id;
   const rpc = await getRpc(rpcEndpoint);
-  const client = new QueryProviderClient(rpc);
-  const request = QueryProviderRequest.fromPartial({
+  const getProvider = createRpcRequest(rpc, {
+    methodName: "akash.provider.v1beta4.Provider",
+    requestType: QueryProviderRequest,
+    responseType: QueryProviderResponse
+  });
+
+  const providerResponse = await getProvider({
     owner: provider
   });
 
-  const tx = await client.Provider(request);
-
-  if (tx.provider === undefined) {
+  if (providerResponse.provider === undefined) {
     throw new Error(`Could not find provider ${provider}`);
   }
 
-  const providerInfo = tx.provider;
+  const providerInfo = providerResponse.provider;
   const manifest = sdl.manifestSortedJSON();
   const path = `/deployment/${dseq}/manifest`;
 
@@ -327,7 +344,8 @@ async function sendManifest(sdl: SDL, lease: Lease, wallet: DirectSecp256k1HdWal
   const agent = new https.Agent({
     cert: certificate.cert,
     key: certificate.privateKey,
-    rejectUnauthorized: false
+    rejectUnauthorized: false,
+    servername: "" // required to disable SNI, so the provider API will use mTLS authentication (e.i., self-signed certificates)
   });
 
   await new Promise((resolve, reject) => {

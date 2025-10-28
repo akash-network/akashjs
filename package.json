@@ -48,11 +48,11 @@
   },
   "dependencies": {
     "@akashnetwork/akash-api": "^1.4.0",
-    "@cosmjs/amino": "^0.32.4",
-    "@cosmjs/launchpad": "^0.27.0",
-    "@cosmjs/proto-signing": "^0.32.4",
-    "@cosmjs/stargate": "^0.32.4",
-    "@cosmjs/tendermint-rpc": "^0.32.4",
+    "@akashnetwork/chain-sdk": "^1.0.0-alpha.14",
+    "@cosmjs/amino": "^0.36.2",
+    "@cosmjs/proto-signing": "^0.36.2",
+    "@cosmjs/stargate": "^0.36.2",
+    "@cosmjs/tendermint-rpc": "^0.36.2",
     "asn1js": "^2.1.1",
     "atob": "^2.1.2",
     "axios": "^1.8.3",
@@ -106,9 +106,9 @@
     "ts-node": "^10.0.0",
     "ts-proto": "^1.104.0",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^4.7.4",
-    "webpack": "^5.41.1",
-    "webpack-cli": "^4.7.2"
+    "typescript": "~5.8.2",
+    "webpack": "^5.91.0",
+    "webpack-cli": "4.10.0"
   },
   "engines": {
     "node": ">18.0.0"

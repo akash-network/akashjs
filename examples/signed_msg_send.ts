@@ -1,8 +1,17 @@
+/**
+ * akashjs examples are working but deprecated.
+ * PLEASE switch to chain-sdk which provides more developer-friendly API with IDE autocomplete support:
+ * https://github.com/akash-network/chain-sdk/tree/main/ts
+ */
+
 import { coins, DirectSecp256k1HdWallet, Registry } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes, SigningStargateClient } from "@cosmjs/stargate";
-import dotenv from "dotenv";
+import "./setup";
 
-dotenv.config({ path: "../.env" });
+const rpcEndpoint = process.env.RPC_ENDPOINT || "";
+if (!rpcEndpoint) {
+  throw new Error("RPC_ENDPOINT environment variable is not set. Please set the environment variable in the .env file. See .env.sample for more information.");
+}
 
 async function main() {
   const mnemonic = process.env.MNEMONIC || "";
@@ -26,9 +35,6 @@ async function main() {
     typeUrl: "/cosmos.bank.v1beta1.MsgSend",
     value: message
   };
-
-  // You can use your own RPC node, or get a list of public nodes from akashjs
-  const rpcEndpoint = "http://your.rpc.node";
 
   const myRegistry = new Registry(defaultRegistryTypes);
 
