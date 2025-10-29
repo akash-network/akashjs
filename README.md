@@ -2,7 +2,7 @@
 
 ![build:main](https://github.com/ovrclk/akashjs/actions/workflows/release.yml/badge.svg?branch=main)
 
-**DEPRECATED:** This package is no longer maintained and does not support Akash Network v1.
+**DEPRECATED:** This package is no longer maintained and though it supports Akash Network v1 in combination with @akashnetwork/chain-sdk.
 Please migrate to [chain-sdk](https://github.com/akash-network/chain-sdk/tree/main/ts), which provides a more developer-friendly API with full IDE autocomplete and TypeScript support.
 
 
