@@ -3,7 +3,7 @@
  * @module wallet
  */
 
-import { Secp256k1HdWallet } from "@cosmjs/launchpad";
+import { Secp256k1HdWallet } from "@cosmjs/amino";
 import keytar from "keytar";
 
 let wallet: any;

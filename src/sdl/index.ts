@@ -22,4 +22,4 @@
  * const manifest = sdl.manifest();
  * ```
  */
-export * from "./SDL/SDL";
+export { SDL } from "@akashnetwork/chain-sdk";

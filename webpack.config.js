@@ -4,13 +4,20 @@ const path = require("path");
 module.exports = {
   entry: "./src/index.ts",
   externals: {
-    "node:crypto": "src/webpack/crypto"
+    "node:crypto": "src/webpack/crypto",
+    'node:https': 'https',
+    'node:http': 'http',
+    'node:http2': 'http2',
+    'node:fs': 'fs',
+    'node:path': 'path',
+    'node:zlib': 'zlib',
+    'node:util': 'util',
   },
   resolve: {
     alias: {
       // add as many aliases as you like!
       keytar: path.resolve(__dirname, "src/wallet/storage.ts"),
-      perf_hooks: path.resolve(__dirname, "src/webpack/perf_hooks.ts")
+      perf_hooks: path.resolve(__dirname, "src/webpack/perf_hooks.ts"),
     },
     extensions: [".wasm", ".mjs", ".js", ".json", ".jsx", ".ts"],
     fallback: {

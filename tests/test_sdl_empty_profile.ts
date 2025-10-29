@@ -107,7 +107,7 @@ const expectedVersion = new Uint8Array([
 tap.test("SDL: fromString", async t => {
   t.plan(2);
 
-  const sdl = SDL.fromString(testSDL);
+  const sdl = SDL.fromString(testSDL, "beta2");
 
   t.ok(sdl instanceof SDL, "Default SDL is not undefined");
   t.ok(sdl.data !== null, "SDL has data object");
@@ -116,7 +116,7 @@ tap.test("SDL: fromString", async t => {
 tap.test("SDL: Manifest", async t => {
   t.plan(1);
 
-  const sdl = SDL.fromString(testSDL);
+  const sdl = SDL.fromString(testSDL, "beta2");
   const result = sdl.manifest();
   const expected = expectedManifest;
 
@@ -126,7 +126,7 @@ tap.test("SDL: Manifest", async t => {
 tap.test("SDL: Version", async t => {
   t.plan(2);
 
-  const sdl = SDL.fromString(testSDL);
+  const sdl = SDL.fromString(testSDL, "beta2");
   const preversionJson = sdl.manifestSortedJSON();
   const result = await sdl.manifestVersion();
   const expected = expectedVersion;

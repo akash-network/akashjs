@@ -2,6 +2,10 @@
 
 ![build:main](https://github.com/ovrclk/akashjs/actions/workflows/release.yml/badge.svg?branch=main)
 
+**DEPRECATED:** This package is no longer maintained and does not support Akash Network v1.
+Please migrate to [chain-sdk](https://github.com/akash-network/chain-sdk/tree/main/ts), which provides a more developer-friendly API with full IDE autocomplete and TypeScript support.
+
+
 Connect and communicate with the Akash Network. Pure JS library can be used in browser for unsigned transactions, and with node.js for full compatibility.
 
 ## Packages
@@ -143,4 +147,3 @@ npm run setup-git-hooks
 - Set `DEBUG=akashjs:*` environment variable for detailed logs
 
 PRs are welcome! By adhering to these guidelines and leveraging our automated systems, we can maintain a high-quality codebase and streamline our development processes.
-

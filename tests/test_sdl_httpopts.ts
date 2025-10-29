@@ -107,7 +107,7 @@ const testManifest = [
 tap.test("SDL: Manifest w/ HTTP options", async t => {
   t.plan(1);
 
-  const sdl = SDL.fromString(testSDL);
+  const sdl = SDL.fromString(testSDL, "beta2");
   const result = sdl.manifest();
   const expected = testManifest;
 

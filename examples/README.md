@@ -1,5 +1,7 @@
 # AkashJS Examples
 
+**DEPRECATED:** akashjs examples are deprecated and will not be updated after akash network v1 release. Please migrate to [chain-sdk](https://github.com/akash-network/chain-sdk/tree/main/ts), which offers a more developer-friendly API with full IDE autocomplete support.
+
 This directory contains several examples of how to interact with the Akash networking using AkashJS and CosmJS.
 
 ## Setup
@@ -62,13 +64,7 @@ Install the following dependencies for general usage and signing transactions wi
 npm i @akashnetwork/akash-api @akashnetwork/akashjs @cosmjs/stargate @cosmjs/proto-signing
 ```
 
-If you want to create wallets
-
-```bash
-npm i @cosmjs/launchpad
-```
-
-For [amino encoding](https://docs.cosmos.network/main/learn/advanced/encoding#encoding-1)
+If you want to create wallets with [amino encoding](https://docs.cosmos.network/main/learn/advanced/encoding#encoding-1)
 
 ```bash
 npm i @cosmjs/amino
@@ -81,7 +77,7 @@ The following code shows an example of the process for creating a new Akash wall
 A new wallet can be initialized by calling `Secp256k1HdWallet.generate` from @cosmjs/launchpad, and passing `{ prefix: "akash" }`.
 
 ```ts
-import { Secp256k1HdWallet } from "@cosmjs/launchpad";
+import { Secp256k1HdWallet } from "@cosmjs/amino";
 
 // the first parameter for generate is the size of the mnemonic, default is 12
 const wallet = await Secp256k1HdWallet.generate(undefined, { prefix: "akash" });
@@ -90,7 +86,7 @@ const wallet = await Secp256k1HdWallet.generate(undefined, { prefix: "akash" });
 After the wallet is created, specific private/public key pairs are available via `getAccounts`.
 
 ```ts
-import { Secp256k1HdWallet } from "@cosmjs/launchpad";
+import { Secp256k1HdWallet } from "@cosmjs/amino";
 
 const wallet = await Secp256k1HdWallet.generate(undefined, { prefix: "akash" });
 
@@ -101,7 +97,7 @@ const [account] = await wallet.getAccounts();
 The account address, as well as its public key, are available as properties on this account object.
 
 ```ts
-import { Secp256k1HdWallet } from "@cosmjs/launchpad";
+import { Secp256k1HdWallet } from "@cosmjs/amino";
 
 const wallet = await Secp256k1HdWallet.generate(undefined, { prefix: "akash" });
 
@@ -116,7 +112,7 @@ const { address, pubkey } = account;
 Cosmjs does not publicly expose the private key for accounts. Instead, messages are passed into the wallet for signing. This can be done directly, as shown below.
 
 ```ts
-import { Secp256k1HdWallet, StdSignDoc } from "@cosmjs/launchpad";
+import { Secp256k1HdWallet, StdSignDoc } from "@cosmjs/amino";
 
 function getMessage(): StdSignDoc {
   // implements custom message
