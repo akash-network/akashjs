@@ -1,3 +1,14 @@
+## [1.0.0](https://github.com/akash-network/akashjs/compare/v0.11.1...v1.0.0) (2025-10-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrated to akash network v1
+
+### Features
+
+* integrates new chain-sdk into akashjs ([#137](https://github.com/akash-network/akashjs/issues/137)) ([0fa50be](https://github.com/akash-network/akashjs/commit/0fa50bed27bf31051408f9dd8769b935ba422641))
+
 ## [0.11.1](https://github.com/akash-network/akashjs/compare/v0.11.0...v0.11.1) (2025-06-27)
 
 
